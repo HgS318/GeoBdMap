@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body, html{width: 100%;height: 100%; margin:0;font-family:"微软雅黑";}
+        #l-map{height:100%;width:80%;}
+        #r-result {
+            margin: 0;
+            padding: 0;
+            z-index: 999;
+            position: absolute;
+            background-color: white;
+            max-height: 100%;
+            overflow-y: auto;
+            top: 0;
+            right: 0;
+            width: 20%;
+        }
+        dl,dt,dd,ul,li{
+            margin:0;
+            padding:0;
+            list-style:none;
+        }
+        dt{
+            font-size:14px;
+            font-family:"微软雅黑";
+            font-weight:bold;
+            border-bottom:1px dotted #000;
+            padding:5px 0 5px 5px;
+            margin:5px 0;
+        }
+        dd{
+            padding:5px 0 0 5px;
+        }
+        li{
+            line-height:28px;
+        }
+    </style>
+    <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=n3xc9ALenVeuL9apmqs4ZjrluhhsX4mr"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js" charset="UTF-8"></script>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
+    <title>百度地图</title>
+</head>
+<body>
+<div id="l-map"></div>
+<div id="r-result"></div>
+</body>
+</html>
+<script type="text/javascript">
+    var map = new BMap.Map("l-map");
+    var point1 = new BMap.Point(114.305549, 30.602943);
+    map.centerAndZoom(point1, 15);
+    map.enableScrollWheelZoom(true);
+
+    function getQueryString(name) {
+        var result = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
+        if (result == null || result.length < 1) {
+            return "";
+        }
+        return result[1];
+    }
+    var postcode = getQueryString('postcode');
+    var ip = getQueryString('ip');
+    var areacode = getQueryString('areacode');
+    if(areacode == null || "" == areacode) {
+        if(ip == null || "" == ip) {
+            if(postcode == null || "" == postcode) {
+                postcode = "430079";
+            }
+            showPostcode(postcode);
+        } else {
+            showIpArea(ip);
+        }
+    } else {
+        showAreacode(areacode);
+    }
+
+    function showAreacode(areacode) {
+        $.ajax({
+            url: 'getCoordsByAreacode?areacode=' + areacode,
+            type: 'get',
+            dataType: 'json',
+            success: function (dist) {
+                var simcall = dist['simcall'];
+                var elements = simcall.split(',');
+                var ele_len = elements.length;
+                var province = elements[ele_len - 2];
+                var city = elements[ele_len - 1];
+                var district = "";
+                getShape(province, city, district);
+            }, error: function (err_data) {
+                console.log(err_data);
+            }
+        });
+    }
+
+    function showIpArea(ip) {
+        $.ajax({
+            url: 'getCoordsByIP?ip=' + ip,
+            type: 'get',
+            dataType: 'json',
+            success: function (dist) {
+                if(dist['status'] != 0) {
+                    return;
+                }
+                var address_detail = dist['content']['address_detail'];
+                var province = address_detail['province'];
+                var city = address_detail['city'];
+                var district = "";
+                getShape(province, city, district);
+            }, error: function (err_data) {
+                console.log(err_data);
+            }
+        });
+    }
+
+    function showPostcode(postcode) {
+
+        $.ajax({
+            url: 'getPolygonByPostcode?postcode=' + postcode,
+            type: 'get',
+            dataType: 'json',
+            success: function (data) {
+                var point_data = data['points'];
+                if(point_data != null && point_data.length > 0) {
+                    for (var i = 0; i < point_data.length; i++) {
+                        var point = point_data[i];
+                        var location = point['location'];
+                        var x = location['lng'];
+                        var y = location['lat'];
+                        var point = new BMap.Point(x, y);
+                        addMarker(point);
+                        if(i == 0) {
+                            map.centerAndZoom(point, 12);
+                        }
+                    }
+                }
+                var polygon_data = data['polygon'];
+                if(polygon_data != null && polygon_data.length > 2) {
+                    var len = polygon_data.length;
+                    var polyArr = [];
+                    for (var i = 0; i < len; i++) {
+                        var bp = new BMap.Point(polygon_data[i][0], polygon_data[i][1]);
+                        polyArr.push(bp);
+                        if(i == 0) {
+                            map.centerAndZoom(bp, 12);
+                        }
+                    }
+                    var polygon = new BMap.Polygon(polyArr, {
+                        strokeColor: "blue",
+                        strokeWeight: 2,
+                        strokeOpacity: 0.5
+                    });
+                    map.addOverlay(polygon);
+                }
+            }, error: function (err_data) {
+                showPostcodeDistrict(postcode);
+//                console.log(err_data);
+            }
+        });
+
+    }
+
+    function showPostcodeDistrict(postcode) {
+        $.ajax({
+            url: 'getDistrictsByPostcode?postcode=' + postcode,
+            type: 'get',
+            dataType: 'json',
+            success: function (dists) {
+                var len = dists.length;
+                for (var i = 0; i < len; i++) {
+                    var dist = dists[i];
+                    var simcall = dist['simcall'];
+                    var elements = simcall.split(',');
+                    var ele_len = elements.length;
+                    var province = elements[ele_len - 2];
+                    var city = elements[ele_len - 1];
+                    var district = "";
+                    getShape(province, city, district);
+                }
+            }, error: function (err_data) {
+                console.log(err_data);
+            }
+        });
+    }
+
+    function getShape(province, city, district) {
+        $.ajax({
+            url: 'getShape?province=' + province + '&city=' + city + '&district=' + district,
+            type: 'get',
+            dataType: 'json',
+            success: function (shp_data) {
+                var shape = shp_data['shape'];
+                var lineArr = JSON.parse(shape);
+                var pointArr = [];
+                for(var i = 0; i < lineArr.length; i++) {
+                    var [_x, _y] = lineArr[i];
+                    var bp = new BMap.Point(_x, _y);
+                    pointArr.push(bp);
+                }
+                var polygon = new BMap.Polygon(pointArr, {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
+                map.addOverlay(polygon);
+                var _point = pointArr[0];
+                map.centerAndZoom(_point, 9);
+            }, error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+
+    function addMarker(point) {
+        var marker = new BMap.Marker(point);
+        map.addOverlay(marker);
+    }
+
+</script>

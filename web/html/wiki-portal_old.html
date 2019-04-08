@@ -1,0 +1,432 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" id="html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <title> 地名百科 </title>
+
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="generator" content="HDWiki 5.1" />
+    <meta name="author" content="HDWiki Team and Hudong UI team" />
+    <meta name="copyright" content="2005-2013 baike.com" />
+    <link href="../css/hdwiki.css" rel="stylesheet" type="text/css" media="all"/>
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/front.js"></script>
+    <script type="text/javascript" src="../js/jquery.dialog-0.8.min.js"></script>
+    <script type="text/javascript" src="../js/login.js"></script>
+
+</head>
+<body>
+<!--编辑异常中断，下次登录提示-->
+<ul id="login" class="w-950 bor_b-ccc"> 
+<li name="login" class="bor_no"></li>
+<li name="register" class="bor_no"></li>
+
+</ul>
+<div class="bg_book">
+    <a href="wiki-portal.html" id="logo"><img alt="HDWiki" height="65px" src="../images/logo.png"/></a>
+    <form name="searchform" method="post" action="#">
+        <p id="search">
+            <input name="searchtext" class="btn_txt" maxlength="80" size="42" value="" type="text" id="name0" onkeypress="srchkeypress(event)"/>
+            <input name="default" value="搜索词条" tabindex="2" class="enter_doc" onclick="searchWord()" type="button"/>
+            <!--<input name="full" value="1" tabindex="1"   type="hidden"/>-->
+            <!--&lt;!&ndash;<input name="search" value="搜 索" tabindex="1" class="btn_inp sea_doc" type="submit"/>&ndash;&gt;-->
+            <!--<a href="#" class="sea_advanced link_black">高级搜索</a>-->
+
+            <label>热门搜索：
+                <a href="wikiContent_fitall.html?name=wangguiting" target="_blank">望归亭</a>
+                <a href="wikiContent_fitall.html?name=sanxialianziyajingqu" target="_blank">三峡链子崖景区</a>
+                <a href="wikiContent_fitall.html?name=xiangxihe" target="_blank">香溪河</a>
+            </label>
+        </p>
+    </form>
+    <div id="nav" class="w-950 bor_b-ccc">
+        <ul>
+            <li><a href="wiki-portal.html">首页</a></li>
+            <li><a href="wikiClass.html">百科分类</a></li>
+
+
+        </ul>
+
+        <!-- 匿名用户 -->
+
+    </div>
+</div>
+
+<!--ad start -->
+
+
+<!--ad end -->
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        $("#tpbk img,#tjct img").each(function(i){
+            var w = this.width;
+            var h = this.height;
+            if(w > 100 || h > 75){
+                if(w/h>4/3){
+                    this.style.width = "100px"
+                }else{
+                    this.style.height = "75px"
+                }
+            }
+        });
+
+        $("input[name*='searchtext']") .focus();
+    });
+
+    function searchWord() {
+        var srhname = document.getElementById("name0").value;
+        if(srhname && "" != srhname) {
+            var newurl = "wikiContent_fitall.html?name=" + srhname;
+            window.open(newurl);
+        }
+    }
+
+    function srchkeypress(e) {
+        var keynum = window.event ? e.keyCode : e.which;
+        if(13 == keynum) {
+            searchWord();
+        }
+    }
+
+</script>
+
+<div class="l w-710 o-v">
+
+    <div class="l w-270">
+        <div id="block_right"><div id="category" class="columns o-v bor-c_dl category" bid="23">
+            <h2 class="col-h2"><a href="wikiClass.html">词条分类</a></h2>
+            <dl class="i6-ff p-b10 bor_no">
+                <dt><a href="wiki-list.html?bigtype=行政区域类" >行政区域类</a></dt>
+				<dd><a href="wiki-list.html?type=县级行政区">县级行政区</a></dd>
+                <dd><a href="wiki-list.html?type=乡级行政区">乡级行政区</a></dd>
+			</dl>
+            <dl class="i6-ff p-b10 bor_no">
+                <dt><a href="wiki-list.html?bigtype=非行政区域类" >非行政区域类</a></dt>
+					<dd><a href="wiki-list.html?type=地片">地片</a></dd>
+                    <dd><a href="wiki-list.html?type=区片">区片</a></dd>
+					<dd><a href="wiki-list.html?type=开发区">开发区</a></dd>
+					<!-- <dd><a href="index.php?category-view-104">非行政区域类其他</a></dd> -->
+					<dd><a href="wiki-list.html?type=林区">林区</a></dd>
+					<dd><a href="wiki-list.html?type=矿区">矿区</a></dd>
+					<!-- <dd><a href="index.php?category-view-108">农、林、牧、渔区</a></dd>  -->
+					<dd><a href="wikiClass.html">...</a></dd>
+			</dl>
+            <dl class="i6-ff p-b10 bor_no">
+                <dt><a href="wiki-list.html?bigtype=群众自治组织类" >群众自治组织类</a></dt>
+                <dd><a href="wiki-list.html?type=居民委员会">居民委员会</a></dd>
+				<dd><a href="wiki-list.html?type=村民委员会">村民委员会</a></dd>
+			</dl>
+            <dl class="i6-ff p-b10 bor_no">
+                <dt><a href="wiki-list.html?bigtype=居民点类" >居民点类</a></dt>
+                <dd><a href="wiki-list.html?type=城镇居民点">城镇居民点</a></dd>
+				<dd><a href="wiki-list.html?type=农村居民点">农村居民点</a></dd>
+			</dl>
+            <dl class="i6-ff p-b10 bor_no">
+                <dt><a href="wiki-list.html?bigtype=交通运输设施类" >交通运输设施类</a></dt>
+                <dd><a href="wiki-list.html?type=桥梁">桥梁</a></dd>
+                <dd><a href="wiki-list.html?type=隧道">隧道</a></dd>
+                <dd><a href="wiki-list.html?type=加油站">加油站</a></dd>
+                <dd><a href="wiki-list.html?type=长途汽车站">长途汽车站</a></dd>
+                <dd><a href="wiki-list.html?type=主干路">主干路</a></dd>
+                <dd><a href="wiki-list.html?type=锚地">锚地</a></dd>
+                <dd><a href="wiki-list.html?type=河港">河港</a></dd>
+                <!--<dd><a href="#">街、巷</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-87">车站、停车场</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-86">城镇交通运输类其他</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-85">船闸、升船机站</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-84">道班</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-83">道口</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-82">灯塔、导航台</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-81">渡口</a></dd>  &ndash;&gt;-->
+				<!--<dd><a href="#">公路</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-87">公路运输类其他</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-86">管道</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-85">管站</a></dd> &ndash;&gt;-->
+				<!--<dd><a href="#">航空港</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-83">航空与管道运输类其他</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-82">环岛、路口</a></dd> &ndash;&gt;-->
+				<!--<dd><a href="#">火车站</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-88">加油站</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-87">检查站</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-86">交通运输附属设施类其他</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-85">交通运输设施类其他</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-84">锚地</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-83">桥梁</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-82">收费站</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-81">水上运输类其他</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-85">交通运输设施类其他</a></dd> &ndash;&gt;-->
+				<!--<dd><a href="#">水运港口</a></dd>-->
+				<!--<dd><a href="#">隧道</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-82">索道、扶梯</a></dd> &ndash;&gt;-->
+				<!--<dd><a href="#">铁路</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-82">铁路运输类其他</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-81">有轨交通线路</a></dd> &ndash;&gt;-->
+				<dd><a href="wikiClass.html">...</a></dd>
+            </dl>
+            <dl class="i6-ff p-b10 bor_no">
+                <dt><a href="wiki-list.html?bigtype=水利电力设施类" >水利电力设施类</a></dt>
+                <dd><a href="wiki-list.html?type=池塘">池塘</a></dd>
+                <dd><a href="wiki-list.html?type=水库">水库</a></dd>
+                <dd><a href="wiki-list.html?type=灌溉渠">灌溉渠</a></dd>
+                <dd><a href="wiki-list.html?type=水力发电站">水力发电站</a></dd>
+                <dd><a href="wiki-list.html?type=通信基站">通信基站</a></dd>
+                <dd><a href="wiki-list.html?type=输变电站">输变电站</a></dd>
+                <!--<dd><a href="#">发电站</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-96">泵站</a></dd> &ndash;&gt;-->
+				<!--<dd><a href="#">池塘、海塘</a></dd>-->
+				<!--<dd><a href="#">堤堰</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-93">堤堰类其他</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-92">电力设施类其他</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-89">灌区</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-97">涵洞</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-96">井</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-95">排灌设施类其他</a></dd> &ndash;&gt;-->
+				<!--<dd><a href="#">输变电站</a></dd>-->
+				<!--<dd><a href="#">水库</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-92">水利、电力、通信设施类其他</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-91">水渠</a></dd> &ndash;&gt;-->
+				<!--<dd><a href="#">通信基站</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-89">通信设施类其他</a></dd><dd><a href="index.php?category-view-97">发电站</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-96">蓄洪区、泄洪区</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-95">蓄水区类其他</a></dd> &ndash;&gt;-->
+				<!--<dd><a href="#">运河</a></dd>-->
+				<dd><a href="wikiClass.html">...</a></dd>
+			</dl>
+			<dl class="i6-ff p-b10 bor_no">
+                <dt><a href="wiki-list.html?bigtype=纪念地旅游景点类" >纪念地旅游景点类</a></dt>
+                <dd><a href="wiki-list.html?type=人物纪念地">人物纪念地</a></dd>
+                <dd><a href="wiki-list.html?type=事件纪念地">事件纪念地</a></dd>
+                <dd><a href="wiki-list.html?type=公园">公园</a></dd>
+                <dd><a href="wiki-list.html?type=风景区">风景区</a></dd>
+                <!--<dd><a href="#">纪念地、遗址</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-79">纪念地、遗址类其他</a></dd> &ndash;&gt;-->
+				<!--<dd><a href="#">公园、风景区</a></dd>-->
+				<!--<dd><a href="#">自然保护区</a></dd>-->
+				<!--<dd><a href="#">宗教纪念地</a></dd>-->
+				<!-- <dd><a href="index.php?category-view-75">纪念地、旅游景点类其他</a></dd> -->
+				<dd><a href="wikiClass.html">...</a></dd>
+            </dl>
+            <dl class="i6-ff p-b10 bor_no">
+                <dt><a href="wiki-list.html?bigtype=建筑物类" >建筑物类</a></dt>
+                <dd><a href="wiki-list.html?type=房屋">房屋</a></dd>
+                <dd><a href="wiki-list.html?type=广场">广场</a></dd>
+                <dd><a href="wiki-list.html?type=亭">亭</a></dd>
+                <dd><a href="wiki-list.html?type=碑">碑</a></dd>
+                <dd><a href="wiki-list.html?type=塔">塔</a></dd>
+                <!--<dd><a href="#">广场、体育场</a></dd>-->
+				<!--<dd><a href="#">城堡、墙</a></dd>-->
+				<!--<dd><a href="#">亭、台、碑、塔</a></dd>-->
+				<!--<dd><a href="#">房屋</a></dd>-->
+				 <!--<dd><a href="#">建筑物类其他</a></dd>-->
+                <dd><a href="wikiClass.html">...</a></dd>
+            </dl>
+
+			<dl class="i6-ff p-b10 bor_no">
+                <dt><a href="wiki-list.html?bigtype=单位类" >单位类</a></dt>
+                <dd><a href="wiki-list.html?type=党政机关">党政机关</a></dd>
+                <dd><a href="wiki-list.html?type=事业单位">事业单位</a></dd>
+                <dd><a href="wiki-list.html?type=企业">企业</a></dd>
+                <dd><a href="wiki-list.html?type=军事单位">军事单位</a></dd>
+				<!--<dd><a href="#">单位</a></dd>-->
+				<!--<dd><a href="#">单位类其他</a></dd>-->
+                <!--<dd><a href="#">...</a></dd>-->
+			</dl>
+            <dl class="i6-ff p-b10 bor_no">
+                <dt><a href="wiki-list.html?bigtype=陆地水系类" >陆地水系类</a></dt>
+                <dd><a href="wiki-list.html?type=河流">河流</a></dd>
+                <dd><a href="wiki-list.html?type=峡谷">峡谷</a></dd>
+                <dd><a href="wiki-list.html?type=河滩">河滩</a></dd>
+                <!--<dd><a href="#">河流</a></dd>-->
+				<!--<dd><a href="#">河口</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-95">河流类其他</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-94">河滩</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-93">河湾</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-92">河源</a></dd> &ndash;&gt;-->
+				<!--<dd><a href="#">湖泊</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-90">阶地</a></dd> &ndash;&gt;-->
+				<!--<dd><a href="#">陆地岛屿类其他</a></dd>-->
+				<!--<dd><a href="#">陆地水系类其他</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-96">瀑布</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-95">泉</a></dd> &ndash;&gt;-->
+				<!--<dd><a href="#">三角洲</a></dd>-->
+				<!--<dd><a href="#">峡谷</a></dd>-->
+				<dd><a href="wikiClass.html">...</a></dd>
+			</dl>
+			<dl class="i6-ff p-b10 bor_no">
+                <dt><a href="wiki-list.html?bigtype=陆地地形类" >陆地地形类</a></dt>
+                <dd><a href="wiki-list.html?type=山">山</a></dd>
+                <dd><a href="wiki-list.html?type=洞穴">洞穴</a></dd>
+                <dd><a href="wiki-list.html?type=天生桥">天生桥</a></dd>
+                <dd><a href="wiki-list.html?type=山峰">山峰</a></dd>
+                <dd><a href="wiki-list.html?type=山口、关隘">山口、关隘</a></dd>
+                <dd><a href="wiki-list.html?type=山谷、谷地">山谷、谷地</a></dd>
+                <dd><a href="wiki-list.html?type=山坡">山坡</a></dd>
+                <!--<dd><a href="#">山</a></dd>-->
+                <!--<dd><a href="#">山</a></dd>-->
+				<!--<dd><a href="#">山峰</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-95">山口、关隘</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-94">山坡</a></dd> &ndash;&gt;-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-93">山体</a></dd> &ndash;&gt;-->
+				<!--<dd><a href="#">洞穴</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-91">陆地地形类其他</a></dd> &ndash;&gt;-->
+				<!--<dd><a href="#">平原、盆地</a></dd>-->
+				<!--<dd><a href="#">丘陵山地</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-97">丘陵山地类其他</a></dd> &ndash;&gt;-->
+				<!--<dd><a href="#">森林</a></dd>-->
+				<!--<dd><a href="#">湿地（沼泽）</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-94">台地</a></dd> &ndash;&gt;-->
+				<!--<dd><a href="#">苔原</a></dd>-->
+				<!--&lt;!&ndash; <dd><a href="index.php?category-view-92">天生桥</a></dd> &ndash;&gt;-->
+				<dd><a href="wikiClass.html">...</a></dd>
+			</dl>
+        </div></div>
+    </div>
+    <div class="w-430 r">
+        <div id="block_ctop2"><div id="tjct" class="columns tjct i6-ff " bid="19">
+            <h2 class="col-h2">推荐词条</h2>
+            <a href="#" class="more">更多>></a>
+            <div>
+                <div class="jc_tj">
+                    <a href="wikiContent_fitall.html?name=quyuanguliwenhualvyouqu"  class="a-img"><img alt="屈原故里文化旅游区" title="屈原故里文化旅游区" src="../data/wikiContent/place/quyuanguliwenhualvyouqu/quyuanguliwenhualvyouqu实景图片.jpg"/></a>
+                    <p class="a-c"><a href="wikiContent_fitall.html?name=quyuanguliwenhualvyouqu"  title="屈原故里文化旅游区">屈原故里文化旅游区</a></p>
+                </div>
+                <div class="jc_tj">
+                    <a href="wikiContent_fitall.html?name=jiuwanxi"  class="a-img"><img alt="九畹溪" title="九畹溪" src="../data/wikiContent/place/jiuwanxi/jiuwanxi实景图片.jpg"/></a>
+                    <p class="a-c"><a href="wikiContent_fitall.html?name=jiuwanxi"  title="九畹溪">九畹溪</a></p>
+                </div>
+                <div class="jc_tj">
+                    <a href="wikiContent_fitall.html?name=chufengguangchang"  class="a-img"><img alt="雏凤广场" title="雏凤广场" src="../data/wikiContent/place/chufengguangchang/chufengguangchang实景图片.jpg"/></a>
+                    <p class="a-c"><a href="wikiContent_fitall.html?name=chufengguangchang"  title="雏凤广场">雏凤广场</a></p>
+                </div>
+            </div>
+            <ul class="col-ul point c-b">
+                <li><a href="wikiContent_fitall.html?name=xiaoqiugushan"  title="小秋谷山">小秋谷山</a></li>
+                <li><a href="wikiContent_fitall.html?name=shanghepingsuidao"  title="上和坪隧道">上和坪隧道</a></li>
+            </ul>
+        </div><div id="jcct" class="columns jcct " bid="22">
+            <h2 class="col-h2">精彩词条</h2>
+            <a href="#"  class="more">更多>></a>
+            <dl class="col-dl">
+                <dd class="l"><a href="wikiContent_fitall.html?name=sanxialianziyajingqu"  class="a-img"><img title="三峡链子崖景区" src="../data/wikiContent/sanxialianziyajingqu.jpg"/></a></dd>
+                <dt class="h1 a-c bold"><a href="wikiContent_fitall.html?name=sanxialianziyajingqu" title="三峡链子崖景区" >三峡链子崖景区</a></dt>
+                <dd><p>地名来历&nbsp; 地名含义&nbsp; 历史沿革&nbsp;地理实体描述&nbsp; 其它信息&nbsp;<a href="wikiContent_fitall.html?name=sanxialianziyajingqu" >阅读全文&gt;&gt;</a></p></dd>
+            </dl>
+            <dl class="col-dl">
+                <dd class="l"><a href="wikiContent_fitall.html?name=ziguihaotingdujiadajiudianyouxiangongsi"  class="a-img"><img title="秭归豪庭渡假大酒店有限公司" src="../data/wikiContent/place/ziguihaotingdujiadajiudianyouxiangongsi/ziguihaotingdujiadajiudianyouxiangongsi实景图片.jpg"/></a></dd>
+                <dt class="h1 a-c bold"><a href="wikiContent_fitall.html?name=ziguihaotingdujiadajiudianyouxiangongsi" title="秭归豪庭渡假大酒店有限公司" >秭归豪庭渡假大酒店有限公司</a></dt>
+                <dd><p>地名来历&nbsp; 地名含义&nbsp; 历史沿革&nbsp;地理实体描述&nbsp; 其它信息&nbsp;<a href="wikiContent_fitall.html?name=sanxialianziyajingqu" >阅读全文&gt;&gt;</a></p></dd>
+            </dl>
+            <ul class="col-ul point font-14 link_blue ">
+
+
+                <li><a href="wikiContent_fitall.html?name=jiuwanxi" >九畹溪</a>: 地名来历&nbsp; 地名含义&nbsp; 历史沿革&nbsp;地理实体描述&nbsp; 其它信息&nbsp;</li>
+                <li><a href="wikiContent_fitall.html?name=quyuanguliwenhualvyouqu" >屈原故里文化旅游区</a>: 地名来历&nbsp; 地名含义&nbsp; 历史沿革&nbsp;地理实体描述&nbsp; 其它信息&nbsp;</li>
+                <li><a href="wikiContent_fitall.html?name=chufengguangchang" >雏凤广场</a>: 地名来历&nbsp; 地名含义&nbsp; 历史沿革&nbsp;地理实体描述&nbsp; 其它信息&nbsp;</li>
+
+                <li><a href="wikiContent_fitall.html?name=niulingcunyiminwenhuaguangchang" >牛岭村移民文体广场</a>: 地名来历&nbsp; 地名含义&nbsp; 历史沿革&nbsp;地理实体描述&nbsp; 其它信息&nbsp;</li>
+                <li><a href="wikiContent_fitall.html?name=xiangxihe" >香溪河</a>: 地名来历&nbsp; 地名含义&nbsp; 历史沿革&nbsp;地理实体描述&nbsp; 其它信息&nbsp;</li>
+                <li><a href="wikiContent_fitall.html?name=zhongxinguancuncunminweiyuanhui" >中心观村村民委员会</a>: 地名来历&nbsp; 地名含义&nbsp; 历史沿革&nbsp;地理实体描述&nbsp; 其它信息&nbsp;</li>
+                <li><a href="wikiContent_fitall.html?name=meizuoxia" >美座峡</a>: 地名来历&nbsp; 地名含义&nbsp; 历史沿革&nbsp;地理实体描述&nbsp; 其它信息&nbsp;</li>
+                <li><a href="wikiContent_fitall.html?name=shijicheng" >世纪城</a>: 地名来历&nbsp; 地名含义&nbsp; 历史沿革&nbsp;地理实体描述&nbsp; 其它信息&nbsp;</li>
+
+                <!--<li><a href="wikiContent_fitall.html?name=dahekouqiao" >大河口桥</a>: 地名来历&nbsp; 地名含义&nbsp; 历史沿革&nbsp;地理实体描述&nbsp; 其它信息&nbsp;</li>-->
+                <li><a href="wikiContent_fitall.html?name=hengdunyansuidao" >横墩岩隧道</a>: 地名来历&nbsp; 地名含义&nbsp; 历史沿革&nbsp;地理实体描述&nbsp; 其它信息&nbsp;</li>
+                <li><a href="wikiContent_fitall.html?name=百竹苑" >百竹苑</a>: 地名来历&nbsp; 地名含义&nbsp; 历史沿革&nbsp;地理实体描述&nbsp; 其它信息&nbsp;</li>
+                <!--<li><a href="wikiContent_fitall.html?name=mingxinting" >铭心亭</a>: 地名来历&nbsp; 地名含义&nbsp; 历史沿革&nbsp;地理实体描述&nbsp; 其它信息&nbsp;</li>-->
+                <!--<li><a href="wikiContent_fitall.html?name=lanlingxi" >兰陵溪</a>: 地名来历&nbsp; 地名含义&nbsp; 历史沿革&nbsp;地理实体描述&nbsp; 其它信息&nbsp;</li>-->
+
+            </ul>
+        </div></div>
+    </div>
+
+    <!--ad start -->
+
+
+    <!--ad end -->
+</div>
+<div class="r w-230">
+    <div id="block_ctop1"><div id="reci" class="columns  reci " bid="24">
+        <h2 class="col-h2">热门词条</h2>
+        <a href="#" class="more">更多>></a>
+        <dl class="col-dl ">
+            <dt><a href="wikiContent_fitall.html?name=wangguiting"  title="望归亭">望归亭</a></dt>
+            <dd>地名来历&nbsp; 地名含义&nbsp; 历史沿革...[<a href="wikiContent_fitall.html?name=wangguiting"  class="entry">详细</a>]</dd>
+        </dl>
+        <dl class="col-dl ">
+            <dt><a href="wikiContent_fitall.html?name=liangdouhe"  title="良斗河">良斗河</a></dt>
+            <dd>地名来历&nbsp; 地名含义&nbsp; 历史沿革...[<a href="wikiContent_fitall.html?name=liangdouhe"  class="entry">详细</a>]</dd>
+        </dl>
+
+
+        <dl class="col-dl ">
+            <dt><a href="wikiContent_fitall.html?name=sanxialianziyajingqu"  title="三峡链子崖景区">三峡链子崖景区</a></dt>
+            <dd>地名来历&nbsp; 地名含义&nbsp; 历史沿革...[<a href="wikiContent_fitall.html?name=sanxialianziyajingqu"  class="entry">详细</a>]</dd>
+        </dl>
+        <dl class="col-dl ">
+            <dt><a href="wikiContent_fitall.html?name=quyuanguliwenhualvyouqu"  title="屈原故里文化旅游区">屈原故里文化旅游区</a></dt>
+            <dd>地名来历&nbsp; 地名含义&nbsp; 历史沿革...[<a href="wikiContent_fitall.html?name=quyuanguliwenhualvyouqu"  class="entry">详细</a>]</dd>
+        </dl>
+
+    </div><div id="zjgx" class="columns zjgx o-v " bid="6">
+        <h2 class="col-h2">最近更新</h2>
+        <a href="#" class="more">更多>></a>
+        <ul class="col-ul font-14 ">
+            <li><a href="wikiContent_fitall.html?name=batougongyuan"  class="ctm" title="坝头公园">坝头公园</a><span>09-16 16:57</span></li>
+            <li><a href="wikiContent_fitall.html?name=tanjiawuchang"  class="ctm" title="谭家屋场">谭家屋场</a><span>09-16 10:23</span></li>
+            <li><a href="wikiContent_fitall.html?name=liangshuijing"  class="ctm" title="凉水井">凉水井</a><span>09-16 09:39</span></li>
+            <li><a href="wikiContent_fitall.html?name=xuchangxian"  class="ctm" title="徐长线">徐长线</a><span>09-14 14:39</span></li>
+            <li><a href="wikiContent_fitall.html?name=yingxiongchangqu"  class="ctm" title="英雄长渠">英雄长渠</a><span>09-14 14:31</span></li>
+
+            <li><a href="wikiContent_fitall.html?name=quyuanzhennongmaoshichang"  class="ctm" title="屈原镇农贸市场">屈原镇农贸市场</a><span>03-25 17:57</span></li>
+            <li><a href="wikiContent_fitall.html?name=dashuitianping"  class="ctm" title="大水田坪">大水田坪</a><span>03-25 17:23</span></li>
+            <li><a href="wikiContent_fitall.html?name=dahekouoqiao"  class="ctm" title="大河口桥">大河口桥</a><span>03-23 14:39</span></li>
+            <li><a href="wikiContent_fitall.html?name=maopingzhen"  class="ctm" title="茅坪镇">茅坪镇</a><span>07-23 14:39</span></li>
+            <li><a href="wikiContent_fitall.html?name=meipingjizhan"  class="ctm" title="梅坪基站">梅坪基站</a><span>03-23 14:39</span></li>
+            <!--<li><a href="wikiContent_fitall.html?name=wangkeshilieshizhimu"  class="ctm" title="王克诗烈士之墓">王克诗烈士之墓</a><span>03-23 14:39</span></li>-->
+        </ul>
+    </div>
+	<!-- <div  class="columns i6-ff p-b8 rmbq " bid="21"> -->
+        <!-- <h2 class="col-h2">热门标签</h2> -->
+        <!-- <ul class="col-ul list-s"> -->
+            <!-- <li><a href="index.php?search-tag-%E6%97%B6%E4%BB%A4%E6%B9%96" >时令湖</a></li> -->
+            <!-- <li><a href="index.php?search-tag-%E7%A7%BB%E5%8A%A8%E9%80%9A%E4%BF%A1%E5%A1%94" >移动通信塔</a></li> -->
+        <!-- </ul> -->
+    <!-- </div> -->
+	
+	</div>
+</div>
+<div class="l w-710 o-v">
+    <div class="l w-270">
+        <div id="block_cbottoml"></div>
+    </div>
+    <div class="w-430 r">
+        <div id="block_cbottomr"></div>
+    </div>
+</div>
+
+
+<div class="c-b"></div>
+
+<div id="block_bottom"><div id="yqlj" class="columns no_col-h2 bg-gray yqlj i6-ff " bid="16">
+    <ul class="col-ul list-s">
+        <li><span class="bold">友情链接:</span></li>
+    </ul>
+</div></div>
+
+<!--ad start -->
+
+
+<!--ad end -->
+<div class="c-b"></div>
+<div id="footer"  class="w-950">
+    <p id="footer-p"> Copyright @ <a href="http://mzj.hbzg.gov.cn/" target="_blank">秭归县民政局</a>  V WIKI_VERSION  &copy;2017 <a href="#" class="link_black">地名百科</a> | <a href="#">Licensed</a> <br/>
+    </p>
+    <br/>
+    <p style="color:rgb(87, 87, 87);">ICP: xxx-xxxx</p>
+</div>
+
+</body>
+</html>

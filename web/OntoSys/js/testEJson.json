@@ -1,0 +1,13 @@
+[{"分类代码":321200,"概念名称":"盐田、盐场","负责单位":"WHU",
+	"属性":{"PositionX":"0","PositionY":"8","PositionZ":"5","path":"1418264774199/dymDae02.dae"},
+	"三维图像":{"type":"3D","need":"true","exsit":"true",
+		"urls":[{"url":"100000/SWCG/shucong.dae"},{"url":"100000/SWCG/shucong.dae"}]},
+	"实景全景图像":{"type":"QJ","need":"true","exsit":"true",
+		"urls":[{"url":"100000/SJQJ/210100SJQJ1-3.jpg"},{"url":"/.../...jpg"}]},
+	"立体图像":{"type":"TP","need":"true","exsit":"true",
+		"urls":[{"url":"100000/SJDJ/321200SJDJ1.jpg"},{"url":"100000/SJDJ/321200SJDJ2.jpg"},{"url":"100000/SJDJ/321200SJDJ3.jpg"}]},
+	"图式图像":{"type":"TP","need":"true","exsit":"true",
+		"urls":[{"url":"100000/YGCG/321200YGCG1.jpg"},{"url":"100000/TSCG/321200TS1.jpg"},{"url":"100000/SJCG/321200SJCG1.jpg"}]},
+	"视频":{"type":"SP","need":"true","exsit":"true",
+		"urls":[{"url":"100000/SPCG/321200SPCG1.flv"},{"url":"100000/SPCG/321200SPCG1.flv"}]},
+}]

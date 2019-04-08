@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Basic Window - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="../demo.css">
+	<script type="text/javascript" src="../../jquery.min.js"></script>
+	<script type="text/javascript" src="../../jquery.easyui.min.js"></script>
+</head>
+<body>
+	<h2>Basic Window</h2>
+	<p>Window can be dragged freely on screen.</p>
+	<div style="margin:20px 0;">
+		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#w').window('open')">Open w</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#w').window('close')">Close y</a>
+	</div>
+	<div style="margin:20px 0;">
+		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="openWindowY()">Open y</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#y').window('close')">Close y</a>
+	</div>
+	<div id="w" class="easyui-window" title="Basic Window" data-options="iconCls:'icon-save'" style="width:500px;height:400px;padding:10px;">
+		The window content.
+	</div>
+	<div id="y" class="easyui-window" title="Basic Window" data-options="iconCls:'icon-save'" style="width:500px;height:500px;padding:10px;">
+		<div>        &nbsp;&nbsp;&nbsp;&nbsp;<input type="file" accept="text/plain" onchange="openFile(event)"><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<textarea id="extrapostext" rows="10" cols="30"></textarea><br>
+	    &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="位置提取" onclick="extract_positions()">
+		&nbsp;&nbsp;<input type="button" onclick="showOver()" value="显示">
+		&nbsp;&nbsp;<input type="button" onclick="hideOver()" value="隐藏">
+        &nbsp;&nbsp;&nbsp;&nbsp;<div id="extraposinfo"></div></div>
+	</div>
+
+<script language="JavaScript">
+function getQueryString(name) {
+    var result = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
+    if (result == null || result.length < 1) {
+        return "";
+    }
+    return result[1];
+}
+function openWindowY() {
+	var $win = $('#y').window({
+		title:'my title',
+		width: 500,
+		height: 400,
+		top: 100,    
+		left:100,
+		//shadow: true,
+		//modal:true,
+		//iconCls:'icon-add',
+        //closed:true,
+        //minimizable:false,
+        //maximizable:false,
+        // collapsible:false
+    });
+     
+     $win.window('open');
+}
+</script>
+</body>
+</html>

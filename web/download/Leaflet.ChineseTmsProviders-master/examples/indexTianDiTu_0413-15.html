@@ -1,0 +1,544 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="../lib/leaflet.css">
+    <!--<link href="../../../css/index.css" rel="stylesheet"/>-->
+    <style type="text/css">
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        html,
+        body,
+        #map {
+            height: 100%;
+        }
+        .info {
+            border: solid 1px silver;
+            background-color: #FFFFFF;
+        }
+        div.info-top {
+            position: relative;
+            background: none repeat scroll 0 0 #F9F9F9;
+            border-bottom: 1px solid #CCC;
+            border-radius: 5px 5px 0 0;
+        }
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+        div.info-middle {
+            font-size: 12px;
+            padding: 6px;
+            line-height: 20px;
+        }
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+    </style>
+    <script type="text/javascript" src="../lib/leaflet.js"></script>
+    <script type="text/javascript" src='../src/leaflet.ChineseTmsProviders.js'></script>
+    <script type="text/javascript" src="../lib/esri-leaflet.js"></script>
+    <script type="text/javascript" src="../lib/esri-leaflet-debug.js"></script>
+    <script type="text/javascript" src="../../../js/jquery.js"></script>
+    <!--<script type="text/javascript" src="../esri-leaflet-2.1.3/dist/esri-leaflet.js"></script>
+    <script src="https://unpkg.com/esri-leaflet@2.1.3/dist/esri-leaflet.js" integrity="sha512-pijLQd2FbV/7+Jwa86Mk3ACxnasfIMzJRrIlVQsuPKPCfUBCDMDUoLiBQRg7dAQY6D1rkmCcR8286hVTn/wlIg==" crossorigin=""></script>
+    <script type="text/javascript" src='../src/leaflet.ChineseTmsProviders.js'></script>
+    <script type="text/javascript" src="../lib/esri-leaflet.js"></script>
+    <script type="text/javascript" src="../lib/esri-leaflet-debug.js"></script>-->
+</head>
+
+<body>
+<div id='map'></div>
+</body>
+<script type="text/javascript">
+
+    //	生成信息窗体的内容
+    function constructInfoWindow(title, content) {
+        var info = document.createElement("div");
+        info.className = "info";
+
+        //可以通过下面的方式修改自定义窗体的宽高
+        //info.style.width = "400px";
+        // 定义顶部标题
+        var top = document.createElement("div");
+        var titleD = document.createElement("div");
+//        var closeX = document.createElement("img");
+        top.className = "info-top";
+        titleD.innerHTML = "&nbsp;" + title;
+//        closeX.src = "images/close2.gif";
+//        closeX.onclick = closeInfoWindow;
+        top.appendChild(titleD);
+//        top.appendChild(closeX);
+        info.appendChild(top);
+
+        // 定义中部内容
+        var middle = document.createElement("div");
+        middle.className = "info-middle";
+        middle.style.backgroundColor = 'white';
+        middle.innerHTML = content;
+        info.appendChild(middle);
+
+        return info;
+    }
+
+    function create_popup(feature) {
+        var extData = feature.properties;
+        var showobj = extData['desbrif'];
+        var title = extData.name + '<span style="font-size:11px;color:#F00;">&nbsp;&nbsp;' + extData['type'] + '</span>';
+        //var title = '华荣正街' + '<span style="font-size:11px;color:#F00;">&nbsp;&nbsp;' + '街道' + '</span>';
+        var content = "";
+        content = content + ("<img src='../../images/contentdemopic.jpg' onerror='this.src=\"../../../images/contentdemopic.jpg\"' />"
+                + "<strong>地名含义：</strong>" + extData['brif'] + "<br/>");
+        content = content + ("<strong>行政区：</strong>" + extData['adminarea'] + "<br/>");
+        content = content + ("<strong>使用时间：</strong>" + extData['usetime'] + "<br/>");
+        content = content + ("<strong>地理实体描述：</strong>" + showobj +
+                "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+                "<a href='html/wikiContent_fitall.html?name=" + extData['spell'] + "' target='_blank'>详细信息</a>");
+        var info_window = constructInfoWindow(title, content);
+        return info_window;
+    }
+
+    //  根据leaflet的find模块查询到的要素，生成查询语句（多个FID号），该查询语句作为DynamicLayer的layerDefs参数使用
+    function create_search_query(features) {
+        if (features == undefined || features == null || features.length < 1) {
+            return "FID<0";
+        }
+        var q = "";
+        for (var i = 0; i < features.length; i++) {
+            var feature = features[i];
+            var _id = feature["id"];
+            q = q + "FID=" + _id;
+            if (i != features.length - 1) {
+                q = q + " or ";
+            }
+        }
+        return q;
+    }
+
+    function get_common_features(searched_features, current_features) {
+        var common_features = [];
+        for (var i = 0; i < searched_features.length; i++) {
+            var srh_feature = searched_features[i];
+            if (srh_feature===undefined) {
+                continue;
+            }
+            var srh_feature_id = srh_feature.id;
+            for (var j = 0; j < current_features.length; j++) {
+                var cur_feature = current_features[j];
+                if (cur_feature===undefined) {
+                    continue;
+                }
+                var cur_feature_id = cur_feature.id;
+                if (srh_feature_id == cur_feature_id) {
+                    common_features.push(srh_feature);
+                }
+            }
+        }
+        return common_features;
+    }
+
+    var myIcon = L.icon({
+        iconUrl: '../lib/images/test.png',
+        // iconSize: [38, 95],
+        //iconAnchor: [22, 94],
+        //popupAnchor: [-3, -76],
+        //shadowUrl: 'my-icon-shadow.png',
+        //shadowSize: [68, 95],
+        //shadowAnchor: [22, 94]
+    });
+
+    function add_markers(searched_result){
+        markersGroup.clearLayers();
+        dict_line_popup ={};
+        var markers = [];
+        for (var i = 0; i < searched_result.length;i++) {
+            var feature = searched_result[i];
+            var feature_shape = feature.properties.Shape;
+            var info_win = create_popup(feature);
+            var popup = L.popup({
+                maxWidth: 300,
+//                className: "info",
+//                autoPanPadding: L.point(0,0)
+            });
+            popup.setContent(info_win);
+            if(feature_shape =="折线" ||  feature_shape =="Polyline") {
+                //  添加折线（Polyline）及其信息窗体
+                var line_coord_array_org = feature.geometry.coordinates;
+                var num_points = line_coord_array_org.length;
+                var line_array = [];
+                for (var j = 0; j < num_points; j++) {
+                    var coord_org = line_coord_array_org[j];
+                    var coord = [];
+                    coord.push(coord_org[1]);
+                    coord.push(coord_org[0]);
+                    line_array.push(coord);
+                }
+                var polyline = L.polyline(line_array, {
+                    color: 'green',
+                    weight: 8,
+                    opacity: 0.03
+                });
+                polyline.id = feature.id;
+                dict_line_popup[polyline.id] = popup;
+                polyline.bindPopup(popup);
+                polyline.on({
+//                    mouseover: function (e) {},
+                    click: function (e) {
+                        var key_line_ids = Object.keys(dict_line_popup);
+                        var this_line = e.sourceTarget;
+                        var has_popup = false;
+                        var this_id = this_line.id;
+                        for(var k = 0; k < key_line_ids.length; k++) {
+                            var key_id = key_line_ids[k];
+                            if(this_id == key_id) {
+                                has_popup = true;
+                                break;
+                            }
+                        }
+                        if(has_popup) {
+                            var line_popup = dict_line_popup[this_line.id];
+                            line_popup.setLatLng(e.latlng);
+                            line_popup.openOn(map);
+                        }
+                    }
+                });
+                markers.push(polyline);
+            } else if(feature_shape =="点" ||  feature_shape =="Point"){
+                //  添加点标注（Marker）及其信息窗体
+                var y = feature.geometry.coordinates[0];
+                var x = feature.geometry.coordinates[1];
+                var name_info= feature.properties.name+"  "+feature.properties.brif;
+                var marker = L.marker([x,y], {icon: myIcon});
+
+                marker.bindPopup(popup);
+                markers.push(marker);
+//            marker.bindPopup(info_win);
+            }
+
+//            L.marker([x,y], {icon: myIcon}).addTo(map).bindPopup(name_info);
+        }
+        markersGroup = L.layerGroup(markers);
+        map.addLayer(markersGroup);
+
+    }
+
+    function query_adapt(find_point, find_line, field_name, text, clean_current) {
+        if(clean_current === undefined) {
+            clean_current = false;
+        }
+        find_point.layers('0').fields(field_name).text(text);
+        find_line.layers('1').fields(field_name).text(text);
+        find_point.run(function(error, featureCollection, response){
+//            console.log('Found ' + featureCollection.features.length + ' feature(s)');
+            var searched_point_features = [];
+            if(featureCollection != undefined) {
+                searched_point_features = featureCollection.features;
+            }
+            if(current_features.length < 1) {
+                current_point_features = searched_point_features;
+            } else if(clean_current) {
+                current_point_features = searched_point_features;
+            } else {
+                var common_features = get_common_features(searched_point_features, current_point_features);
+                current_point_features = common_features;
+            }
+            var search_query = create_search_query(current_point_features);
+            layer_Def["0"] = search_query;
+            find_line.run(function(error1, featureCollection1, response1){
+                if(featureCollection1 != undefined) {
+                    var searched_line_features = featureCollection1.features;
+                    if(current_line_features.length < 1) {
+                        current_line_features = searched_line_features;
+                    } else if(clean_current) {
+                        current_line_features = searched_line_features;
+                    } else {
+                        var common_features = get_common_features(searched_line_features, current_line_features);
+                        current_line_features = common_features;
+                    }
+                    var search_query1 = create_search_query(current_line_features);
+                    layer_Def["1"] = search_query1;
+                    d_layer.setLayerDefs(layer_Def);
+                    d_layer.addTo(map);
+                    current_features = current_point_features.concat(current_line_features);
+                    add_markers(current_features);
+                }
+            });
+        });
+    }
+
+    var normalm = L.tileLayer.chinaProvider('TianDiTu.Normal.Map', {
+                maxZoom: 18,
+                minZoom: 2
+            }),
+            normala = L.tileLayer.chinaProvider('TianDiTu.Normal.Annotion', {
+                maxZoom: 18,
+                minZoom: 2
+            }),
+            imgm = L.tileLayer.chinaProvider('TianDiTu.Satellite.Map', {
+                maxZoom: 18,
+                minZoom: 2
+            }),
+            imga = L.tileLayer.chinaProvider('TianDiTu.Satellite.Annotion', {
+                maxZoom: 18,
+                minZoom: 2
+            });
+
+    var normal = L.layerGroup([normalm, normala]),
+            image = L.layerGroup([imgm, imga]);
+
+    var baseLayers = {
+        "地图": normal,
+        "影像": image,
+    }
+
+    var overlayLayers = {
+
+    }
+    var map;
+//    var map = L.map("map", {
+//        center: [30.9, 110.7],
+//        zoom: 10,
+//        layers: [normal],
+//        zoomControl: false
+//    });
+
+    var markersGroup = L.layerGroup();
+//    map.addLayer(markersGroup);
+
+    var current_point_features = [];
+    var current_line_features = [];
+    var current_features = [];
+//    var searched_features = [];
+
+    var dict_line_popup = {};
+
+//    L.control.layers(baseLayers, overlayLayers).addTo(map);
+//    L.control.zoom({
+//        zoomInTitle: '放大',
+//        zoomOutTitle: '缩小'
+//    }).addTo(map);
+
+    // var my_service_url = 'http://localhost:6080/arcgis/rest/services/SampleWorldCities/MapServer';
+    var my_service_url = 'http://10.5.220.20:6080/arcgis/rest/services/my_map_service_01/MapServer';
+
+    var layer_Def={};
+    var d_layer = L.esri.dynamicMapLayer({
+        url: my_service_url,
+        opacity: 0.7,
+        // layerDefs:layer_Def
+    });
+
+
+    var find_word_point = L.esri.find({
+        url: my_service_url
+    });
+    var find_word_line = L.esri.find({
+        url: my_service_url
+    });
+//    query_word('秭归');
+
+    var find_type_point = L.esri.find({
+        url: my_service_url
+    });
+    var find_type_line = L.esri.find({
+        url: my_service_url
+    });
+//    query_type('type', '企业');
+
+    var find_dist_point = L.esri.find({
+        url: my_service_url
+    });
+    var find_dist_line = L.esri.find({
+        url: my_service_url
+    });
+////    query_dist('沙镇溪镇');
+////    query_adapt(find_dist_point, find_dist_line, "adminarea", "沙镇溪镇");
+////    query_adapt(find_type_point, find_type_line, "type", "农村居民点");
+//    query_adapt(find_type_point, find_type_line, "bigtype", "交通运输设施类");
+////    query_adapt(find_word_point, find_word_line, "name", "秭归");
+//
+//    //L.marker([30.9, 110.7]).addTo(map).bindPopup("hello world");
+
+    function query_word(word) {
+
+//    find_word_point.layers('0').fields('name').text('秭归');
+        find_word_point.layers('1').fields('name').text(word);
+        find_word_point.run(function(error, featureCollection, response){
+            console.log('Found ' + featureCollection.features.length + ' feature(s)');
+            searched_features = featureCollection.features;
+            if(current_features.length < 1) {
+                current_features = searched_features;
+            } else {
+                var common_features = get_common_features(searched_features, current_features);
+                current_features = common_features;
+            }
+            var search_query = create_search_query(current_features);
+            layer_Def["0"] = search_query;
+            d_layer.setLayerDefs(layer_Def);
+            d_layer.addTo(map);
+            add_markers(current_features);
+//    var d_layer = L.esri.dynamicMapLayer({
+//        url: my_service_url,
+//        opacity: 0.7,
+//        layerDefs:layer_Def
+//    }).addTo(map);
+        });
+    }
+
+    function query_type(big_or_small, text) {
+//    find_type_point.layers('0').fields('type').text('企业');
+        find_type_point.layers('1').fields(big_or_small).text(text);
+        find_type_point.run(function(error, featureCollection, response){
+            console.log('Found ' + featureCollection.features.length + ' feature(s)');
+            searched_features = featureCollection.features;
+            if(current_features.length < 1) {
+                current_features = searched_features;
+            } else {
+                common_features = [];
+                var common_features = get_common_features(searched_features, current_features);
+                current_features = common_features;
+            }
+            var search_query = create_search_query(current_features);
+            layer_Def["0"] = search_query;
+            d_layer.setLayerDefs(layer_Def);
+            d_layer.addTo(map);
+            add_markers(current_features);
+        });
+    }
+
+    function query_dist(dist_name) {
+
+        find_dist_point.layers('0').fields('adminarea').text(dist_name);
+        find_dist_line.layers('1').fields('adminarea').text(dist_name);
+        find_dist_point.run(function(error, featureCollection, response){
+//            console.log('Found ' + featureCollection.features.length + ' feature(s)');
+            var searched_point_features = [];
+            if(featureCollection != undefined) {
+                searched_point_features = featureCollection.features;
+            }
+            if(current_features.length < 1) {
+                current_point_features = searched_point_features;
+            } else {
+                var common_features = get_common_features(searched_point_features, current_point_features);
+                current_point_features = common_features;
+            }
+            var search_query = create_search_query(current_point_features);
+            layer_Def["0"] = search_query;
+            find_dist_line.run(function(error1, featureCollection1, response1){
+                if(featureCollection1 != undefined) {
+                    var searched_line_features = featureCollection1.features;
+                    if(current_line_features.length < 1) {
+                        current_line_features = searched_line_features;
+                    } else {
+                        var common_features = get_common_features(searched_line_features, current_line_features);
+                        current_line_features = common_features;
+                    }
+                    var search_query1 = create_search_query(current_line_features);
+                    layer_Def["1"] = search_query1;
+                    d_layer.setLayerDefs(layer_Def);
+                    d_layer.addTo(map);
+                    current_features = current_point_features.concat(current_line_features);
+                    add_markers(current_features);
+                    //    var d_layer = L.esri.dynamicMapLayer({
+                    //        url: my_service_url,
+                    //        opacity: 0.7,
+                    //        layerDefs:layer_Def
+                    //    }).addTo(map);
+                }
+            });
+        });
+    }
+
+
+    $(function() {
+
+
+        var normalm = L.tileLayer.chinaProvider('TianDiTu.Normal.Map', {
+                    maxZoom: 18,
+                    minZoom: 2
+                }),
+                normala = L.tileLayer.chinaProvider('TianDiTu.Normal.Annotion', {
+                    maxZoom: 18,
+                    minZoom: 2
+                }),
+                imgm = L.tileLayer.chinaProvider('TianDiTu.Satellite.Map', {
+                    maxZoom: 18,
+                    minZoom: 2
+                }),
+                imga = L.tileLayer.chinaProvider('TianDiTu.Satellite.Annotion', {
+                    maxZoom: 18,
+                    minZoom: 2
+                });
+
+        var normal = L.layerGroup([normalm, normala]),
+                image = L.layerGroup([imgm, imga]);
+
+        var baseLayers = {
+            "地图": normal,
+            "影像": image,
+        }
+
+        var overlayLayers = {
+
+        }
+
+        map = L.map("map", {
+            center: [30.9, 110.7],
+            zoom: 10,
+            layers: [normal],
+            zoomControl: false
+        });
+
+        map.addLayer(markersGroup);
+
+        L.control.layers(baseLayers, overlayLayers).addTo(map);
+        L.control.zoom({
+            zoomInTitle: '放大',
+            zoomOutTitle: '缩小'
+        }).addTo(map);
+
+//    query_dist('沙镇溪镇');
+//    query_adapt(find_dist_point, find_dist_line, "adminarea", "沙镇溪镇");
+//    query_adapt(find_type_point, find_type_line, "type", "农村居民点");
+        query_adapt(find_type_point, find_type_line, "bigtype", "交通运输设施类");
+//    query_adapt(find_word_point, find_word_line, "name", "秭归");
+
+//L.marker([30.9, 110.7]).addTo(map).bindPopup("hello world");
+
+    });
+
+
+</script>
+
+
+</html>

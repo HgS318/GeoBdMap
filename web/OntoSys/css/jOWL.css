@@ -1,0 +1,65 @@
+/**
+* jOWL CSS Generic Style Settings.
+* Creator - David Decraene
+* Version 1.0
+* http://jowl.ontologyonline.org
+*/
+
+img {
+	border: 0pt none;
+	display: block
+}
+
+/** custom widget settings */
+.jowl_link {
+	text-decoration: underline;
+	color: #fff;
+	cursor: pointer;
+}
+
+.jowl_tooltip {
+	text-decoration: underline;
+	color: #fff;
+}
+
+#thingtooltip {
+	border: 0px;
+}
+
+.stats {
+	text-align: right;
+	font-size: smaller;
+}
+
+.resourcebox {
+	text-align: left
+}
+
+
+
+/** bordered box */
+.ui-widget-content {border:0;}
+/** shaded titlebar */
+.ui-dialog-titlebar {margin:0px;padding:3px;text-align:center;background-color:#F8F8FF}
+
+.jowl-content {padding:5px;min-height:80px;}
+
+/** jowl-navbar */
+.jowl-navbar span {margin-right:5px;cursor:pointer;}
+.jowl-navbar div {margin-bottom:5px;}
+.jowl-navbar .external {font-weight:bold;color:red;font-style:italic;}
+
+/** jowl_autocomplete */
+.jowl_autocomplete_results{
+	display:none;min-height:20px;text-align:left;width:250px;z-index:20;position:absolute;
+	border: 1px solid WindowFrame; background-color: Window;
+	list-style-position: outside; list-style: none; margin: 0px;padding-left:0px;
+	}
+.jowl_autocomplete_results li {margin: 0px;cursor: pointer;display: block;font: menu;font-size: 12px;padding: 2px 5px;margin-bottom:2px;}
+.jowl_autocomplete_results .type{font-style:italic;float:right}
+.jowl_autocomplete_results .termlabel{font-size:8px}
+.jowl_autocomplete_results .name{font-weight:bold}
+
+
+
+

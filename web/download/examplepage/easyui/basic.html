@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<!--<meta charset="UTF-8">-->
+	<title>查询结果详情</title>
+	<link rel="stylesheet" type="text/css" href="../../../OntoSys/js/easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../../../OntoSys/js/easyui/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="demo.css">
+    <style>
+        /*body {text-align:center}*/
+        .basicmid {
+            margin-left: 320px;
+            width:700px;
+            float: none;
+        }
+        /* CSS注释：设置对象边框、宽度、高度 便于观察布局效果 */
+    </style>
+
+    <script type="text/javascript" src="../../../js/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="../../../OntoSys/js/easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../../data/testdata_copy.js"></script>
+    <script type="text/javascript" src="basicjs.js"></script>
+
+</head>
+<body>
+
+
+
+<div style="float: left; margin: 60px 10px 20px 60px; width: 220px">
+    <h2>查询信息</h2>
+    <div id="infodiv"></div>
+</div>
+
+	<div class="basicmid">
+        <h1 style="text-align: center">查询结果详情</h1>
+        <table id="placedatadiv" class="easyui-datagrid" title="地名" style="width:700px;height:300px"
+                data-options="rownumbers:true,singleSelect:true,collapsible:true,method:'get'">
+            <thead data-options="frozen:true">
+                <tr>
+                    <!--<th data-options="field:'id'">Item ID</th>-->
+                    <th data-options="field:'name'">名称</th>
+                </tr>
+            </thead>
+            <thead>
+                <tr>
+                    <th data-options="field:'所在跨行政区'">行政区</th>
+                    <th data-options="field:'大类'">地名大类</th>
+                    <th data-options="field:'小类'">地名小类</th>
+                    <th data-options="field:'spaTypeName'">空间类型</th>
+                    <th data-options="field:'brif'">地名简介</th>
+                </tr>
+                </thead>
+        </table>
+
+        <div></div>
+        <table id="distdatadiv" class="easyui-datagrid" title="行政区" style="width:700px;height:300px"
+               data-options="rownumbers:true,singleSelect:true,collapsible:true,method:'get'">
+            <thead data-options="frozen:true">
+            <tr>
+                <th data-options="field:'name'">名称</th>
+            </tr>
+            </thead>
+            <thead>
+            <tr>
+                <th data-options="field:'Grade'">行政级别</th>
+                <th data-options="field:'id'">行政编号</th>
+                <th data-options="field:'地理位置',width:100">地理位置</th>
+                <th data-options="field:'上级行政区',align:'right'">上级行政区</th>
+                <th data-options="field:'面积'">总面积</th>
+                <th data-options="field:'人口'">总人口</th>
+            </tr>
+            </thead>
+        </table>
+
+        <div></div>
+        <table id="bounddatadiv" class="easyui-datagrid" title="行政界线" style="width:700px;height:300px"
+               data-options="rownumbers:true,singleSelect:true,collapsible:true,method:'get'">
+            <thead data-options="frozen:true">
+            <tr>
+                <th data-options="field:'name'">名称</th>
+            </tr>
+            </thead>
+            <thead>
+            <tr>
+                <th data-options="field:'Grade'">行政级别</th>
+                <th data-options="field:'LeftName',width:100">相关行政区1</th>
+                <th data-options="field:'RightName',width:100">相关行政区2</th>
+                <th data-options="field:'markNum'">界桩、界碑数</th>
+                <th data-options="field:'updateTime'">更新时间</th>
+            </tr>
+            </thead>
+        </table>
+
+        <div></div>
+        <table id="boundmarkerdatadiv" class="easyui-datagrid" title="界桩、界碑" style="width:700px;height:120px"
+               data-options="rownumbers:true,singleSelect:true,collapsible:true,method:'get'">
+            <thead data-options="frozen:true">
+            <tr>
+                <th data-options="field:'name'">名称</th>
+            </tr>
+            </thead>
+            <thead>
+            <tr>
+                <th data-options="field:'Grade'">行政级别</th>
+                <th data-options="field:'TypeName'">类别</th>
+                <th data-options="field:'relatedDists',width:100">相关行政区域</th>
+                <th data-options="field:'updateTime'">更新时间</th>
+            </tr>
+            </thead>
+        </table>
+
+
+</div>
+
+
+</body>
+</html>

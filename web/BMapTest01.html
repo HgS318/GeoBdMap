@@ -1,0 +1,71 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+		body, html{width: 100%;height: 100%; margin:0;font-family:"微软雅黑";}
+		#l-map{height:100%;width:80%;}
+		#r-result {
+            margin: 0;
+            padding: 0;
+            z-index: 999;
+            position: absolute;
+            background-color: white;
+            max-height: 100%;
+            overflow-y: auto;
+            top: 0;
+            right: 0;
+            width: 20%;
+        }
+	</style>
+	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=SycUWXeBU9Z1tkvcNqmFxvo93cS4jbU7"></script>
+	<title>Baidu map demo01</title>
+</head>
+<body>
+	<div id="l-map"></div>
+	<div id="r-result"></div>
+</body>
+</html>
+<script type="text/javascript">
+
+
+//	获取url参数
+function getQueryString(name) {
+    var result = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
+    if (result == null || result.length < 1) {
+        return "";
+    }
+    return result[1];
+}
+
+$.ajax({
+	url: 'testShpService.action',
+	type: 'get',
+	dataType: 'json',
+	success: function (shp_data) {
+		var shape = shp_data['shape'];
+		var lineArr = JSON.parse(shape);
+		var pointArr = [];
+		for(var i = 0; i < lineArr.length; i++) {
+			var [_x, _y] = lineArr[i];
+			var bp = new BMap.Point(_x, _y);
+			pointArr.push(bp);
+		}
+		var polygon = new BMap.Polygon(pointArr);
+
+		//	百度地图API功能
+		var map = new BMap.Map("l-map");            // 创建Map实例
+		var _point = new BMap.Point(120.76387299284131, 31.92252143886308);
+		map.centerAndZoom(_point, 9);
+		map.enableScrollWheelZoom(true);
+
+//		map.centerAndZoom(new BMap.Point(midx, midy), 11);
+
+		map.addOverlay(polygon);
+	},
+	error: function (err_data) {
+	}
+});
+
+</script>

@@ -1,0 +1,604 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" id="html">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+	<title>地名 - 地名百科 </title>
+
+	<meta name="keywords" content="" />
+	<meta name="description" content="  属性名称 值   概念代码:  230200  概念名称:  时令湖  范例名称:  月亮湖  长" />
+	<meta name="generator" content="HDWiki 5.1" />
+	<meta name="author" content="HDWiki Team and Hudong UI team" />
+	<meta name="copyright" content="2005-2013 baike.com" />
+	<link href="../css/hdwiki.css" rel="stylesheet" type="text/css" media="all"/>
+
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script type="text/javascript" src="../js/front.js"></script>
+	<script type="text/javascript" src="../js/jquery.dialog-0.8.min.js"></script>
+	<script type="text/javascript" src="../data/testdata.js" charset=”utf-8″></script>
+	<script type="text/javascript" src="../js/pages/wiki-common.js" charset=”utf-8″></script>
+
+</head>
+<body>
+<!--编辑异常中断，下次登录提示-->
+
+<ul id="login" class="w-950 bor_b-ccc">
+	<li name="login" class="bor_no" />
+	<li name="register" class="bor_no" />
+</ul>
+
+<div class="bg_book">
+	<a href="wiki-portal.html" id="logo"><img alt="HDWiki" height="65px" src="../images/logo.png"/></a>
+	<form name="searchform" method="post" action="#">
+		<p id="search">
+			<input name="searchtext" class="btn_txt" maxlength="80" size="42" value="" type="text" id="name0" onkeypress="srchkeypress(event)"/>
+			<input name="default" value="搜索词条" tabindex="2" class="enter_doc" onclick="searchWord()" type="button"/>
+			<!--<input name="full" value="1" tabindex="1"   type="hidden"/>-->
+			<!--<input name="search" value="搜 索" tabindex="1" class="btn_inp sea_doc" type="submit"/>-->
+			<!--<a href="#" class="sea_advanced link_black">高级搜索</a>-->
+			<label>热门搜索：
+				<a href="wikiContent_fitall.html?name=wangguiting" target="_blank">望归亭</a>
+				<a href="wikiContent_fitall.html?name=sanxialianziyajingqu" target="_blank">三峡链子崖景区</a>
+				<a href="wikiContent_fitall.html?name=xiangxihe" target="_blank">香溪河</a>
+			</label>
+		</p>
+	</form>
+	<div id="nav" class="w-950 bor_b-ccc">
+		<ul>
+			<li><a href="wiki-portal.html">首页</a></li>
+			<li><a href="wikiClass.html">百科分类</a></li>
+			<!--<li><a href="#">排行榜</a></li>-->
+		</ul>
+	</div>
+</div>
+
+
+<!--ad end -->
+<!--全屏图片查看脚本文件 -->
+<!--<script type="text/javascript" src="plugins/lightbox/js/galleria.js"></script>-->
+<!-- 设置全屏图片遮罩层, 图片点击事件等脚本 -->
+<script type="text/javascript">
+
+	var data;
+
+	$(function() {
+		var url = "", url_specific = "";
+		var id_str = getQueryString("zgid");
+		if("" != id_str) {
+			url = 'getGeonameFullById.action?id=' + id_str;
+		} else {
+			var placename = getQueryString("name");
+			url = "getGeonameByNickname.action?name=" + placename;
+		}
+
+		$.ajax({
+			url: url,
+			type: 'get',
+			dataType: 'json',
+			success: function (_data) {
+				if(!_data) {
+					return;
+				}
+				data = _data;
+//				if("DMID" in data && "TBNAME" in data) {
+				if("DMID" in data && "TBNAME" in data) {
+					var dmid = data["DMID"];
+					var tb = data["TBNAME"];
+					url_specific = "getGeonameSpecificInfo.action?dmid=" + dmid + "&tb=" + tb;
+					$.ajax({
+						url: url_specific,
+						type: 'get',
+						dataType: 'json',
+						success: function (spe_data) {
+							for(var _key in spe_data) {
+								var _val = spe_data[_key];
+								add_table_val(_key, "&nbsp;" + _val);
+							}
+						},
+						error: function (er_data) {
+							console.log(er_data);
+						}
+					});
+				}
+				consMainContent(data);
+				consPicsListContent(placename,data);
+			},
+			error: function (data) {
+				console.log(data);
+			}
+		})
+
+	});
+
+	function add_table_val(field_name, field_value){
+		var tab = document.getElementById("attr_tb");
+		oneRow = tab.insertRow();
+		cell1 = oneRow.insertCell();
+		cell2 = oneRow.insertCell();
+		cell1.innerHTML = "&nbsp; " + field_name;
+		cell2.innerHTML = field_value;
+	}
+
+	function consBasicCotent(data, attaname, divname) {
+		if(data[attaname]) {
+			document.getElementById(divname).innerHTML ="&nbsp;" + data[attaname];
+		}
+	}
+
+	function consDetailedContent(data, attaname, divname) {
+		if(data[attaname]) {
+			document.getElementById(divname).innerHTML ="&nbsp;&nbsp;&nbsp;&nbsp;" + data[attaname];
+		}
+	}
+
+	function consMainContent(data) {
+
+		var name = data['name'];
+		document.title = name + " - 地名百科";
+		var bc = data['大类'],sc = data['类别名称'];
+		document.getElementById("name0").setAttribute("value", name);
+		document.getElementById("doctitle").innerHTML = name;
+		document.getElementById("bigclass1").innerHTML = bc;
+		document.getElementById("bigclass1").href = "wiki-list.html?bigtype=" + bc;
+		document.getElementById("smallclass1").innerHTML = sc;
+		document.getElementById("smallclass1").href = "wiki-list.html?type=" + sc;
+		document.getElementById("bigclass2").innerHTML = bc;
+		document.getElementById("bigclass2").href = "wiki-list.html?bigtype=" + bc;
+		document.getElementById("smallclass2").innerHTML = sc;
+		document.getElementById("smallclass2").href = "wiki-list.html?type=" + sc;
+		document.getElementById("name2").innerHTML = name;
+		document.getElementById("smallclass3").innerHTML = sc;
+		document.getElementById("smallclass3").href = "wiki-list.html?type=" + sc;
+
+//		consBasicCotent(data, "标准名称","stdname");
+		consBasicCotent(data, "name","stdname");
+		consBasicCotent(data, "ChnSpell","ChnSpell");
+		consBasicCotent(data, "geonamecode","gncode");
+		consBasicCotent(data, "所在跨行政区","indist");
+		consBasicCotent(data, "比例尺","scale");
+		consBasicCotent(data, "图名图号年版","mapname");
+		consBasicCotent(data, "使用时间","usetime");
+		consBasicCotent(data, "oldname","oldname");
+//		consBasicCotent(data, "普查状态","instate");
+//		consBasicCotent(data, "设立年份","setyear");
+//		consBasicCotent(data, "废止年份","endyear");
+		consBasicCotent(data, "东经","east");
+		consBasicCotent(data, "至东经","toeast");
+		consBasicCotent(data, "北纬","north");
+		consBasicCotent(data, "至北纬","tonorth");
+//		consBasicCotent(data, "坐标系","coo");
+//		consBasicCotent(data, "测量方法","method");
+		consDetailedContent(data, "地名含义","hanyi");
+		consDetailedContent(data, "地名来历","laili");
+		consDetailedContent(data, "历史沿革","yange");
+		consDetailedContent(data, "地理实体描述","miaoshu");
+		consDetailedContent(data, "资料来源及出处","ziliao");
+
+	}
+
+	function consPicsListContent(placename, data) {
+
+		var sharp = 7;
+
+		if(data.DXCG) {
+			consListContent(placename, ++sharp, "地形图", 455);
+		}
+		if(data.TSCG) {
+			consListContent(placename, ++sharp, "图式图像", 160);
+		}
+		if(data.SJCG) {
+			consListContent(placename, ++sharp, "实景图片", 564);
+		}
+		if(data.SJQJ) {
+			consListContent(placename, ++sharp, "实景全景", 800);
+		}
+		if(data.SJHR) {
+			consListContent(placename, ++sharp, "实景环绕", 700);
+		}
+		if(data.SJDJ) {
+			consListMultiContent(placename, ++sharp, "实景多角度", 700, 2);
+		}
+		if(data.SJDS) {
+			consListMultiContent(placename, ++sharp, "实景多时相", 219, 2);
+		}
+		if(data.YGCG) {
+			consListContent(placename, ++sharp, "遥感图像", 700);
+		}
+		if(data.YGDS) {
+			consListMultiContent(placename, ++sharp, "遥感多时相", 720, 2);
+		}
+		if(data.LTCG) {
+			consListContent(placename, ++sharp, "立体图像", 700);
+		}
+		if(data.SYCG) {
+			consListContent(placename, ++sharp, "示意图像", 700);
+		}
+
+	}
+
+	function consListContent(nickname, sharp, typename, fwitdh) {
+		var lis = consListItem(sharp, typename);
+		document.getElementById("hidesection").innerHTML += lis;
+		var cont = consPicCont(nickname, sharp, typename, fwitdh);
+		document.getElementById("details").innerHTML += cont;
+	}
+
+	function consListMultiContent(nickname, sharp, typename, fwitdh, numStr) {
+		var lis = consListItem(sharp, typename);
+		document.getElementById("hidesection").innerHTML += lis;
+		var cont = consMultiPicCont(nickname, sharp, typename, fwitdh, numStr);
+		document.getElementById("details").innerHTML += cont;
+	}
+
+	function consListItem(sharp, typename) {
+		var str = "<li style=\"display:none\">&#8226; <a href=\"#" + sharp +"\">" + typename + "</a></li>";
+		return str;
+	}
+
+	function consPicCont(nickname, sharp, typename, fwitdh) {
+
+		var url1 = "../data/wikiContent/place/" + nickname + "/" + nickname + typename + ".jpg";
+		var str1 = "<h3><span class='texts'>"+ typename + "</span>";
+		var str2 =	"<a name='" + sharp + "'></a> <a href='#section'>回目录</a></h3>";
+		var str3 =	"<div class='content_topp'><p></p><p></p>" + "<div class='img img_l' style='width: " + fwitdh +"px;'>";
+		var reg1 = new RegExp("typename","g"); //创建正则RegExp对象
+		var reg2 = new RegExp("url1","g"); //创建正则RegExp对象
+		var str4tmp = "<a title='typename' href='url1' target='_blank'><img title='typename' alt='typename' src='url1' /></a>";
+		var str4tmp1 = str4tmp.replace(reg1, typename);
+		var str4 = str4tmp1.replace(reg2, url1);
+		var str5 = "<span style='clear: both; display: block; padding-top: 10px; color: rgb(51, 51, 51);'>"
+				+typename+"</span></div></div>";
+
+		var recon = str1 + str2 + str3 + str4 + str5;
+		return recon;
+	}
+
+	function consMultiPicCont(nickname, sharp, typename, fwitdh, numStr) {
+
+		var str1 = "<h3><span class='texts'>"+ typename + "</span>";
+		var str2 =	"<a name='" + sharp + "'></a> <a href='#section'>回目录</a></h3>";
+		var str3 =	"<div class='content_topp'><p></p><p></p>";
+		var reg1 = new RegExp("typename","g"); //创建正则RegExp对象
+		var mul = "";
+		var num = parseInt(numStr);
+		for(var i = 0; i < num; i++) {
+			var url = "../data/wikiContent/" + nickname + "/" + nickname + typename + (i+1) + ".jpg";
+			var reg = new RegExp("url","g"); //创建正则RegExp对象
+			var s1 = "<div class='img img_l' style='width: " + fwitdh +"px;'>";
+			var s2tmp = "<a title='typename' href='url' target='_blank'><img title='typename' alt='typename' src='url' /></a>";
+			var s2tmp1 = s2tmp.replace(reg1, typename);
+			var s2 = s2tmp1.replace(reg, url);
+			var s3 = "<span style='clear: both; display: block; padding-top: 10px; color: rgb(51, 51, 51);'>"
+					+typename+"</span></div>";
+			mul += (s1 + s2 + s3);
+		}
+		var str5 = "</div>";
+		var recon = str1 + str2 + str3 + mul + str5;
+		return recon;
+	}
+
+//	function searchWord() {
+////		var srhname = document.getElementById("name0").value;
+////		if(srhname && "" != srhname) {
+////			if(data && data.name && data.name == srhname) {
+////				return;
+////			}
+////			var newurl = "wikiContent_fitall.html?name=" + srhname;
+////			window.open(newurl);
+////		}
+//		var srhname = document.getElementById("name0").value;
+//		if(srhname && "" != srhname) {
+//			if(data && data.name && data.name == srhname) {
+//				return;
+//			}
+//			var newurl = "wiki-list.html?words=" + srhname;
+//			window.open(newurl);
+//		}
+//	}
+//
+//	function srchkeypress(e) {
+//		var keynum = window.event ? e.keyCode : e.which;
+//		if(13 == keynum) {
+//			searchWord();
+//		}
+//	}
+
+	//	设置自动补全
+	function setAutoComplete() {
+
+		$("#winsrhword").focus().autocomplete(placedata, {
+			minChars: 1,
+			width: 100,
+			matchCase: false,//不区分大小写
+//				matchContains: "word",
+//				autoFill: true,
+			formatItem: function(row, i, max) {
+				return row.name;
+			},
+			formatMatch: function(row, i, max) {
+				return row.spell + row.name;
+			},
+			formatResult: function(row) {
+				return row.name;
+			},
+			reasultSearch:function(row, v) {//本场数据自定义查询语法 注意这是我自己新加的事件
+				//自定义在code或spell中匹配
+				if(row.data.spell.indexOf(v) == 0 || row.data.name.indexOf(v) == 0) {
+					return row;
+				}
+				else {
+					return false;
+				}
+			}
+		});
+		$("#winsrhword").keydown(function(e) {
+			if(e.keyCode != 13){
+				return;
+			}
+			if(!entered) {
+				entered = true;
+				return;
+			}
+			var navTxt = $("#startorend")[0].innerText;
+			entered = false;
+			if(navTxt =="起点" || navTxt =="终点") {
+				if(navMethod == "trans") {
+					srhbus();
+				} else if(navMethod == "drive") {
+					srhdrive();
+				} else if(navMethod == "walk") {
+					srhwalk();
+				}
+			} else {
+				srhpoi();
+			}
+		});
+	}
+
+	function partsection(){
+		$('#fullsection').css('display','block');
+		$('#partsection').css('display','none');
+		$("#hidesection > li:gt(3)").css('display','none');
+	}
+
+	function fullsection(){
+		$('#fullsection').css('display','none');
+		$('#partsection').css('display','block');
+		$("#hidesection > li:gt(3)").css('display','block');
+	}
+</script>
+
+<div class="w-950 hd_map"> <a href="wiki-portal.html">地名百科</a> <!--&gt;&gt;所属分类 &gt;&gt;-->
+	<span id="catenavi">
+    &gt;&gt;
+        <a href="#" id="bigclass1">  </a>
+    &gt;&gt;
+        <a href="#" id="smallclass1"></a>
+    <!--&gt;&gt;-->
+	</span> </div>
+<div class="l w-710 o-v">
+<div id="doc_id">
+  <h1 class="title_thema"> <span id='doctitle'>暂无该地名</span>
+    <label id='auditmsg'>
+          </label>
+    <label id='lockimage'>
+          </label>
+  </h1>
+  <div class="subordinate">
+	<p class="cate_open">
+		<span class="bold">标签:</span>
+		<span name="nonetag">暂无标签</span>
+	</p>
+</div>
+
+
+	<div class="content_1 wordcut" id="details">
+    	<hr style="border-bottom:0;border-top:1"/>
+           <div style="float:left; width: 78%; margin-top: 5px; padding-right: 15px;">
+			   <p><font size="4"><span style="line-height: 27px;"><b>地名含义</b></span></font></p>
+			   <p id="hanyi">&nbsp;&nbsp;&nbsp;&nbsp;
+
+			   </p>
+			   <p></p>
+
+		   </div>
+
+    <fieldset id="catalog">
+		<legend><a name='section'>目录</a></legend>
+		<ul id="hidesection">
+			<li>&#8226; <a href="#1">地名含义</a></li>
+			<li>&#8226; <a href="#2">基本属性</a></li>
+			<li>&#8226; <a href="#3">地名来历</a></li>
+			<li>&#8226; <a href="#4">历史沿革</a></li>
+			<li style="display:none">&#8226; <a href="#5">实体描述</a></li>
+			<li style="display:none">&#8226; <a href="#6">资料来源</a></li>
+			<li style="display:none">&#8226; <a href="#7">词条关系</a></li>
+			<!--<li style="display:none">&#8226; <a href="#7">地形图</a></li>-->
+			<!--<li style="display:none">&#8226; <a href="#8">实景</a></li>-->
+			<!--<li style="display:none">&#8226; <a href="#9">实景多时相</a></li>-->
+			<!--<li style="display:none">&#8226; <a href="#10">实景全景</a></li>-->
+			<!--<li style="display:none">&#8226; <a href="#11">图式图像</a></li>-->
+			<!--<li style="display:none">&#8226; <a href="#12">遥感</a></li>-->
+			<!--<li style="display:none">&#8226; <a href="#13">遥感多时相</a></li>-->
+
+		</ul>
+            <p><a href="javascript:void(0);" onclick="partsection();"  id="partsection" style="display:none">[显示部分]</a><a href="javascript:void(0);" onclick="fullsection();" id="fullsection">[显示全部]</a></p>
+          </fieldset>
+
+		<h3><span class="texts">基本属性</span>
+            <!-- 判断用户角色 当用户未登录(即匿名用户)时, [编辑本段]功能不显示 -->
+    	    		<!-- 匿名用户 此处本可以不输出a标签, 但目录定位是根据[编辑本段]的a标签的name属性定位的, 所以加一个空的a标签 -->
+            <a name="2"></a>
+    	    	<a href="#section">回目录</a>
+    	</h3>
+        <div class="content_topp">
+			<p></p>
+			<table id="attr_tb" class="jqe-table" width="600" border="1" bordercolor="#cccccc">
+				<tbody id="test_tb">
+				<tr><th>&nbsp; 属性名</th><th>&nbsp;值&nbsp;</th></tr>
+				<tr><td>&nbsp; 标准名称</td><td id="stdname"></td></tr>
+				<tr><td>&nbsp; 罗马拼音</td><td id="ChnSpell"></td></tr>
+				<tr><td>&nbsp; 地名代码</td><td id="gncode"></td></tr>
+				<tr><td>&nbsp; 所在（跨）行政区</td><td id="indist"></td></tr>
+				<tr><td>&nbsp; 图名图号（年版）</td><td id="mapname"></td></tr>
+				<tr><td>&nbsp; 比例尺</td><td id="scale"></td></tr>
+				<tr><td>&nbsp; 使用时间</td><td id="usetime"></td></tr>
+				<tr><td>&nbsp; 旧称</td><td id="oldname"></td></tr>
+				<!--<tr><td>&nbsp; 普查状态</td><td id="instate"></td></tr>-->
+				<!--<tr><td>&nbsp; 设立年份<br /></td><td id="setyear"></td></tr>-->
+				<!--<tr><td>&nbsp; 废止年份</td><td id="endyear"></td></tr>-->
+				<tr><td>&nbsp; 东经</td><td id="east"></td></tr>
+				<tr><td>&nbsp; 至东经</td><td id="toeast"></td></tr>
+				<tr><td>&nbsp; 北纬</td><td id="north"></td></tr>
+				<tr><td>&nbsp; 至北纬</td><td id="tonorth"></td></tr>
+				<!--<tr><td>&nbsp; 坐标系</td><td id="coo"></td></tr>-->
+				<!--<tr><td>&nbsp; 测量方法</td><td id="method"></td></tr>-->
+				</tbody>
+			</table>
+            <p></p>
+		</div>
+
+		<h3><span class="texts">地名来历</span>
+			<a name="3"></a>
+			<a href="#section">回目录</a>
+		</h3>
+		<div class="content_topp">
+			<p><font size="4"><span style="line-height: 27px;"><b></b></span></font></p>
+			<p id="laili">&nbsp;&nbsp;&nbsp;&nbsp;
+
+			</p>
+			<p></p>
+		</div>
+
+		<h3><span class="texts">历史沿革</span>
+			<a name="4"></a>
+			<a href="#section">回目录</a>
+		</h3>
+		<div class="content_topp">
+			<p><font size="4"><span style="line-height: 27px;"><b></b></span></font></p>
+			<p id="yange">&nbsp;&nbsp;&nbsp;&nbsp;
+            </p>
+			<p></p>
+		</div>
+
+		<h3><span class="texts">地理实体描述</span>
+			<a name="5"></a>
+			<a href="#section">回目录</a>
+		</h3>
+		<div class="content_topp">
+			<p><font size="4"><span style="line-height: 27px;"><b></b></span></font></p>
+			<p id="miaoshu">&nbsp;&nbsp;&nbsp;&nbsp;
+            </p>
+			<p></p>
+		</div>
+
+		<h3><span class="texts">资料来源及出处</span>
+			<a name="6"></a>
+			<a href="#section">回目录</a>
+		</h3>
+		<div class="content_topp">
+			<p><font size="4"><span style="line-height: 27px;"><b></b></span></font></p>
+			<p id="ziliao">&nbsp;&nbsp;&nbsp;&nbsp;
+            </p>
+			<p></p>
+		</div>
+
+		<h3>
+			<span class="texts">词条关系</span>
+			<!-- 判断用户角色 当用户未登录(即匿名用户)时, [编辑本段]功能不显示 -->
+			<!-- 匿名用户 此处本可以不输出a标签, 但目录定位是根据[编辑本段]的a标签的name属性定位的, 所以加一个空的a标签 -->
+			<a name="7"></a>
+			<a href="#section">回目录</a>
+		</h3>
+
+		<div class="content_topp">
+			<p>所属类型：<a href="#" class="baikelink" title="" style="line-height: 1.5;" id="smallclass3">时令湖</a>
+			</p>
+			<div><br /></div>
+		</div>
+
+  </div>
+
+
+</div>
+  <div class="nav_model">
+    </div>
+
+<!-- 全屏看图遮罩层 -->
+<div id="galleria"></div>
+
+    <div class="fj_list m-t10"> <h3
+    style="display:none"
+    >附件列表
+  </h3>
+  <dl style="display: none;">
+    <dt><img class="fj_img"/><a></a><br/>
+      <span class="l">
+      <label> 下载次数：0</label>
+      </span></dt>
+    <dd></dd>
+  </dl>
+      <input type="hidden" name="coin_hidden" id="coin_hidden" value=""  />
+</div>
+<div class="bor_b-ccc m-t10 notes">
+	<!-- 匿名用户 -->
+	<p class="r">
+		<a class="m-lr8">上一篇</a>
+		<a class="m-lr8">下一篇</a>
+	</p>
+</div>
+<p class="useful_for_me"> <span>词条内容仅供参考，如果您需要解决具体问题<br/>，建议您咨询相关领域专业人士。</span> <a href="javascript:void(0)" onclick="vote(this)">
+  <label id="votemsg">本词条对我有帮助</label>
+  <b>3</b></a> </p>
+<div class="bor-ccc m-t10 bg-gray notes add">
+  <p class="add_synonym">
+    <label class="l w-550"><b>同义词</b>：
+            <span name="nonesynonym">暂无同义词</span>
+          </label>
+      </p>
+</div>
+
+
+</div>
+
+<!-- 右侧边栏 -->
+<div class="r w-230">
+
+	<!-- 词条层级关系 -->
+	<div class="columns">
+		<h2 class="col-h2" style="background-color:rgb(54, 110, 161); color:#fff;">层级关系</h2>
+		<ul class="col-ul">
+			<li><a href="#" title="" style="color:rgb(54, 110, 161)" id="bigclass2"></a></li>
+			<li>&nbsp;&nbsp; &gt;<a href="#" title="" style="color:rgb(54, 110, 161)" id="smallclass2"></a></li>
+			<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;<a href="#" style="color:rgb(54, 110, 161)" id="name2"></a></li>
+		</ul>
+	</div>
+
+	<!--相关词条-->
+	<div class="columns">
+		<h2 class="col-h2" style="background-color:rgb(30, 127, 53); color:#fff;">
+			<!--原始标题: 相关词条 相关词条-->
+			<!--根据词条类型(概念or范例)确定标题(相关概念or相关范例)-->
+					相关地名
+				</h2>
+		<ul class="col-ul" id='related_doc'>
+			<li><a href="wikiContent_fitall.html?zgid=1" target="_blank" title="秭归县" style="color:rgb(30, 127, 53)">秭归县</a></li>
+		</ul>
+	</div>
+
+	<div class="nav_model"></div>
+	<div id="block_right"></div>
+</div>
+
+<div class="nav_model"></div>
+
+<div class="c-b"></div>
+<div id="footer"  class="w-950">
+	<p id="footer-p"> Copyright @ <a href="http://mzj.hbzg.gov.cn/" target="_blank">秭归县民政局</a>  V WIKI_VERSION  &copy;2017 <a href="#" class="link_black">地名百科</a> | <a href="#">Licensed</a> <br/>
+	</p>
+	<br/>
+	<p style="color:rgb(87, 87, 87);">ICP: xxx-xxxx</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+﻿<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>两列式全屏布局</title>
+
+    <style type="text/css">
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .top {
+            background-color: red;
+            border: solid 1px black;
+            margin: 0 0 5px 0;
+            height: 50px;
+        }
+
+        .sidebar {
+            position: absolute;
+            left: 0;
+            top: 57px;
+            width: 205px;
+            background-color: yellow;
+            border: solid 1px black;
+            border-left-width: 0;
+            height: 50px;
+        }
+
+        .main {
+            margin-left: 210px;
+            background-color: white;
+            border: solid 1px black;
+            height: 50px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="top">A(固定高度，宽度自适应)</div>
+    <div class="sidebar">B(高度任意，宽度为固定)</div>
+    <div class="main">C(高度任意，宽度为除开B之外的所有空间，自适应)</div>
+</body>
+</html>

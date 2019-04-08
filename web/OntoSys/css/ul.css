@@ -1,0 +1,90 @@
+/* Styles for Example #2 */
+#ul_ha {
+	margin: 0;
+	padding: 0;
+	width: 300px;
+	list-style-type: none;
+	background-color: #FFFFFF;
+	color: #000000;
+	line-height: 120%;
+	height: 300px;
+}
+
+#ul_ha a {
+	display: block;
+	font-weight: normal;
+	text-decoration: none;
+}
+
+#ul_ha ul {
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+}
+
+#ul_ha li {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#ul_ha li a {
+	width: 285px;
+	padding: 5px 0 0 15px;
+	display: block;
+	color: #000000;
+	background-image: url("./images/ha-header.jpg");
+	height: 25px;
+}
+
+#ul_ha li a.closed {
+	color: #000000 !important;
+	background-image: url("./images/ha-header.jpg") !important;
+}
+
+#ul_ha li.firstitem a.closed {
+	color: #000000 ;
+	background-image: url("./images/ha-header-first.jpg") ;
+}
+
+#ul_ha li.lastitem a.closed {
+	color: #000000 ;
+	background-image: url("./images/ha-header-last.jpg") ;
+}
+
+#ul_ha li li {
+	border-left: 1px solid #E5E5E5;
+	border-right: 1px solid #E5E5E5;
+	padding: 0 15px 0 15px;
+	height: 175px;
+}
+
+#ul_ha li a.opened {
+	background-image: url("./images/ha-header-active.jpg");
+	color: #FFFFFF;
+}
+
+#ul_ha li.firstitem a.opened {
+	background-image: url("./images/ha-header-first-active.jpg");
+	color: #FFFFFF;
+}
+
+#ul_ha li.lastitem li {
+	margin-bottom: -4px;
+}
+
+#ul_ha li.lastitem ul {
+	background-image: url("./images/ha-footer.jpg");
+	background-repeat: no-repeat;
+	background-position: bottom;
+	padding-bottom: 4px;
+}
+
+.innerUL {
+	display: none;
+	height: 175px;
+}
+
+.innerLI {
+	display: none;
+}

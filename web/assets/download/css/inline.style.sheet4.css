@@ -1,0 +1,177 @@
+.amap-adinfo-content-wrap,.amap-info-combo {
+    text-align:center
+}
+.amap-adinfo-content-wrap .adinfo-select-btn {
+    margin:3px auto
+}
+.adinfo-select-btn {
+    margin-left:25px;
+    margin-top:4px;
+    margin-bottom:3px;
+    border:0;
+    color:#fff;
+    cursor:pointer;
+    padding:3px 6px;
+    border-radius:2px;
+    background-color:#0091ff
+}
+.amap-info-combo {
+    font-size:12px;
+    line-height:18px;
+    white-space:nowrap
+}
+.amap-input-tips {
+    position:fixed;
+    border:1px solid #dadada;
+    width:100px;
+    height:100px
+}
+.amap-info-combo table {
+    width:100%;
+    border-spacing:0;
+    margin:4px 0 6px
+}
+.amap-info-combo table td {
+    min-width:8px
+}
+.amap-info-tabs {
+    overflow:hidden;
+    height:30px;
+    line-height:30px;
+    color:#333;
+    cursor:pointer;
+    background-color:#f2f2f2
+}
+.amap-info-combo .tab {
+    border:1px solid #d9d9d9;
+    height:22px;
+    border-right-width:0;
+    padding:0 10px
+}
+.amap-info-combo .tab:first-child {
+    border-left-width:0
+}
+.amap-info-tabs .tab-icon {
+    width:18px;
+    height:18px;
+    display:inline-block;
+    vertical-align:middle;
+    background:url(http://webapi.amap.com/theme/v1.3/images/amap-info.png) no-repeat
+}
+.amap-info-tabs .icon-start {
+    background-position:0 -100px
+}
+.amap-info-tabs .icon-end {
+    background-position:0 -50px
+}
+.amap-info-tabs .icon-around {
+    background-position:0 1px;
+    border-left:0
+}
+.amap-info-combo .selected {
+    background-color:#fefefe;
+    border-bottom:0
+}
+.amap-info-combo input:focus {
+    outline:0
+}
+.amap-info-combo .input-label {
+    padding:0 5px 0 8px
+}
+.amap-info-combo.status-poiSearch .input-label {
+    padding:0 2px
+}
+.amap-info-combo.status-poiSearch .keyword-input {
+    border-right:0
+}
+.amap-info-combo .keyword {
+    width:90%;
+    height:20px;
+    border:0;
+    padding:0 4px;
+    background-color:#fff
+}
+.amap-info-combo .keyword-input {
+    border:1px solid #c9c9c9;
+    line-height:21px;
+    height:22px;
+    width:100%;
+    text-align:left;
+    margin-right:40px;
+    border-radius:2px
+}
+.amap-info-combo .search-button {
+    background:url(http://webapi.amap.com/theme/v1.3/images/amap-info.png) 7px -198px no-repeat #0091ff;
+    border:none;
+    border-top-right-radius:2px;
+    border-bottom-right-radius:2px;
+    color:#FFF;
+    width:30px;
+    height:22px;
+    line-height:24px;
+    padding:0 4px;
+    margin-right:5px;
+    text-indent:-9999em;
+    cursor:pointer
+}
+.amap-info-combo .nav-button {
+    padding:2px 2px 2px 8px
+}
+.amap-info-combo .nav-icon {
+    padding:4px 3px 4px 20px;
+    border:1px solid #c9c9c9;
+    margin-right:4px;
+    border-radius:2px;
+    background:url(http://webapi.amap.com/theme/v1.3/images/amap-info.png) no-repeat;
+    cursor:pointer
+}
+.amap-info-combo .hovered {
+    background-color:#0091ff;
+    border-color:#0091ff;
+    color:#fff
+}
+.amap-info-combo .nav-drive {
+    background-position:2px -246px
+}
+.amap-info-combo .nav-drive-hover {
+    background-position:2px -396px
+}
+.amap-info-combo .nav-bus {
+    background-position:2px -299px
+}
+.amap-info-combo .nav-bus-hover {
+    background-position:2px -447px
+}
+.amap-info-combo .nav-walk {
+    background-position:6px -347px
+}
+.amap-info-combo .nav-walk-hover {
+    background-position:6px -497px
+}
+.amap-adcombo-close {
+    position:absolute;
+    top:4px;
+    right:4px;
+    background:url(http://webapi.amap.com/images/close.png) center center no-repeat;
+    width:18px;
+    height:18px;
+    text-indent:-9999em
+}
+.amap-adcontent-body {
+    box-shadow:0 0 .5px rgba(0,0,100,.6);
+    background:#fff;
+    border-radius:2px;
+    text-align:left;
+    border:1px solid silver
+}
+.amap-combo-sharp {
+    margin:0 auto;
+    bottom:1px;
+    position:relative;
+    background:url(http://webapi.amap.com/theme/v1.3/images/amap-info.png) -5px -564px no-repeat;
+    width:18px;
+    height:9px
+}
+.hide {
+    display:none
+}

@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" id="html">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+	<title> 地名百科 - 分类 </title>
+
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	<meta name="generator" content="HDWiki 5.1">
+	<meta name="author" content="HDWiki Team and Hudong UI team">
+	<meta name="copyright" content="2005-2013 baike.com">
+	<link href="../css/hdwiki.css" rel="stylesheet" type="text/css" media="all">
+		<style id="hudong_dialog_style">
+			div.hudong_dialog {border:1px rgb(0, 126, 115) solid;background-color:#FFFFFF;overflow:hidden;}
+			div.hudong_dialog h2.title{margin:0;height:22px;background-color:rgb(0, 126, 115);				border-bottom:1px solid rgb(0, 126, 115);color:#fff;padding:3px 5px;font-weight:bold;font-size:14px;overflow:hidden;-moz-user-select:none;line-height:22px;}
+			div.hudong_dialog .close{display:block;float:right;cursor:pointer;width:16px;height:16px;margin:0;				top:5px;right:5px;position:absolute;background:url(../images/close.jpg);}
+			div.hudong_dialog div.content{padding:0;text-align:center;background-color:#FFFFFF;position:relative;}
+			div.hudong_dialog div.button{position:absolute;width:100%;left:0px;bottom:0;text-align:center;height:25px;padding:4px 10px 10px;}
+			div.hudong_dialog div.button input{text-align:center;margin-right:10px;}
+			div.hudong_overlay{z-index:2001;cursor:default;background-color:#ffffff;				width:0 !important;height:100%;top:0px;left:0 !important;position:absolute;margin:0 auto;}div.bluebox {border:5px solid #666666;}
+			div.bluebox h2.title{background:none;background-color:#009DF0;color:#FFFFFF;font-size:14px;}
+			div.bluebox .close{top:5px;right:5px;}
+			div.bluebox div.button{background-color:#E8E8E8;padding:5px 10px 2px;}div.noborder {border:0;background-color:transparent;}
+			div.noborder .close{top:10px;right:10px;}
+		</style>
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script type="text/javascript" src="../js/front.js"></script>
+	<script type="text/javascript" src="../js/jquery.dialog-0.8.min.js"></script>
+	<!--<script src="../data/testdata.js" type="text/javascript" charset=”utf-8″></script>-->
+	<script src="../assets/js/pages/testdata.js" type="text/javascript" charset=”utf-8″></script>
+	<script type="text/javascript" src="../js/pages/wiki-common.js" charset=”utf-8″></script>
+	<script type="text/javascript">
+
+		$(function() {
+			consTypes();
+		});
+
+		function consTypes() {
+			var pardiv = document.getElementById("category");
+			var strArr = new Array();
+			for(var i = 0; i < typedata.subclasses.length; i++) {
+				strArr.push("<dl class='i6-ff m-t10 p-b10' name='类别" + i + "'>");
+				var bigtype = typedata.subclasses[i];
+//				strArr.push("<dt><a href='#类别" + i + "'>" + bigtype.name + "</a></dt>");
+				strArr.push("<dt><a href='wiki-list.html?bigtype=" + bigtype.name + "'>" + bigtype.name + "</a></dt>");
+				for(var j = 0; j < bigtype.subclasses.length; j++) {
+					var smalltype = bigtype.subclasses[j];
+//					strArr.push("<dd><a href='#" + i + "'>" + smalltype.name + "</a></dd>");
+					strArr.push("<dd><a href='wiki-list.html?type=" + smalltype.name + "'>" + smalltype.name + "</a></dd>");
+				}
+				strArr.push("</dl>");
+			}
+			var str = strArr.join(" ");
+			pardiv.innerHTML += str;
+		}
+
+	</script>
+</head>
+<body>
+<!--编辑异常中断，下次登录提示-->
+
+<ul id="login" class="w-950 bor_b-ccc"> 
+<li name="login" class="bor_no"></li>
+<li name="register" class="bor_no"></li>
+
+</ul>
+<div class="bg_book">
+	<a href="wiki-portal.html" id="logo"><img alt="HDWiki" height="65px" src="../images/logo.png"></a>
+		<form name="searchform" method="post" action="">
+			<p id="search">
+				<input name="searchtext" class="btn_txt" maxlength="80" size="42" value="" type="text" id="name0" onkeypress="srchkeypress(event)"/>
+				<input name="default" value="搜索词条" tabindex="2" class="enter_doc" onclick="searchWord()" type="button"/>
+				<!--<input name="full" value="1" tabindex="1"   type="hidden"/>-->
+				<!--&lt;!&ndash;<input name="search" value="搜 索" tabindex="1" class="btn_inp sea_doc" type="submit"/>&ndash;&gt;-->
+				<!--<a href="#" class="sea_advanced link_black">高级搜索</a>-->
+
+				<label>热门搜索：
+					<a href="wikiContent_fitall.html?name=wangguiting" target="_blank">望归亭</a>
+					<a href="wikiContent_fitall.html?name=sanxialianziyajingqu" target="_blank">三峡链子崖景区</a>
+					<a href="wikiContent_fitall.html?name=xiangxihe" target="_blank">香溪河</a>
+				</label>
+			</p>
+	</form>
+		<div id="nav" class="w-950 bor_b-ccc">
+	<ul>
+		<li><a href="wiki-portal.html">首页</a></li>
+		<li><a href="wikiClass.html">百科分类</a></li>
+			
+			</ul>
+
+	</div>
+</div>
+
+<!--ad start -->
+
+<!--ad end -->
+
+<div id="category" class="l w-710 o-v bor-c_dl category">
+	<div class="hd_map">
+		<a href="wiki-portal.html">地名百科</a> &gt;&gt;百科分类
+	</div>
+
+</div>
+<div class="r w-230">
+    <div id="block_right"><div class="columns i6-ff p-b8 rmbq " bid="13">
+	<h2 class="col-h2">热门标签</h2>
+	<ul class="col-ul list-s">
+		<li><a href="#">地片</a></li>
+		<li><a href="#">单位</a></li>
+	</ul>
+</div><div class=" columns i6-ff p-b10 azmsx" bid="14">
+	<h2 class="col-h2">按字母顺序浏览</h2>
+	<ul class="col-ul list-s">
+		<li><a href="wiki-list.html?initial=A">A</a></li>
+		<li><a href="wiki-list.html?initial=B">B</a></li>
+		<li><a href="wiki-list.html?initial=C">C</a></li>
+		<li><a href="wiki-list.html?initial=D">D</a></li>
+		<li><a href="wiki-list.html?initial=E">E</a></li>
+		<li><a href="wiki-list.html?initial=F">F</a></li>
+		<li><a href="wiki-list.html?initial=G">G</a></li>
+		<li><a href="wiki-list.html?initial=H">H</a></li>
+		<li><a href="wiki-list.html?initial=I">I</a></li>
+		<li><a href="wiki-list.html?initial=J">J</a></li>
+		<li><a href="wiki-list.html?initial=K">K</a></li>
+		<li><a href="wiki-list.html?initial=L">L</a></li>
+		<li><a href="wiki-list.html?initial=M">M</a></li>
+		<li><a href="wiki-list.html?initial=N">N</a></li>
+		<li><a href="wiki-list.html?initial=O">O</a></li>
+		<li><a href="wiki-list.html?initial=P">P</a></li>
+		<li><a href="wiki-list.html?initial=Q">Q</a></li>
+		<li><a href="wiki-list.html?initial=R">R</a></li>
+		<li><a href="wiki-list.html?initial=S">S</a></li>
+		<li><a href="wiki-list.html?initial=T">T</a></li>
+		<li><a href="wiki-list.html?initial=U">U</a></li>
+		<li><a href="wiki-list.html?initial=V">V</a></li>
+		<li><a href="wiki-list.html?initial=W">W</a></li>
+		<li><a href="wiki-list.html?initial=X">X</a></li>
+		<li><a href="wiki-list.html?initial=Y">Y</a></li>
+		<li><a href="wiki-list.html?initial=Z">Z</a></li>
+		<!--<li><a href="#">0</a></li>-->
+		<!--<li><a href="#">1</a></li>-->
+		<!--<li><a href="#">2</a></li>-->
+		<!--<li><a href="#">3</a></li>-->
+		<!--<li><a href="#">4</a></li>-->
+		<!--<li><a href="#">5</a></li>-->
+		<!--<li><a href="#">6</a></li>-->
+		<!--<li><a href="#">7</a></li>-->
+		<!--<li><a href="#">8</a></li>-->
+		<!--<li><a href="#">9</a></li>-->
+		<!--<li><a href="#" style="width:auto">其他</a></li>-->
+	</ul>
+</div></div>
+	<!--ad start -->
+	<div class="ad" id="advlist_7">
+		</div>
+	<!--ad end -->	
+</div>
+<!--ad start -->
+
+<!--ad end -->
+<div class="c-b"></div>
+<div id="footer" class="w-950">
+	<p id="footer-p"> Copyright @ <a href="http://sres.whu.edu.cn/" target="_blank">武汉大学</a>  V WIKI_VERSION  ©2015 <a href="wiki-portal.html" class="link_black">地名百科</a> | <a href="wiki-portal.html">Licensed</a> <br>
+	</p>
+	<br>
+	<p style="color:rgb(87, 87, 87);">ICP: xxx-xxxx</p>
+</div>
+
+
+</body>
+</html>

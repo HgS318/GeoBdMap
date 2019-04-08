@@ -1,0 +1,121 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+		body, html{width: 100%;height: 100%; margin:0;font-family:"微软雅黑";}
+		#l-map{height:100%;width:80%;}
+		#r-result {
+            margin: 0;
+            padding: 0;
+            z-index: 999;
+            position: absolute;
+            background-color: white;
+            max-height: 100%;
+            overflow-y: auto;
+            top: 0;
+            right: 0;
+            width: 20%;
+        }
+	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=SycUWXeBU9Z1tkvcNqmFxvo93cS4jbU7"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
+	<link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
+	<title>百度地图 - 多边形坐标</title>
+</head>
+<body>
+	<div id="l-map"></div>
+	<div id="r-result">
+		<br/>&nbsp;&nbsp;&nbsp;&nbsp;X: <input id="x" value="116.400244"/>
+		<br/>&nbsp;&nbsp;&nbsp;&nbsp;Y: <input id="y" value="39.92556"/>
+		<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="gotoXY" value="转到坐标" onclick="gotoXY()"/>
+
+		<br/><br/><br/>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;勾画坐标：<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+		<textarea id="coords" rows="15" cols="30"></textarea><br>
+		<br/><br/><br/>
+		&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="获取绘制的覆盖物个数" onclick="alert(overlays.length)"/>
+		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="清除所有覆盖物" onclick="clearAll()"/>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+
+
+//	获取url参数
+function getQueryString(name) {
+    var result = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
+    if (result == null || result.length < 1) {
+        return "";
+    }
+    return result[1];
+}
+
+function gotoXY() {
+	try {
+		var x = document.getElementById("x").value;
+		var y = document.getElementById("y").value;
+		map.centerAndZoom(new BMap.Point(x, y), 13);
+	} catch (e) {
+		alert("x, y输入有误...");
+	}
+
+}
+
+//	百度地图API功能
+var map = new BMap.Map("l-map");            // 创建Map实例
+//	var cood = [114.363039, 30.532864];
+//	var midx = cood[0], midy = cood[1];
+map.enableScrollWheelZoom(true);
+
+map.centerAndZoom(new BMap.Point(116.400244, 39.92556), 11);
+
+//鼠标绘制完成回调方法   获取各个点的经纬度
+var overlays = [];
+var overlaycomplete = function(e){
+	overlays.push(e.overlay);
+	var path = e.overlay.getPath();//Array<Point> 返回多边型的点数组
+	var str = "[";
+	for(var i=0;i < path.length;i++){
+//		console.log("lng:"+path[i].lng+"\n lat:"+path[i].lat);
+		str += " [" + path[i].lng + ", " + path[i].lat + "],";
+	}
+	str.trim(",");
+	str += "]";
+	document.getElementById("coords").value = str;
+};
+var styleOptions = {
+	strokeColor:"red",    //边线颜色。
+	fillColor:"red",      //填充颜色。当参数为空时，圆形将没有填充效果。
+	strokeWeight: 3,       //边线的宽度，以像素为单位。
+	strokeOpacity: 0.8,       //边线透明度，取值范围0 - 1。
+	fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
+	strokeStyle: 'solid' //边线的样式，solid或dashed。
+}
+//实例化鼠标绘制工具
+var drawingManager = new BMapLib.DrawingManager(map, {
+	isOpen: false, //是否开启绘制模式
+	enableDrawingTool: true, //是否显示工具栏
+	drawingMode:BMAP_DRAWING_POLYGON,//绘制模式  多边形
+	drawingToolOptions: {
+		anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
+		offset: new BMap.Size(5, 5), //偏离值
+		drawingModes:[
+			BMAP_DRAWING_POLYGON,
+			BMAP_DRAWING_POLYLINE
+		]
+	},
+	polygonOptions: styleOptions //多边形的样式
+});
+
+ //添加鼠标绘制工具监听事件，用于获取绘制结果
+drawingManager.addEventListener('overlaycomplete', overlaycomplete);
+function clearAll() {
+	for(var i = 0; i < overlays.length; i++){
+		map.removeOverlay(overlays[i]);
+	}
+	overlays.length = 0   
+}
+
+
+</script>

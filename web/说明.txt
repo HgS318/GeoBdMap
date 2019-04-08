@@ -1,0 +1,28 @@
+1. 由index.html进入地图主页面，显示所有地名标注。
+2. 由“行政区划”一栏进入恩施自治州、恩施市、恩施市的舞阳坝、六角亭、小渡船街道，可查看地区内的地名。在左下列表和地图中显示。
+3. 由“地名分类”一栏进入各大类、各大类的第一小类进行查看，在左下列表以及地图中显示同类别的地名。
+4. 由地名标注可打开属性小窗口，并从“详细信息”超链接至地名百科词条页面。
+5. 地名百科门户主页面为 htmlwikiIndex.html，词条通配页面为 htmlwikiContent_fitall.html.可通过 wikiContent_fitall.htmlname= 进行
+查询。当前的实例地名主要有20个，这些数据在网页中基本实现互通：
+地名名称		查询参数名称
+六角亭街道		liujiaotingjiedao
+舞阳坝街道		wuyangbajiedao
+小渡船街道		xiaoduchuanjiedao
+土桥坝			tuqiaoba
+月亮岩湾		yueliangyanwan
+官坡社区居民委员会	guanpishequ
+黄泥坝社区居委会	huangnibashequ
+凤凰雅居		fenghuangyaju
+地质大队		dizhidadui
+金桂大道		jinguidadao
+清江大桥		qingjiangdaqiao
+龙麟宫			longlingong
+洗马池			ximachi
+金三角广场		jinsanjiaoguangchang
+恩施市体育运动中心	tiyuzhongxin
+恩施市人民法院		renminfayuan
+恩施日报社		enshiribaoshe
+锦华纸业有限责任公司	jinhuazhiye
+高井河			gaojinghe
+挂榜岩			guabangyan
+

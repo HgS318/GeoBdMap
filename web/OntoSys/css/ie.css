@@ -1,0 +1,28 @@
+/* IE6 Styling */
+* html #banner div{color:#fff}
+* html #content #leftColumn .leftGlow{background-image:none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/glow.png", sizingMethod="crop");zoom:1}
+* html #content #rightColumn{height:512px}
+* html #content #rightColumn .rightGlow{background-image:none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/glow_right.png", sizingMethod="crop");zoom:1}
+* html #details li.address{background-image:none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/book_addresses.png", sizingMethod="crop");zoom:1}
+* html #details li.email{background-image:none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/email.png", sizingMethod="crop");zoom:1}
+* html #details li.name{background-image:none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/16-member.png", sizingMethod="crop");zoom:1}
+* html #details li.phone{background-image:none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/phone.png", sizingMethod="crop");zoom:1}
+* html #footer{height:150px}
+* html #footer .footerGlow{background-image:none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/footer_glow.png", sizingMethod="crop");zoom:1}
+* html #header li{white-space:no-wrap;width:1%}
+* html #header li a{cursor:pointer;position:relative}
+* html #header li a span{cursor:pointer;padding-left:30px;position:relative}
+* html #header li a span,#header li a:hover span,#header li a.on span,#header li a.on:hover span{background-image:none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/button_right.png", sizingMethod="crop");zoom:1}
+* html #header li a,#header li a:hover,#header li a.on,#header li a.on:hover,h3 span{background-image:none}
+* html #leftColumn form{padding-bottom:20px}
+* html #login{background-color:#000}
+* html #rightColumn ul.listText li{background-image:none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/script.png", sizingMethod="crop");zoom:1}
+* html #rightColumn ul.listTick li{background-image:none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/bullet_tick.png", sizingMethod="crop");zoom:1}
+* html #subFooter .box{background-image:none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/subFooter_box.png", sizingMethod="crop");zoom:1}
+* html #subFooter .subFooterGlow{background-image:none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/subFooter_glow.png", sizingMethod="crop");left:-175px;padding-left:0;padding-right:0;position:absolute;width:1090px;zoom:1}
+* html .banner a{background-image:none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/content_imageborder.png", sizingMethod="crop");zoom:1}
+* html .loginBar{height:1px;width:810px}
+* html .loginBar button.loginbtn img,a.loginbtn img,#contact button.btn img,a.btn img{background-image:none;display:none;zoom:1}
+* html .loginBar button.loginbtn,a.loginbtn,#contact button.btn,a.btn{background-image:none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="img/login_button.png", sizingMethod="crop");zoom:1}
+* html .loginBar fieldset,#leftColumn fieldset{border:0}
+* html div{zoom:1}

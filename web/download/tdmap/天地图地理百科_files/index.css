@@ -1,0 +1,455 @@
+
+.navbar-brand {
+    float: left;
+    height: 20px;
+    padding: 15px 20px;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.popover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1210;
+    display: none;
+    max-width: 600px;
+    padding: 1px;
+    text-align: left;
+    white-space: normal;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-radius: 6px;
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+}
+
+html,body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.hmlogonav {
+    font-size: 12px;
+    padding: 5px 5px;
+}
+
+.nav > a {
+    padding: 0px 5px;
+    cursor: pointer;
+}
+
+.nav > a.active {
+    color: #6d087b;
+}
+
+.hmbar-header {
+    height: 80px;
+    border: 1px solid transparent;
+    background-image: url("../images/background.png");
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.hmbar-side {
+    float: left;
+    position: absolute;
+    width: 300px;
+    height: 100%;
+    border-right: 1px solid transparent;
+    font-size: 12px;
+}
+
+.hmbar-default {
+    background-color: #ffffff;
+    border-color: #e7e7e7;
+}
+
+.hmbar-content {
+    float: left;
+    width: 100%;
+    height: 100%;
+    margin: 0 0 0 300px;
+
+}
+
+.hmbar-right {
+    float: right;
+    color: #2774c9;
+    height: 20px;
+    margin-top: 5px;
+    margin-right: 10px;
+    letter-spacing: 1px;
+    font-size: 12px;
+}
+
+.hmbar-right li {
+    float: left;
+    display: inline;
+    margin-right: 8px;
+}
+.hmbar-right li a {
+    color: #1f2c4b;
+    font-weight:bold;
+}
+
+.line {
+    width: 1px;
+    height: 12px;
+    background: #477cb7;
+    margin-top: 2px;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+#hm_searchinput {
+    margin-top: 16px;
+}
+
+.hm-searchpanel {
+    width: 450px;
+    margin: 0 0 0 300px;
+    padding-top: 6px;
+}
+
+.hm-mapinfo{
+    width: 100%;
+    height: 100%;
+}
+
+.hm-infohead{
+    width: 100%;
+    height: 30px;
+    margin-top: 1px;
+    border: none;
+    background-color: #326AA7;
+}
+
+.headnav-default{
+    width: 100px;
+    height: 100%;
+    display:inline;
+    float:left;
+    text-align: center;
+    line-height:30px;
+    color: white;
+    cursor: pointer;
+}
+
+div.headnav-default:hover,
+div.headnav-default:focus {
+    background-color: rgba(87, 195, 251, 0.5);
+}
+div.headnav-default.active {
+    background-color: #002850;
+}
+
+#hm_classnav {
+
+}
+
+#hm_favnav {
+
+}
+
+#hm_wikinav{
+    width: 98px;
+}
+
+.hm_boxshadow {
+    /*border:solid rgba(255, 255, 255, 1.0) 4px;*/
+    box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+    border-radius: 3px;
+    background: #f8f8f9;
+    transition: all .2s;
+}
+
+.hm-infoclass {
+    width: 100%;
+    height: 150px;
+    background-image: url("../images/class.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    border-bottom: 1px solid #ddd;
+    display: none;
+}
+
+.hm-favorites {
+    width: 100%;
+    height: 430px;
+    margin-top: 10px;
+    background-image: url("../images/favorites.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    display: none;
+}
+
+.hm-wikiClass {
+    width: 100%;
+    height: 100%;
+    /*display: none;*/
+}
+
+.hm-wikiAdv{
+    padding: 20px 0px 10px 5px;
+    border-top: 1px solid #ddd;
+    font-family: "黑体", "微软雅黑", "宋体";
+    font-weight:bold;
+}
+
+.hm-wikiBottomAdv{
+    width: 250px;
+    height: 130px;
+    margin-top: 20px;
+    margin-left: 20px;
+    background-image: url("../images/bottomAdv.png");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.hm-wikiClassBackground{
+    width: 300px;
+    height: 350px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    background-image: url("../images/geobackground.png");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.wikiClass-list {
+    list-style: none;
+    overflow: hidden;
+    zoom: 1;
+    margin: 28px auto 20px;
+    /*-webkit-padding-start: 10px;*/
+    padding-left: 10px;
+}
+
+ul.wikiClass-list li {
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    position: relative;
+    margin: 0 20px;
+}
+
+.wikiClass-list-item {
+    width: 50px;
+    height: 50px;
+    /*border: 1px solid #ddd;*/
+}
+
+.wikiClass-list-title {
+    display: inline-block;
+    text-align: center;
+    padding: 5px 0;
+    font: 400 12px "Microsoft YaHei","΢���ź�",sans-serif;
+    color: #333;
+}
+
+.water {
+    background: url("../images/water.png") no-repeat;
+}
+
+.traffic {
+    background: url("../images/traffic.png") no-repeat;
+}
+
+.landform {
+    background: url("../images/landform.png") no-repeat;
+}
+
+.pipe {
+    background: url("../images/pipe.png") no-repeat;
+}
+
+.residents {
+    background: url("../images/residents.png") no-repeat;
+}
+
+.vegetation {
+    background: url("../images/vegetation.png") no-repeat;
+}
+
+.place {
+    background: url("../images/place.png") no-repeat;
+}
+
+.region {
+    background: url("../images/region.png") no-repeat;
+}
+
+.location {
+    background: url("../images/location.png") no-repeat;
+}
+
+.hm-btn{
+    width: 16px;
+    height: 16px;
+    float: left;
+    margin-top: 0px;
+    margin-right: 5px;
+}
+
+.hm-btnCircleSelect {
+    background: url("../images/btn-circleselect.png") no-repeat;
+}
+
+.hm-btnRectangleSelect {
+    background: url("../images/btn-rectangleselect.png") no-repeat;
+}
+
+.hm-btnGeoKnowledge {
+    background: url("../images/btn-geoknowledge.png") no-repeat;
+}
+
+.hm-btnMarkGeo {
+    background: url("../images/btn-markgeo.png") no-repeat;
+}
+
+.hm-btnRelationCal {
+    background: url("../images/btn-relationcal.png") no-repeat;
+}
+
+.hm-btnView {
+    background: url("../images/btn-view.png") no-repeat;
+}
+
+.hm-btnMeasureDis {
+    background: url("../images/btn-measuredis.png") no-repeat;
+}
+
+.hm-btnMeasureArea {
+    background: url("../images/btn-measurearea.png") no-repeat;
+}
+
+.hm-btnClear {
+    background: url("../images/btn-clear.png") no-repeat;
+}
+
+.hm-relCal{
+    width: 55%;
+    height:300px;
+    float: left;
+    padding-bottom: 9px;
+}
+
+.hm-relResults{
+    width: 43%;
+    height:300px;
+    float: left;
+    font-size:12px;
+    overflow-y: auto;
+    border: 1px solid #a6a6a6;
+    margin-right: 5px;
+    margin-bottom: 9px;
+}
+
+.hm-viewSearch{
+     width: 250px;
+     height:120px;
+ }
+
+.hm-viewSearchContent{
+    margin-top: 20px;
+}
+
+.hm-viewClassContent {
+    color: #2774c9;
+    height: 15px;
+    letter-spacing: 1px;
+    font-size: 12px;
+}
+
+.hm-viewClassContent ul{
+    padding-left: 10px;
+}
+
+.hm-viewClassContent li {
+    float: left;
+    display: inline;
+    margin-right: 8px;
+}
+.hm-viewClassContent li a {
+    color: #2774c9;
+    font-weight:bold;
+    cursor: pointer;
+}
+
+.hm-baseMap{
+    width: 58px;
+    height: 60px;
+    border: 1px solid #a6a6a6;
+    background-color: #ffffff;
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.hm-baseMapContent{
+    width: 56px;
+    height: 38px;
+    margin-bottom: 1px;
+}
+
+.hm-vecBaseMap{
+    background: url("../images/map.png") no-repeat;
+}
+
+.hm-satBaseMap{
+    background: url("../images/satellite.png") no-repeat;
+}
+
+.hm-baseMap :hover{
+    background-color: rgba(0, 153, 255, 0.25);
+}
+
+.hm-baseMapText{
+    color: #404040;
+}
+
+.hm-wikicontentpanel{
+    width: 390px;
+    height: 480px;
+    overflow-y:auto;
+    display: none;
+    opacity: 0.9;
+    filter:alpha(opacity=90);
+}
+
+.hm-wikiInfoPanel{
+    float: left;
+    margin-left: 25px;
+    margin-bottom: 10px;
+}
+
+.hm-tipContent{
+    width: 360px;
+    /*margin-left: 5px;*/
+    margin-top: 10px;
+    display: none;
+}
+
+.hm-wikiInfoContent{
+    width: 320px;
+    margin-left: 10px;
+    margin-top: 15px;
+    display: none;
+}
+
+.hm-wikiInfoSimilar{
+    width: 320px;
+    margin-left: 10px;
+    display: none;
+}
+
+.hm-wikiInfoHead{
+    padding: 5px 15px;
+}

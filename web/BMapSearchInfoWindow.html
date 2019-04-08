@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body, html{width: 100%;height: 100%; margin:0;font-family:"微软雅黑";}
+        #l-map{height:100%;width:80%;}
+        #r-result {
+            margin: 0;
+            padding: 0;
+            z-index: 999;
+            position: absolute;
+            background-color: white;
+            max-height: 100%;
+            overflow-y: auto;
+            top: 0;
+            right: 0;
+            width: 20%;
+        }
+        dl,dt,dd,ul,li{
+            margin:0;
+            padding:0;
+            list-style:none;
+        }
+        dt{
+            font-size:14px;
+            font-family:"微软雅黑";
+            font-weight:bold;
+            border-bottom:1px dotted #000;
+            padding:5px 0 5px 5px;
+            margin:5px 0;
+        }
+        dd{
+            padding:5px 0 0 5px;
+        }
+        li{
+            line-height:28px;
+        }
+    </style>
+    <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=n3xc9ALenVeuL9apmqs4ZjrluhhsX4mr"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js" charset="UTF-8"></script>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
+    <title>百度地图</title>
+</head>
+<body>
+<div id="l-map"></div>
+<div id="r-result"></div>
+</body>
+</html>
+<script type="text/javascript">
+    function getQueryString(name) {
+        var result = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
+        if (result == null || result.length < 1) {
+            return "";
+        }
+        return result[1];
+    }
+    var map;
+    var searchInfoWindow = null;
+
+    $.ajax({
+        url: 'testShpService.action',
+        type: 'get',
+        dataType: 'json',
+
+        success: function (shp_data) {
+            var shape = shp_data['shape'];
+            var lineArr = JSON.parse(shape);
+            var pointArr = [];
+            for(var i = 0; i < lineArr.length; i++) {
+                var [_x, _y] = lineArr[i];
+                var bp = new BMap.Point(_x, _y);
+                pointArr.push(bp);
+            }
+            var polygon = new BMap.Polygon(pointArr);
+            map = new BMap.Map("l-map");            // 创建Map实例
+            var _point = new BMap.Point(120.76387299284131, 31.92252143886308);
+            map.centerAndZoom(_point, 9);
+            map.enableScrollWheelZoom(true);
+            $.ajax({
+                url:"getAllSynData.action",
+                type: 'get',
+                dataType: 'json',
+                success:function(syn_data) {
+                    var DataJson = syn_data;
+                    for (var i = 0; i < DataJson.length; i++) {
+                        Data=DataJson[i];
+                        var pointStr=Data.position;
+                        var pointArray=pointStr.split(",");
+                        var X=pointArray[0];
+                        var Y=pointArray[1];
+                        var Point=new BMap.Point(X,Y);
+                        var content = '<br style="margin:0;line-height:10px;padding:2px;">' +
+                            '地址：' + Data.address + '<br/>电话：' + Data.phoneNum + '<br/>简介：' + Data.introduction1 + '</br>' +
+                            '图片:' + '<img src=' + Data.picturePath1 + ' class="img" alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>' +
+                            '<img src=' +
+                            Data.picturePath2 +
+                            ' class="img" alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>' +
+                            '<img src=' +
+                            Data.picturePath3 +
+                            ' class="img" alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>' +
+                            '<img src=' +
+                            Data.picturePath4 +
+                            ' class="img" alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/></br>' +
+                            '视频链接:' + '&nbsp;&nbsp;' + '<a href="#" onclick="getHref()">视频1</a>' + '&nbsp;&nbsp;' + '<a href="#" onclick="getHref1()">视频2</a>' + '&nbsp;&nbsp;' + '<a href="#" onclick="getHref2()">视频3</a>' +
+                            '</div>';
+                        var marker = new BMap.Marker(Point);
+                        marker.name=Data.name;
+                        marker.enableDragging(); //marker可拖拽
+                        // marker.addEventListener("click", function (e) {
+                        //     searchInfoWindow.open(marker);
+                        // });
+
+                        addClickHandler(content,marker);
+
+                        map.addOverlay(marker);
+
+                        function getHref() {
+                            window.open(Data.videoUrl1);
+                        }
+
+                        function getHref1() {
+                            window.open(Data.videoUrl2);
+                        }
+
+                        function getHref2() {
+                            window.open(Data.videoUrl3);
+                        }
+                    }
+                }
+        });
+            map.addOverlay(polygon);
+        },
+        error: function (err_data) {
+            var i = 0;
+        }
+    });
+
+    function addClickHandler(content,marker){
+        marker.addEventListener("click",function(e){
+            openInfo(content,e)}
+        );
+    }
+
+    function openInfo(content,e){
+        var p = e.target;
+        var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+        // var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象
+        searchInfoWindow = new BMapLib.SearchInfoWindow(map, content, {
+            title: e.target.name,
+            width: 250,
+            height: 150,
+            panel: "panel",
+            enableAutoPan: true,
+            searchTypes: [
+                BMAPLIB_TAB_SEARCH,
+                BMAPLIB_TAB_TO_HERE,
+                BMAPLIB_TAB_FROM_HERE
+            ]
+        });
+        // map.openInfoWindow(searchInfoWindow,point); //开启信息窗口
+        searchInfoWindow.open(p);
+    }
+    function addClickHandler(content,marker){
+        marker.addEventListener("click",function(e){
+            openInfo(content,e)}
+        );
+    }
+
+    //     $.ajax({
+    //         url: 'testShpService1.action',
+    //         type: 'get',
+    //         dataType: 'json',
+    //         success: function (shp_data) {
+    //             var shape = shp_data['shape'];
+    //             var lineArr = JSON.parse(shape);
+    //             var pointArr = [];
+    //             for(var i = 0; i < lineArr.length; i++) {
+    //                 var [_x, _y] = lineArr[i];
+    //                 var bp = new BMap.Point(_x, _y);
+    //                 pointArr.push(bp);
+    //             }
+    //             var polygon = new BMap.Polygon(pointArr);
+    //
+    //             //	百度地图API功能
+    //             var map = new BMap.Map("l-map");            // 创建Map实例
+    //             var _point = new BMap.Point(120.76387299284131, 31.92252143886308);
+    //             map.centerAndZoom(_point, 9);
+    //             map.enableScrollWheelZoom(true);
+    //
+    // //		map.centerAndZoom(new BMap.Point(midx, midy), 11);
+    //
+    //             map.addOverlay(polygon);
+    //         },
+    //         error: function (err_data) {
+    //         }
+    //     });
+
+</script>

@@ -1,0 +1,88 @@
+/* Elements----------------------------------------*/
+* {
+	margin: 0;
+	padding: 0;
+	outline: 0;
+}
+
+/*右侧悬浮icon*/
+.side-bar {
+	width: 66px;
+	position: fixed;
+	bottom: 20px;
+	right: 25px;
+	font-size: 0;
+	line-height: 0;
+	z-index: 100;
+}
+.side-bar .icon-chat {
+	width: 66px;
+	height: 66px;
+	display: inline-block;
+	/*background-color: #dddddd;*/
+	margin-bottom: 2px;
+	background-image: url(robot.gif);
+	background-repeat: no-repeat;
+}
+.side-bar .icon-chat:hover {
+	/*background-color: #669fdd;*/
+}
+
+
+.chat-tips {
+	width: 350px;
+	padding: 5px;
+	border: 1px solid #d1d2d6;
+	position: absolute;
+	right: 78px;
+	top: -205px;
+	background-color: #ffffff;
+	display: none;
+	bottom: 0px;
+    opacity: 0.85;
+}
+
+.chat-tips i {
+	width: 9px;
+	height: 16px;
+	display: inline-block;
+	position: absolute;
+	right: -8px;
+	bottom: 25px;
+	background-image: url(tipi.png);
+	background-repeat: no-repeat;
+}
+
+
+table,input {
+  font:normal 12px Verdana, Arial;
+}
+
+form {
+  margin:0;
+  font:normal 12px Verdana, Arial;
+}
+
+#ChatBody {
+  border:0px solid #003399;
+  border-top:none;
+  padding:5px;
+  height:100%
+}
+#ChatContent {
+  height:225px;
+  padding:6px;
+  overflow-y:scroll;
+  word-break: break-all
+  text-align:left;
+  font:normal 12px Verdana, Arial;
+}
+#ChatBtn {
+  border-top:1px solid #003399;
+    padding-top: 8px;
+  /*padding:2px;*/
+}
+#ChatValue{
+	width:285px;
+}
+

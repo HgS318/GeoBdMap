@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<!-- saved from url=(0032)http://www.rsteq.com/geowikimap/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>天地图地理百科</title>
+    <link rel="icon" href="http://www.rsteq.com/geowikimap/images/fav.ico" type="‘image/x-ico’">
+
+    <!-- Core CSS - Include with every page -->
+    <link href="./天地图地理百科_files/bootstrap.min.css" rel="stylesheet">
+    <link href="./天地图地理百科_files/font-awesome.css" rel="stylesheet">
+
+    <!-- Page-Level Plugin CSS - Dashboard -->
+    <!--<link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+    <link href="css/plugins/timeline/timeline.css" rel="stylesheet">-->
+    <link href="./天地图地理百科_files/social-buttons.css" rel="stylesheet">
+
+    <!-- SB Admin CSS - Include with every page -->
+    <!--<link href="css/sb-admin.css" rel="stylesheet">-->
+
+    <link href="./天地图地理百科_files/jquery.autocomplete.css" rel="stylesheet">
+    <!--<link href="css/hummingmap.css" rel="stylesheet"/>-->
+    <link href="./天地图地理百科_files/kkpager.css" rel="stylesheet">
+    <link href="./天地图地理百科_files/search.css" rel="stylesheet">
+    <!--<link href="js/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>-->
+    <link href="./天地图地理百科_files/index.css" rel="stylesheet">
+    <link href="./天地图地理百科_files/spinkit.css" rel="stylesheet">
+
+    <link href="./天地图地理百科_files/gdt-style.css" rel="stylesheet">
+
+    <script>
+        window.isSearchWiki = false;
+    </script>
+
+<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="main" src="./天地图地理百科_files/main.js.下载"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="hummingMap" src="./天地图地理百科_files/hummingMap.js.下载"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jquery" src="./天地图地理百科_files/jquery-1.10.2.min.js.下载"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="hummingUtil" src="./天地图地理百科_files/hummingUtil.js.下载"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="hummingSearch" src="./天地图地理百科_files/hummingSearch.js.下载"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="tdtSearch" src="./天地图地理百科_files/tdtSearch.js.下载"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="echartConfig" src="./天地图地理百科_files/config.js.下载"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jquery.autocomplete" src="./天地图地理百科_files/jquery.autocomplete.js.下载"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="kkpager" src="./天地图地理百科_files/kkpager.js.下载"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="bootstrap" src="./天地图地理百科_files/bootstrap.js.下载"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jquery.metisMenu" src="./天地图地理百科_files/jquery.metisMenu.js.下载"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="sb.admin" src="./天地图地理百科_files/sb-admin.js.下载"></script></head>
+
+<body style="">
+    <script>window.isSearchWiki = true;</script>
+    <div id="hm_header" class="hmbar-header hmbar-default">
+        <a class="navbar-brand" href="http://www.rsteq.com/geowikimap/index.php">
+            <img src="./天地图地理百科_files/logo.png">
+        </a>
+
+        <div id="hm_login" class="modal fade" style="z-index: 9999;">
+            <div class="modal-dialog" style="width: 400px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">地理百科账号登录</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <span>用户名：</span><div style=""><input id="hm_user" class="form-control" name="username" type="input" value="shutong" autofocus=""></div>
+                        </div>
+                        <div class="form-group">
+                            <span>密码：</span><div style=""><input id="hm_pwd" class="form-control" name="password" type="password" value="shutong"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="doLogin()">登录</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <div class="hmbar-right">
+            <ul>
+                <li>L_kami</li>
+                <li><a href="javascript:void(0)" onclick="doLogout()">退出</a></li>                <li class="line"></li><li><a href="http://www.rsteq.com/geowiki/index.php?user-register" target="register">注册</a></li>
+                <li class="line"></li><li><a href="http://map.tianditu.com/" target="map">在线地图</a></li>
+                <li class="line"></li><li><a href="http://zhfw.tianditu.com/" target="portal">综合服务</a></li>
+                <li class="line"></li><li><a href="http://mobile.tianditu.cn/" target="‘mobile’">手机地图</a></li>
+                <li class="line"></li><li><a href="http://api.tianditu.cn/" target="api">地图API</a></li>
+                <li class="line"></li><li><a href="http://app.tianditu.com/" target="app">专题应用</a></li>
+                <li class="line"></li><li><a href="http://www.tianditu.com/service/query.html" target="guide">服务资源</a></li>
+            </ul>
+        </div>
+
+        <div class="hm-searchpanel">
+            <!--<div class="hmlogonav">
+                <span class="nav">
+                    <a id="wiki_search" class="active" onclick="javascript:clickLogoNav('HMSearch',this)"><b>百科</b></a>
+                    <a id="tdt_search" onclick="javascript:clickLogoNav('TDTSearch',this)"><b>搜索</b></a>
+                </span>
+            </div>-->
+
+            <div id="hm_searchinput" class="input-group custom-search-form">
+                <input id="autocomplete" title="提示: &quot;输入搜索关键字&quot;" placeholder="百科搜索..." class="form-control" autocomplete="off">
+                                <span class="input-group-btn">
+                                <button id="search" class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                                </span>
+            </div>
+        </div>
+    </div>
+    <div id="hm_sidebar" class="hmbar-side hmbar-default " style="height: 542px;">
+        <div id="infohead" class="hm-infohead">
+            <div id="hm_wikinav" class="headnav-default     active">
+                <p><i class="fa fa-lg fa-th fa-fw"></i> 百科</p>
+            </div>
+            <div id="hm_classnav" class="headnav-default">
+                <p><i class="fa fa-lg fa-th-large fa-fw"></i> 分类搜索</p>
+            </div>
+            <div id="hm_favnav" class="headnav-default">
+                <p><i class="fa fa-lg fa-star fa-fw"></i> 收藏</p>
+            </div>
+        </div>
+        <div id="hm_mapInfo" class="hm-mapinfo" style="display: none;">
+            <div id="hm_infoClass" class="hm-infoclass" style="display: none;"></div>
+            <div id="hm_favorites" class="hm-favorites" style="display: none;"></div>
+            <div id="hm_wikiClass" class="hm-wikiClass" style="display: block;">
+            <div>                   <ul class="wikiClass-list">                       <li>                           <div class="wikiClass-list-item water" data-value="200000"></div>                           <span class="wikiClass-list-title">水系</span>                       </li>                       <li>                           <div class="wikiClass-list-item traffic" data-value="400000"></div>                           <span class="wikiClass-list-title">交通</span>                       </li>                       <li>                           <div class="wikiClass-list-item landform" data-value="700000"></div>                           <span class="wikiClass-list-title">地貌</span>                       </li>                       <li>                           <div class="wikiClass-list-item pipe" data-value="500000"></div>                           <span class="wikiClass-list-title">管线</span>                       </li>                       <li>                           <div class="wikiClass-list-item residents" data-value="300000"></div>                           <span class="wikiClass-list-title" style="margin-left: -10px;">居民地设施</span>                       </li>                       <li>                           <div class="wikiClass-list-item vegetation" data-value="800000"></div>                           <span class="wikiClass-list-title" style="margin-left: -5px;">植被土质</span>                       </li>                       <li>                           <div class="wikiClass-list-item place" data-value="900000"></div>                           <span class="wikiClass-list-title">地名</span>                       </li>                       <li>                           <div class="wikiClass-list-item region" data-value="600000"></div>                           <span class="wikiClass-list-title" style="margin-left: -10px;">境界与政区</span>                       </li>                       <li>                           <div class="wikiClass-list-item location" data-value="100000"></div>                           <span class="wikiClass-list-title" style="margin-left: -5px;">定位基础</span>                       </li>                   </ul>               </div>            <div class="hm-wikiAdv">
+                <p><a href="http://www.rsteq.com/geowiki" target="_blank"><i class="fa fa-lg fa-bell-o fa-fw"></i>地理百科让您了解不一样的基础地理要素知识！</a></p>
+                <p><a href="http://www.rsteq.com/geowiki/index.php?user-register" target="_blank"><i class="fa fa-lg fa-bell-o fa-fw"></i>地理百科期待您的共同参与！</a></p>
+            </div>
+
+                <div title="虚位以待，期待您的加入！" class="hm-wikiBottomAdv"></div>            </div>
+        </div>
+        <div id="searchresults" class="SearchResult" style="display: block;">
+            <div id="resultitems"><div class="list-group"><div class="list-group-item"><div class="SearchResult_item_left"><p><strong>A</strong></p></div><div class="SearchResult_item_content"><p><font color="#0B73EB">凤翔路</font><span class="wikiTag">地理实体</span></p><p>地理概念代码：430503</p></div></div><div class="list-group-item"><div class="SearchResult_item_left"><p><strong>B</strong></p></div><div class="SearchResult_item_content"><p><font color="#0B73EB">海润路</font><span class="wikiTag">地理实体</span></p><p>地理概念代码：430502</p></div></div><div class="list-group-item"><div class="SearchResult_item_left"><p><strong>C</strong></p></div><div class="SearchResult_item_content"><p><font color="#0B73EB">城中路</font><span class="wikiTag">地理实体</span></p><p>地理概念代码：430503</p></div></div><div class="list-group-item"><div class="SearchResult_item_left"><p><strong>D</strong></p></div><div class="SearchResult_item_content"><p><font color="#0B73EB">果岭路</font><span class="wikiTag">地理实体</span></p><p>地理概念代码：430503</p></div></div><div class="list-group-item"><div class="SearchResult_item_left"><p><strong>E</strong></p></div><div class="SearchResult_item_content"><p><font color="#0B73EB">国兴路</font><span class="wikiTag">地理实体</span></p><p>地理概念代码：430503</p></div></div></div></div>
+            <div id="hm_Paginate"><div id="kkpager">&nbsp;<span class="disabled">&lt;&lt;</span><span class="curr">1</span><a href="http://www.rsteq.com/geowikimap/#" onclick="return kkpager._clickHandler(2)" title="第2页">2</a><a href="http://www.rsteq.com/geowikimap/#" onclick="return kkpager._clickHandler(3)" title="第3页">3</a><a href="http://www.rsteq.com/geowikimap/#" onclick="return kkpager._clickHandler(4)" title="第4页">4</a><a href="http://www.rsteq.com/geowikimap/#" onclick="return kkpager._clickHandler(5)" title="第5页">5</a><a href="http://www.rsteq.com/geowikimap/#" onclick="return kkpager._clickHandler(6)" title="第6页">6</a><a href="http://www.rsteq.com/geowikimap/#" onclick="return kkpager._clickHandler(7)" title="第7页">7</a><span>...</span><a href="http://www.rsteq.com/geowikimap/#" onclick="return kkpager._clickHandler(2)" title="下一页">&gt;&gt;</a>&nbsp;<span class="normalsize"><br>&nbsp;&nbsp;共197页/984条数据</span></div></div>
+        </div>
+    </div>
+    <div id="hm_content" class="hmbar-content">
+        <div id="map" align="left" style="height: 582px; width: 1045px; position: relative; overflow: hidden; background: url(&quot;http://api.tianditu.com/img/map/bgImg.gif&quot;); cursor: default;"><div id="platform" style="position: absolute; z-index: 100; cursor: default; user-select: none; overflow: visible; left: 522.525px; top: 291.014px;"><div id="t_maskDiv" style="position: absolute; z-index: 180; width: 1045px; height: 582px; background-image: url(&quot;http://api.tianditu.com/img/map/mask.gif&quot;); user-select: none; opacity: 0; left: -522.525px; top: -291.014px;"></div><div style="position: absolute; z-index: 1; user-select: none;"><div id="mapsDiv_14" style="position: absolute; z-index: 100;"><img src="./天地图地理百科_files/404.png" style="width: 256px; height: 256px; user-select: none; position: absolute; opacity: 1; transition: opacity 0.4s ease-in-out; left: -98px; top: -435px;"><img src="./天地图地理百科_files/404.png" style="width: 256px; height: 256px; user-select: none; position: absolute; opacity: 1; transition: opacity 0.4s ease-in-out; left: -98px; top: 77px;"><img src="./天地图地理百科_files/404.png" style="width: 256px; height: 256px; user-select: none; position: absolute; opacity: 1; transition: opacity 0.4s ease-in-out; left: -354px; top: 77px;"><img src="./天地图地理百科_files/404.png" style="width: 256px; height: 256px; user-select: none; position: absolute; opacity: 1; transition: opacity 0.4s ease-in-out; left: 158px; top: 77px;"><img src="./天地图地理百科_files/404.png" style="width: 256px; height: 256px; user-select: none; position: absolute; opacity: 1; transition: opacity 0.4s ease-in-out; left: -610px; top: -435px;"><img src="./天地图地理百科_files/404.png" style="width: 256px; height: 256px; user-select: none; position: absolute; opacity: 1; transition: opacity 0.4s ease-in-out; left: -354px; top: -179px;"><img src="./天地图地理百科_files/404.png" style="width: 256px; height: 256px; user-select: none; position: absolute; opacity: 1; transition: opacity 0.4s ease-in-out; left: -354px; top: -435px;"><img src="./天地图地理百科_files/404.png" style="width: 256px; height: 256px; user-select: none; position: absolute; opacity: 1; transition: opacity 0.4s ease-in-out; left: 158px; top: -435px;"><img src="./天地图地理百科_files/404.png" style="width: 256px; height: 256px; user-select: none; position: absolute; opacity: 1; transition: opacity 0.4s ease-in-out; left: -610px; top: 77px;"><img src="./天地图地理百科_files/404.png" style="width: 256px; height: 256px; user-select: none; position: absolute; opacity: 1; transition: opacity 0.4s ease-in-out; left: 414px; top: -435px;"><img src="./天地图地理百科_files/404.png" style="width: 256px; height: 256px; user-select: none; position: absolute; opacity: 1; transition: opacity 0.4s ease-in-out; left: -98px; top: -179px;"><img src="./天地图地理百科_files/404.png" style="width: 256px; height: 256px; user-select: none; position: absolute; opacity: 1; transition: opacity 0.4s ease-in-out; left: -610px; top: -179px;"><img src="./天地图地理百科_files/404.png" style="width: 256px; height: 256px; user-select: none; position: absolute; opacity: 1; transition: opacity 0.4s ease-in-out; left: 414px; top: 77px;"><img src="./天地图地理百科_files/404.png" style="width: 256px; height: 256px; user-select: none; position: absolute; opacity: 1; transition: opacity 0.4s ease-in-out; left: 414px; top: -179px;"><img src="./天地图地理百科_files/404.png" style="width: 256px; height: 256px; user-select: none; position: absolute; opacity: 1; transition: opacity 0.4s ease-in-out; left: 158px; top: -179px;"></div><div style="position:absolute;left:0px;top:0px;z-index:101;"><img src="./天地图地理百科_files/DataServer" style="position: absolute; z-index: 400; user-select: none; border: 0px; padding: 0px; margin: 0px; opacity: 1; transition: opacity 0.4s ease-in-out; left: -610px; top: -435px; width: 256px; height: 256px;"><img src="./天地图地理百科_files/DataServer(1)" style="position: absolute; z-index: 400; user-select: none; border: 0px; padding: 0px; margin: 0px; opacity: 1; transition: opacity 0.4s ease-in-out; left: -610px; top: -179px; width: 256px; height: 256px;"><img src="./天地图地理百科_files/DataServer(2)" style="position: absolute; z-index: 400; user-select: none; border: 0px; padding: 0px; margin: 0px; opacity: 1; transition: opacity 0.4s ease-in-out; left: -610px; top: 77px; width: 256px; height: 256px;"><img src="./天地图地理百科_files/DataServer(3)" style="position: absolute; z-index: 400; user-select: none; border: 0px; padding: 0px; margin: 0px; opacity: 1; transition: opacity 0.4s ease-in-out; left: -354px; top: -435px; width: 256px; height: 256px;"><img src="./天地图地理百科_files/DataServer(4)" style="position: absolute; z-index: 400; user-select: none; border: 0px; padding: 0px; margin: 0px; opacity: 1; transition: opacity 0.4s ease-in-out; left: -354px; top: -179px; width: 256px; height: 256px;"><img src="./天地图地理百科_files/404.png" style="position: absolute; z-index: 400; user-select: none; border: 0px; padding: 0px; margin: 0px; opacity: 1; transition: opacity 0.4s ease-in-out; left: -354px; top: 77px; width: 256px; height: 256px;"><img src="./天地图地理百科_files/404.png" style="position: absolute; z-index: 400; user-select: none; border: 0px; padding: 0px; margin: 0px; opacity: 1; transition: opacity 0.4s ease-in-out; left: -98px; top: -435px; width: 256px; height: 256px;"><img src="./天地图地理百科_files/404.png" style="position: absolute; z-index: 400; user-select: none; border: 0px; padding: 0px; margin: 0px; opacity: 1; transition: opacity 0.4s ease-in-out; left: -98px; top: -179px; width: 256px; height: 256px;"><img src="./天地图地理百科_files/404.png" style="position: absolute; z-index: 400; user-select: none; border: 0px; padding: 0px; margin: 0px; opacity: 1; transition: opacity 0.4s ease-in-out; left: -98px; top: 77px; width: 256px; height: 256px;"><img src="./天地图地理百科_files/404.png" style="position: absolute; z-index: 400; user-select: none; border: 0px; padding: 0px; margin: 0px; opacity: 1; transition: opacity 0.4s ease-in-out; left: 158px; top: -435px; width: 256px; height: 256px;"><img src="./天地图地理百科_files/404.png" style="position: absolute; z-index: 400; user-select: none; border: 0px; padding: 0px; margin: 0px; opacity: 1; transition: opacity 0.4s ease-in-out; left: 158px; top: -179px; width: 256px; height: 256px;"><img src="./天地图地理百科_files/404.png" style="position: absolute; z-index: 400; user-select: none; border: 0px; padding: 0px; margin: 0px; opacity: 1; transition: opacity 0.4s ease-in-out; left: 158px; top: 77px; width: 256px; height: 256px;"><img src="./天地图地理百科_files/404.png" style="position: absolute; z-index: 400; user-select: none; border: 0px; padding: 0px; margin: 0px; opacity: 1; transition: opacity 0.4s ease-in-out; left: 414px; top: -435px; width: 256px; height: 256px;"><img src="./天地图地理百科_files/404.png" style="position: absolute; z-index: 400; user-select: none; border: 0px; padding: 0px; margin: 0px; opacity: 1; transition: opacity 0.4s ease-in-out; left: 414px; top: -179px; width: 256px; height: 256px;"><img src="./天地图地理百科_files/404.png" style="position: absolute; z-index: 400; user-select: none; border: 0px; padding: 0px; margin: 0px; opacity: 1; transition: opacity 0.4s ease-in-out; left: 414px; top: 77px; width: 256px; height: 256px;"></div></div><div id="t_overlaysDiv" style="position: absolute; z-index: 500; width: 1045px; height: 582px;"><div style="position: absolute; display: block; left: -103px; top: -140px;"><div style="overflow: hidden; width: 70px; height: 30px; position: absolute; left: 58px; top: 0px;"><img style="border: 0px none ; margin: 0px; padding: 0px; position: absolute; left: -323px; top: 0px; width: 1144px; height: 370px; -moz-user-select: none" src="./天地图地理百科_files/infoWinShadow.png"></div><div style="overflow: hidden; width: 70px; height: 30px; position: absolute; left: 316px; top: 0px;"><img style="border: 0px none ; margin: 0px; padding: 0px; position: absolute; left: -1033px; top: 0px; width: 1144px; height: 370px; -moz-user-select: none" src="./天地图地理百科_files/infoWinShadow.png"></div><div style="overflow: hidden; width: 70px; height: 60px; position: absolute; left: 0px; top: 59px;"><img style="border: 0px none ; margin: 0px; padding: 0px; position: absolute; left: -14px; top: -310px; width: 1144px; height: 370px; -moz-user-select: none" src="./天地图地理百科_files/infoWinShadow.png"></div><div style="overflow: hidden; width: 70px; height: 60px; position: absolute; left: 288px; top: 59px;"><img style="border: 0px none ; margin: 0px; padding: 0px; position: absolute; left: -754px; top: -310px; width: 1144px; height: 370px; -moz-user-select: none;" src="./天地图地理百科_files/infoWinShadow.png"></div><div style="overflow: hidden; width: 140px; height: 60px; position: absolute; left: 84px; top: 59px;"><img style="border: 0px none ; margin: 0px; padding: 0px; position: absolute; left: -119px; top: -310px; width: 1144px; height: 370px; -moz-user-select: none;" src="./天地图地理百科_files/infoWinShadow.png"></div><div style="overflow: hidden; position: absolute; left: 128px; top: 0px; width: 188px; height: 30px;"><div style="overflow: hidden;width: 640px;height: 30px"><img src="./天地图地理百科_files/infoWinShadow.png" style="border: 0px none ; margin: 0px; padding: 0px; position: absolute; left: -393px; top: 0px; width: 1144px; height: 370px; -moz-user-select: none"></div></div><div style="overflow: hidden; width: 55px; height: 29px; bottom: -1px; position: absolute; left: 29px; top: 30px;"><img style="border: 0px none; margin: 0px; padding: 0px; position: absolute; left: -294px; top: -30px; width: 1144px; height: 370px;" src="./天地图地理百科_files/infoWinShadow.png"></div><div style="overflow: hidden; width: 55px; height: 29px; bottom: -1px; position: absolute; left: 317px; top: 30px;"><img style="border: 0px none; margin: 0px; padding: 0px; position: absolute; left: -1034px; top: -30px; width: 1144px; height: 370px;" src="./天地图地理百科_files/infoWinShadow.png"></div><div style="overflow: hidden; position: absolute; left: 70px; top: 59px; width: 14px; height: 60px;"><div style="overflow: hidden; width: 320px; height: 60px"><img style="border: 0px none ; margin: 0px; padding: 0px; position: absolute; left: -345px; top: -310px; width: 1144px; height: 370px; -moz-user-select: none" src="./天地图地理百科_files/infoWinShadow.png"></div></div><div style="overflow: hidden; position: absolute; left: 224px; top: 59px; width: 64px; height: 60px;"><div style="overflow: hidden; width: 320px; height: 60px"><img style="border: 0px none ; margin: 0px; padding: 0px; position: absolute; left: -345px; top: -310px; width: 1144px; height: 370px; -moz-user-select: none" src="./天地图地理百科_files/infoWinShadow.png"></div></div><div style="overflow: hidden; position: absolute; left: 84px; top: 30px; width: 233px; height: 29px;"><div style="overflow: hidden;width: 640px;height: 598px"><img style="border: 0px none ; margin: 0px; padding: 0px; position: absolute; left: -360px; top: -30px; width: 1144px; height: 370px; -moz-user-select: none" src="./天地图地理百科_files/infoWinShadow.png"></div></div></div><svg style="position: absolute; overflow: visible; left: -5000px; top: -5000px;" width="10000" height="10000" viewBox="0 0 10000 10000"><marker><path d="M 0 0 L 1 1"></path></marker><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="green" stroke-width="3" stroke-opacity="1" fill-opacity="0.5" stroke-dasharray="" d="" style="position: absolute; z-index: 420;"></path><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="green" stroke-width="3" stroke-opacity="1" fill-opacity="0.5" stroke-dasharray="" d="M 4993 5114 L 4993 5080 L 4993 5053 L 4993 5048 L 4993 5037 L 4994 5018 L 5004 4991 L 5006 4983 L 5008 4977 L 5011 4971 L 5013 4954 L 5013 4950 L 5013 4934 L 5013 4922 L 5013 4913 L 5013 4901 L 5013 4887" style="position: absolute; z-index: 420;"></path><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="green" stroke-width="3" stroke-opacity="1" fill-opacity="0.5" stroke-dasharray="" d="M 6835 5152 L 6835 5113 L 6836 5084 L 6837 4971 L 6836 4955 L 6829 4950 L 6818 4942 L 6813 4933 L 6811 4930 L 6808 4925 L 6804 4921 L 6799 4918 L 6797 4908 L 6798 4903 L 6804 4895 L 6820 4877 L 6830 4860 L 6838 4849 L 6839 4848 L 6840 4847 L 6841 4847 L 6844 4846" style="position: absolute; z-index: 420;"></path><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="green" stroke-width="3" stroke-opacity="1" fill-opacity="0.5" stroke-dasharray="" d="M 6763 7004 L 6763 7024 L 6763 7032 L 6766 7042 L 6768 7046 L 6774 7057 L 6785 7068 L 6797 7076 L 6820 7089 L 6824 7091" style="position: absolute; z-index: 420;"></path><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="green" stroke-width="3" stroke-opacity="1" fill-opacity="0.5" stroke-dasharray="" d="M 4993 5114 L 4993 5080 L 4993 5053 L 4993 5048 L 4993 5037 L 4994 5018 L 5004 4991 L 5006 4983 L 5008 4977 L 5011 4971 L 5013 4954 L 5013 4950 L 5013 4934 L 5013 4922 L 5013 4913 L 5013 4901 L 5013 4887" style="position: absolute; z-index: 420;"></path></svg><div style="position: absolute; z-index: 510; border: 0px solid rgb(0, 0, 0); font-size: 12px; color: rgb(0, 0, 0); padding: 2px; white-space: nowrap; left: -17px; top: -46px;"><div style="position: relative; cursor: pointer; z-index: 500;"><div style="position: relative;left: 0px;top: 0px"><img src="./天地图地理百科_files/A.png" style="width: 36px; height: 46px;"></div></div></div><div style="position: absolute; z-index: 490; border: 0px solid rgb(0, 0, 0); font-size: 12px; color: rgb(0, 0, 0); padding: 2px; white-space: nowrap; left: 1819px; top: -64px;"><div style="position: relative; cursor: pointer; z-index: 500;"><div style="position: relative;left: 0px;top: 0px"><img src="./天地图地理百科_files/B.png" style="width: 36px; height: 46px;"></div></div></div><div style="position: absolute; z-index: 490; border: 0px solid rgb(0, 0, 0); font-size: 12px; color: rgb(0, 0, 0); padding: 2px; white-space: nowrap; left: 1758px; top: 2013px;"><div style="position: relative; cursor: pointer; z-index: 500;"><div style="position: relative;left: 0px;top: 0px"><img src="./天地图地理百科_files/D.png" style="width: 36px; height: 46px;"></div></div></div><div style="position: absolute; z-index: 560; width: 372px; height: 171px; left: -210.4px; top: -215px;"><img width="51" height="31" src="./天地图地理百科_files/infoWinDown.png" style="z-index: 1; position: absolute; top: 142px; right: 109.6px;"><div style="position: absolute; cursor: default; border: 1px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 372px; height: 141px;"><div style="overflow-x: hidden; visibility: hidden;"><div style="border-bottom: 1px solid #ccc; height: 25px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><div style="line-height: 24px; height: 24px; background-color: rgb(249, 249, 249); white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><p style="margin: 0px; padding: 0px;"><div style="position: absolute; margin: 0px; padding: 0px 0px 0px 10px; font-size: 14px; font-weight: bold; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"></div></p></div></div></div><div style="position: absolute; left: 0px; padding: 0px 10px; color: rgb(51, 51, 51); font-size: 12px; margin-top: -10px; min-width: 150px; word-wrap: break-word; top: 27px;"><div class="infoWindow_head"><p style="font-size: 14px"><b>凤翔路</b><a onclick="javascript:searchGeoWiki(430503)" class="wikilink">百科预览</a><a id="hm_owldownload" title="下载当前地理实体要素相关的owl文件" onclick="javascript:downLoadOwl({&quot;OBJECTID_1&quot;:4832,&quot;paths&quot;:[[[109.41677246900008,18.290633139000022],[109.41676985200007,18.292076708000025],[109.41676907800007,18.293255178000038],[109.41676891300006,18.293486486000063],[109.41676861900004,18.293934234000062],[109.41681297000008,18.294746132000057],[109.41720957900009,18.29591590700005],[109.41733359900007,18.296281701000055],[109.41741241900007,18.296514158000036],[109.41750521200004,18.296787851000033],[109.41762488800003,18.29748546600007],[109.41762522500005,18.29768114700005],[109.41762643900006,18.298375519000047],[109.41762731300008,18.298876360000065],[109.41762802800008,18.299282362000042],[109.41763060000005,18.29979419500006],[109.41763360300007,18.300392644000055]]],&quot;spatialReference&quot;:{&quot;wkt&quot;:&quot;GEOGCS[\&quot;CGCS_2000\&quot;,DATUM[\&quot;D_China_2000\&quot;,SPHEROID[\&quot;CGCS2000\&quot;,6378137.0,298.257222101]],PRIMEM[\&quot;Greenwich\&quot;,0.0],UNIT[\&quot;Degree\&quot;,0.0174532925199433]]&quot;},&quot;OBJECTID&quot;:4842,&quot;GB&quot;:430503,&quot;RN&quot;:&quot; &quot;,&quot;RDPAC&quot;:0,&quot;NAME&quot;:&quot;凤翔路&quot;,&quot;RTEG&quot;:&quot; &quot;,&quot;MATRL&quot;:&quot; &quot;,&quot;LANE&quot;:0,&quot;SDTF&quot;:&quot; &quot;,&quot;WIDTH&quot;:0,&quot;TYPE&quot;:&quot; &quot;,&quot;PERIOD&quot;:&quot; &quot;,&quot;OCODE&quot;:&quot;430001&quot;,&quot;MAPID&quot;:&quot; &quot;,&quot;RND&quot;:0,&quot;RTYPE&quot;:&quot;城市内部交通&quot;,&quot;FEAID&quot;:0,&quot;STACOD&quot;:&quot; &quot;,&quot;VERS&quot;:&quot; &quot;,&quot;SHAPE_Leng&quot;:0.00989455255637,&quot;ONTOID&quot;:&quot;MAP50000_LRDL_4832&quot;,&quot;Shape_Le_1&quot;:1093.30748168,&quot;Shape_Le_2&quot;:1093.30748168,&quot;Shape_Length&quot;:0.00988508605147028,&quot;Anchor&quot;:&quot;109.417078943818,18.295530606187&quot;})" class="wikilink">OWL</a><a onclick="javascript:removeGeoNameSpace()" class="wikilink">清除地名空间</a></p></div><div class="infoWindow_content"><p>地理概念代码：430503</p></div><div class="infoWindow_tail"><p><a id="hm_walkIndex" style="margin-left:-5px" title="计算与当前要素或POI相关生活指数" onclick="javascript:getWalkIndex({&quot;name&quot;:&quot;凤翔路&quot;,&quot;lonlat&quot;:&quot;109.41708 18.29553&quot;})" class="wikilink"><i class="fa fa-lg fa-bullseye fa-fw"></i>生活步行指数</a><a id="hm_owldownload" style="margin-left:-5px" title="查找当前地理要素的地名空间范围" onclick="javascript:geoNameSpace({&quot;OBJECTID_1&quot;:4832,&quot;paths&quot;:[[[109.41677246900008,18.290633139000022],[109.41676985200007,18.292076708000025],[109.41676907800007,18.293255178000038],[109.41676891300006,18.293486486000063],[109.41676861900004,18.293934234000062],[109.41681297000008,18.294746132000057],[109.41720957900009,18.29591590700005],[109.41733359900007,18.296281701000055],[109.41741241900007,18.296514158000036],[109.41750521200004,18.296787851000033],[109.41762488800003,18.29748546600007],[109.41762522500005,18.29768114700005],[109.41762643900006,18.298375519000047],[109.41762731300008,18.298876360000065],[109.41762802800008,18.299282362000042],[109.41763060000005,18.29979419500006],[109.41763360300007,18.300392644000055]]],&quot;spatialReference&quot;:{&quot;wkt&quot;:&quot;GEOGCS[\&quot;CGCS_2000\&quot;,DATUM[\&quot;D_China_2000\&quot;,SPHEROID[\&quot;CGCS2000\&quot;,6378137.0,298.257222101]],PRIMEM[\&quot;Greenwich\&quot;,0.0],UNIT[\&quot;Degree\&quot;,0.0174532925199433]]&quot;},&quot;OBJECTID&quot;:4842,&quot;GB&quot;:430503,&quot;RN&quot;:&quot; &quot;,&quot;RDPAC&quot;:0,&quot;NAME&quot;:&quot;凤翔路&quot;,&quot;RTEG&quot;:&quot; &quot;,&quot;MATRL&quot;:&quot; &quot;,&quot;LANE&quot;:0,&quot;SDTF&quot;:&quot; &quot;,&quot;WIDTH&quot;:0,&quot;TYPE&quot;:&quot; &quot;,&quot;PERIOD&quot;:&quot; &quot;,&quot;OCODE&quot;:&quot;430001&quot;,&quot;MAPID&quot;:&quot; &quot;,&quot;RND&quot;:0,&quot;RTYPE&quot;:&quot;城市内部交通&quot;,&quot;FEAID&quot;:0,&quot;STACOD&quot;:&quot; &quot;,&quot;VERS&quot;:&quot; &quot;,&quot;SHAPE_Leng&quot;:0.00989455255637,&quot;ONTOID&quot;:&quot;MAP50000_LRDL_4832&quot;,&quot;Shape_Le_1&quot;:1093.30748168,&quot;Shape_Le_2&quot;:1093.30748168,&quot;Shape_Length&quot;:0.00988508605147028,&quot;Anchor&quot;:&quot;109.417078943818,18.295530606187&quot;})" class="wikilink"><i class="fa fa-lg fa-building-o fa-fw"></i>地名空间</a><a id="hm_relFeatures" style="margin-left:-5px" title="计算与当前地理实体要素有关系的其它地理实体要素" onclick="javascript:surRelCalc({&quot;OBJECTID_1&quot;:4832,&quot;paths&quot;:[[[109.41677246900008,18.290633139000022],[109.41676985200007,18.292076708000025],[109.41676907800007,18.293255178000038],[109.41676891300006,18.293486486000063],[109.41676861900004,18.293934234000062],[109.41681297000008,18.294746132000057],[109.41720957900009,18.29591590700005],[109.41733359900007,18.296281701000055],[109.41741241900007,18.296514158000036],[109.41750521200004,18.296787851000033],[109.41762488800003,18.29748546600007],[109.41762522500005,18.29768114700005],[109.41762643900006,18.298375519000047],[109.41762731300008,18.298876360000065],[109.41762802800008,18.299282362000042],[109.41763060000005,18.29979419500006],[109.41763360300007,18.300392644000055]]],&quot;spatialReference&quot;:{&quot;wkt&quot;:&quot;GEOGCS[\&quot;CGCS_2000\&quot;,DATUM[\&quot;D_China_2000\&quot;,SPHEROID[\&quot;CGCS2000\&quot;,6378137.0,298.257222101]],PRIMEM[\&quot;Greenwich\&quot;,0.0],UNIT[\&quot;Degree\&quot;,0.0174532925199433]]&quot;},&quot;OBJECTID&quot;:4842,&quot;GB&quot;:430503,&quot;RN&quot;:&quot; &quot;,&quot;RDPAC&quot;:0,&quot;NAME&quot;:&quot;凤翔路&quot;,&quot;RTEG&quot;:&quot; &quot;,&quot;MATRL&quot;:&quot; &quot;,&quot;LANE&quot;:0,&quot;SDTF&quot;:&quot; &quot;,&quot;WIDTH&quot;:0,&quot;TYPE&quot;:&quot; &quot;,&quot;PERIOD&quot;:&quot; &quot;,&quot;OCODE&quot;:&quot;430001&quot;,&quot;MAPID&quot;:&quot; &quot;,&quot;RND&quot;:0,&quot;RTYPE&quot;:&quot;城市内部交通&quot;,&quot;FEAID&quot;:0,&quot;STACOD&quot;:&quot; &quot;,&quot;VERS&quot;:&quot; &quot;,&quot;SHAPE_Leng&quot;:0.00989455255637,&quot;ONTOID&quot;:&quot;MAP50000_LRDL_4832&quot;,&quot;Shape_Le_1&quot;:1093.30748168,&quot;Shape_Le_2&quot;:1093.30748168,&quot;Shape_Length&quot;:0.00988508605147028,&quot;Anchor&quot;:&quot;109.417078943818,18.295530606187&quot;})" class="wikilink"><i class="fa fa-lg fa-group fa-fw"></i>周边关系计算</a><a id="hm_addRelCal" style="margin-left:-5px" title="将当前地理实体要素加入到关系计算" onclick="javascript:addRelationCalFeature({&quot;OBJECTID_1&quot;:4832,&quot;paths&quot;:[[[109.41677246900008,18.290633139000022],[109.41676985200007,18.292076708000025],[109.41676907800007,18.293255178000038],[109.41676891300006,18.293486486000063],[109.41676861900004,18.293934234000062],[109.41681297000008,18.294746132000057],[109.41720957900009,18.29591590700005],[109.41733359900007,18.296281701000055],[109.41741241900007,18.296514158000036],[109.41750521200004,18.296787851000033],[109.41762488800003,18.29748546600007],[109.41762522500005,18.29768114700005],[109.41762643900006,18.298375519000047],[109.41762731300008,18.298876360000065],[109.41762802800008,18.299282362000042],[109.41763060000005,18.29979419500006],[109.41763360300007,18.300392644000055]]],&quot;spatialReference&quot;:{&quot;wkt&quot;:&quot;GEOGCS[\&quot;CGCS_2000\&quot;,DATUM[\&quot;D_China_2000\&quot;,SPHEROID[\&quot;CGCS2000\&quot;,6378137.0,298.257222101]],PRIMEM[\&quot;Greenwich\&quot;,0.0],UNIT[\&quot;Degree\&quot;,0.0174532925199433]]&quot;},&quot;OBJECTID&quot;:4842,&quot;GB&quot;:430503,&quot;RN&quot;:&quot; &quot;,&quot;RDPAC&quot;:0,&quot;NAME&quot;:&quot;凤翔路&quot;,&quot;RTEG&quot;:&quot; &quot;,&quot;MATRL&quot;:&quot; &quot;,&quot;LANE&quot;:0,&quot;SDTF&quot;:&quot; &quot;,&quot;WIDTH&quot;:0,&quot;TYPE&quot;:&quot; &quot;,&quot;PERIOD&quot;:&quot; &quot;,&quot;OCODE&quot;:&quot;430001&quot;,&quot;MAPID&quot;:&quot; &quot;,&quot;RND&quot;:0,&quot;RTYPE&quot;:&quot;城市内部交通&quot;,&quot;FEAID&quot;:0,&quot;STACOD&quot;:&quot; &quot;,&quot;VERS&quot;:&quot; &quot;,&quot;SHAPE_Leng&quot;:0.00989455255637,&quot;ONTOID&quot;:&quot;MAP50000_LRDL_4832&quot;,&quot;Shape_Le_1&quot;:1093.30748168,&quot;Shape_Le_2&quot;:1093.30748168,&quot;Shape_Length&quot;:0.00988508605147028,&quot;Anchor&quot;:&quot;109.417078943818,18.295530606187&quot;})" class="wikilink"><i class="fa fa-lg fa-code-fork fa-fw"></i>加入计算</a></p></div></div></div><div style="float: right; position: absolute; top: 1px; right: 0px; height: 24px;"><div style="width: 32px; height: 24px"><img width="10" height="10" src="./天地图地理百科_files/infoWinClose.gif" style="position: absolute; top: 7px; right: 8px; width: 10px; height: 10px; cursor: pointer;"></div></div></div></div></div><div style="position: absolute; z-index: 65535; left: 0px; bottom: 0px;"><div style="margin-left: 4px; font-size: 12px; text-decoration: none; color: black;"><img style="position:absolute;bottom:0px;left:2px;background-color:transparent;background-image:url(http://api.tianditu.com/img/map/logo.png);filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=image,src=http://api.tianditu.com/img/map/logo.png);MozOpacity:1;opacity:1;" src="./天地图地理百科_files/logo(1).png" width="53px" height="22px" opacity="0"><div style="position:absolute;bottom:0px;left:58px;white-space:nowrap;">GS(2018)1432 - 甲测资字1100471号</div></div></div><div style="position: absolute; left: 4px; bottom: 25px; height: 26px; border: 0px; width: 67px; z-index: 1100;"><div style="position:absolute;height:15px;font-size:11px;left:6px;top:-3px;align:center;white-space:nowrap;">250米</div><div style="position: absolute; width: 100%; top: 12px; height: 2px; left: 3px; font-size: 0px; z-index: 2; border-top: 1px solid white; border-bottom: 1px solid white; border-right: 1px solid white; background-color: rgb(0, 0, 0);"></div><div style="position: absolute; width: 2px; height: 24px; top: 0px; font-size: 0px; border: 1px solid white; background-color: rgb(0, 0, 0);"></div><div style="position: absolute; width: 2px; height: 11px; top: 1px; font-size: 0px; border-left: 1px solid white; border-right: 1px solid white; border-top: 1px solid white; z-index: 3; background-color: rgb(0, 0, 0); left: 55px;"></div><div style="position: absolute; width: 2px; height: 11px; bottom: -1px; font-size: 0px; border-left: 1px solid white; border-right: 1px solid white; border-bottom: 1px solid white; z-index: 3; background-color: rgb(0, 0, 0); left: 67px;"></div><div style="position:absolute;height:15px;font-size:11px;left:6px;bottom:-4px;align:center;white-space:nowrap;">1000英尺</div></div><div style="position: absolute; left: 10px; top: 10px; user-select: none; width: 64.5px; height: 193px; z-index: 1100;"><div title="放大" style="background-image: url(&quot;http://api.tianditu.com/img/map/mapNav.png&quot;); background-position: 0px -221px; width: 20px; height: 20px; position: absolute; overflow: hidden; left: 14px; top: 45px; user-select: none; cursor: pointer; z-index: 10;"></div><div title="缩小" style="background-image: url(&quot;http://api.tianditu.com/img/map/mapNav.png&quot;); background-position: 0px -265px; width: 20px; height: 20px; position: absolute; overflow: hidden; left: 14px; top: 178px; user-select: none; cursor: pointer; z-index: 10;"></div><div title="" style="background-image: url(&quot;http://api.tianditu.com/img/map/mapNav.png&quot;); background-position: 0px 0px; width: 42px; height: 42px; position: absolute; overflow: hidden; left: 2px; top: 0px; user-select: none; cursor: pointer;"><div title="左移" style="width: 12px; height: 12px; position: absolute; overflow: hidden; left: 0px; top: 12px; user-select: none; cursor: pointer;"></div><div title="上移" style="width: 12px; height: 12px; position: absolute; overflow: hidden; left: 13px; top: 0px; user-select: none; cursor: pointer;"></div><div title="右移" style="width: 12px; height: 12px; position: absolute; overflow: hidden; left: 27px; top: 11px; user-select: none; cursor: pointer;"></div><div title="下移" style="width: 12px; height: 12px; position: absolute; overflow: hidden; left: 13px; top: 25px; user-select: none; cursor: pointer;"></div></div><div style="position: absolute; left: 21px; top: 63px; z-index: 1; background-image: url(&quot;http://api.tianditu.com/img/map/mapNav.png&quot;); background-position: -24px -225px; background-repeat: no-repeat; width: 6px; height: 115px; user-select: none; cursor: pointer;"><div title="" style="background-image: url(&quot;http://api.tianditu.com/img/map/mapNav.png&quot;); background-position: 0px -309px; width: 18px; height: 10px; position: absolute; overflow: hidden; left: -6px; top: 20px; user-select: none; cursor: pointer;"></div></div><div style="position: absolute; left: 21px; top: 93px; background: url(&quot;http://api.tianditu.com/img/map/mapNav.png&quot;) -33px bottom / auto no-repeat scroll padding-box border-box transparent; z-index: 5; cursor: pointer; width: 6px; height: 95px; user-select: none;"></div><div style="position: absolute; left: 20px; top: 49px; width: 45px; height: 156px; display: none;"><div style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"></div><div style="position: absolute; left: 18px; top: 18px; cursor: pointer; width: 27px; height: 18px; overflow: hidden; background: url(&quot;http://api.tianditu.com/img/map/mapNav.png&quot;) 0px -380px / auto no-repeat scroll padding-box border-box transparent;"></div><div style="position: absolute; left: 18px; top: 54px; cursor: pointer; width: 27px; height: 18px; overflow: hidden; background: url(&quot;http://api.tianditu.com/img/map/mapNav.png&quot;) 0px -400px / auto no-repeat scroll padding-box border-box transparent;"></div><div style="position: absolute; left: 18px; top: 78px; cursor: pointer; width: 27px; height: 18px; overflow: hidden; background: url(&quot;http://api.tianditu.com/img/map/mapNav.png&quot;) 0px -421px / auto no-repeat scroll padding-box border-box transparent;"></div><div style="position: absolute; left: 18px; top: 102px; cursor: pointer; width: 27px; height: 18px; overflow: hidden; background: url(&quot;http://api.tianditu.com/img/map/mapNav.png&quot;) 0px -442px / auto no-repeat scroll padding-box border-box transparent;"></div></div></div><div id="appbtngroup" class="btn-group hm_boxshadow" style="position: absolute; left: auto; right: 10px; top: 10px; z-index: 1100;">
+            <!--<button id="btnCircleSelect" type="button" class="btn btn-default btn-sm"><span class="hm-btn hm-btnCircleSelect"></span>矩形选择</button>
+            <button id="btnRecSelect" type="button" class="btn btn-default btn-sm"><span class="hm-btn hm-btnRectangleSelect"></span>圆形选择</button>-->
+            <!--<button id="btnGeoKnowledge" type="button" class="btn btn-default btn-sm"><span class="hm-btn hm-btnGeoKnowledge"></span>地理知识</button>-->
+            <!--<button id="btnMarkGeo" type="button" class="btn btn-default btn-sm"><span class="hm-btn hm-btnMarkGeo"></span>标注要素</button>-->
+            <button id="btnRelCal" type="button" class="btn btn-default btn-sm"><span class="hm-btn hm-btnRelationCal"></span>关系计算</button><button id="btnView" type="button" class="btn btn-default btn-sm"><span class="hm-btn hm-btnView"></span>视野内百科</button>            <button id="btnMeasureDis" type="button" class="btn btn-default btn-sm"><span class="hm-btn hm-btnMeasureDis"></span>测距</button>
+            <button id="btnMeasureArea" type="button" class="btn btn-default btn-sm"><span class="hm-btn hm-btnMeasureArea"></span>测面</button>
+            <button id="btnClear" type="button" class="btn btn-default btn-sm"><span class="hm-btn hm-btnClear"></span>清空</button>
+        </div><div id="basemapbtn" class="hm-baseMap" style="position: absolute; left: 80px; top: 10px; z-index: 1100;">
+            <div id="hm_vecbase" style="display: none;">
+                <div class="well hm-baseMapContent hm-vecBaseMap"></div>
+                <div class="hm-baseMapText">地图</div>
+            </div>
+            <div id="hm_satbase">
+                <div class="well hm-baseMapContent hm-satBaseMap"></div>
+                <div class="hm-baseMapText">卫星</div>
+            </div>
+        </div><div style="position: absolute; user-select: none; left: 160px; top: 561px; z-index: 1100;"><span style="font-style: normal; font-variant: normal; font-weight: normal; font-stretch: normal; font-size: 11px; line-height: normal; font-family: arial, simsun;">© <a href="http://sres.whu.edu.cn/" target="_blank" style="font-size:12px;background:transparent">武汉大学资源与环境科学学院</a></span></div><div id="wikicontentpanel" class="panel panel-default hm-wikicontentpanel hm_boxshadow" style="position: absolute; left: auto; right: 10px; top: 60px; z-index: 1100;">
+            <div style="float: right; margin-top: 5px; margin-right: 15px;"><a href="javascript:closeWikiPanel()"><i class="fa fa-times fa-fw"></i></a></div>
+            <div class="panel-body">
+                <div id="hm_tipcontent" class="panel panel-primary hm-tipContent"></div>
+                <div id="hm_wikicontent" class="panel panel-primary hm-wikiInfoContent hm-wikiInfoPanel"></div>
+                <!--<div id="hm_wikirelate" class="panel panel-success hm-wikiInfoPanel"></div>-->
+                <div id="hm_wikisimilar" class="panel panel-info  hm-wikiInfoSimilar hm-wikiInfoPanel"></div>
+            </div>
+        </div><div id="hm_loader" class="sk-wave" style="position: absolute; left: 472.5px; top: 241px; z-index: 1100; display: none;">
+            <div class="sk-rect sk-rect1"></div>
+            <div class="sk-rect sk-rect2"></div>
+            <div class="sk-rect sk-rect3"></div>
+            <div class="sk-rect sk-rect4"></div>
+            <div class="sk-rect sk-rect5"></div>
+        </div></div>
+        
+        
+                
+        
+        <div id="hm_chartbot"><div class="side-bar">    	 	<div class="icon-chat" id="ChatBot" onclick="ChatBotBar.onActBtnClick()"></div>    	 	<div class="chat-tips" id="ChatTips">    	 		<i></i>				<div id="ChatBody">		  			<div id="ChatContent">		  				<div id="msg" style="overflow:hidden;"></div>		  				<div id="msg_end" style="height:0px; overflow:hidden"></div>		  			</div>		  			<div id="ChatBtn">		  				<form name="chat">		  					<input name="ChatValue" id="ChatValue">		  					<input name="Submit" type="button" value="发送" onclick="ChatBotBar.ChatSend(this.form);">		  				</form>		  			</div>		  		</div>			</div>		</div></div>
+
+    <script type="text/javascript" src="./天地图地理百科_files/maps.js.下载"></script>
+    <script type="text/javascript" src="./天地图地理百科_files/maptools.js.下载"></script>
+
+    <script type="text/javascript" src="./天地图地理百科_files/json2.js.下载"></script>
+    <script type="text/javascript" src="./天地图地理百科_files/echarts-all.js.下载"></script>
+    <!--<script src="js/proj4.js"></script>-->
+    <script data-main="js/main" src="./天地图地理百科_files/require.js.下载"></script>
+    <script src="./天地图地理百科_files/chatbot.js.下载"></script>
+
+    <script>
+        initChatBotBar('hm_chartbot');
+        window.searchType = 'HMSearch';
+        //var preSelItem = document.getElementById("wiki_search");
+        /*(function() {
+
+        })();*/
+        var _loaderControl = null;
+        // 添加Loader控件
+        var loaderObj = document.getElementById("hm_loader");
+        window._loaderControl = new THtmlElementControl(loaderObj);
+
+        function doLogin(){
+            $.ajax({
+                url: "login.php?action=login",
+                data: {
+                    username:$("#hm_user").val(),
+                    password:$("#hm_pwd").val()
+                },
+                type: "POST",
+                dataType: "json",
+                success: function(data) {
+                    if (data.retVal){
+                        $('#hm_login').modal('hide');
+                        location.reload();
+                    }else{
+                        alert("登陆失败！\n请检查用户名和密码是否正确！");
+                    }
+                }
+            });
+        }
+
+        function doLogout(){
+            $.ajax({
+                url: "login.php?action=logout",
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    if (data.retVal){
+                        location.reload();
+                    }
+                }
+            });
+        }
+
+        /*function clickLogoNav(t, o){
+            //window.location.reload();  //刷新页面
+            activeLogoNav(t, o);
+            require.config({
+                paths: {
+                    "hummingMap": "hummingMap"
+                }
+            });
+
+            require(['hummingMap'], function(HMMap){
+                HMMap.initSearch();
+                $("#hm_wikinav").click();
+            });
+        }
+
+        function activeLogoNav(t, o){
+            window.searchType = t;
+            if (preSelItem != null){
+                var reg = new RegExp('(\\s|^)' + "active" + '(\\s|$)');
+                preSelItem.className = preSelItem.className.replace(reg, ' ');
+            }
+            o.className += " active";
+            preSelItem = o;
+
+            var tip = "搜索..."
+            if (t == 'HMSearch')
+            {
+                tip = "百科搜索...";
+            }
+            else if (t == 'TDTSearch')
+            {
+                tip = "天地图搜索...";
+            }
+            $("#autocomplete").attr('placeholder',tip);
+        }*/
+
+        // 搜地理百科的内容
+        function searchGeoWiki(e){
+            require(['hummingSearch'], function(HMSearch){
+                HMSearch.searchWikiConcept(e);
+            });
+        }
+
+        function gotoWikiConcept(e){
+            require(['hummingUtil'], function(HMUtil){
+                var wikiUrl = HMUtil.G_WIKISearchUrl;
+                $.ajax({
+                    url: wikiUrl + "doc-concept-" + e,
+                    type: 'GET',
+                    success: function (data) {
+                        if(data == 'none'){
+                            window.open(wikiUrl);
+                        }
+                        else{
+                            window.open( wikiUrl + "doc-view-" + data);
+                        }
+                    }
+                });
+            });
+        }
+
+        // 设置地理百科图层
+        function setGeoWikiLayer(){
+            require(['hummingMap'], function(HMMap){
+                HMMap.setOwnerLayer();
+            });
+        }
+
+        // 获取POI步行指数
+        function getWalkIndex(e){
+            require(['tdtSearch'], function(TDTSearch){
+                TDTSearch.gePOIWalkIndex(e);
+            });
+        }
+
+        // 查看关系计算详情
+        function watchRelationDetail(){
+            require(['hummingMap'], function(HMMap){
+                HMMap.showRelationDetail();
+            });
+        }
+
+        // 添加参加关系计算百科要素
+        function addRelationCalFeature(e){
+            require(['hummingMap'], function(HMMap){
+                HMMap.addRelCalFeature(e);
+            });
+        }
+
+        // 周边关系计算
+        function surRelCalc(e){
+            require(['hummingMap'], function(HMMap){
+                HMMap.surroundingRelCalc(e);
+            });
+        }
+
+        // 地名空间
+        function geoNameSpace(e){
+            require(['hummingMap'], function(HMMap){
+                HMMap.getGeoNameSpace(e);
+            });
+        }
+
+        // 清除地名空间图形
+        function removeGeoNameSpace(){
+            require(['hummingMap'], function(HMMap){
+                HMMap.removeGeoNameSpace();
+            });
+        }
+
+        // 下载要素对应的owl文件
+        function downLoadOwl(e){
+            require(['hummingMap'], function(HMMap){
+                HMMap.downLoadOwlFile(e);
+            });
+        }
+
+        // 关闭查看关系计算详情面板
+        function closeWatchRelationDetailPanel(){
+            $("#hm_relDetail").popover('destroy');
+        }
+
+        // 关闭步行指数计算面板
+        function closeWalkIndexPanel(){
+            $("#hm_walkIndex").popover('destroy');
+        }
+
+        // 关闭关系计算结果面板
+        function closeRelCalPanel(){
+            $("#btnRelCal").popover('destroy');
+        }
+
+        // 关闭视野范围内搜索面板
+        function closeViewPanel(){
+            $("#btnView").popover('hide');
+        }
+
+        // 关闭地理百科内容预览面板
+        function closeWikiPanel(){
+            var wikiPanelObj = document.getElementById("wikicontentpanel");
+            wikiPanelObj.style.display="none";
+        }
+    </script>
+
+
+
+
+</div><div class="autocomplete-suggestions" style="position: absolute; max-height: 300px; z-index: 9999; top: 57px; left: 301px; width: 409px; display: none;"><div class="autocomplete-suggestion" data-index="0"><strong>河流</strong>州</div><div class="autocomplete-suggestion" data-index="1"><strong>河流</strong>坡</div><div class="autocomplete-suggestion" data-index="2"><strong>河流</strong>咀</div><div class="autocomplete-suggestion" data-index="3">西<strong>河流</strong></div><div class="autocomplete-suggestion" data-index="4"><strong>河流</strong>村</div><div class="autocomplete-suggestion" data-index="5">倒<strong>河流</strong></div><div class="autocomplete-suggestion" data-index="6">西<strong>河流</strong>村</div><div class="autocomplete-suggestion" data-index="7"><strong>河流</strong>坡沟</div><div class="autocomplete-suggestion" data-index="8">大<strong>河流</strong>村</div><div class="autocomplete-suggestion" data-index="9"><strong>河流</strong></div></div></body></html>

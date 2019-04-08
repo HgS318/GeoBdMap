@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>selectList</title>
+    <style type="text/css">
+        *{margin:0;padding:0;}
+        .selectList{width:200px;margin:50px auto;}
+    </style>
+    <!--<script type="text/javascript" src="jquery1.7.1.js"></script>-->
+    <script type="text/javascript" src="../../../js/jquery-1.10.2.js"></script>
+</head>
+<body>
+<div class="selectList">
+    <select id="city1" class="cityselect">
+        <option>请选择</option>
+    </select>
+    <select id="county1" class="countyselect">
+        <option>请选择</option>
+    </select>
+    <select id="street1" class="streetselect">
+        <option>请选择</option>
+    </select>
+</div>
+
+<div class="selectList">
+    <select id="city2" class="cityselect">
+        <option>请选择</option>
+    </select>
+    <select id="county2" class="countyselect">
+        <option>请选择</option>
+    </select>
+    <select id="street2" class="streetselect">
+        <option>请选择</option>
+    </select>
+</div>
+
+<script type="text/javascript">
+
+$(function(){
+    var i = 0;
+    $(".selectList").each(function(){
+        i++;
+        var val = i;
+        var url = "wholeEasyDists.action";
+        var areaJson;
+        var temp_html;
+        var oProvince = $(this).find(".cityselect");
+        var oCity = $(this).find(".countyselect");
+        var oDistrict = $(this).find(".streetselect");
+        //初始化省
+        var province = function(){
+            $.each(areaJson,function(i,province){
+                temp_html+="<option value='"+province.name+"'>"+province.name+"</option>";
+            });
+            oProvince.html(temp_html);
+            city();
+        };
+        //赋值市
+        var city = function(){
+            temp_html = "";
+            var n = oProvince.get(0).selectedIndex;
+            $.each(areaJson[n].children,function(i,city){
+                temp_html+="<option value='"+city.name+"'>"+city.name+"</option>";
+            });
+            oCity.html(temp_html);
+            district();
+        };
+        //赋值县
+        var district = function(){
+            temp_html = "";
+            var m = oProvince.get(0).selectedIndex;
+            var n = oCity.get(0).selectedIndex;
+            if(typeof(areaJson[m].children[n].children) == "undefined"){
+                oDistrict.css("display","none");
+            }else{
+                oDistrict.css("display","inline");
+                $.each(areaJson[m].children[n].children,function(i,district){
+                    temp_html+="<option value='"+district.name+"'>"+district.name+"</option>";
+                });
+                oDistrict.html(temp_html);
+            };
+            console.log(val);
+        };
+        //选择省改变市
+        oProvince.change(function(){
+            city();
+        });
+        //选择市改变县
+        oCity.change(function(){
+            district();
+        });
+        //获取json数据
+        $.getJSON(url,function(data){
+            areaJson = data[0].children;
+            province();
+        });
+    });
+});
+
+
+</script>
+</body>
+</html>

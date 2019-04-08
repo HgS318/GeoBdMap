@@ -1,0 +1,37 @@
+{
+  "name": "mapv",
+  "version": "2.0.33",
+  "description": "a library of geography visualization",
+  "main": "build/mapv.js",
+  "scripts": {
+    "prepublish": "npm run build && npm run mini",
+    "mini": "npm run build && uglifyjs build/mapv.js -c -m -o build/mapv.min.js",
+    "build": "npm run pre && rollup -c",
+    "pre": "mkdir -p build && mkdir -p build/release && node -e 'process.stdout.write(\"export var version = \\\"\" + require(\"./package.json\").version + \"\\\";\\n\");' > build/version.js",
+    "dev": "npm run pre && rollup -c -w",
+    "dev3d": "npm run pre && rollup -c rollup.config.3d.js -w",
+    "start": "npm run dev",
+    "test": "npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huiyan-fe/mapv.git"
+  },
+  "author": "huiyan-fe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/huiyan-fe/mapv/issues"
+  },
+  "homepage": "https://github.com/huiyan-fe/mapv#readme",
+  "devDependencies": {
+    "babel-helpers": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
+    "rollup": "^0.41.4",
+    "rollup-plugin-babel": "^2.4.0",
+    "rollup-watch": "^4.3.1",
+    "uglify-js": "^3.1.9"
+  },
+  "dependencies": {
+    "babel-plugin-external-helpers": "^6.22.0"
+  }
+}

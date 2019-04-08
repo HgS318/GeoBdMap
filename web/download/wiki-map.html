@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>秭归地名百科地图</title>
+    <meta name="description" content="系统主页面">
+    <meta name="keywords" content="index">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="stylesheet" href="assets/css/amazeui.min.css" />
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <link rel="stylesheet" href="assets/css/app.css">
+    <style type="text/css">
+        *{margin:0;padding:0;list-style-type:none;}
+        a,img{border:0;}
+        body{font:12px "宋体","Arial Narrow",HELVETICA;background:#fff;-webkit-text-size-adjust:100%;}
+        a{color:#2d374b;text-decoration:none}
+        a:hover{color:#cd0200;text-decoration:underline}
+
+
+        /* searchTxt */
+        .searchBtn button,.searchTxt .searchMenu .searchSelected{background-image:url(images/searchbg.png);background-repeat:no-repeat;}
+
+        .searchTxt{float:left;width:399px;height:34px;border:2px solid #d3d3d3;border-right:0;position:relative;z-index:20;background:#fff;}
+        .searchTxt .radius{width:1px;height:1px;overflow:hidden;background:#f4f4f4;position:absolute;top:-2px;left:-2px;}
+        .searchTxtHover{float:left;width:399px;height:34px;border:2px solid #3297d8;border-right:0;position:relative;z-index:20;background:#fff;}
+        .searchTxtHover .radius{width:1px;height:1px;overflow:hidden;background:#cce5f5;position:absolute;top:-2px;left:-2px;}
+
+        .searchTxt .searchMenu{float:left;}
+        .searchTxt .searchMenu .searchSelected{color:#a8a8a8;cursor:pointer;font-size:14px;font-weight:bold;height:30px;width:98px;line-height:30px;padding:0 10px;background-position:0px -54px;}
+        .searchTxt .searchMenu .searchOpen{background-position:0px -104px;}
+
+        .searchTxt .searchMenu .searchTab{display:none; position:absolute;top:30px;left:-2px;width:98px;border:2px solid #3297d8;border-top:0;background:#fff;height:116px;z-index:20;}
+        .searchTxt .searchMenu .searchTab li{width:94px;height:28px;line-height:28px;color:#a8a8a8;font-size:14px;font-weight:bold;text-indent:10px;cursor:pointer;}
+        .searchTxt .searchMenu .searchTab li.selected{background:#edf3fc;color:#6994c1;}
+
+        .searchTxt input{float:left;border:0;background:#fff;color:#333;font:14px/22px '宋体',verdana,tahoma,arial,'SimSun',sans-serif;width:221px;height:22px;margin:0;outline:medium none;padding:4px;}
+        .searchTxt .sosoLogo{float:right;margin:8px 6px 0 0;display:inline;}
+        .searchBtn{float:left;}
+        .searchBtn button{background-position:0px 0px;border:0;color:#fff;cursor:pointer;float:left;font-size:16px;height:34px;text-indent:-9999px;width:86px;}
+    </style>
+    <!--<link rel="stylesheet" href="plugins/leaflet/leaflet.css" />-->
+    <!--<script src="plugins/leaflet/leaflet-src.js"></script>-->
+    <!--<script src="plugins/esri-leaflet/esri-leaflet-debug.js"></script>-->
+    <link rel="stylesheet" type="text/css" href="js/leaflet/leaflet.css">
+    <script type="text/javascript" src="js/leaflet/leaflet.js"></script>
+    <script type="text/javascript" src='js/leaflet/leaflet.ChineseTmsProviders.js'></script>
+    <script type="text/javascript" src="js/leaflet/esri-leaflet.js"></script>
+    <script type="text/javascript" src="js/leaflet/esri-leaflet-debug.js"></script>
+    <!--add-->
+    <link rel="stylesheet" href="assets/download/css/search.css">
+
+    <link href="assets/download/bootstrap.css" rel="stylesheet">
+    <link href="assets/download/font-awesome.css" rel="stylesheet">
+
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="assets/download/css/plugins/social-buttons/social-buttons.css" rel="stylesheet">
+    <link href="assets/download/css/jquery-ui.min.css" rel="stylesheet" />
+    <!--<link href="css/hummingmap.css" rel="stylesheet"/>-->
+    <link href="assets/download/css/kkpager.css" rel="stylesheet"/>
+    <link href="assets/download/css/search.css" rel="stylesheet"/>
+    <!--<link href="js/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>-->
+    <link href="assets/download/css/index.css" rel="stylesheet"/>
+    <link href="assets/download/css/spinkit.css" rel="stylesheet"/>
+    <link href="assets/download/css/jquery.autocomplete.css" rel="stylesheet"/>
+    <link href="assets/download/css/jquery.treeview.css" rel="stylesheet" />
+    <link href="assets/download/css/screen.css" rel="stylesheet" />
+    <link href="assets/download/css/inline.style.sheet4.css" rel="stylesheet" />
+
+    <script src="assets/js/jquery.min.js" type="text/javascript"></script>
+    <!--<script src="js/jquery-1.10.2.min.js"></script>-->
+    <script src="assets/js/tiandit/jquery-ui.min.js"></script>
+    <script src="assets/js/tiandit/jquery.cookie.js"></script>
+    <script src="assets/js/tiandit/jquery.treeview.js" type="text/javascript"></script>
+    <script src="assets/js/tiandit/jquery.autocomplete.js" type="text/javascript"></script>
+
+    <script src="assets/js/tiandit/jquery.treeview.js" type="text/javascript"></script>
+    <script src="assets/js/tiandit/jquery.treeview.async.js" type="text/javascript"></script>
+    <!--<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>-->
+    <script src="assets/js/pages/wikiIndex.js" type="text/javascript"></script>
+    <script src="assets/js/pages/wikiIndex-map.js" type="text/javascript"></script>
+    <script src="assets/js/pages/wikiIndex-page.js" type="text/javascript"></script>
+    <script src="assets/js/pages/testdata.js" type="text/javascript"></script>
+
+    <!--<script src="assets/js/jquery.min.js"></script>-->
+    <script src="assets/js/amazeui.min.js"></script>
+    <script src="assets/js/iscroll.js"></script>
+    <!--<script src="assets/js/app.js"></script>-->
+    <script src="assets/js/echarts.min.js"></script>
+
+</head>
+
+<body data-type="index">
+<header class="am-topbar am-topbar-inverse admin-header hmbar-header">
+    <!--<div class="am-topbar-brand">-->
+        <!--<a href="javascript:;" class="tpl-logo">-->
+            <!--<img src="assets/img/logo.png" alt="">-->
+            <!--&lt;!&ndash;<img src="images/logo.png" alt=""/>&ndash;&gt;-->
+        <!--</a>-->
+    <!--</div>-->
+    <!--<div class="am-icon-list tpl-header-nav-hover-ico am-fl am-margin-right"></div>-->
+    <a class="navbar-brand">
+        <img src="images/logo.png" href="html/wiki-protal.html"/>
+    </a>
+    <!--<div id='hm_searchinput' class="input-group">-->
+        <!--<input id="autocomplete" class="form-control" onkeyup="search_press()"-->
+               <!--title="提示: &quot;输入搜索关键字&quot;" placeholder="搜索..." />-->
+        <!--<span class="input-group-btn">-->
+            <!--<button id="search" class="btn btn-default" type="button" onclick="search_keyword()">-->
+                <!--<i class="fa fa-search"></i>-->
+            <!--</button>-->
+        <!--</span>-->
+    <!--</div>-->
+    <div method="get" name="" style="width:487px;height:34px;margin:25px auto 0 350px;">
+        <div id="searchTxt" class="searchTxt" onMouseOver="this.className='searchTxt searchTxtHover';" onMouseOut="this.className='searchTxt';">
+            <div class="radius" style="top:-2px;"></div>
+            <div class="radius" style="top:31px;"></div>
+
+            <div class="searchMenu">
+
+                <div class="searchSelected" id="searchSelected">全部地名</div>
+
+                <div style="display:none;" class="searchTab" id="searchTab">
+                    <div class="radius" style="top:259px;"></div>
+                    <div class="radius" style="top:259px;left:59px;"></div>
+                    <ul>
+                        <li class="">全部地名</li>
+                        <li>单位</li>
+                        <li>居民点</li>
+                        <li>自然地物</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <input name="w" type="text" style="height: 28px" id="autocomplete" onkeyup="search_press()"/>
+
+            <!--<a href="http://www.sogou.com/" target="_blank"><img id="sogouLogo" alt="搜狗" class="sosoLogo" src="images/sogoulogo.png"></a>-->
+
+        </div>
+
+        <div class="searchBtn">
+            <button id="search" onclick="search_keyword()">搜狗</button>
+        </div>
+
+    </div>
+    <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+    <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+        <!--<ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">-->
+            <!--<li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>-->
+                <!--<a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">-->
+                    <!--<span class="am-icon-bell-o"></span> 提醒 <span class="am-badge tpl-badge-success am-round">5</span></span>-->
+                <!--</a>-->
+                <!--<ul class="am-dropdown-content tpl-dropdown-content">-->
+                    <!--<li class="tpl-dropdown-content-external">-->
+                        <!--<h3>你有 <span class="tpl-color-success">5</span> 条提醒</h3><a href="###">全部</a></li>-->
+                    <!--<li class="tpl-dropdown-list-bdbc"><a href="#" class="tpl-dropdown-list-fl"><span class="am-icon-btn am-icon-plus tpl-dropdown-ico-btn-size tpl-badge-success"></span> 【预览模块】移动端 查看时 手机、电脑框隐藏。</a>-->
+                        <!--<span class="tpl-dropdown-list-fr">3小时前</span>-->
+                    <!--</li>-->
+                    <!--<li class="tpl-dropdown-list-bdbc"><a href="#" class="tpl-dropdown-list-fl"><span class="am-icon-btn am-icon-check tpl-dropdown-ico-btn-size tpl-badge-danger"></span> 移动端，导航条下边距处理</a>-->
+                        <!--<span class="tpl-dropdown-list-fr">15分钟前</span>-->
+                    <!--</li>-->
+                    <!--<li class="tpl-dropdown-list-bdbc"><a href="#" class="tpl-dropdown-list-fl"><span class="am-icon-btn am-icon-bell-o tpl-dropdown-ico-btn-size tpl-badge-warning"></span> 追加统计代码</a>-->
+                        <!--<span class="tpl-dropdown-list-fr">2天前</span>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</li>-->
+            <!--<li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>-->
+                <!--<a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">-->
+                    <!--<span class="am-icon-comment-o"></span> 消息 <span class="am-badge tpl-badge-danger am-round">9</span></span>-->
+                <!--</a>-->
+                <!--<ul class="am-dropdown-content tpl-dropdown-content">-->
+                    <!--<li class="tpl-dropdown-content-external">-->
+                        <!--<h3>你有 <span class="tpl-color-danger">9</span> 条新消息</h3><a href="###">全部</a></li>-->
+                    <!--<li>-->
+                        <!--<a href="#" class="tpl-dropdown-content-message">-->
+                                <!--<span class="tpl-dropdown-content-photo">-->
+                      <!--<img src="assets/img/user02.png" alt=""> </span>-->
+                            <!--<span class="tpl-dropdown-content-subject">-->
+                      <!--<span class="tpl-dropdown-content-from"> 禁言小张 </span>-->
+                                <!--<span class="tpl-dropdown-content-time">10分钟前 </span>-->
+                                <!--</span>-->
+                            <!--<span class="tpl-dropdown-content-font"> Amaze UI 的诞生，依托于 GitHub 及其他技术社区上一些优秀的资源；Amaze UI 的成长，则离不开用户的支持。 </span>-->
+                        <!--</a>-->
+                        <!--<a href="#" class="tpl-dropdown-content-message">-->
+                                <!--<span class="tpl-dropdown-content-photo">-->
+                      <!--<img src="assets/img/user03.png" alt=""> </span>-->
+                            <!--<span class="tpl-dropdown-content-subject">-->
+                      <!--<span class="tpl-dropdown-content-from"> Steam </span>-->
+                                <!--<span class="tpl-dropdown-content-time">18分钟前</span>-->
+                                <!--</span>-->
+                            <!--<span class="tpl-dropdown-content-font"> 为了能最准确的传达所描述的问题， 建议你在反馈时附上演示，方便我们理解。 </span>-->
+                        <!--</a>-->
+                    <!--</li>-->
+
+                <!--</ul>-->
+            <!--</li>-->
+            <!--<li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>-->
+                <!--<a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">-->
+                    <!--<span class="am-icon-calendar"></span> 进度 <span class="am-badge tpl-badge-primary am-round">4</span></span>-->
+                <!--</a>-->
+                <!--<ul class="am-dropdown-content tpl-dropdown-content">-->
+                    <!--<li class="tpl-dropdown-content-external">-->
+                        <!--<h3>你有 <span class="tpl-color-primary">4</span> 个任务进度</h3><a href="###">全部</a></li>-->
+                    <!--<li>-->
+                        <!--<a href="javascript:;" class="tpl-dropdown-content-progress">-->
+                                <!--<span class="task">-->
+                        <!--<span class="desc">Amaze UI 用户中心 v1.2 </span>-->
+                                <!--<span class="percent">45%</span>-->
+                                <!--</span>-->
+                            <!--<span class="progress">-->
+                        <!--<div class="am-progress tpl-progress am-progress-striped"><div class="am-progress-bar am-progress-bar-success" style="width:45%"></div></div>-->
+                    <!--</span>-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="javascript:;" class="tpl-dropdown-content-progress">-->
+                                <!--<span class="task">-->
+                        <!--<span class="desc">新闻内容页 </span>-->
+                                <!--<span class="percent">30%</span>-->
+                                <!--</span>-->
+                            <!--<span class="progress">-->
+                       <!--<div class="am-progress tpl-progress am-progress-striped"><div class="am-progress-bar am-progress-bar-secondary" style="width:30%"></div></div>-->
+                    <!--</span>-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="javascript:;" class="tpl-dropdown-content-progress">-->
+                                <!--<span class="task">-->
+                        <!--<span class="desc">管理中心 </span>-->
+                                <!--<span class="percent">60%</span>-->
+                                <!--</span>-->
+                            <!--<span class="progress">-->
+                        <!--<div class="am-progress tpl-progress am-progress-striped"><div class="am-progress-bar am-progress-bar-warning" style="width:60%"></div></div>-->
+                    <!--</span>-->
+                        <!--</a>-->
+                    <!--</li>-->
+
+                <!--</ul>-->
+            <!--</li>-->
+            <!--<li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen" class="tpl-header-list-link"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>-->
+
+            <!--<li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>-->
+                <!--<a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">-->
+                    <!--<span class="tpl-header-list-user-nick">禁言小张</span><span class="tpl-header-list-user-ico"> <img src="assets/img/user01.png"></span>-->
+                <!--</a>-->
+                <!--<ul class="am-dropdown-content">-->
+                    <!--<li><a href="#"><span class="am-icon-bell-o"></span> 资料</a></li>-->
+                    <!--<li><a href="#"><span class="am-icon-cog"></span> 设置</a></li>-->
+                    <!--<li><a href="#"><span class="am-icon-power-off"></span> 退出</a></li>-->
+                <!--</ul>-->
+            <!--</li>-->
+            <!--<li><a href="###" class="tpl-header-list-link"><span class="am-icon-sign-out tpl-header-list-ico-out-size"></span></a></li>-->
+        <!--</ul>-->
+    </div>
+</header>
+
+<div class="tpl-page-container tpl-page-header-fixed">
+<!--以下是LZX添加的AmzaUI-->
+
+    <div id="hm_sidebar" class="hmbar-side hmbar-default ">
+        <div class="am-panel-group"  id="accordion">
+            <div class="am-panel am-panel-default">
+                <div class="am-panel-hd">
+                    <h4 class="am-panel-title" data-am-collapse="{parent: '#accordion', target: '#do-not-say-1'}">
+                        地名分类
+                    </h4>
+                </div>
+                <div id="do-not-say-1" class="am-panel-collapse am-collapse am-in" >
+                    <div class="am-panel-bd" style="padding:0rem">
+                        <!--地名分类-->
+                        <div id="hm_wikiClass" class="hm-wikiClass">
+
+                            <div class="hm-wikiAdv" style="max-height: 300px">
+
+                                <table>
+                                    <tr>
+                                        <!--<td style="padding-left: 15px"><wb:share-button appkey='2943998357' addition='simple' type='icon'></wb:share-button></td>-->
+                                        <td>
+                                            <div id="sidetreecontrol2">
+                                                &nbsp; <a href="#">全部收起</a> | <a href="#">全部展开</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <table style="margin-top: 5px;max-height: 300px" >
+                                    <tr>
+                                        <td><p>&nbsp;</p>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                        <td>
+                                            <ul class="treeview" id="tree2">
+                                                <li class="expandable" id="folder2">
+                                                    <div class="hitarea expandable-hitarea"></div><a href="#" onclick="gotoBigType('行政区域类')">行政区域类</a>
+                                                    <ul style="display: none;">
+                                                        <li class="last">
+                                                            <a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#" onclick="gotoBigType('非行政区域类')">非行政区域类</a></li>
+                                                <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#" onclick="gotoBigType('群众自治组织类')">群众自治组织类</a></li>
+                                                <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#/index.cfm">居民点类</a></li>
+                                                <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#/index.cfm">交通运输设施类</a></li>
+                                                <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#/index.cfm">水利电力设施类</a></li>
+                                                <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#/index.cfm">纪念地旅游景点类</a></li>
+                                                <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#/index.cfm">建筑物类</a></li>
+                                                <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#/index.cfm">单位类</a></li>
+                                                <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#/index.cfm">陆地水系类</a></li>
+                                                <li class="last"><div class="hitarea expandable-hitarea"></div><a href="#/index.cfm">陆地地形类</a></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-panel am-panel-default">
+                <div class="am-panel-hd">
+                    <h4 class="am-panel-title" data-am-collapse="{parent: '#accordion', target: '#do-not-say-2'}">
+                        行政区划
+                    </h4>
+                </div>
+                <div id="do-not-say-2" class="am-panel-collapse am-collapse">
+                    <div class="am-panel-bd" style="padding: 0rem">
+
+                        <!--行政区划-->
+                        <div id="hm_infoClass" class="hm-infoclass">
+
+                            <div class="hm-wikiAdv">
+                                <table>
+                                    <tr>
+                                        <!--<td style="padding-left: 15px"><wb:share-button appkey='2943998357' addition='simple' type='icon'></wb:share-button></td>-->
+                                        <td>
+                                            <div id="sidetreecontrol1">
+                                                &nbsp; <a href="#">全部收起</a> | <a href="#">全部展开</a><br/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <!--<div class="weiboicondiv">-->
+                                <!--<wb:share-button appkey='2943998357' addition='simple' type='icon'></wb:share-button>-->
+                                <!--</div>-->
+                                <!--<div id="sidetreecontrol1" style="width:200px;height:20px;margin: 0 0 0 80px;">-->
+                                <!--<a href="#">全部收起</a> | <a href="#">全部展开</a>-->
+                                <!--</div>-->
+                                <table style="margin-top: 5px">
+                                    <tr>
+                                        <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                        <td>
+                                            <ul class="treeview" id="tree1">
+                                                <li class="expandable" id="folder1">
+                                                    <div class="hitarea expandable-hitarea"></div>
+                                                    <a href="#">宜昌市</a>
+                                                    <ul>
+                                                        <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">西陵区</a>
+                                                            <ul style="display: none;"><li class="last">
+                                                                <a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">西陵街道</a></li></ul>
+                                                        </li>
+                                                        <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">伍家岗区</a>
+                                                            <ul style="display: none;"><li class="last">
+                                                                <a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
+                                                        <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">点军区</a>
+                                                            <ul style="display: none;"><li class="last">
+                                                                <a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
+                                                        <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">猇亭区</a>
+                                                            <ul style="display: none;"><li class="last">
+                                                                <a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
+                                                        <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">夷陵区</a>
+                                                            <ul style="display: none;"><li class="last">
+                                                                <a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
+                                                        <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">远安县</a>
+                                                            <ul style="display: none;"><li class="last">
+                                                                <a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
+                                                        <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">兴山县</a>
+                                                            <ul style="display: none;"><li class="last">
+                                                                <a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
+                                                        <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">秭归县</a>
+                                                            <ul style="display: none;"><li class="last">
+                                                                <a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
+                                                        <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">长阳土家族自治县</a>
+                                                            <ul style="display: none;"><li class="last">
+                                                                <a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
+                                                        <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">五峰土家族自治县</a>
+                                                            <ul style="display: none;"><li class="last">
+                                                                <a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
+                                                        <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">宜都市</a>
+                                                            <ul style="display: none;"><li class="last">
+                                                                <a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
+                                                        <li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">当阳市</a>
+                                                            <ul style="display: none;"><li class="last">
+                                                                <a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
+                                                        <li class="last"><div class="hitarea expandable-hitarea"></div><a href="#">枝江市</a>
+                                                            <ul style="display: none;"><li class="last">
+                                                                <a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="am-panel-group" id="accordion2" >
+            <div class="am-panel am-panel-default">
+                <div class="am-panel-hd">
+                    <h4 class="am-panel-title" data-am-collapse="{parent: '#accordion', target: '#do-not-say-1'}">
+                        地名列表
+                    </h4>
+                </div>
+                <div id="do-not-say-3" class="am-panel-collapse am-collapse am-in">
+                    <div class="am-panel-bd" style="padding: 0rem;border-top:0rem" >
+                        <!--<div>-->
+                            <!--&nbsp;<a href="#">当前查询信息</a><strong id="search_info"></strong>-->
+                            <!--&nbsp;<a href="#">返回列表</a>-->
+                        <!--</div>-->
+                        <div id="searchresults" class="SearchResult" style="overflow: auto;max-height: 370px">
+
+                            <!--<div id="resultitems"></div>-->
+                            <!--<div id="hm_Paginate"></div>-->
+                        </div>
+
+                        <!--分页控件-->
+                        <div id="hm_Paginate">
+                            <div id="kkpager">&nbsp;
+                                <span class="disabled">&lt;&lt;</span>
+                                <span class="curr">1</span>
+                                <a href="#" onclick="gotoPage(2)" title="第2页">2</a>
+                                <a href="#" onclick="gotoPage(3)" title="第3页">3</a>
+                                <a href="#" onclick="gotoPage(4)" title="第4页">4</a>
+                                <a href="#" onclick="gotoPage(5)" title="第5页">5</a>
+                                <a href="#" onclick="gotoPage(6)" title="第6页">6</a>
+                                <span>...</span><a href="#" onclick="gotoPage(2)" title="下一页">&gt;&gt;</a>&nbsp;
+                                <span class="normalsize"><br>&nbsp;&nbsp;共25页/123条数据</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!--<div id="searchresults" class="SearchResult">-->
+        <!--<p>jieguo</p>-->
+        <!--&lt;!&ndash;<div id="resultitems"></div>&ndash;&gt;-->
+        <!--&lt;!&ndash;<div id="hm_Paginate"></div>&ndash;&gt;-->
+        <!--</div>-->
+    </div>>
+
+
+
+<!--以上是LZX添加的AmzaUI-->
+
+    <div class="tpl-content-wrapper">
+        <div class="tpl-content-scope" style="position: absolute; right:10px; left:350px;top:95px" id="map_out_div">
+            <div id="map"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>
