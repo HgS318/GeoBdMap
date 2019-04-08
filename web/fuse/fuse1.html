@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>SVG - window 融合</title>
+	
+	<link rel="stylesheet" type="text/css" href="css/default.css">
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.3.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="fonts/vicons/vicons-font.css" />
+	<link rel="stylesheet" type="text/css" href="css/base.css" />
+	<link rel="stylesheet" type="text/css" href="css/menu.css" />
+	<link rel="stylesheet" href="jqueryModalmessage/index.css">
+
+	<!-- <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script> -->
+	<!--[if IE]>
+		<script src="http://libs.baidu.com/html5shiv/3.7/html5shiv.min.js"></script>
+	<![endif]-->
+</head>
+<body class="demo-2">
+
+	<div id="win1" class="datawin datawin1">
+		<div id="toptool1" class="datawintop">Window 1<span id="close1" class="datawinclose">&times;</span></div>
+		<div id="content1">content 1...</div>
+		<!--<div><iframe src="../../download/mapv/examples/baidu-map-polyline-time.html" width='300px' height='250px'></iframe></div>-->
+		 <!--<div class="group"><label> name1 </label> <input type="text" id="username"></div> -->
+		<!-- <div class="group"><label>  Please enter content1 <br /></label><textarea id="content"></textarea></div> -->
+		<!-- <input type="submit" value="confirm" id="btn2"> -->
+		<!-- <input type="submit" value="cancel" id="btn3"> -->
+    </div>
+	<div id="win2" class="datawin datawin2">
+		<div id="toptool2" class="datawintop">Window 2<span id="close2" class="datawinclose">&times;</span></div>
+		<div id="content2">content 2...</div>
+    </div>
+	<div id="win3" class="datawin datawin3">
+		<div id="toptool3" class="datawintop">Window 3<span id="close3" class="datawinclose">&times;</span></div>
+		<div id="content3">content 3...</div>
+    </div>
+	
+	<!-- <input type="submit" value="fuse" id="btn1"> -->
+	<!-- <input type="submit" value="split" id="btn2"> -->
+	<!-- <div class="box"> -->
+    	<!-- <div class="title">&nbsp;<span class="close">X</span></div> -->
+        <!-- <div class="con"> -->
+        	<!-- <p>内容2</p> -->
+        <!-- </div> -->
+    <!-- </div> -->
+	
+	<div class="htmleaf-container">
+		<header class="htmleaf-header">
+			<h1>SVG - window 融合</h1>
+			<h2>示例</h2>
+		</header>
+		<div class="content">
+			<div class="menu">
+				<div class="menu-wrapper">
+					<ul class="menu-items">
+						<li class="menu-item">
+							<button class="menu-item-button" id="btn">
+								<!-- <i class="menu-item-icon icon icon-reply"></i> -->
+								<i class="menu-item-icon icon icon-box"></i>
+							</button>
+							<div class="menu-item-bounce"></div>
+						</li>
+						<!-- <li class="menu-item"> -->
+							<!-- <button class="menu-item-button"> -->
+								<!-- <i class="menu-item-icon icon icon-box"></i> -->
+							<!-- </button> -->
+							<!-- <div class="menu-item-bounce"></div> -->
+						<!-- </li> -->
+						<li class="menu-item">
+							<button class="menu-item-button">
+								<!-- <i class="menu-item-icon icon icon-trash"></i> -->
+								<i class="menu-item-icon icon icon-box"></i>
+							</button>
+							<div class="menu-item-bounce"></div>
+						</li>
+					</ul>
+					<button class="menu-toggle-button">
+						<i class="fa fa-plus menu-toggle-icon"></i>
+					</button>
+				</div>
+			</div>
+			
+		</div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+<!---->		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="800">
+		  <defs>
+		    <filter id="goo">
+		      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+		      <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+		      <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+		    </filter>
+		  </defs>
+		</svg>
+	
+	<script src="js/jquery.min.js"></script>
+	<script src="js/TweenMax.min.js"></script>
+	<script src="js/menu.js"></script>
+	<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+</body>
+</html>
