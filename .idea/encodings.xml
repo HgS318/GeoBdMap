@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/src/test/BikeTrack.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/whu/eres/cartolab/controllers/JsonAction01.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/whu/eres/cartolab/db/DbfFile.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/whu/eres/cartolab/db/esri/ShapeFile.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/whu/eres/cartolab/db/mysql/connections/MysqlLocalConnection.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/whu/eres/cartolab/db/mysql/queries/MySQLQuery.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/whu/eres/cartolab/db/mysql/queries/PlaceQuery.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/whu/eres/cartolab/db/mysql/queries/ZPlaceQuery.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/whu/eres/cartolab/geo/ConvexHull.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/whu/eres/cartolab/json/BoundJson.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/whu/eres/cartolab/json/BoundMarkerJson.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/whu/eres/cartolab/json/PlaceJson.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/web/js/pages/wikiIndex.js" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>
