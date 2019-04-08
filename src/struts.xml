@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <package name="default" extends="struts-default">
+        <action name="hello">
+            <result>
+                /index.jsp
+            </result>
+        </action>
+    </package>
+
+    <package name="p1m" extends="default">
+
+        <action name="getAllGeoEntities" class="whu.eres.cartolab.controllers.JsonAction01" method="getAllGeoEntities" />
+        <action name="getAllSynData" class="whu.eres.cartolab.controllers.JsonAction01" method="getAllSynData" />
+        <action name="getCoordsByPostcode" class="whu.eres.cartolab.controllers.JsonAction01" method="getCoordsByPostcode" />
+        <action name="getDistrictsByPostcode" class="whu.eres.cartolab.controllers.JsonAction01" method="getDistrictsByPostcode" />
+        <action name="getPolygonByPostcode" class="whu.eres.cartolab.controllers.JsonAction01" method="getPolygonByPostcode" />
+        <action name="getCoordsByIP" class="whu.eres.cartolab.controllers.JsonAction01" method="getCoordsByIP" />
+        <action name="getCoordsByAreacode" class="whu.eres.cartolab.controllers.JsonAction01" method="getCoordsByAreacode" />
+        <action name="testShpService" class="whu.eres.cartolab.controllers.JsonAction01" method="testShpService" />
+        <action name="getShape" class="whu.eres.cartolab.controllers.JsonAction01" method="getShape" />
+
+
+        <action name="searchPrepare" class="whu.eres.cartolab.controllers.JsonAction00" method="searchPrepare" />
+        <action name="getSessionAttribute" class="whu.eres.cartolab.controllers.JsonAction00" method="getSessionAttribute" />
+        <action name="randomResults" class="whu.eres.cartolab.controllers.JsonAction00" method="randomResults" />
+        <action name="randomPlacesResults" class="whu.eres.cartolab.controllers.JsonAction00" method="randomPlacesResults" />
+        <action name="randomDistsResults" class="whu.eres.cartolab.controllers.JsonAction00" method="randomDistsResults" />
+        <action name="randomBoundsResults" class="whu.eres.cartolab.controllers.JsonAction00" method="randomBoundsResults" />
+        <action name="randomBoundMarkersResults" class="whu.eres.cartolab.controllers.JsonAction00" method="randomBoundMarkersResults" />
+
+        <action name="wholeGeonames" class="whu.eres.cartolab.controllers.JsonAction00" method="wholeGeonames" />
+        <action name="easyGeonames" class="whu.eres.cartolab.controllers.JsonAction00" method="easyGeonames" />
+
+        <action name="getEasyGeonamesByBigType" class="whu.eres.cartolab.controllers.JsonAction00" method="getEasyGeonamesByBigType" />
+        <action name="getEasyGeonamesByType" class="whu.eres.cartolab.controllers.JsonAction00" method="getEasyGeonamesByType" />
+        <action name="getEasyGeonamesByInitial" class="whu.eres.cartolab.controllers.JsonAction00" method="getEasyGeonamesByInitial" />
+        <action name="getEasyGeonamesByWords" class="whu.eres.cartolab.controllers.JsonAction00" method="getEasyGeonamesByWords" />
+        <action name="getGeonameSpecificInfo" class="whu.eres.cartolab.controllers.JsonAction00" method="getGeonameSpecificInfo" />
+
+        <action name="getGeonameByNickname" class="whu.eres.cartolab.controllers.JsonAction00" method="getGeonameByNickname" />
+        <action name="getGeonameInfoByNickname" class="whu.eres.cartolab.controllers.JsonAction00" method="getGeonameInfoByNickname" />
+        <action name="getGeonameFullByNickname" class="whu.eres.cartolab.controllers.JsonAction00" method="getGeonameFullByNickname" />
+        <action name="getGeonameFullById" class="whu.eres.cartolab.controllers.JsonAction00" method="getGeonameFullById" />
+
+        <action name="wholeDists" class="whu.eres.cartolab.controllers.JsonAction00" method="wholeDists" />
+        <action name="wholeEasyDists" class="whu.eres.cartolab.controllers.JsonAction00" method="wholeEasyDists" />
+        <action name="getEasyDistInfoWithZeroChilds" class="whu.eres.cartolab.controllers.JsonAction00" method="getEasyDistInfoWithZeroChilds" />
+        <action name="getDistInfoByNickname" class="whu.eres.cartolab.controllers.JsonAction00" method="getDistInfoByNickname" />
+        <action name="getDistInfoByNum" class="whu.eres.cartolab.controllers.JsonAction00" method="getDistInfoByNum" />
+
+        <action name="wholeTypes" class="whu.eres.cartolab.controllers.JsonAction00" method="wholeTypes" />
+
+        <action name="wholeEasyBounds" class="whu.eres.cartolab.controllers.JsonAction00" method="wholeEasyBounds" />
+        <action name="wholeBoundPaths" class="whu.eres.cartolab.controllers.JsonAction00" method="wholeBoundPaths" />
+        <action name="getBoundInfoById" class="whu.eres.cartolab.controllers.JsonAction00" method="getBoundInfoById" />
+
+        <action name="wholeEasyBoundMarkers" class="whu.eres.cartolab.controllers.JsonAction00" method="wholeEasyBoundMarkers" />
+        <action name="getBoundMarkerInfoById" class="whu.eres.cartolab.controllers.JsonAction00" method="getBoundMarkerInfoById" />
+        <action name="getBoundMarkerRelateDistsById" class="whu.eres.cartolab.controllers.JsonAction00" method="getBoundMarkerRelateDistsById" />
+
+        <action name="tempHighSearch" class="whu.eres.cartolab.controllers.JsonAction00" method="tempHighSearch" />
+
+
+    </package>
+
+</struts>
