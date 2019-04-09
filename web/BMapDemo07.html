@@ -54,117 +54,123 @@
         id = "1";
     }
     var map = new BMap.Map("allmap");
+    overlays = [];
     var infoWindow;
        // 创建Map实例
     var _point = new BMap.Point(120.76387299284131, 31.92252143886308);
     map.centerAndZoom(_point, 9);
     map.enableScrollWheelZoom(true);
     var entity = data[id];
-    var content = '<div style="width: 320px">' +
-            '<h4 style="margin: 0 0 0 0; padding: 0 0 0 0; color: #be2924; font-size: 18px">' + entity['name'] + '</h4><br/>';
-    if(entity.address != null && entity.address != undefined) {
-        content += '地址：' + entity.address + '<br/>';
+    createEntity(entity);
+    if(overlays.length > 0) {
+        openInfoWin(null, {target: overlays[0]});
     }
-    if(entity['text'] != null) {
-        var text = entity['text'];
-        if(text.length > 150) {
-            text = text.substring(0, 150) + '...';
+
+    function createEntity(entity) {
+        var content = createContent(entity);
+        var overlay = createOverlay(entity);
+        overlays.push(overlay);
+        addOverlayAndWindow(overlay, entity, content);
+    }
+
+    function createContent(entity) {
+
+        var content = '<div style="width: 320px">' +
+                '<h4 style="margin: 0 0 0 0; padding: 0 0 0 0; color: #be2924; font-size: 18px">' + entity['name'] + '</h4><br/>';
+        if(entity.address != null && entity.address != undefined) {
+            content += '地址：' + entity.address + '<br/>';
         }
-        content += "<strong>文字</strong><p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
-    }
-    if(entity['images'] != null && entity['images'].length > 0) {
-        content += '<strong>图像</strong><br/>';
-        for (var j = 0; j < entity['images'].length; j++) {
-            var img_path = entity['images'][j];
+        if(entity['text'] != null) {
+            var text = entity['text'];
+            if(text.length > 60) {
+                text = text.substring(0, 60) + '...';
+            }
+            content += "<strong>文字</strong><p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
+        }
+        if(entity['texts'] != null) {
+            for(var j = 0; j < entity['texts'].length; j++) {
+                var text = entity['texts'][j];
+                if(text.length > 50) {
+                    text = text.substring(0, 50) + '...';
+                }
+                content += "<strong>文字</strong><p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
+            }
+        }
+        if(entity['images'] != null && entity['images'].length > 0) {
+            content += '<strong>图像</strong><br/>';
+            for (var j = 0; j < entity['images'].length; j++) {
+                var img_path = entity['images'][j];
 //                                content += "<img src='" + img_path + "' class='img' alt='' onclick='openWindowY(img_path)'"
 //                                        + "style='zoom:1;overflow:hidden;width:50px;height:50px;'/>";
-            content += '&nbsp;&nbsp;<img src=' + img_path + ' class="img" onclick="openWindowY(this, \'image\')" ' +
-                    'alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>'
+                content += '&nbsp;&nbsp;<img src=' + img_path + ' class="img" onclick="openWindowY(this, \'image\')" ' +
+                        'alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>'
 
+            }
+            content += '<br/>';
         }
-        content += '<br/>';
-    }
-    if(entity['vedios'] != null && entity['vedios'].length > 0) {
-        content += '<strong>视频</strong><br/>';
-        for (var j = 0; j < entity['vedios'].length; j++) {
-            var vedio_path = entity['vedios'][j];
+        if(entity['vedios'] != null && entity['vedios'].length > 0) {
+            content += '<strong>视频</strong><br/>';
+            for (var j = 0; j < entity['vedios'].length; j++) {
+                var vedio_path = entity['vedios'][j];
 //                                content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + vedio_path + '" target="_blank" onclick="openWindowY(this, \'vedio\')">视频' + (j + 1) + '</a>');
-            content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + vedio_path +'" target="_blank">视频' + (j + 1) + '</a>');
+                content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + vedio_path +'" target="_blank">视频' + (j + 1) + '</a>');
+            }
+            content += '<br/>';
         }
-        content += '<br/>';
-    }
-    if(entity['audios'] != null && entity['audios'].length > 0) {
-        content += '<strong>音频</strong><br/>';
-        for (var j = 0; j < entity['audios'].length; j++) {
-            var audio_path = entity['audios'][j];
-            content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + audio_path +'" target="_blank">音频' + (j + 1) + '</a>');
+        if(entity['audios'] != null && entity['audios'].length > 0) {
+            content += '<strong>音频</strong><br/>';
+            for (var j = 0; j < entity['audios'].length; j++) {
+                var audio_path = entity['audios'][j];
+                content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + audio_path +'" target="_blank">音频' + (j + 1) + '</a>');
+            }
+            content += '<br/>';
         }
-        content += '<br/>';
-    }
-    if(entity['models'] != null && entity['models'].length > 0) {
-        content += '<strong>模型</strong><br/>';
-        for (var j = 0; j < entity['models'].length; j++) {
-            var model_paths = entity['models'][j];
-            var model_pic = model_paths.split(':');
-            var model_path = model_pic[0];
-            var model_pic = model_pic[1];
-            content += '<img src=' + model_pic + ' class="img" href="' + model_path + '" ' +
-                    'target="_blank" alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>'
+        if(entity['models'] != null && entity['models'].length > 0) {
+            content += '<strong>模型</strong><br/>';
+            for (var j = 0; j < entity['models'].length; j++) {
+                var model_paths = entity['models'][j];
+                var model_pic = model_paths.split(':');
+                var model_path = model_pic[0];
+                var model_pic = model_pic[1];
+                content += '<img src=' + model_pic + ' class="img" href="' + model_path + '" ' +
+                        'target="_blank" alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>'
 //                                content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + vedio_path + '" onclick="getHref()">视频' + (j + 1) + '</a>');
+            }
+            content += '<br/>';
         }
-        content += '<br/>';
-    }
-    content += '</div>';
-
-    var pointStr = entity['position'];
-    if(pointStr != null && pointStr != undefined) {
-        var pointArray = pointStr.split(",");
-        var X = pointArray[0];
-        var Y = pointArray[1];
-        var Point = new BMap.Point(X, Y);
-        var marker = new BMap.Marker(Point);
-        marker.spaType = 1;
-        addOverlayAndWin(marker, entity.name, content);
-    }
-    var lineStr = entity['line'];
-    if(lineStr != null && lineStr != undefined) {
-        var polyline = getFigureJson(lineStr, "line");
-        polyline.spaType = 3;
-        addOverlayAndWin(polyline, entity.name, content);
-    }
-    var polygonStr = entity['polygon'];
-    if(polygonStr != null && polygonStr != undefined) {
-        var polygon = getFigureJson(polygonStr, "polygon");
-        polygon.spaType = 5;
-        addOverlayAndWin(polygon, entity.name, content);
+        content += '</div>';
+        return content;
     }
 
-    var pointStr = entity['position'];
-    if(pointStr != null && pointStr != undefined) {
-        var pointArray = pointStr.split(",");
-        var X = pointArray[0];
-        var Y = pointArray[1];
-        var Point = new BMap.Point(X, Y);
-        var marker = new BMap.Marker(Point);
-        marker.spaType = 1;
-        addOverlayAndWin(marker, entity.name, content);
-    }
-    var lineStr = entity['line'];
-    if(lineStr != null && lineStr != undefined) {
-        var polyline = getFigureByStr(lineStr, "line");
-        polyline.spaType = 3;
-        addOverlayAndWin(polyline, entity.name, content);
-    }
-    var polygonStr = entity['polygon'];
-    if(polygonStr != null && polygonStr != undefined) {
-        var polygon = getFigureByStr(polygonStr, "polygon");
-        polygon.spaType = 5;
-        addOverlayAndWin(polygon, entity.name, content);
+    function createOverlay(entity) {
+
+        var pointStr = entity['position'];
+        if(pointStr != null && pointStr != undefined) {
+            var pointArray = pointStr.split(",");
+            var X = pointArray[0];
+            var Y = pointArray[1];
+            var Point = new BMap.Point(X, Y);
+            var marker = new BMap.Marker(Point);
+            marker.spaType = 1;
+            return marker;
+        }
+        var lineStr = entity['line'];
+        if(lineStr != null && lineStr != undefined) {
+            var polyline = getFigureByStr(lineStr, "line");
+            polyline.spaType = 3;
+            return polyline;
+        }
+        var polygonStr = entity['polygon'];
+        if(polygonStr != null && polygonStr != undefined) {
+            var polygon = getFigureByStr(polygonStr, "polygon");
+            polygon.spaType = 5;
+            return polygon;
+        }
     }
 
-
-    function addOverlayAndWin(overlay, name, content) {
-        overlay.name = name;
+    function addOverlayAndWindow(overlay, entityData, content) {
+        overlay.name = entityData.name;
+        overlay.extData = entityData;
         addClickHandler(overlay, content);
         map.addOverlay(overlay);
     }
@@ -183,6 +189,11 @@
         } else if (overlay.spaType == 3 || overlay.spaType == 5) {
             var first_point = overlay.getPath()[0];
             point = new BMap.Point(first_point.lng, first_point.lat);
+        } else {
+            point = new BMap.Point(e.x, e.y);
+        }
+        if(content == null || content === undefined) {
+            content = createContent(overlay.extData);
         }
         infoWindow = new BMap.InfoWindow(content);
         map.openInfoWindow(infoWindow, point);

@@ -134,20 +134,20 @@
                     }
                     content += '<br/>';
                 }
+                if(entity['audios'] != null && entity['audios'].length > 0) {
+                    content += '<br/><strong>音频</strong>： (信息量: ' + entity['infoAmount']['audioLength'] + ' 秒)<br/>';
+                    for (var j = 0; j < entity['audios'].length; j++) {
+                        var audio_path = entity['audios'][j];
+                        content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + audio_path + ' onclick="openWindowY(this, \'audio\')">音频' + (j + 1) + '</a>');
+                    }
+                    content += '<br/>';
+                }
                 if(entity['vedios'] != null && entity['vedios'].length > 0) {
                     content += '<br/><strong>视频</strong>： (信息量: ' + entity['infoAmount']['vedioLength'] + ' 秒)<br/>';
                     for (var j = 0; j < entity['vedios'].length; j++) {
                         var vedio_path = entity['vedios'][j];
 //                                content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + vedio_path + '" target="_blank" onclick="openWindowY(this, \'vedio\')">视频' + (j + 1) + '</a>');
                         content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + vedio_path + ' onclick="openWindowY(this, \'vedio\')">视频' + (j + 1) + '</a>');
-                    }
-                    content += '<br/>';
-                }
-                if(entity['audios'] != null && entity['audios'].length > 0) {
-                    content += '<br/><strong>音频</strong>： (信息量: ' + entity['infoAmount']['audioLength'] + ' 秒)<br/>';
-                    for (var j = 0; j < entity['audios'].length; j++) {
-                        var audio_path = entity['audios'][j];
-                        content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + audio_path + ' onclick="openWindowY(this, \'audio\')">音频' + (j + 1) + '</a>');
                     }
                     content += '<br/>';
                 }
@@ -198,16 +198,6 @@
                         addOverlayAndWin(polygon, entity.name, content);
                     }
                 }
-
-
-//                        var content = '<br style="margin:0;line-height:10px;padding:2px;">' +
-//                            '地址：' + entity.address + '<br/>电话：' + entity.phoneNum + '<br/>简介：' + entity.introduction1 + '</br>' +
-//                            '图片:' + '<img src=' + entity.picturePath1 + ' class="img" alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>' +
-//                            '<img src=' + entity.picturePath2 + ' class="img" alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>' +
-//                            '<img src=' + entity.picturePath3 + ' class="img" alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>' +
-//                            '<img src=' + entity.picturePath4 + ' class="img" alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/></br>' +
-//                            '视频链接:' + '&nbsp;&nbsp;' + '<a href="#" onclick="getHref()">视频1</a>' + '&nbsp;&nbsp;' + '<a href="#" onclick="getHref1()">视频2</a>' + '&nbsp;&nbsp;' + '<a href="#" onclick="getHref2()">视频3</a>' +
-//                            '</div>';
 
             }
         },
@@ -277,6 +267,11 @@
                     "width='615px' height='472px' /></div>";
             width = 656;
             height = 546;
+        } else if(type == "audio") {
+            windowHtml = "<div><iframe src='download/bofq/yp.html?url=../../" + e.id + "' " +
+                    "width='460px' height='220px' /></div>";
+            width = 490;
+            height = 270;
         } else if(type == "model") {
 
         } else if(type == "track") {
