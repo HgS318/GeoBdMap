@@ -111,8 +111,8 @@
                 if(entity.address != null && entity.address != undefined) {
                     content += '地址：' + entity.address + '<br/>';
                 }
-                content += '<br/><strong>文字</strong>： (信息量: ' + entity['infoAmount']['textLenth'] + ' 字节)<br/>';
                 if(entity['text'] != null) {
+                    content += '<br/><strong>文字</strong>： (信息量: ' + entity['infoAmount']['textLenth'] + ' 字节)<br/>';
                     for (var j = 0; j < entity['text'].length; j++) {
                         var content_text = entity['text'][j];
                         if(content_text.length > 45) {
