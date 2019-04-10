@@ -141,10 +141,9 @@ function initWindows() {
 }
 
 function initPages() {
-
-	page1 = getQueryString("page1");
-	page2 = getQueryString("page2");
-	page3 = getQueryString("page3");
+	page1 = decodeURI(getQueryString("page1"));
+	page2 = decodeURI(getQueryString("page2"));
+	page3 = decodeURI(getQueryString("page3"));
 	if(page1 == "" || page1 == null) {
 		page1 = "../download/mapv/examples/baidu-map-polyline-time.html";
 	}
@@ -159,6 +158,21 @@ function initPages() {
 	// $("#content3").html("<iframe src='" + page3 +"' width='495px' height='362px'></iframe>");
 	$("#content1").html(createHtml(page1));
 	$("#content2").html(createHtml(page2));
+
+	var mainTitle = decodeURI(getQueryString("h1"));
+	var subTitle = decodeURI(getQueryString("h2"));
+	var top1 = decodeURI(getQueryString("top1"));
+	var top2 = decodeURI(getQueryString("top2"));
+	var top3 = decodeURI(getQueryString("top3"));
+	console.log(mainTitle);
+	$("#mainTitle")[0].innerHTML = mainTitle;
+	$("#webTitle")[0].innerHTML = mainTitle;
+	$("#subTitle")[0].innerHTML = subTitle;
+	$("#toptool1")[0].innerHTML = top1;
+	$("#toptool2")[0].innerHTML = top2;
+	$("#toptool3")[0].innerHTML = top3;
+
+
 	inited = true;
 }
 
@@ -179,8 +193,6 @@ function unScroll(){
 function removeUnScroll(){
 	$(document).unbind("scroll.unable");
 }
-
-
 
 function pressHandler(event){
 	on = !on;
