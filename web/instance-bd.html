@@ -65,6 +65,7 @@
 	<!--<script src="OntoSys/js/easyui/jquery.iDialog.js"></script>-->
 	<script src="js/pages/g1m-bd-mainpage-layout.js"></script>
 	<script src="js/pages/g1m-bd-mainpage-map.js"></script>
+	<script src="js/pages/relpos.js"></script>
 	<!--<script src="OntoSys/js/my/instanceLoad.js" type="text/javascript" charset="utf-8"></script>-->
 
 	<script src="http://www.jq22.com/jquery/bootstrap-3.3.4.js"></script>
@@ -174,16 +175,17 @@
 						<p></p>
 						<form class="ClassCheckbox" method="post" action="" enctype="multipart/form-data">
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<input type="file" name="uploadFile" accept=".txt"/>
+							<input type="file" name="uploadFile" accept="text/plain" onchange="openFile(event)" />
 
 							<br/><br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							<input type="checkbox" id="abs_relative_checkbox" checked onclick=""/>相对位置 &nbsp;&nbsp;
 							<input type="checkbox" id="abs_show_checkbox" checked onclick=""/>在地图上显示
-
+							<br/>&nbsp;&nbsp;&nbsp;
+							<textarea id="extrapostext" rows="10" cols="35"></textarea><br>
 							<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<input type="submit" class="srhbtn" value="上传" />
+							<input type="submit" class="srhbtn" value="上传" onchange="openFile(event)" />
 							<!--<input type="submit" value="提取位置信息" />-->&nbsp;&nbsp;&nbsp;&nbsp;
-							<button id="abstractStart" class="srhbtn" onclick="doHighSearch()">提取位置信息</button>
+							<button id="abstractStart" class="srhbtn" onclick="extract_positions()">提取位置信息</button>
 						</form>
 
 					</div>

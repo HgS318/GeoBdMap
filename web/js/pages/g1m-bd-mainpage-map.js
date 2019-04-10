@@ -95,6 +95,7 @@ $(function() {
                 initTmpDists();
             }
             toResStat();
+            initRelpos();
         },
         error:function(data){
             console.log(data);

@@ -52,16 +52,16 @@
         }
 		
 		.datawin1{
-            left:5%;
-            top:5%;
+            left: 5%;
+            top: 5%;
         }
 		.datawin2{
-            left:60%;
-            top:5%;
+            left: 63%;
+            top: 5%;
         }
 		.datawin3{
-            left:30%;
-            top:45%;
+            left: 30%;
+            top: 45%;
         }
         #username {
 			width: 200px;

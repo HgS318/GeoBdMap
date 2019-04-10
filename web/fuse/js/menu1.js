@@ -8,20 +8,27 @@ var close2;
 var win3;
 var top3;
 var close3;
+var page1;
+var page2;
+var page3;
 var inited = false;
 
 // var btn1;
 // var btn2;
 
 var menuItemNum;
-var angle=120;
-var distance=90;
-var startingAngle=180+(-angle/2);
-var slice=angle/(menuItemNum-1);
+var angle = 120;
+var distance = 90;
+var startingAngle = 180 + (-angle / 2);
+var slice;
 
 var on = false;
+var firstFuse = true;
 
-function openWin(win) {
+function openWin(win, html) {
+	if(html != undefined && html != null && html != "") {
+		win.html = html;
+	}
 	win.style.display = "block";
 }
 
@@ -69,15 +76,19 @@ function drag(ev, win) {
 	};
 }
 
-function fuse_simple() {
+function fuse_simple(first) {
 	closeWin(win1);
 	closeWin(win2);
+	if(first) {
+		$("#content3").html(createHtml(page3));
+	}
 	openWin(win3);
 }
 
 function split_simple() {
 	openWin(win1);
 	openWin(win2);
+	// openWin(win3);
 	closeWin(win3);
 }
 
@@ -131,9 +142,9 @@ function initWindows() {
 
 function initPages() {
 
-	var page1 = getQueryString("page1");
-	var page2 = getQueryString("page2");
-	var page3 = getQueryString("page3");
+	page1 = getQueryString("page1");
+	page2 = getQueryString("page2");
+	page3 = getQueryString("page3");
 	if(page1 == "" || page1 == null) {
 		page1 = "../download/mapv/examples/baidu-map-polyline-time.html";
 	}
@@ -143,10 +154,16 @@ function initPages() {
 	if(page3 == "" || page1 == null) {
 		page3 = "../download/mapv/examples/baidu-map-polyline-time.html";
 	}
-	$("#content1").html("<iframe src='" + page1 +"' width='495px' height='362px'></iframe>");
-	$("#content2").html("<iframe src='" + page2 +"' width='495px' height='362px'></iframe>");
-	$("#content3").html("<iframe src='" + page3 +"' width='495px' height='362px'></iframe>");
+	// $("#content1").html("<iframe src='" + page1 +"' width='495px' height='362px'></iframe>");
+	// $("#content2").html("<iframe src='" + page2 +"' width='495px' height='362px'></iframe>");
+	// $("#content3").html("<iframe src='" + page3 +"' width='495px' height='362px'></iframe>");
+	$("#content1").html(createHtml(page1));
+	$("#content2").html(createHtml(page2));
 	inited = true;
+}
+
+function createHtml(page) {
+	return "<iframe src='" + page +"' width='495px' height='362px'></iframe>";
 }
 
 
@@ -227,7 +244,7 @@ function openMenu(){
 
 function closeMenu(){
 	$(".menu-item").each(function(i){
-		var delay=i*0.08;
+		var delay = i * 0.08;
 
 		var $bounce=$(this).children(".menu-item-bounce");
 
@@ -254,7 +271,8 @@ function closeMenu(){
 							easeParams:[1.1,0.12]
 						});
 						if(inited) {
-							fuse_simple();
+							fuse_simple(firstFuse);
+							firstFuse = false;
 						}
 					}
 				})
@@ -282,7 +300,7 @@ $(document).ready(function(){
 	initWindows();
 
 	menuItemNum=$(".menu-item").length;
-	slice=angle/(menuItemNum - 1);
+	slice=angle / (menuItemNum - 1);
 	TweenMax.globalTimeScale(0.8);
 	$(".menu-item").each(function(i){
 		var angle=startingAngle+(slice*i);
