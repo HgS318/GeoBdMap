@@ -21,6 +21,7 @@ public class GeoEntity {
     public List<String> images = new ArrayList<>();
     public Map<String, Long> vedios = new HashMap<>();
     public Map<String, Long> audios = new HashMap<>();
+    public Map<String, Long> flashes = new HashMap<>();
     public Map<String, String> models = new HashMap<>();
     public Date time;
     public Date obsoleteTime;
@@ -70,6 +71,9 @@ public class GeoEntity {
             if(info.audio != null && !"".equals(info.audio)) {
                 audios.put(info.audio, info.audioLength);
             }
+            if(info.flash != null && !"".equals(info.flash)) {
+                flashes.put(info.flash, info.flashLength);
+            }
             if(info.model != null && !"".equals(info.model)) {
                 models.put(info.model, info.modelimg);
             }
@@ -90,6 +94,7 @@ public class GeoEntity {
         JSONArray imagesArr = toJSONArray(images);
         JSONArray vediosArr = toJSONArray(vedios);
         JSONArray audiosArr = toJSONArray(audios);
+        JSONArray flashArr = toJSONArray(flashes);
         JSONArray modelsArr = toPairJSONArray(models);
         InfoAmount infoAmount = infoAmount();
 
@@ -107,6 +112,7 @@ public class GeoEntity {
         obj.put("images", imagesArr);
         obj.put("vedios", vediosArr);
         obj.put("audios", audiosArr);
+        obj.put("flashes", flashArr);
         obj.put("models", modelsArr);
         obj.put("time", time == null ? null : time.toString());
         obj.put("obsoleteTime", obsoleteTime == null ? null : obsoleteTime.toString());
@@ -246,6 +252,10 @@ public class GeoEntity {
         return InfoAmount.countAudioLength(audios);
     }
 
+    public long flashInfoAmount() {
+        return InfoAmount.countFlashLength(flashes);
+    }
+
     public long modelInfoAmount() {
         return InfoAmount.countModelsLength(models, MysqlLocalConnection.websitePath);
     }
@@ -256,8 +266,9 @@ public class GeoEntity {
         long imageAmout = imageInfoAmount();
         long vedioAmount = vedioInfoAmount();
         long audioAmount = audioInfoAmount();
+        long flashAmount = flashInfoAmount();
         long modelAmount = modelInfoAmount();
-        InfoAmount ia = new InfoAmount(textAmount, figureAmount, imageAmout, vedioAmount, audioAmount, modelAmount);
+        InfoAmount ia = new InfoAmount(textAmount, figureAmount, imageAmout, vedioAmount, audioAmount, flashAmount, modelAmount);
         return ia;
 
     }

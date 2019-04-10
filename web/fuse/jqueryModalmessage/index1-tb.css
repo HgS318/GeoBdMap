@@ -50,7 +50,6 @@
         	color: #666;
         	font-size: 14px;
         }
-		
 		.datawin1{
             left: 5%;
             top: 5%;
@@ -60,9 +59,28 @@
             top: 5%;
         }
 		.datawin3{
-            left: 35%;
+            left: 18%;
             top: 45%;
         }
+        .datatb{
+            display:none;
+            background:#eee;
+            width: 400px;
+            height:340px;
+            position:absolute;
+        }
+		.tb1{
+			left: 8%;
+			top: 55%;
+		}
+		.tb2{
+			left: 65%;
+			top: 55%;
+		}
+		.tb3{
+			left: 57%;
+			top: 50%;
+		}
         #username {
 			width: 200px;
 			height: 25px;

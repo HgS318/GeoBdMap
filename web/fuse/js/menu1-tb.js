@@ -8,9 +8,13 @@ var close2;
 var win3;
 var top3;
 var close3;
+var tb1, tb2, tb3;
+// var tbCont1, tbCont2, tbCont3;
+
 var page1;
 var page2;
 var page3;
+var tPage1, tPage2, tPage3;
 var inited = false;
 
 // var btn1;
@@ -78,18 +82,25 @@ function drag(ev, win) {
 
 function fuse_simple(first) {
 	closeWin(win1);
+	closeWin(tb1);
 	closeWin(win2);
+	closeWin(tb2);
 	if(first) {
-		$("#content3").html(createHtml(page3));
+		$("#content3").html(createWindowHtml(page3));
+		$("#tbCont3").html(createTbHtml(tPage3));
 	}
 	openWin(win3);
+	openWin(tb3);
 }
 
 function split_simple() {
 	openWin(win1);
 	openWin(win2);
+	openWin(tb1);
+	openWin(tb2);
 	// openWin(win3);
 	closeWin(win3);
+	closeWin(tb3);
 }
 
 function initWindows() {
@@ -102,19 +113,13 @@ function initWindows() {
 	win3  = document.getElementById("win3");
 	top3  = document.getElementById("toptool3");
 	close3= document.getElementById("close3");
-	
-	// openWin(win1);
-	// openWin(win2);
+	tb1 =document.getElementById("tb1");
+	tb2 =document.getElementById("tb2");
+	tb3 =document.getElementById("tb3");
+	// tbCont1 =document.getElementById("tbCont1");
+	// tbCont2 =document.getElementById("tbCont2");
+	// tbCont3 =document.getElementById("tbCont3");
 
-	// btn1  = document.getElementById("btn1");
-	// btn2  = document.getElementById("btn2");
-    // btn1.onclick=function(){
-        // fuse_simple();
-    // };
-    // btn2.onclick=function(){
-        // split_simple();
-    // };
-   
 	// 拖拽
 	top1.onmousedown = function (ev) {
 		drag(ev, win1);
@@ -137,16 +142,22 @@ function initWindows() {
 		closeWin(win3);
 	};
 
-	// inited = true;
 }
 
 function initPages() {
 	page1 = decodeURI(getQueryString("page1"));
 	page2 = decodeURI(getQueryString("page2"));
 	page3 = decodeURI(getQueryString("page3"));
+	tPage1 = decodeURI(getQueryString("tb1"));
+	tPage2 = decodeURI(getQueryString("tb2"));
+	tPage3 = decodeURI(getQueryString("tb3"));
 	var default_pages = ["html3/beihang_haidian.html",
-				"html3/beihang_shahe.html",
-				"html3/beihang_total.html"];
+		"html3/beihang_shahe.html",
+		"html3/beihang_total.html",
+		"html3/beihang_haidian.html",
+		"html3/beihang_shahe.html",
+		"html3/beihang_total.html"
+	];
 	if(page1 == "" || page1 == null) {
 		page1 = default_pages[0];
 	}
@@ -156,18 +167,27 @@ function initPages() {
 	if(page3 == "" || page1 == null) {
 		page3 = default_pages[2];
 	}
-	// $("#content1").html("<iframe src='" + page1 +"' width='495px' height='362px'></iframe>");
-	// $("#content2").html("<iframe src='" + page2 +"' width='495px' height='362px'></iframe>");
-	// $("#content3").html("<iframe src='" + page3 +"' width='495px' height='362px'></iframe>");
-	$("#content1").html(createHtml(page1));
-	$("#content2").html(createHtml(page2));
+    if(tPage1 == "" || tPage1 == null) {
+        tPage1 = default_pages[3];
+    }
+    if(tPage2 == "" || tPage2 == null) {
+        tPage2 = default_pages[4];
+    }
+    if(tPage3 == "" || tPage31 == null) {
+        tPage3 = default_pages[5];
+    }
+	$("#content1").html(createWindowHtml(page1));
+	$("#content2").html(createWindowHtml(page2));
+
+	$("#tbCont1").html(createTbHtml(tPage1));
+	$("#tbCont2").html(createTbHtml(tPage2));
+
 
 	var mainTitle = decodeURI(getQueryString("h1"));
 	var subTitle = decodeURI(getQueryString("h2"));
 	var top1 = decodeURI(getQueryString("top1"));
 	var top2 = decodeURI(getQueryString("top2"));
 	var top3 = decodeURI(getQueryString("top3"));
-	console.log(mainTitle);
 	$("#mainTitle")[0].innerHTML = mainTitle;
 	$("#webTitle")[0].innerHTML = mainTitle;
 	$("#subTitle")[0].innerHTML = subTitle;
@@ -179,8 +199,12 @@ function initPages() {
 	inited = true;
 }
 
-function createHtml(page) {
+function createWindowHtml(page) {
 	return "<iframe src='" + page +"' width='495px' height='362px'></iframe>";
+}
+
+function createTbHtml(page) {
+	return "<iframe src='" + page +"' width='395px' height='300px'></iframe>";
 }
 
 
