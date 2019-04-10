@@ -8,20 +8,27 @@ var close2;
 var win3;
 var top3;
 var close3;
+var page1;
+var page2;
+var page3;
 var inited = false;
 
 // var btn1;
 // var btn2;
 
 var menuItemNum;
-var angle=120;
-var distance=90;
-var startingAngle=180+(-angle/2);
-var slice=angle/(menuItemNum-1);
+var angle = 120;
+var distance = 90;
+var startingAngle = 180 + (-angle / 2);
+var slice;
 
 var on = false;
+var firstFuse = true;
 
-function openWin(win) {
+function openWin(win, html) {
+	if(html != undefined && html != null && html != "") {
+		win.html = html;
+	}
 	win.style.display = "block";
 }
 
@@ -69,15 +76,19 @@ function drag(ev, win) {
 	};
 }
 
-function fuse_simple() {
+function fuse_simple(first) {
 	closeWin(win1);
 	closeWin(win2);
+	if(first) {
+		$("#content3").html(createHtml(page3));
+	}
 	openWin(win3);
 }
 
 function split_simple() {
 	openWin(win1);
 	openWin(win2);
+	// openWin(win3);
 	closeWin(win3);
 }
 
@@ -91,19 +102,19 @@ function initWindows() {
 	win3  = document.getElementById("win3");
 	top3  = document.getElementById("toptool3");
 	close3= document.getElementById("close3");
-	
+
 	// openWin(win1);
 	// openWin(win2);
 
 	// btn1  = document.getElementById("btn1");
 	// btn2  = document.getElementById("btn2");
-    // btn1.onclick=function(){
-        // fuse_simple();
-    // };
-    // btn2.onclick=function(){
-        // split_simple();
-    // };
-   
+	// btn1.onclick=function(){
+	// fuse_simple();
+	// };
+	// btn2.onclick=function(){
+	// split_simple();
+	// };
+
 	// 拖拽
 	top1.onmousedown = function (ev) {
 		drag(ev, win1);
@@ -131,9 +142,9 @@ function initWindows() {
 
 function initPages() {
 
-	var page1 = getQueryString("page1");
-	var page2 = getQueryString("page2");
-	var page3 = getQueryString("page3");
+	page1 = getQueryString("page1");
+	page2 = getQueryString("page2");
+	page3 = getQueryString("page3");
 	if(page1 == "" || page1 == null) {
 		page1 = "../download/mapv/examples/baidu-map-polyline-time.html";
 	}
@@ -143,17 +154,23 @@ function initPages() {
 	if(page3 == "" || page1 == null) {
 		page3 = "../download/mapv/examples/baidu-map-polyline-time.html";
 	}
-	$("#content1").html("<iframe src='" + page1 +"' width='495px' height='362px'></iframe>");
-	$("#content2").html("<iframe src='" + page2 +"' width='495px' height='362px'></iframe>");
-	$("#content3").html("<iframe src='" + page3 +"' width='495px' height='362px'></iframe>");
+	// $("#content1").html("<iframe src='" + page1 +"' width='495px' height='362px'></iframe>");
+	// $("#content2").html("<iframe src='" + page2 +"' width='495px' height='362px'></iframe>");
+	// $("#content3").html("<iframe src='" + page3 +"' width='495px' height='362px'></iframe>");
+	$("#content1").html(createHtml(page1));
+	$("#content2").html(createHtml(page2));
 	inited = true;
+}
+
+function createHtml(page) {
+	return "<iframe src='" + page +"' width='495px' height='362px'></iframe>";
 }
 
 
 //锁定滚动条
 function unScroll(){
 	var top=$(document).scrollTop();
-		$(document).on('scroll.unable',function (e){
+	$(document).on('scroll.unable',function (e){
 		$(document).scrollTop(top);
 	})
 }
@@ -183,39 +200,39 @@ function openMenu(){
 
 		var $bounce=$(this).children(".menu-item-bounce");
 		TweenMax.fromTo($bounce,0.2,
-		{
-			transformOrigin:"50% 50%"
-		},{
-			delay:delay,
-			scaleX:0.8,
-			scaleY:1.2,
-			force3D:true,
-			ease:Quad.easeInOut,
-			onComplete:function(){
-				TweenMax.to($bounce,0.15,{
-					// scaleX:1.2,
-					scaleY:0.7,
-					force3D:true,
-					ease:Quad.easeInOut,
-					onComplete:function(){
-						TweenMax.to($bounce,3,{
-							// scaleX:1,
-							scaleY:0.8,
-							force3D:true,
-							ease:Elastic.easeOut,
-							easeParams:[1.1,0.12]
-						});
-						if(inited) {
-							split_simple();
-						} else {
-							initPages();
-							split_simple();
+			{
+				transformOrigin:"50% 50%"
+			},{
+				delay:delay,
+				scaleX:0.8,
+				scaleY:1.2,
+				force3D:true,
+				ease:Quad.easeInOut,
+				onComplete:function(){
+					TweenMax.to($bounce,0.15,{
+						// scaleX:1.2,
+						scaleY:0.7,
+						force3D:true,
+						ease:Quad.easeInOut,
+						onComplete:function(){
+							TweenMax.to($bounce,3,{
+								// scaleX:1,
+								scaleY:0.8,
+								force3D:true,
+								ease:Elastic.easeOut,
+								easeParams:[1.1,0.12]
+							});
+							if(inited) {
+								split_simple();
+							} else {
+								initPages();
+								split_simple();
+							}
 						}
-					}
-				})
-			}
-		});
-		
+					})
+				}
+			});
+
 		TweenMax.to($(this).children(".menu-item-button"),0.5,{
 			delay:delay,
 			y:distance,
@@ -254,13 +271,14 @@ function closeMenu(){
 							easeParams:[1.1,0.12]
 						});
 						if(inited) {
-							fuse_simple();
+							fuse_simple(firstFuse);
+							firstFuse = false;
 						}
 					}
 				})
 			}
 		});
-		
+
 		TweenMax.to($(this).children(".menu-item-button"),0.3,{
 			delay:delay,
 			y:0,
@@ -282,7 +300,7 @@ $(document).ready(function(){
 	initWindows();
 
 	menuItemNum=$(".menu-item").length;
-	slice=angle/(menuItemNum - 1);
+	slice=angle / (menuItemNum - 1);
 	TweenMax.globalTimeScale(0.8);
 	$(".menu-item").each(function(i){
 		var angle=startingAngle+(slice*i);
