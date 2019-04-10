@@ -154,6 +154,15 @@
                     }
                     content += '<br/>';
                 }
+                if(entity['flashes'] != null && entity['flashes'].length > 0) {
+                    content += '<br/><strong>动画</strong>： (信息量: ' + entity['infoAmount']['flashLength'] + ' 秒)<br/>';
+                    for (var j = 0; j < entity['flashes'].length; j++) {
+                        var flash_path = entity['flashes'][j];
+                        content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + flash_path + '' +
+                        ' onclick="openWindowY(this, \'flash\', \'' + flash_path + '\')">动画' + (j + 1) + '</a>');
+                    }
+                    content += '<br/>';
+                }
                 if(entity['models'] != null && entity['models'].length > 0) {
                     content += '<br/><strong>模型</strong>： (信息量: ' + entity['infoAmount']['modelLength'] + ' 字节)<br/>';
                     for (var j = 0; j < entity['models'].length; j++) {
@@ -299,6 +308,15 @@
                     "width='460px' height='220px' /></div>";
             width = 490;
             height = 270;
+        } else if(type == "flash") {
+            title = "收看动画";
+            if(name != undefined && name != null && name != "") {
+                title += ": " + name;
+            }
+            windowHtml = "<div><iframe src='download/view_flash.html?url=../" + path + "' " +
+                    "width='617px' height='465px' /></div>";
+            width = 656;
+            height = 546;
         } else if(type == "model") {
             title = "查看模型";
             if(name != undefined && name != null && name != "") {
