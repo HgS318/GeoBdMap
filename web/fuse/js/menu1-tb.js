@@ -145,8 +145,8 @@ function initPages() {
 	page2 = decodeURI(getQueryString("page2"));
 	page3 = decodeURI(getQueryString("page3"));
 	var default_pages = ["html3/beihang_haidian.html",
-		"html3/beihang_shahe.html",
-		"html3/beihang_total.html"];
+				"html3/beihang_shahe.html",
+				"html3/beihang_total.html"];
 	if(page1 == "" || page1 == null) {
 		page1 = default_pages[0];
 	}
@@ -214,7 +214,8 @@ function openMenu(){
 		var delay=i*0.08;
 
 		var $bounce=$(this).children(".menu-item-bounce");
-		TweenMax.fromTo($bounce,0.2, {
+		TweenMax.fromTo($bounce,0.2,
+		{
 			transformOrigin:"50% 50%"
 		},{
 			delay:delay,

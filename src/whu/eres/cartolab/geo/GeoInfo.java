@@ -76,14 +76,16 @@ public class GeoInfo {
                 text = text.replace("\"", "\'");
             }
             imageStrs = rs.getString("images");
-            String[] imagesStrs = imageStrs.split(";");
-            for(String imageStr : imagesStrs) {
-                if(imageStr != null && imageStr.length() > 3) {
-                    String imageStrTrim = imageStr.trim();
-                    String imagePath = MysqlLocalConnection.websitePath + imageStrTrim;
-                    File imageFile = new File(imagePath);
-                    if(imageFile.exists()) {
-                        images.add(imageStrTrim);
+            if(imageStrs != null && !"".equals(imageStrs)) {
+                String[] imagesStrs = imageStrs.split(";");
+                for (String imageStr : imagesStrs) {
+                    if (imageStr != null && imageStr.length() > 3) {
+                        String imageStrTrim = imageStr.trim();
+                        String imagePath = MysqlLocalConnection.websitePath + imageStrTrim;
+                        File imageFile = new File(imagePath);
+                        if (imageFile.exists()) {
+                            images.add(imageStrTrim);
+                        }
                     }
                 }
             }
