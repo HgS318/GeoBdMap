@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+
+    <style type="text/css">
+        body, html{width: 100%;height: 100%; margin:0;font-family:"微软雅黑";}
+        #l-map{height:100%;width:80%;}
+        #r-result {
+            margin: 0;
+            padding: 0;
+            z-index: 999;
+            position: absolute;
+            background-color: white;
+            max-height: 100%;
+            overflow-y: auto;
+            top: 0;
+            right: 0;
+            width: 20%;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="../../jquery-easyui-1.7.0/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../jquery-easyui-1.7.0/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../../jquery-easyui-1.7.0/demo/demo.css">
+    <script type="text/javascript" src="../../jquery-easyui-1.7.0/jquery.min.js"></script>
+    <script type="text/javascript" src="../../jquery-easyui-1.7.0/jquery.easyui.min.js"></script>
+</head>
+<body class="easyui-layout">
+    <div data-options="region:'north',border:false" style="height:80px;background:#B3DFDA;padding:10px">
+        <p></p>
+        <p></p><strong style="font-size: 22px">瞬间叠加</strong>  &nbsp;&nbsp;&nbsp;&nbsp;案例：轨迹快照</p>
+    </div>
+    <div data-options="region:'east',split:true,title:'选择快照时间点'" style="width:300px;padding:10px;">
+
+        <br/><br/>输入时间:&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" id="value" />
+        <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="button" value="各轨迹所在点" onclick="showSnap()"/>
+
+        <br/><br/><br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="button" id="setbut" value="轨迹模式/地图模式" />
+    </div>
+    <div data-options="region:'center',title:'轨迹地图'" id="l-map">
+
+        <!--<div id="l-map"></div>-->
+        <!--<canvas id="canvas"></canvas>-->
+
+    </div>
+    <!--<div id="l-map"></div>-->
+   <!--<div id="r-result"></div>-->
+
+    <!--<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>-->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=1XjLLEhZhQNUzd93EjU5nOGQ"></script>
+    <script type="text/javascript" src="../build/mapv.js"></script>
+    <script type="text/javascript">
+var show = true;
+var mapvLayer1;
+var mapvLayer2;
+
+function getQueryString(name) {
+    var result = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
+    if (result == null || result.length < 1) {
+        return "";
+    }
+    return result[1];
+}
+
+document.getElementById("setbut").onclick = function () {
+    if(show) {
+        setDefaultStyle();
+        mapvLayer1.hide();
+        mapvLayer2.hide();
+    } else {
+        setTrackStyle();
+        mapvLayer1.show();
+        mapvLayer2.show();
+    }
+    show = !show;
+}
+
+// 百度地图API功能
+var map = new BMap.Map("l-map", {
+    enableMapClick: false
+});    // 创建Map实例
+//        map.centerAndZoom(new BMap.Point(114.321317, 30.598428), 12);  // 初始化地图,设置中心点坐标和地图级别
+map.centerAndZoom(new BMap.Point(121.470192,31.213448), 12);  // 初始化地图,设置中心点坐标和地图级别
+//map.centerAndZoom(new BMap.Point(116.402544,39.919583), 13);  // 初始化地图,设置中心点坐标和地图级别
+map.enableScrollWheelZoom(true); // 开启鼠标滚轮缩放
+setTrackStyle();
+var timeData;
+var markers = [];
+
+function showSnap() {
+    var text_val = document.getElementById('value').value;
+    // alert(text_val);
+    try {
+        var time = parseInt(text_val) * 2;
+        removeMarkers();
+        for (var k = 0; k < timeData.length; k++) {
+            if (timeData[k].time == time) {
+                console.log(timeData[k]);
+                var point = new BMap.Point(timeData[k].geometry.coordinates[0], timeData[k].geometry.coordinates[1]);
+                var marker = new BMap.Marker(point);
+                markers.push(marker);
+                map.addOverlay(marker);
+                marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+            }
+        }
+    } catch (e) {
+        alert("input or data error...");
+        console.log(e);
+    }
+}
+
+function removeMarkers() {
+    for(var i = 0; i < markers.length; i++) {
+        markers[i].hide();
+        map.removeOverlay(markers[i]);
+    }
+    markers.splice(0, markers.length);
+}
+
+function setDefaultStyle() {
+    map.setMapStyle({
+        style: 'normal'
+    });
+}
+
+function setTrackStyle() {
+   // 地图自定义样式
+   map.setMapStyle({
+       styleJson: [
+       {
+           "featureType": "water",
+           "elementType": "all",
+           "stylers": {
+               "color": "#044161"
+           }
+       }, {
+           "featureType": "land",
+           "elementType": "all",
+           "stylers": {
+               "color": "#091934"
+           }
+       }, {
+           "featureType": "boundary",
+           "elementType": "geometry",
+           "stylers": {
+               "color": "#064f85"
+           }
+       }, {
+           "featureType": "railway",
+           "elementType": "all",
+           "stylers": {
+               "visibility": "off"
+           }
+       }, {
+           "featureType": "highway",
+           "elementType": "geometry",
+           "stylers": {
+               "color": "#004981"
+           }
+       }, {
+           "featureType": "highway",
+           "elementType": "geometry.fill",
+           "stylers": {
+               "color": "#005b96",
+               "lightness": 1
+           }
+       }, {
+           "featureType": "highway",
+           "elementType": "labels",
+           "stylers": {
+               "visibility": "on"
+           }
+       }, {
+           "featureType": "arterial",
+           "elementType": "geometry",
+           "stylers": {
+               "color": "#004981",
+               "lightness": -39
+           }
+       }, {
+           "featureType": "arterial",
+           "elementType": "geometry.fill",
+           "stylers": {
+               "color": "#00508b"
+           }
+       }, {
+           "featureType": "poi",
+           "elementType": "all",
+           "stylers": {
+               "visibility": "off"
+           }
+       }, {
+           "featureType": "green",
+           "elementType": "all",
+           "stylers": {
+               "color": "#056197",
+               "visibility": "off"
+           }
+       }, {
+           "featureType": "subway",
+           "elementType": "all",
+           "stylers": {
+               "visibility": "off"
+           }
+       }, {
+           "featureType": "manmade",
+           "elementType": "all",
+           "stylers": {
+               "visibility": "off"
+           }
+       }, {
+           "featureType": "local",
+           "elementType": "all",
+           "stylers": {
+               "visibility": "off"
+           }
+       }, {
+           "featureType": "arterial",
+           "elementType": "labels",
+           "stylers": {
+               "visibility": "off"
+           }
+       }, {
+           "featureType": "boundary",
+           "elementType": "geometry.fill",
+           "stylers": {
+               "color": "#029fd4"
+           }
+       }, {
+           "featureType": "building",
+           "elementType": "all",
+           "stylers": {
+               "color": "#1a5787"
+           }
+       }, {
+           "featureType": "label",
+           "elementType": "all",
+           "stylers": {
+               "visibility": "off"
+           }
+       }, {
+           "featureType": "poi",
+           "elementType": "labels.text.fill",
+           "stylers": {
+               "color": "#ffffff"
+           }
+       }, {
+           "featureType": "poi",
+           "elementType": "labels.text.stroke",
+           "stylers": {
+               "color": "#1e1c1c"
+           }
+       }, {
+           "featureType": "administrative",
+           "elementType": "labels",
+           "stylers": {
+               "visibility": "off"
+           }
+       },{
+           "featureType": "road",
+           "elementType": "labels",
+           "stylers": {
+               "visibility": "off"
+           }
+       }]
+   });
+}
+
+
+var data_file;
+var qs = getQueryString("file");
+if(qs === undefined || qs == null || qs == "") {
+    data_file = 'data/tracks_wgs3.txt';
+} else {
+    data_file = 'data/' + qs + '.txt';
+}
+
+// $.get('https://mapv.baidu.com/examples/data/wuhan-car', function (rs) {
+$.get(data_file, function (rs) {
+
+    var data = [];
+    timeData = [];
+
+    rs = rs.split("\n");
+    console.log(rs.length);
+    var maxLength = 0;
+    for (var i = 0; i < rs.length; i++) {
+        var item = rs[i].split(',');
+        var coordinates = [];
+        if (item.length > maxLength) {
+            maxLength = item.length;
+        }
+        for (j = 0; j < item.length; j += 2) {
+            coordinates.push([item[j], item[j + 1]]);
+            timeData.push({
+                geometry: {
+                    type: 'Point',
+                    coordinates: [item[j], item[j + 1]]
+                },
+                count: 1,
+                time: j
+            });
+        }
+        data.push({
+            geometry: {
+                type: 'LineString',
+                coordinates: coordinates
+            }
+        });
+
+    }
+
+    var dataSet = new mapv.DataSet(data);
+
+    var options = {
+        strokeStyle: 'rgba(53,57,255,0.5)',
+        coordType: 'bd09mc',
+        // globalCompositeOperation: 'lighter',
+        shadowColor: 'rgba(53,57,255,0.2)',
+        shadowBlur: 3,
+        lineWidth: 3.0,
+        draw: 'simple'
+    }
+
+    mapvLayer1 = new mapv.baiduMapLayer(map, dataSet, options);
+
+
+    var dataSet = new mapv.DataSet(timeData);
+
+    var options = {
+        fillStyle: 'rgba(255, 250, 250, 0.2)',
+//                coordType: 'bd09mc',
+        globalCompositeOperation: "lighter",
+        size: 1.5,
+        animation: {
+            stepsRange: {
+                start: 0,
+                end: 100
+            },
+            trails: 3,
+            duration: 5,
+        },
+        draw: 'simple'
+    }
+
+    mapvLayer2 = new mapv.baiduMapLayer(map, dataSet, options);
+
+});
+
+
+        </script>
+	
+</body>
+</html>

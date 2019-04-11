@@ -35,6 +35,8 @@ public class GeoInfo {
     public long audioLength;
     public String model;
     public String modelimg;
+    public String flash;
+    public long flashLength;
     public Date time;
     public Date obsoleteTime;
 
@@ -76,14 +78,16 @@ public class GeoInfo {
                 text = text.replace("\"", "\'");
             }
             imageStrs = rs.getString("images");
-            String[] imagesStrs = imageStrs.split(";");
-            for(String imageStr : imagesStrs) {
-                if(imageStr != null && imageStr.length() > 3) {
-                    String imageStrTrim = imageStr.trim();
-                    String imagePath = MysqlLocalConnection.websitePath + imageStrTrim;
-                    File imageFile = new File(imagePath);
-                    if(imageFile.exists()) {
-                        images.add(imageStrTrim);
+            if(imageStrs != null && !"".equals(imageStrs)) {
+                String[] imagesStrs = imageStrs.split(";");
+                for (String imageStr : imagesStrs) {
+                    if (imageStr != null && imageStr.length() > 3) {
+                        String imageStrTrim = imageStr.trim();
+                        String imagePath = MysqlLocalConnection.websitePath + imageStrTrim;
+                        File imageFile = new File(imagePath);
+                        if (imageFile.exists()) {
+                            images.add(imageStrTrim);
+                        }
                     }
                 }
             }
@@ -93,6 +97,8 @@ public class GeoInfo {
             audioLength = rs.getLong("audioLength");
             model = rs.getString("model");
             modelimg = rs.getString("modelimg");
+            flash = rs.getString("flash");
+            flashLength = rs.getLong("flashLength");
             time = rs.getDate("time");
             obsoleteTime = rs.getDate("obsoleteTime");
 
@@ -133,9 +139,13 @@ public class GeoInfo {
         obj.put("text", text);
         obj.put("images", imageJson);
         obj.put("vedio", vedio);
+        obj.put("vedioLength", vedioLength);
         obj.put("audio", audio);
+        obj.put("audioLength", audioLength);
         obj.put("model", model);
         obj.put("modelimg", modelimg);
+        obj.put("flash", flash);
+        obj.put("flashLength", flashLength);
         obj.put("time", time);
         obj.put("obsoleteTime", obsoleteTime);
         return obj;
@@ -219,7 +229,7 @@ public class GeoInfo {
         long figureAmount = figureInfoAmount();
         long imageAmount = imagesInfoAmount();
         long modelAmount = modelInfoAmount();
-        InfoAmount ia = new InfoAmount(textAmount, figureAmount, imageAmount, vedioLength, audioLength, modelAmount);
+        InfoAmount ia = new InfoAmount(textAmount, figureAmount, imageAmount, vedioLength, audioLength, flashLength, modelAmount);
         return ia;
     }
 

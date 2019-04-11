@@ -17,34 +17,216 @@ import java.util.*;
 import java.text.SimpleDateFormat;
 
 public class JsonAction02 {
+//    public static void main(String[] args){
+//        sortTracks01();
+//    }
 
-    public static void sortTracks() {
+//    public static void sortTracks() {
+//        List<SimpleTrack> tracks = new ArrayList<>();
+//
+//        Collections.sort(tracks, new Comparator<SimpleTrack>() {
+//            public int compare(SimpleTrack o1, SimpleTrack o2) {
+//                long sn_diff =  o1.time - o2.time;
+//                if(sn_diff < 0) {
+//                    return -1;
+//                }
+//                if(sn_diff > 0) {
+//                    return 1;
+//                }
+//                return o1.userid.compareTo(o2.userid);
+//            }
+//        });
+//    }
+    public String sortTracks01() {
+        int len = 30000;
+        int i = 0;
+        String csvFile = "F:/IDEA2017/GeoBdMap/web/data/track/A_B.csv";
+        StringBuffer jsonStr = new StringBuffer();
+        jsonStr.append("[");
         List<SimpleTrack> tracks = new ArrayList<>();
-        Collections.sort(tracks, new Comparator<SimpleTrack>() {
-            public int compare(SimpleTrack o1, SimpleTrack o2) {
-                long sn_diff =  o1.time - o2.time;
-                if(sn_diff < 0) {
-                    return -1;
+        try {
+
+            BufferedReader br = new BufferedReader(new FileReader(csvFile));//构造一个BufferedReader类来读取文件
+
+            String s = null;
+            while ((s = br.readLine()) != null) {//使用readLine方法，一次读一行
+                if (i > len) {
+                    break;
                 }
-                if(sn_diff > 0) {
-                    return 1;
-                }
-                return o1.userid.compareTo(o2.userid);
+                i++;
+                String[] infoStr = s.split(",");
+                double x = Double.parseDouble(infoStr[1]);
+                double y = Double.parseDouble(infoStr[2]);
+                String ID = infoStr[4];
+                String timestr = infoStr[5];
+                Long time = Long.parseLong(timestr) * 1000;
+                SimpleTrack track = new SimpleTrack(time, ID, x, y);
+                tracks.add(track);
             }
-        });
+                Collections.sort(tracks, new Comparator<SimpleTrack>() {
+                    public int compare(SimpleTrack o1, SimpleTrack o2) {
+                        long sn_diff = o1.time - o2.time;
+                        if (sn_diff < 0) {
+                            return -1;
+                        }
+                        if (sn_diff > 0) {
+                            return 1;
+                        }
+                        return o1.userid.compareTo(o2.userid);
+                    }
+                });
+        for(SimpleTrack track:tracks){
+            double X=track.x;
+            double Y=track.y;
+            String id=track.userid;
+            Long Time=track.time;
+            Date d = new Date(Time);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String Timestr=sdf.format(d);
+            String infoJson = "{\"lng\": " + X + ", \"lat\": " + Y +", \"id\": " +"\""+ id+"\""+", \"time\": \"" + Timestr+"\"}," ;
+            jsonStr.append(infoJson);
+        }
+        br.close();
+        jsonStr.deleteCharAt(jsonStr.length() - 1);
+        jsonStr.append("]");
+//        System.out.println(jsonStr.toString());
+            toBeJson(jsonStr.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
+    public String sortTracks02() {
+        int len = 30000;
+        int i = 0;
+        String csvFile = "F:/IDEA2017/GeoBdMap/web/data/track/B_C.csv";
+        StringBuffer jsonStr = new StringBuffer();
+        jsonStr.append("[");
+        List<SimpleTrack> tracks = new ArrayList<>();
+        try {
+
+            BufferedReader br = new BufferedReader(new FileReader(csvFile));//构造一个BufferedReader类来读取文件
+
+            String s = null;
+            while ((s = br.readLine()) != null) {//使用readLine方法，一次读一行
+                if (i > len) {
+                    break;
+                }
+                i++;
+                String[] infoStr = s.split(",");
+                double x = Double.parseDouble(infoStr[1]);
+                double y = Double.parseDouble(infoStr[2]);
+                String ID = infoStr[4];
+                String timestr = infoStr[5];
+                Long time = Long.parseLong(timestr) * 1000;
+                SimpleTrack track = new SimpleTrack(time, ID, x, y);
+                tracks.add(track);
+            }
+            Collections.sort(tracks, new Comparator<SimpleTrack>() {
+                public int compare(SimpleTrack o1, SimpleTrack o2) {
+                    long sn_diff = o1.time - o2.time;
+                    if (sn_diff < 0) {
+                        return -1;
+                    }
+                    if (sn_diff > 0) {
+                        return 1;
+                    }
+                    return o1.userid.compareTo(o2.userid);
+                }
+            });
+            for(SimpleTrack track:tracks){
+                double X=track.x;
+                double Y=track.y;
+                String id=track.userid;
+                Long Time=track.time;
+                Date d = new Date(Time);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String Timestr=sdf.format(d);
+                String infoJson = "{\"lng\": " + X + ", \"lat\": " + Y +", \"id\": " +"\""+ id+"\""+", \"time\": \"" + Timestr+"\"}," ;
+                jsonStr.append(infoJson);
+            }
+            br.close();
+            jsonStr.deleteCharAt(jsonStr.length() - 1);
+            jsonStr.append("]");
+//        System.out.println(jsonStr.toString());
+            toBeJson(jsonStr.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public String sortTracks03() {
+        int len = 30000;
+        int i = 0;
+        String csvFile = "F:/IDEA2017/GeoBdMap/web/data/track/A_C.csv";
+        StringBuffer jsonStr = new StringBuffer();
+        jsonStr.append("[");
+        List<SimpleTrack> tracks = new ArrayList<>();
+        try {
+
+            BufferedReader br = new BufferedReader(new FileReader(csvFile));//构造一个BufferedReader类来读取文件
+
+            String s = null;
+            while ((s = br.readLine()) != null) {//使用readLine方法，一次读一行
+                if (i > len) {
+                    break;
+                }
+                i++;
+                String[] infoStr = s.split(",");
+                double x = Double.parseDouble(infoStr[1]);
+                double y = Double.parseDouble(infoStr[2]);
+                String ID = infoStr[4];
+                String timestr = infoStr[5];
+                Long time = Long.parseLong(timestr) * 1000;
+                SimpleTrack track = new SimpleTrack(time, ID, x, y);
+                tracks.add(track);
+            }
+            Collections.sort(tracks, new Comparator<SimpleTrack>() {
+                public int compare(SimpleTrack o1, SimpleTrack o2) {
+                    long sn_diff = o1.time - o2.time;
+                    if (sn_diff < 0) {
+                        return -1;
+                    }
+                    if (sn_diff > 0) {
+                        return 1;
+                    }
+                    return o1.userid.compareTo(o2.userid);
+                }
+            });
+            for(SimpleTrack track:tracks){
+                double X=track.x;
+                double Y=track.y;
+                String id=track.userid;
+                Long Time=track.time;
+                Date d = new Date(Time);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String Timestr=sdf.format(d);
+                String infoJson = "{\"lng\": " + X + ", \"lat\": " + Y +", \"id\": " +"\""+ id+"\""+", \"time\": \"" + Timestr+"\"}," ;
+                jsonStr.append(infoJson);
+            }
+            br.close();
+            jsonStr.deleteCharAt(jsonStr.length() - 1);
+            jsonStr.append("]");
+//        System.out.println(jsonStr.toString());
+            toBeJson(jsonStr.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 
     public String outputCoordsJson02() {
         int len = 30000;
         int i = 0;
-        String csvFile ="E:/Data/11.csv";
+        String csvFile ="E:/Data/222.csv";
         StringBuffer jsonStr = new StringBuffer();
         jsonStr.append("[");
         StringBuilder result = new StringBuilder();
         try{
-
             BufferedReader br = new BufferedReader(new FileReader(csvFile));//构造一个BufferedReader类来读取文件
-
             String s = null;
             while((s = br.readLine())!=null){//使用readLine方法，一次读一行
                 if (i > len) {
@@ -60,9 +242,10 @@ public class JsonAction02 {
                     Long time = Long.parseLong(timestr)*1000;
                     Date d = new Date(time);
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String Time=sdf.format(d);
+                    String Timestr=sdf.format(d);
+//                    Long Time=Long.parseLong(Timestr);
 
-                    String infoJson = "{\"lng\": " + x + ", \"lat\": " + y +", \"id\": " +"\""+ ID+"\""+", \"time\": " +"\""+ Time+"\""+"}," ;
+                    String infoJson = "{\"lng\": " + x + ", \"lat\": " + y +", \"id\": " +"\""+ ID+"\""+", \"time\": \"" + Timestr+"\"}," ;
                     jsonStr.append(infoJson);
                     //{"lng": "120.85631249942352", "lat": "30.662593566467432"}
                 } catch (Exception e2) {
@@ -612,4 +795,11 @@ class SimpleTrack {
 
     public String userid;
     public double x, y;
+
+    public SimpleTrack(long time, String userid, double x, double y) {
+        this.time = time;
+        this.userid = userid;
+        this.x = x;
+        this.y = y;
+    }
 }
