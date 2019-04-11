@@ -6,9 +6,6 @@ import javax.servlet.http.*;
 import java.net.*;
 import org.apache.struts2.*;
 import net.sf.json.*;
-
-import whu.eres.cartolab.db.esri.*;
-import whu.eres.cartolab.geo.*;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.MultiLineString;
 import com.vividsolutions.jts.geom.MultiPolygon;
@@ -39,19 +36,22 @@ import java.util.Map;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import whu.eres.cartolab.db.esri.*;
+import whu.eres.cartolab.db.csv.*;
+import whu.eres.cartolab.db.mysql.connections.MysqlLocalConnection;
+import whu.eres.cartolab.geo.*;
 
-/**
- * Created by admin on 2019/4/10.
- */
+
 public class JsonAction03 {
 
 //    public static void main(String[] args) {
-//        new JsonAction03().readcoincide_06to10();
+//        new JsonAction03().getChinaAirMixedMultiDaysSplit();
 //    }
 
-    public String readcsv() {
+    public String readCsvTest() {
         int i,l,k;
-        File csv = new File("C:\\Users\\admin\\Desktop\\test.csv");  // CSVæ–‡ä»¶è·¯å¾„
+        MysqlLocalConnection.getInstance();
+        File csv = new File(MysqlLocalConnection.websitePath + "data/air/test.csv");  // CSVæ–‡ä»¶è·¯å¾„
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(csv));
@@ -62,25 +62,23 @@ public class JsonAction03 {
         try {
             StringBuffer buf = new StringBuffer();
             buf.append("[");
-            //å…ˆåœ¨å¾ªç¯å¤–è¯»ï¿??ï¿??,è·³è¿‡ç¬¬ä¸€ï¿??
             line = br.readLine();
             while ((line = br.readLine()) != null)  //è¯»å–åˆ°çš„å†…å®¹ç»™lineå˜é‡
             {
                 k = 1;
                 l = 0;
-                String context[] = line.split(",",-1);//CSVæ–‡ä»¶æ˜¯ä»¥é€—å·åˆ†å‰²çš„æ•°æ®ä»“ï¿??    split(",",-1)å¦‚æœæœ«å°¾æ˜¯ç©ºï¿??,ä¼šç»§ç»­åˆ†å‰²ï¿½?ï¿½ä¸æ˜¯è·³ï¿??
+                String context[] = line.split(",",-1);
                 try {
                     for ( i=0 ;i<context.length/7;i++ ) {
                         String sites_name = context[0];
-                        //å¦‚æœcontext[]ä¸ºç©ºï¿??,èµ‹ï¿½?ï¿½ä¸º0
-                        double AQI_num = Double.parseDouble("".equals(context[1+l].toString())?"0.00":context[1+l].toString());
-                        double PM2_5_num = Double.parseDouble("".equals(context[2+l].toString())?"0.00":context[2+l].toString());
-                        double PM10_num = Double.parseDouble("".equals(context[3+l].toString())?"0.00":context[3+l].toString());
-                        double SO2_num = Double.parseDouble("".equals(context[4+l].toString())?"0.00":context[4+l].toString());
-                        double NO2_num = Double.parseDouble("".equals(context[5+l].toString())?"0.00":context[5+l].toString());
-                        double O3_num = Double.parseDouble("".equals(context[6+l].toString())?"0.00":context[6+l].toString());
-                        double CO_num = Double.parseDouble("".equals(context[7+l].toString())?"0.00":context[7+l].toString());
-                        buf.append("{\"¼à²âµã\""+":" + "\"" + sites_name  + "1ÔÂ" + k + "ÈÕ\""
+                        double AQI_num = Double.parseDouble("".equals(context[1+l])?"0.00":context[1+l]);
+                        double PM2_5_num = Double.parseDouble("".equals(context[2+l])?"0.00":context[2+l]);
+                        double PM10_num = Double.parseDouble("".equals(context[3+l])?"0.00":context[3+l]);
+                        double SO2_num = Double.parseDouble("".equals(context[4+l])?"0.00":context[4+l]);
+                        double NO2_num = Double.parseDouble("".equals(context[5+l])?"0.00":context[5+l]);
+                        double O3_num = Double.parseDouble("".equals(context[6+l])?"0.00":context[6+l]);
+                        double CO_num = Double.parseDouble("".equals(context[7+l])?"0.00":context[7+l]);
+                        buf.append("{\"ç›‘æµ‹ç‚¹\""  +":" + "\"" + sites_name  + "1æœˆ" + k + "æ—¥\""
                                 + "," + "\"AQI\":" + AQI_num + "," + "\"PM2.5\":\"" + PM2_5_num + "\"," + "\"PM10\":" +
                                 PM10_num + "," + "\"SO2\":" + SO2_num + ","
                                 + "\"NO2\":" + NO2_num + "," + "\"O3\":" + O3_num + "," +
@@ -89,7 +87,6 @@ public class JsonAction03 {
                         k++;
                     }
                 } catch (Exception e2) {
-                    continue;
                 }
             }
             br.close();
@@ -103,8 +100,10 @@ public class JsonAction03 {
         return null;
     }
 
-    public String readbeijing_00() {
-        File csv = new File("F:\\overlaydata\\collocation_overlay\\beijing_20180101_00.csv");
+    public String getBeijingAirMoment() {
+
+        MysqlLocalConnection.getInstance();
+        File csv = new File(MysqlLocalConnection.websitePath + "data/air/collocation_overlay/beijing_20180101_00.csv");
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(csv));
@@ -130,7 +129,7 @@ public class JsonAction03 {
                     double NO2_num = Double.parseDouble(context[7]);
                     double O3_num = Double.parseDouble(context[8]);
                     double CO_num = Double.parseDouble(context[9]);
-                    buf.append("{\"¼à²âµã\""+":" + "\"" + sites_name + "\"" + "," + "\"¾­¶È\":" + lng_num + "," + "\"Î³¶È\":" + lat_num
+                    buf.append("{\"ç›‘æµ‹ç‚¹\""+":" + "\"" + sites_name + "\"" + "," + "\"ç»åº¦\":" + lng_num + "," + "\"çº¬åº¦\":" + lat_num
                             + "," + "\"AQI\":" + AQI_num + "," + "\"PM2.5\":" + PM2_5_num + "," + "\"PM10\":" +
                             PM10_num + "," + "\"SO2\":" + SO2_num + "," + "\"NO2\":" + NO2_num + "," + "\"O3\":" + O3_num + "," + "\"CO\":" + CO_num + " },");
                 } catch (Exception e2) {
@@ -147,8 +146,9 @@ public class JsonAction03 {
         return null;
     }
 
-    public String readchina_00() {
-        File csv = new File("F:\\overlaydata\\collocation_overlay\\china_20180101_00.csv");
+    public String getChinaAirMoment() {
+        MysqlLocalConnection.getInstance();
+        File csv = new File(MysqlLocalConnection.websitePath + "data/air/collocation_overlay/china_20180101_00.csv");
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(csv));
@@ -172,8 +172,8 @@ public class JsonAction03 {
                     double AQI_num = Double.parseDouble(context[5]);
                     double PM2_5_num = Double.parseDouble(context[6]);
                     double PM10_num = Double.parseDouble(context[7]);
-                    buf.append("{\"¼à²âµã±àÂë\":" + "\"" + sites_code + "\"" + "," + "\"¼à²âµãÃû³Æ\":" + "\"" + sites_name + "\"" + "," + "\"³ÇÊĞ\":" + "\"" + city + "\"" + ","
-                            + "\"¾­¶È\":" + lng_num + "," + "\"Î³¶È\":" + lat_num + "," + "\"AQI\":" + AQI_num + "," + "\"PM2.5\":" + PM2_5_num + "," + "\"PM10\":" + PM10_num + " },");
+                    buf.append("{\"ç›‘æµ‹ç‚¹ç¼–ç \":" + "\"" + sites_code + "\"" + "," + "\"ç›‘æµ‹ç‚¹åç§°\":" + "\"" + sites_name + "\"" + "," + "\"åŸå¸‚\":" + "\"" + city + "\"" + ","
+                            + "\"ç»åº¦\":" + lng_num + "," + "\"çº¬åº¦\":" + lat_num + "," + "\"AQI\":" + AQI_num + "," + "\"PM2.5\":" + PM2_5_num + "," + "\"PM10\":" + PM10_num + " },");
                 } catch (Exception e2) {
                 }
             }
@@ -188,8 +188,10 @@ public class JsonAction03 {
         return null;
     }
 
-    public String readbeijing_coincide_00() {
-        File csv = new File("F:\\overlaydata\\collocation_overlay\\beijing_coincide_00.csv");
+    public String getBeijingAirMomentMixed() {
+
+        MysqlLocalConnection.getInstance();
+        File csv = new File(MysqlLocalConnection.websitePath + "data/air/collocation_overlay/beijing_coincide_00.csv");
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(csv));
@@ -217,8 +219,8 @@ public class JsonAction03 {
                     double NO2_num = Double.parseDouble(context[9]);
                     double O3_num = Double.parseDouble(context[10]);
                     double CO_num = Double.parseDouble(context[11]);
-                    buf.append("{\"¼à²âµã±àÂë\":" + "\"" + sites_code + "\"" + "," + "\"¼à²âµãÃû³Æ\":" + "\"" + sites_name + "\"" + "," + "\"³ÇÊĞ\":" + "\"" + city + ","
-                            + "\"¾­¶È\":" + lng_num + "," + "\"Î³¶È\":" + lat_num + "," + "\"AQI\":" + AQI_num + "," + "\"PM2.5\":" + PM2_5_num + "," + "\"PM10\":" +
+                    buf.append("{\"ç›‘æµ‹ç‚¹ç¼–ç \":" + "\"" + sites_code + "\"" + "," + "\"ç›‘æµ‹ç‚¹åç§°\":" + "\"" + sites_name + "\"" + "," + "\"åŸå¸‚\":" + "\"" + city + "\","
+                            + "\"ç»åº¦\":" + lng_num + "," + "\"çº¬åº¦\":" + lat_num + "," + "\"AQI\":" + AQI_num + "," + "\"PM2.5\":" + PM2_5_num + "," + "\"PM10\":" +
                             PM10_num + "," + "\"SO2\":" + SO2_num + "," + "\"NO2\":" + NO2_num + "," + "\"O3\":" + O3_num + "," + "\"CO\":" + CO_num + " },");
                 } catch (Exception e2) {
                 }
@@ -234,9 +236,10 @@ public class JsonAction03 {
         return null;
     }
 
-    public String readbeijing_01to10() {
+    public String geiBeijingAirMultiDaysSplit() {
         int i,l,k;
-        File csv = new File("F:\\overlaydata\\parallel_overlay\\beijing_01to10_3.csv");
+        MysqlLocalConnection.getInstance();
+        File csv = new File(MysqlLocalConnection.websitePath + "data/air/parallel_overlay/beijing_01to10_3.csv");
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(csv));
@@ -262,8 +265,9 @@ public class JsonAction03 {
                         double AQI_num = Double.parseDouble("".equals(context[4+l].toString())?"0.00":context[4+l].toString());
                         double PM2_5_num = Double.parseDouble("".equals(context[5+l].toString())?"0.00":context[5+l].toString());
                         double PM10_num = Double.parseDouble("".equals(context[6+l].toString())?"0.00":context[6+l].toString());
-                        buf.append("{\"¼à²âµãÃû³Æ\":" + "\"" + sites_name + "-1ÔÂ" + k + "ÈÕ\"" + "," + "\"³ÇÊĞ\":" + "\"" + city + "\"" + ","
-                                + "\"¾­¶È\":" + lng_num + "," + "\"Î³¶È\":" + lat_num + "," + "\"AQI\":" + AQI_num + "," + "\"PM2.5\":\"" + PM2_5_num + "\"," + "\"PM10\":" + PM10_num + " },");
+                        buf.append("{\"ç›‘æµ‹ç‚¹åç§°\":" + "\"" + sites_name + "-1æœˆ" + k + "æ—¥\"" + "," + "\"åŸå¸‚\":" + "\"" + city + "\"" + ","
+                                + "\"ç»åº¦\":" + lng_num + "," + "\"çº¬åº¦\":" + lat_num + "," + "\"AQI\":" + AQI_num + "," + "\"PM2.5\":\"" + PM2_5_num + "\"," + "\"PM10\":" + PM10_num + " },");
+                        l += 3;
                         l += 3;
                         k++;
                     }
@@ -282,9 +286,26 @@ public class JsonAction03 {
         return null;
     }
 
-    public String readchina_06to15() {
+    public String geiAirMultiDays() {
+        HttpServletRequest request = ServletActionContext.getRequest();
+        String jsonStr = "";
+        try {
+            String path = request.getParameter("path");
+            MysqlLocalConnection.getInstance();
+            String filePath = MysqlLocalConnection.websitePath + "data/air/parallel_overlay/" + path + ".csv";
+            jsonStr = CSVToJSon.ConvertToJson(filePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            toBeJson(jsonStr);
+        }
+        return null;
+    }
+
+    public String getChinaAirMultiDaysSplit() {
         int i,l,k;
-        File csv = new File("F:\\overlaydata\\parallel_overlay\\china_06to15_3.csv");
+        MysqlLocalConnection.getInstance();
+        File csv = new File(MysqlLocalConnection.websitePath + "data/air/parallel_overlay/china_06to15_3.csv");
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(csv));
@@ -311,8 +332,8 @@ public class JsonAction03 {
                         double AQI_num = Double.parseDouble("".equals(context[5+l].toString())?"0.00":context[4+l].toString());
                         double PM2_5_num = Double.parseDouble("".equals(context[6+l].toString())?"0.00":context[5+l].toString());
                         double PM10_num = Double.parseDouble("".equals(context[7+l].toString())?"0.00":context[6+l].toString());
-                        buf.append("{\"¼à²âµã±àÂë\":" + "\"" + sites_code + "\"" + "," + "\"¼à²âµãÃû³Æ\":" + "\"" + sites_name + "-1ÔÂ" + k + "ÈÕ\"" + "," + "\"³ÇÊĞ\":" + "\"" + city + "\"" + ","
-                                + "\"¾­¶È\":" + lng_num + "," + "\"Î³¶È\":" + lat_num + "," + "\"AQI\":" + AQI_num + "," + "\"PM2.5\":" + PM2_5_num + "," + "\"PM10\":" + PM10_num + " },");
+                        buf.append("{\"ç›‘æµ‹ç‚¹ç¼–ç \":" + "\"" + sites_code + "\"" + "," + "\"ç›‘æµ‹ç‚¹åç§°\":" + "\"" + sites_name + "-1æœˆ" + k + "æ—¥\"" + "," + "\"åŸå¸‚\":" + "\"" + city + "\"" + ","
+                                + "\"ç»åº¦\":" + lng_num + "," + "\"çº¬åº¦\":" + lat_num + "," + "\"AQI\":" + AQI_num + "," + "\"PM2.5\":" + PM2_5_num + "," + "\"PM10\":" + PM10_num + " },");
                         l += 3;
                         k++;
                     }
@@ -331,9 +352,10 @@ public class JsonAction03 {
         return null;
     }
 
-    public String readcoincide_06to10() {
+    public String getBeijing0610Split() {
         int i,l,j;
-        File csv = new File("F:\\overlaydata\\parallel_overlay\\beijing_coincide_06to10.csv");
+        MysqlLocalConnection.getInstance();
+        File csv = new File(MysqlLocalConnection.websitePath + "data/air/parallel_overlay/beijing_coincide_06to10.csv");
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(csv));
@@ -360,8 +382,58 @@ public class JsonAction03 {
                         double AQI_num = Double.parseDouble("".equals(context[5+l].toString())?"0.00":context[5+l].toString());
                         double PM2_5_num = Double.parseDouble("".equals(context[6+l].toString())?"0.00":context[6+l].toString());
                         double PM10_num = Double.parseDouble("".equals(context[7+l].toString())?"0.00":context[7+l].toString());
-                        buf.append("{\"¼à²âµã±àÂë\":" + "\"" + sites_code + "\"" + "," + "\"¼à²âµãÃû³Æ\":" + "\"" + sites_name + "-1ÔÂ" + j + "ÈÕ\"" + "," + "\"³ÇÊĞ\":" + "\"" + city + "\"" + ","
-                                + "\"¾­¶È\":" + lng_num + "," + "\"Î³¶È\":" + lat_num + "," + "\"AQI\":" + AQI_num + "," + "\"PM2.5\":" + PM2_5_num + "," + "\"PM10\":" + PM10_num + " },");
+                        buf.append("{\"ç›‘æµ‹ç‚¹ç¼–ç \":" + "\"" + sites_code + "\"" + "," + "\"ç›‘æµ‹ç‚¹åç§°\":" + "\"" + sites_name + "-1æœˆ" + j + "æ—¥\"" + "," + "\"åŸå¸‚\":" + "\"" + city + "\"" + ","
+                                + "\"ç»åº¦\":" + lng_num + "," + "\"çº¬åº¦\":" + lat_num + "," + "\"AQI\":" + AQI_num + "," + "\"PM2.5\":" + PM2_5_num + "," + "\"PM10\":" + PM10_num + " },");
+                        l += 3;
+                        j++;
+                    }
+                } catch (Exception e2) {
+                    continue;
+                }
+            }
+            br.close();
+            buf.deleteCharAt(buf.length() - 1);
+            buf.append("]");
+//            System.out.println(buf);
+            toBeJson(buf.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getChinaAirMixedMultiDaysSplit() {
+        int i,l,j;
+        MysqlLocalConnection.getInstance();
+        File csv = new File(MysqlLocalConnection.websitePath + "data/air/parallel_overlay/china_coincide_06to10.csv");
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(csv));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        String line ;
+        try {
+            StringBuffer buf = new StringBuffer();
+            buf.append("[");
+            line = br.readLine();
+            while ((line = br.readLine()) != null)
+            {
+                j = 6;
+                l = 0;
+                String context[] = line.split(",",-1);
+                try {
+                    for ( i=0 ;i<(context.length/3-1);i++ ) {
+                        String sites_code = context[0];
+                        String sites_name = context[1];
+                        String city = context[2];
+                        double lng_num = Double.parseDouble(context[3]);
+                        double lat_num = Double.parseDouble(context[4]);
+                        double AQI_num = Double.parseDouble("".equals(context[5+l].toString())?"0.00":context[5+l].toString());
+                        double PM2_5_num = Double.parseDouble("".equals(context[6+l].toString())?"0.00":context[6+l].toString());
+                        double PM10_num = Double.parseDouble("".equals(context[7+l].toString())?"0.00":context[7+l].toString());
+                        buf.append("{\"ç›‘æµ‹ç‚¹åç§°\":" + "\"" + sites_name + "-1æœˆ" + j + "æ—¥\"" + "," + "\"åŸå¸‚\":" + "\"" + city + "\"" + ","
+                                + "\"ç»åº¦\":" + lng_num + "," + "\"çº¬åº¦\":" + lat_num + "," + "\"AQI\":" + AQI_num + "," + "\"PM2.5\":" + PM2_5_num + "," + "\"PM10\":" + PM10_num + " },");
                         l += 3;
                         j++;
                     }
