@@ -1,24 +1,11 @@
 
-
 var relpos = {
     restart: "",
     text: "",
     relMarkerIcon: new BMap.Icon("images/markers/boundmarker_blue.png", new BMap.Size(25 ,37)),
-    extraxt_overlays: []
-}
-
-function initRelpos() {
-    relpos.restart = getQueryString("restart");
-    relpos.text = getQueryString("text");
-    document.getElementById("extrapostext").value = relpos.text;
-
-}
-// var map = new BMap.Map("l-map");
-// var point = new BMap.Point(116.400244, 39.92556);
-// map.centerAndZoom(point, 12);
-// map.enableScrollWheelZoom(true);
-// var relMarkerIcon = new BMap.Icon("images/markers/boundmarker_blue.png", new BMap.Size(25 ,37));
-// var extraxt_overlays = [];
+    positions: [],
+    relPositions: [],
+};
 
 function extract_positions(text) {
     if(text === undefined || text === null || "" === text) {
@@ -32,22 +19,25 @@ function extract_positions(text) {
     $("#extraposinfo").html("位置信息提取中。。。");
     // var url = 'http://localhost:5050/query_positions?text=' + text;
     var url = 'http://106.12.93.49:5050/query_positions?text=' + text;
-    if(restart != null && "" != restart) {
+    if(relpos.restart != null && "" != relpos.restart) {
         url = url + "&restart=1";
     }
     $.ajax({
         url: url,
         type: 'get',
         dataType: 'json',
-        timeout: 10000,
+        // timeout: 10000,
         //dataType:"jsonp",  //数据格式设置为jsonp
         //jsonp:"callback",  //Jquery生成验证参数的名称
         success: function (re_data) {
             $("#extraposinfo").html("位置信息提取完成：\n<br/>" + JSON.stringify(re_data));
             var data = re_data['positions'];
-            showPositions(re_data['positions']);
-            showRelatives(re_data['afters']);
-            showRelatives(re_data['befores']);
+            createPositions(re_data['positions']);
+            createRelatives(re_data['afters']);
+            createRelatives(re_data['befores']);
+            if(!$("#relative_checkbox")[0].checked) {
+                hideRelatives();
+            }
         },
         error: function (err_data) {
             console.log(err_data);
@@ -56,7 +46,7 @@ function extract_positions(text) {
 
 }
 
-function showPositions(pos_data) {
+function createPositions(pos_data) {
     if(pos_data == null || pos_data.length < 1) {
         return;
     }
@@ -93,7 +83,7 @@ function showPositions(pos_data) {
     }
 }
 
-function showRelatives(rel_data) {
+function createRelatives(rel_data) {
     if(rel_data == null || rel_data.length < 1) {
         return;
     }
@@ -123,7 +113,7 @@ function showRelatives(rel_data) {
                         circle.title = "相对位置";
                         circle.geoname = name;
                         addClickHandler(name, circle);
-                        addExtratOverlay(circle);
+                        addExtratOverlay(circle, true);
                     } else if (shape == 'rect') {
                         var polygon = new BMap.Polygon([
                             new BMap.Point(x - buffer, y - buffer),
@@ -136,17 +126,17 @@ function showRelatives(rel_data) {
                         polygon.title = "相对位置";
                         polygon.geoname = name;
                         addClickHandler(name, polygon);
-                        addExtratOverlay(polygon);
+                        addExtratOverlay(polygon, true);
                     }
                 } else {
                     var bp = new BMap.Point(x, y);
-                    var marker = new BMap.Marker(bp, {icon: relMarkerIcon});
+                    var marker = new BMap.Marker(bp, {icon: relpos.relMarkerIcon});
                     marker.spaType = 1;
                     marker.title = "相对位置";
                     marker.geoname = name;
                     //marker.setAnimation(BMAP_ANIMATION_BOUNCE);
                     addClickHandler(name, marker);
-                    addExtratOverlay(marker);
+                    addExtratOverlay(marker, true);
                 }
             } else {
 
@@ -156,6 +146,34 @@ function showRelatives(rel_data) {
         }
     }
 }
+
+function initRelpos() {
+    relpos.restart = getQueryString("restart");
+    relpos.text = getQueryString("text");
+    document.getElementById("extrapostext").value = relpos.text;
+}
+
+//	是否要选择行政级别
+function toShowRelatives(checkbox) {
+    if(checkbox.checked) {
+        showRelatives();
+    } else {
+        hideRelatives();
+    }
+}
+
+function showRelatives() {
+    for(var i = 0; i < relpos.relPositions.length; i++) {
+        relpos.relPositions[i].show();
+    }
+}
+
+function hideRelatives() {
+    for(var i = 0; i < relpos.relPositions.length; i++) {
+        relpos.relPositions[i].hide();
+    }
+}
+
 
 var openFile = function(event){
     var input = event.target;
@@ -170,30 +188,41 @@ var openFile = function(event){
     reader.readAsText(input.files[0]);
 };
 
-function addExtratOverlay(overlay) {
-    relpos.extraxt_overlays.push(overlay);
+function addExtratOverlay(overlay, relative) {
+    if(relative == true) {
+        relpos.relPositions.push(overlay);
+    } else{
+        relpos.positions.push(overlay);
+    }
     map.addOverlay(overlay);
 }
 
 function showRelposOverlays() {
-    for(var i = 0; i < relpos.extraxt_overlays.length; i++) {
-        relpos.extraxt_overlays[i].show();
+    for(var i = 0; i < relpos.positions.length; i++) {
+        relpos.positions[i].show();
     }
+    showRelatives();
 }
 
 function hideRelposOverlays() {
-    for(var i = 0; i < relpos.extraxt_overlays.length; i++) {
-        relpos.extraxt_overlays[i].hide();
+    for(var i = 0; i < relpos.positions.length; i++) {
+        relpos.positions[i].hide();
     }
+    hideRelatives();
 }
 
 function removeExtratOverlays() {
-    for(var i = 0; i < relpos.extraxt_overlays.length; i++) {
-        relpos.extraxt_overlays[i].hide();
-        map.removeOverlay(relpos.extraxt_overlays[i]);
+    for(var i = 0; i < relpos.positions.length; i++) {
+        relpos.positions[i].hide();
+        map.removeOverlay(relpos.positions[i]);
     }
-    // extraxt_overlays = [];
-    relpos.extraxt_overlays.splice(0, relpos.extraxt_overlays.length);
+    for(var i = 0; i < relpos.relPositions.length; i++) {
+        relpos.relPositions[i].hide();
+        map.removeOverlay(relpos.relPositions[i]);
+    }
+    // positions = [];
+    relpos.positions.splice(0, relpos.positions.length);
+    relpos.relPositions.splice(0, relpos.relPositions.length);
 }
 
 function addClickHandler(content, overlay){

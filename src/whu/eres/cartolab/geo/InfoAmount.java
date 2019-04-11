@@ -13,15 +13,17 @@ public class InfoAmount {
     public long imageLength = 0;
     public long vedioLength = 0;
     public long audioLength = 0;
+    public long flashLength = 0;
     public long modelLength = 0;
 
     public InfoAmount(long textLenth, long figureLength, long imageLength, long vedioLength,
-                      long audioLength, long modelLength) {
+                      long audioLength, long flashLength, long modelLength) {
         this.textLenth = textLenth;
         this.figureLength = figureLength;
         this.imageLength = imageLength;
         this.vedioLength = vedioLength;
         this.audioLength = audioLength;
+        this.flashLength = flashLength;
         this.modelLength = modelLength;
     }
 
@@ -79,6 +81,10 @@ public class InfoAmount {
         return countMapLength(audioMap);
     }
 
+    public static long countFlashLength(Map flashMap) {
+        return countMapLength(flashMap);
+    }
+
     public static long countModelLength(String modelPath) {
         return countImageLength(modelPath);
     }
@@ -124,6 +130,7 @@ public class InfoAmount {
                 "imageLength: " + imageLength + "\n" +
                 "vedioLength: " + vedioLength + "\n" +
                 "audioLength: " + audioLength + "\n" +
+                "flashLength: " + flashLength + "\n" +
                 "modelLength: " + modelLength;
     }
 
@@ -135,6 +142,7 @@ public class InfoAmount {
         jo.put("imageLength", imageLength);
         jo.put("vedioLength", vedioLength);
         jo.put("audioLength", audioLength);
+        jo.put("flashLength", flashLength);
         jo.put("modelLength", modelLength);
         String str = jo.toString();
         return str;
