@@ -88,68 +88,151 @@
 
 			<div title="案例1" data-options="iconCls:'icon-qj'">
 				<!--<ul id="id_tree_type" style="margin-top: 10px;"></ul>-->
-				<input class="easyui-searchbox" style="width: 100%; height: 30px; line-height: 30px"
-					data-options="prompt:'位置信息提取',menu:'#simplesearchtabsdiv',searcher:doSimpleSearch" />
-				<div id="simplesearchtabsdiv">
-				<div data-options="name:'allsimplesearch',iconCls:'icon-ok'">全位置信息</div>
-				<div data-options="name:'placesimplesearch'">地名信息</div>
-				<div data-options="name:'distsimplesearch'">相对位置</div>
-				<!--<div data-options="name:'boundsimplesearch'">行政界线</div>-->
-				<!--<div data-options="name:'bmsimplesearch'">界桩界碑</div>-->
+
+				<div id="searchAllDiv" class="datagrid-toolbar" style="margin-bottom: 10px; padding:8px 4px 4px 5px;">
+					<input class="easyui-searchbox" style="width: 100%; height: 30px; line-height: 30px"
+						   data-options="prompt:'位置信息提取',menu:'#simplesearchtabsdiv',searcher:doSearchAll" />
+					<div id="simplesearchtabsdiv">
+						<div data-options="name:'allsimplesearch',iconCls:'icon-ok'">自动识别</div>
+						<div data-options="name:'coordsearch'">坐标</div>
+						<div data-options="name:'postcodesearch'">邮政编码</div>
+						<div data-options="name:'phonesearch'">固定电话</div>
+						<div data-options="name:'ipesearch'">固定IP</div>
+					</div>
 				</div>
-				<br/>
+
 				<!--融合-->
 				<div id="fuseDiv" class="searchDiv">
 					<form id="ClassCheckbox2" class="ClassCheckbox" action="searchInstance.action">
 						<div id="highsearch2">
 							<div id="feature2" class="nextTab" >
-								<h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位置信息叠加与融合</h3>
+								<h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位置信息提取与叠加</h3>
+							</div>
+							<!--<br/>-->
+							<p style="line-height: 1px; height: 1px; font-size: 1px"></p>
+							<div id="addrDiv" class="nextTab" >
+								<!--<br/>-->
+								<h3>&nbsp;&nbsp;地名/地址
+									<!--&nbsp;&nbsp;&nbsp;&nbsp;<input type="file" id="coordfile" name="uploadFile" accept="text/plain"-->
+															  <!--onchange="openFile(event, 'addrtext')" />-->
+								</h3>
+								<textarea id="addrtext" rows="4" cols="32"></textarea>
+								<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="file" id="addrfile" name="uploadFile" accept="text/plain"
+										   onchange="openFile(event, 'addrtext')" />
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="提取地名/地址" class="srhbtn" onclick="extract_address()">
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="清除" class="srhbtn" onclick="clear_address()">
+								</p>
+
 							</div>
 
-							<div id="mapextent2" class="nextTab" >
-								<h3><input type="checkbox" id="mapextentcheckbox2" onclick="toChooseMapExtent(this)"/>&nbsp;自定义地图范围</h3>
-								<div id="mapextentdone" class="nextTab" style="display: none">范围未选择</div>
+							<div id="coordDiv" class="nextTab" >
+								<h3>&nbsp;&nbsp;坐标
+									<!--&nbsp;&nbsp;&nbsp;&nbsp;<input type="file" id="coordfile" name="uploadFile" accept="text/plain"-->
+									<!--onchange="openFile(event, 'addrtext')" />-->
+								</h3>
+								<!--<textarea id="coordtext" rows="4" cols="35"></textarea>-->
+								<p>输入坐标：<input id="coordtext" class="innerWord"/></p>
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="file" id="coordfile" name="uploadFile" accept="text/plain"
+										   onchange="openFileName(event, 'coordtext')" /></p>
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="显示坐标位置" class="srhbtn" onclick="extract_coords()">
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="清除" class="srhbtn" onclick="clear_coords()">
+								</p>
 							</div>
 
-							<div id="choosedists2" class="nextTab" >
-								<h3><input type="checkbox" id="distscheckbox2" checked onclick="toChooseDist(this)"/>&nbsp;全部区域</h3>
-								<div id="distscheckboxes2" class="nextTab">
-									<input type="checkbox" id="acheckbox" checked onclick=""/>区域A &nbsp;
-									<input type="checkbox" id="bcheckbox" checked onclick=""/>区域B &nbsp;
-									<input type="checkbox" id="ccheckbox" checked onclick=""/>区域C<br/>
-									<input type="checkbox" id="dcheckbox" checked onclick=""/>区域D &nbsp;
-									<input type="checkbox" id="echeckbox" checked onclick=""/>区域E &nbsp;
-									<input type="checkbox" id="fcheckbox" checked onclick=""/>区域F &nbsp;<br/>
-									<input type="checkbox" id="gcheckbox" checked onclick=""/>区域G &nbsp;
-									<input type="checkbox" id="hcheckbox" checked onclick=""/>区域H &nbsp;
-									<input type="checkbox" id="icheckbox" checked onclick=""/>区域I<br/>
-									<input type="checkbox" id="jcheckbox" checked onclick=""/>区域J &nbsp;
-									<input type="checkbox" id="kcheckbox" checked onclick=""/>区域K &nbsp;
-									<input type="checkbox" id="lcheckbox" checked onclick=""/>区域L<br/>
-								</div>
+							<div id="postDiv" class="nextTab" >
+								<h3>&nbsp;&nbsp;邮政编码
+									<!--&nbsp;&nbsp;&nbsp;&nbsp;<input type="file" id="coordfile" name="uploadFile" accept="text/plain"-->
+									<!--onchange="openFile(event, 'addrtext')" />-->
+								</h3>
+								<!--<textarea id="coordtext" rows="4" cols="35"></textarea>-->
+								<p>输入邮编：<input id="posttext" class="innerWord"/></p>
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="显示邮编范围" class="srhbtn" onclick="extract_postcode()">
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="清除" class="srhbtn" onclick="clear_postcode()">
+								</p>
 							</div>
 
-							<div id="choosetime2" class="nextTab">
-								<h3><input type="checkbox" id="timecheckbox2" onclick="toChooseTime2(this)"/>&nbsp;时间</h3>
-								<div id="choosetimeitmes2" class="nextTab" style="display: none">
-									<p>起始时间 <input id="starttime2" type="text" class="easyui-datebox" style="width: 170px"></p>
-									<p>截止时间 <input id="endtime2" type="text" class="easyui-datebox" style="width: 170px"></p>
-								</div>
+							<div id="phoneDiv" class="nextTab" >
+								<h3>&nbsp;&nbsp;固定电话
+									<!--&nbsp;&nbsp;&nbsp;&nbsp;<input type="file" id="coordfile" name="uploadFile" accept="text/plain"-->
+									<!--onchange="openFile(event, 'addrtext')" />-->
+								</h3>
+								<textarea id="phonetext" rows="3" cols="32"></textarea>
+								<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="file" id="phonefile" name="uploadFile" accept="text/plain"
+										   onchange="openFile(event, 'phonetext')" />
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="号码归属地" class="srhbtn" onclick="extract_phone_number()">
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="清除" class="srhbtn" onclick="clear_phone_number()">
+								</p>
 							</div>
 
-							<div id="placesearch" class="nextTab">
-								<h3><input type="checkbox" id="placecheckbox" onclick="toSearchDists(this)"/>&nbsp;关键词</h3>
-								<div id="placeitems" class="nextTab">
-									<p>包含词：<input id="placeword" class="innerWord"/></p>
-									<p><input type="checkbox" id="placemmcheckbox" onclick=""/>包含多媒体信息</p>
-								</div>
+							<div id="ipDiv" class="nextTab" >
+								<h3>&nbsp;&nbsp;固定IP
+									<!--&nbsp;&nbsp;&nbsp;&nbsp;<input type="file" id="coordfile" name="uploadFile" accept="text/plain"-->
+									<!--onchange="openFile(event, 'addrtext')" />-->
+								</h3>
+								<textarea id="iptext" rows="3" cols="32"></textarea>
+								<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="file" id="ipfile" name="uploadFile" accept="text/plain"
+										   onchange="openFile(event, 'iptext')" />
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="IP归属地" class="srhbtn" onclick="extract_ip()">
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="清除" class="srhbtn" onclick="clear_ip()">
+								</p>
 							</div>
+
+							<!--<div id="choosedists2" class="nextTab" >-->
+								<!--<h3><input type="checkbox" id="distscheckbox2" checked onclick="toChooseDist(this)"/>&nbsp;全部区域</h3>-->
+								<!--<div id="distscheckboxes2" class="nextTab">-->
+									<!--<input type="checkbox" id="acheckbox" checked onclick=""/>区域A &nbsp;-->
+									<!--<input type="checkbox" id="bcheckbox" checked onclick=""/>区域B &nbsp;-->
+									<!--<input type="checkbox" id="ccheckbox" checked onclick=""/>区域C<br/>-->
+									<!--<input type="checkbox" id="dcheckbox" checked onclick=""/>区域D &nbsp;-->
+									<!--<input type="checkbox" id="echeckbox" checked onclick=""/>区域E &nbsp;-->
+									<!--<input type="checkbox" id="fcheckbox" checked onclick=""/>区域F &nbsp;<br/>-->
+									<!--<input type="checkbox" id="gcheckbox" checked onclick=""/>区域G &nbsp;-->
+									<!--<input type="checkbox" id="hcheckbox" checked onclick=""/>区域H &nbsp;-->
+									<!--<input type="checkbox" id="icheckbox" checked onclick=""/>区域I<br/>-->
+									<!--<input type="checkbox" id="jcheckbox" checked onclick=""/>区域J &nbsp;-->
+									<!--<input type="checkbox" id="kcheckbox" checked onclick=""/>区域K &nbsp;-->
+									<!--<input type="checkbox" id="lcheckbox" checked onclick=""/>区域L<br/>-->
+								<!--</div>-->
+							<!--</div>-->
+
+							<!--<div id="choosetime2" class="nextTab">-->
+								<!--<h3><input type="checkbox" id="timecheckbox2" onclick="toChooseTime2(this)"/>&nbsp;时间</h3>-->
+								<!--<div id="choosetimeitmes2" class="nextTab" style="display: none">-->
+									<!--<p>起始时间 <input id="starttime2" type="text" class="easyui-datebox" style="width: 170px"></p>-->
+									<!--<p>截止时间 <input id="endtime2" type="text" class="easyui-datebox" style="width: 170px"></p>-->
+								<!--</div>-->
+							<!--</div>-->
+
+							<!--<div id="placesearch" class="nextTab">-->
+								<!--<h3><input type="checkbox" id="placecheckbox" onclick="toSearchDists(this)"/>&nbsp;关键词</h3>-->
+								<!--<div id="placeitems" class="nextTab">-->
+									<!--<p>包含词：<input id="placeword" class="innerWord"/></p>-->
+									<!--<p><input type="checkbox" id="placemmcheckbox" onclick=""/>包含多媒体信息</p>-->
+								<!--</div>-->
+							<!--</div>-->
+
 						</div>
+
 					</form>
-					<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<button id="searchStart2" class="srhbtn" onclick="doHighSearch()">开始筛选</button>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<button id="fuseStart" class="srhbtn" onclick="doHighSearch()">开始叠加</button> <p></p>
+					<br/> &nbsp;&nbsp;&nbsp;&nbsp;
+					<button id="clearPosaddsBtn" class="srhbtn" onclick="clear_posadds()">清除叠加信息</button>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<button id="gotoProCaseBtn" class="srhbtn" onclick="gotoProtocolCases()">叠加协议案例演示</button> <p></p>
 				</div>
 
 			</div>
@@ -168,7 +251,8 @@
 							&nbsp;&nbsp;&nbsp;
 							<textarea id="extrapostext" rows="10" cols="35"></textarea><br/>
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<input type="file" name="uploadFile" accept="text/plain" onchange="openFile(event)" />
+							<input type="file" id="relposefile" name="uploadFile" accept="text/plain"
+								   onchange="openFile(event, 'extrapostext')" />
 							<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							<!--<input type="submit" value="提取位置信息" />-->&nbsp;&nbsp;&nbsp;&nbsp;
 							<input type="button" value="提取位置信息" class="srhbtn" onclick="extract_positions()">

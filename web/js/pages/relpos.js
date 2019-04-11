@@ -174,20 +174,6 @@ function hideRelatives() {
     }
 }
 
-
-var openFile = function(event){
-    var input = event.target;
-    var reader = new FileReader();
-    reader.onload = function(){
-        if(reader.result){
-            relpos.text = reader.result;
-            alert(relpos.text);
-            document.getElementById("extrapostext").value = relpos.text;
-        }
-    };
-    reader.readAsText(input.files[0]);
-};
-
 function addExtratOverlay(overlay, relative) {
     if(relative == true) {
         relpos.relPositions.push(overlay);

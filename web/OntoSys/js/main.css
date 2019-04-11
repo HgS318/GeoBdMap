@@ -412,7 +412,7 @@ div.tabContainer{
 
 .srhbtn {
      align-self: center;
-    align: center;
+     align: center;
      height: 28px;
      line-height: 28px;
      background-color: #0D9BF2;
@@ -425,6 +425,22 @@ div.tabContainer{
      margin-bottom: 4px;
      cursor: pointer;
 }
+
+ .srhbtn-inline {
+     align-self: center;
+     align: center;
+     height: 28px;
+     line-height: 28px;
+     background-color: #0D9BF2;
+     color: #FFF;
+     border: 0;
+     outline: none;
+     padding-left: 0px;
+     padding-right: 0px;
+     border-radius: 0px;
+     margin-bottom: 0px;
+     /*cursor: pointer;*/
+ }
 
 .nextTab {
     position: relative;
@@ -445,7 +461,7 @@ div.tabContainer{
 
 .innerWord {
     height: 16px;
-    width: 170px;
+    width: 160px;
 }
 
 .logos {
