@@ -67,8 +67,8 @@ function createPositions(pos_data) {
                 var marker = new BMap.Marker(bp);
                 marker.spaType = 1;
                 marker.title = "地理位置实体";
-                marker.geoname = name;
-                addClickHandler(name, marker);
+                setRelposName(marker, name);
+                addClickHandler(marker, "  &nbsp;&nbsp;" + name);
                 addExtratOverlay(marker);
                 if (flag) {
                     map.centerAndZoom(bp, 10);
@@ -81,6 +81,11 @@ function createPositions(pos_data) {
 
         }
     }
+}
+
+function setRelposName(overlay, name) {
+    overlay.name = name;
+    overlay.extData = {"name": name, "winwidth": 150};
 }
 
 function createRelatives(rel_data) {
@@ -111,8 +116,8 @@ function createRelatives(rel_data) {
                         }); //创建圆
                         circle.spaType = 5;
                         circle.title = "相对位置";
-                        circle.geoname = name;
-                        addClickHandler(name, circle);
+                        setRelposName(circle, name);
+                        addClickHandler(circle, "  &nbsp;&nbsp;" + name);
                         addExtratOverlay(circle, true);
                     } else if (shape == 'rect') {
                         var polygon = new BMap.Polygon([
@@ -124,8 +129,8 @@ function createRelatives(rel_data) {
                         ], {strokeColor: "blue", strokeWeight: 2, strokeOpacity: 0.5});
                         polygon.spaType = 5;
                         polygon.title = "相对位置";
-                        polygon.geoname = name;
-                        addClickHandler(name, polygon);
+                        setRelposName(polygon, name);
+                        addClickHandler("  &nbsp;&nbsp;" + name);
                         addExtratOverlay(polygon, true);
                     }
                 } else {
@@ -133,9 +138,10 @@ function createRelatives(rel_data) {
                     var marker = new BMap.Marker(bp, {icon: relpos.relMarkerIcon});
                     marker.spaType = 1;
                     marker.title = "相对位置";
-                    marker.geoname = name;
+                    marker.name = name;
                     //marker.setAnimation(BMAP_ANIMATION_BOUNCE);
-                    addClickHandler(name, marker);
+                    setRelposName(marker, name);
+                    addClickHandler(marker, "  &nbsp;&nbsp;" + name);
                     addExtratOverlay(marker, true);
                 }
             } else {
@@ -153,7 +159,6 @@ function initRelpos() {
     document.getElementById("extrapostext").value = relpos.text;
 }
 
-//	是否要选择行政级别
 function toShowRelatives(checkbox) {
     if(checkbox.checked) {
         showRelatives();
@@ -209,30 +214,6 @@ function removeExtratOverlays() {
     // positions = [];
     relpos.positions.splice(0, relpos.positions.length);
     relpos.relPositions.splice(0, relpos.relPositions.length);
-}
-
-function addClickHandler(content, overlay){
-    overlay.addEventListener("click",function(e){
-        openInfoWin(content, e)}
-    );
-}
-
-function openInfoWin(content, e){
-    var overlay = e.target;
-    var point;
-    if(overlay.spaType == 1) {
-        point = new BMap.Point(overlay.getPosition().lng, overlay.getPosition().lat);
-    } else if (overlay.spaType == 5) {
-        var first_point = overlay.getPath()[0];
-        point = new BMap.Point(first_point.lng, first_point.lat);
-    }
-    var infoWindow = new BMap.InfoWindow(content, {
-        width : 150,     // 信息窗口宽度
-        height: 50,     // 信息窗口高度
-        title : overlay['title'] , // 信息窗口标题
-        enableMessage:true//设置允许信息窗发送短息
-    });
-    map.openInfoWindow(infoWindow, point); //开启信息窗口
 }
 
 

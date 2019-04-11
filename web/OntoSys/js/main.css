@@ -460,8 +460,9 @@ div.tabContainer{
  }
 
 .innerWord {
-    height: 16px;
+    height: 20px;
     width: 160px;
+    line-height: 20px;
 }
 
 .logos {
