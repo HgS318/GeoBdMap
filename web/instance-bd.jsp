@@ -1,5 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" id="html">
+<%--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<html>
 
 <head>
     <meta charset="UTF-8">
@@ -287,7 +288,7 @@
 			<div id="listTab" title="用户分析" data-options="iconCls:'icon-search'">
 				<br/>
 				<div id="searchDiv" class="searchDiv">
-					<div id="ClassCheckbox1" class="ClassCheckbox">
+					<div id="ClassCheckbox1" class="ClassCheckbox" action="searchInstance.action">
 						<div id="highsearch">
 							<div id="mapextent" class="nextTab" >
 								<h3>&nbsp; 用户属性分析 / 地名消歧 等</h3>
