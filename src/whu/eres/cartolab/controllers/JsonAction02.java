@@ -5,6 +5,7 @@ import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import org.apache.struts2.ServletActionContext;
 import whu.eres.cartolab.db.esri.ShapeFile;
+import whu.eres.cartolab.db.mysql.connections.MysqlLocalConnection;
 import whu.eres.cartolab.geo.MaxConvexPolygon;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,26 +22,12 @@ public class JsonAction02 {
 //        sortTracks01();
 //    }
 
-//    public static void sortTracks() {
-//        List<SimpleTrack> tracks = new ArrayList<>();
-//
-//        Collections.sort(tracks, new Comparator<SimpleTrack>() {
-//            public int compare(SimpleTrack o1, SimpleTrack o2) {
-//                long sn_diff =  o1.time - o2.time;
-//                if(sn_diff < 0) {
-//                    return -1;
-//                }
-//                if(sn_diff > 0) {
-//                    return 1;
-//                }
-//                return o1.userid.compareTo(o2.userid);
-//            }
-//        });
-//    }
     public String sortTracks01() {
         int len = 30000;
         int i = 0;
-        String csvFile = "F:/IDEA2017/GeoBdMap/web/data/track/A_B.csv";
+        MysqlLocalConnection.getInstance();
+        String websitePath = MysqlLocalConnection.websitePath;
+        String csvFile = websitePath + "download/mapv/examples/data/tracks/bj_A_B.csv";
         StringBuffer jsonStr = new StringBuffer();
         jsonStr.append("[");
         List<SimpleTrack> tracks = new ArrayList<>();
@@ -79,9 +66,11 @@ public class JsonAction02 {
             double X=track.x;
             double Y=track.y;
             String id=track.userid;
+//            int id = (int)(1+Math.random()*(10000) + 3);
             Long Time=track.time;
             Date d = new Date(Time);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
             String Timestr=sdf.format(d);
             String infoJson = "{\"lng\": " + X + ", \"lat\": " + Y +", \"id\": " +"\""+ id+"\""+", \"time\": \"" + Timestr+"\"}," ;
             jsonStr.append(infoJson);
@@ -100,7 +89,9 @@ public class JsonAction02 {
     public String sortTracks02() {
         int len = 30000;
         int i = 0;
-        String csvFile = "F:/IDEA2017/GeoBdMap/web/data/track/B_C.csv";
+        MysqlLocalConnection.getInstance();
+        String websitePath = MysqlLocalConnection.websitePath;
+        String csvFile = websitePath + "download/mapv/examples/data/tracks/bj_B_C.csv";
         StringBuffer jsonStr = new StringBuffer();
         jsonStr.append("[");
         List<SimpleTrack> tracks = new ArrayList<>();
@@ -139,9 +130,11 @@ public class JsonAction02 {
                 double X=track.x;
                 double Y=track.y;
                 String id=track.userid;
+//                int id = (int)(1+Math.random()*(10000) + 3);
                 Long Time=track.time;
                 Date d = new Date(Time);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
                 String Timestr=sdf.format(d);
                 String infoJson = "{\"lng\": " + X + ", \"lat\": " + Y +", \"id\": " +"\""+ id+"\""+", \"time\": \"" + Timestr+"\"}," ;
                 jsonStr.append(infoJson);
@@ -156,10 +149,13 @@ public class JsonAction02 {
         }
         return null;
     }
+
     public String sortTracks03() {
         int len = 30000;
         int i = 0;
-        String csvFile = "F:/IDEA2017/GeoBdMap/web/data/track/A_C.csv";
+        MysqlLocalConnection.getInstance();
+        String websitePath = MysqlLocalConnection.websitePath;
+        String csvFile = websitePath + "download/mapv/examples/data/tracks/bj_A_C.csv";
         StringBuffer jsonStr = new StringBuffer();
         jsonStr.append("[");
         List<SimpleTrack> tracks = new ArrayList<>();
@@ -198,9 +194,11 @@ public class JsonAction02 {
                 double X=track.x;
                 double Y=track.y;
                 String id=track.userid;
+//                int id = (int)(1+Math.random()*(10000) + 3);
                 Long Time=track.time;
                 Date d = new Date(Time);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
                 String Timestr=sdf.format(d);
                 String infoJson = "{\"lng\": " + X + ", \"lat\": " + Y +", \"id\": " +"\""+ id+"\""+", \"time\": \"" + Timestr+"\"}," ;
                 jsonStr.append(infoJson);

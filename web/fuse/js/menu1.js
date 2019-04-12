@@ -83,6 +83,7 @@ function fuse_simple(first) {
 		$("#content3").html(createHtml(page3));
 	}
 	openWin(win3);
+	showPageBtns();
 }
 
 function split_simple() {
@@ -90,6 +91,7 @@ function split_simple() {
 	openWin(win2);
 	// openWin(win3);
 	closeWin(win3);
+	hidePageButns();
 }
 
 function initWindows() {

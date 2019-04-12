@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body, html {width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+        #allmap{width:100%;height:100%;}
+        p{margin-left:5px; font-size:14px;}
+    </style>
+    <script type="text/javascript" src="../../js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=n3xc9ALenVeuL9apmqs4ZjrluhhsX4mr"></script>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
+    <title>添加复杂内容的信息窗口</title>
+</head>
+<body>
+<div id="allmap"></div>
+</body>
+</html>
+<script type="text/javascript">
+    var data = {
+        "1": {
+            "name": "富民路1",
+
+            "line": "[ [121.456151, 31.227961], [121.456596, 31.227347], [121.457009, 31.226579], [121.457396, 31.22573], [121.457786, 31.225042]]",
+            // "line2":"[ [121.457387, 31.225745], [121.457791, 31.225039], [121.458271, 31.224228], [121.458613, 31.223645], [121.458837, 31.223139], [121.458887, 31.222788]]",
+            "text": "富民路(Fumin Lu)　在上海市市区中部，跨静安、徐汇两区。北起延安中路，南至东湖路。长625米，宽15.0～17.0米，车行道宽9.0～9.3米。民国2年(1913年)筑，以法国海军中将名命名古拔路(Rue Amiral Courbet)。民国32年以云南富民改今名。沿路为住宅。",
+            // "text2":"富民路北起延安中路，南至长乐路，一条短小精悍的路。从常德路一路往南走，经过宽阔的延安中路便来到了并不宽的富民路。开始的一段路还没有那么的窄，到了巨鹿路与富民路的路口，你会发现路明显就变窄了，只有两车宽。路上小店也明显的多了起来，由巨鹿路、富民路和长乐路组成的黄金工字区里可是小店扎堆的地方，很多小店都各具特色。 道旁梧桐掩映得幽暗，仿佛有着诱人秘密等你去探寻。越走越深、越走越静，路旁沉淀时间的建筑，散发出岁月的味道。",
+            "image": ["../../data/syn_data/建筑道路数据/富民路/富民路3.jpg"],
+            // "image2":"data/syn_data/建筑道路数据/富民路/2.jpg",
+            "spaType": 3
+        },
+        "2": {
+            "name": "富民路2",
+
+            // "line1":"[ [121.456151, 31.227961], [121.456596, 31.227347], [121.457009, 31.226579], [121.457396, 31.22573], [121.457786, 31.225042]]",
+            "line": "[ [121.457387, 31.225745], [121.457791, 31.225039], [121.458271, 31.224228], [121.458613, 31.223645], [121.458837, 31.223139], [121.458887, 31.222788]]",
+            // "text1":"富民路(Fumin Lu)　在上海市市区中部，跨静安、徐汇两区。北起延安中路，南至东湖路。长625米，宽15.0～17.0米，车行道宽9.0～9.3米。民国2年(1913年)筑，以法国海军中将名命名古拔路(Rue Amiral Courbet)。民国32年以云南富民改今名。沿路为住宅。",
+            "text": "富民路北起延安中路，南至长乐路，一条短小精悍的路。从常德路一路往南走，经过宽阔的延安中路便来到了并不宽的富民路。开始的一段路还没有那么的窄，到了巨鹿路与富民路的路口，你会发现路明显就变窄了，只有两车宽。路上小店也明显的多了起来，由巨鹿路、富民路和长乐路组成的黄金工字区里可是小店扎堆的地方，很多小店都各具特色。 道旁梧桐掩映得幽暗，仿佛有着诱人秘密等你去探寻。越走越深、越走越静，路旁沉淀时间的建筑，散发出岁月的味道。",
+
+            // "image1":"data/syn_data/建筑道路数据/富民路/1.jpg",
+            "image": ["../../data/syn_data/建筑道路数据/富民路/2.jpg"],
+            "spaType": 3
+        },
+        "3": {
+            "name": "富民路",
+
+            // "line1":"[ [121.456151, 31.227961], [121.456596, 31.227347], [121.457009, 31.226579], [121.457396, 31.22573], [121.457786, 31.225042]]",
+            "line": "[ [121.456151, 31.227961], [121.456596, 31.227347], [121.457009, 31.226579], [121.457396, 31.22573], [121.457786, 31.225042],[121.457387, 31.225745], [121.457791, 31.225039], [121.458271, 31.224228], [121.458613, 31.223645], [121.458837, 31.223139], [121.458887, 31.222788]]",
+            // "text1":"富民路(Fumin Lu)　在上海市市区中部，跨静安、徐汇两区。北起延安中路，南至东湖路。长625米，宽15.0～17.0米，车行道宽9.0～9.3米。民国2年(1913年)筑，以法国海军中将名命名古拔路(Rue Amiral Courbet)。民国32年以云南富民改今名。沿路为住宅。",
+            "texts": ["富民路(Fumin Lu)　在上海市市区中部，跨静安、徐汇两区。北起延安中路，南至东湖路。长625米，宽15.0～17.0米，车行道宽9.0～9.3米。民国2年(1913年)筑，以法国海军中将名命名古拔路(Rue Amiral Courbet)。民国32年以云南富民改今名。沿路为住宅。",
+                "富民路北起延安中路，南至长乐路，一条短小精悍的路。从常德路一路往南走，经过宽阔的延安中路便来到了并不宽的富民路。开始的一段路还没有那么的窄，到了巨鹿路与富民路的路口，你会发现路明显就变窄了，只有两车宽。路上小店也明显的多了起来，由巨鹿路、富民路和长乐路组成的黄金工字区里可是小店扎堆的地方，很多小店都各具特色。 道旁梧桐掩映得幽暗，仿佛有着诱人秘密等你去探寻。越走越深、越走越静，路旁沉淀时间的建筑，散发出岁月的味道。"],
+            // "image1":"data/syn_data/建筑道路数据/富民路/1.jpg",
+            "image": ["../../data/syn_data/建筑道路数据/富民路/富民路3.jpg",
+                "../../data/syn_data/建筑道路数据/富民路/2.jpg"],
+            "spaType": 3
+        }
+    };
+    var id = getQueryString("id");
+    if(id == "") {
+        id = "1";
+    }
+    overlays = [];
+    var Data = data[id];
+    var pointArray=Data["line"];
+    var lineArr = JSON.parse(pointArray);
+    var point=lineArr[0];
+    var X=point[0];
+    var Y=point[1];
+    var _point = new BMap.Point(116.402544, 39.999583);
+    var map = new BMap.Map("allmap");
+    var infoWindow;
+    var isOpen=0;
+       // 创建Map实例
+    // var _point = new BMap.Point(120.76387299284131, 31.92252143886308);
+    map.centerAndZoom(_point, 9);
+    map.enableScrollWheelZoom(true);
+    $.ajax({
+        url: 'geiAirMultiDays.action?path=beijing_01to10_3',
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
+
+            for(var i=0;i<data.length;i++)
+            {
+//                data.air = '"AQI":' + data['AQI'] + ', "PM2.5":' + data['PM2.5'] +
+//                        ', "PM10"' + data['PM10']  + ', "SO2"' + data['SO2']  + ', "NO2"' + data['NO2']
+//                        + ', "O3"' + data['O3']  + ', "CO"' + data['CO'];
+                var point1 = new BMap.Point(data[i]["经度"],data[i]["纬度"]);
+                var marker = new BMap.Marker(point1);
+                marker.spaType = 1;
+                marker.extData = data[i];
+                marker.addEventListener('click', function (e) {
+                    var info = JSON.stringify(e.target.extData);
+                    alert(info);
+                });
+                map.addOverlay(marker);
+            }
+
+        },
+        error: function (err_data) {
+            console.log(err_data);
+        }
+    });
+
+//    createData(Data);
+//    if(overlays.length > 0) {
+//        openInfoWin(null, {target: overlays[0]});
+//    }
+
+    function createData(Data) {
+        var content = createContent(Data);
+        var overlay = createOverlay(Data);
+        overlays.push(overlay);
+        addOverlayAndWindow(overlay, Data, content);
+    }
+
+    function createContent(Data) {
+
+        var content = '<div style="width: 320px">' +
+            '<h4 style="margin: 0 0 0 0; padding: 0 0 0 0; color: #be2924; font-size: 18px">' + Data['name'] + '</h4><br/>';
+        if(Data.address != null && Data.address != undefined) {
+            content += '地址：' + Data.address + '<br/>';
+        }
+        if(Data['text'] != null) {
+            var text = Data['text'];
+            if(text.length > 60) {
+                text = text.substring(0, 60) + '...';
+            }
+            content += "<strong>文字</strong><p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
+        }
+        if(Data['texts'] != null) {
+            content += "<strong>文字</strong>";
+            for(var j = 0; j < Data['texts'].length; j++) {
+                var text = Data['texts'][j];
+                if(text.length > 50) {
+                    text = text.substring(0, 50) + '...';
+                }
+                content += "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
+            }
+        }
+        if(Data['image'] != null && Data['image'].length > 0) {
+            content += '<strong>图像</strong><br/>';
+            for (var j = 0; j < Data['image'].length; j++) {
+                var img_path = Data['image'][j];
+//                                content += "<img src='" + img_path + "' class='img' alt='' onclick='openWindowY(img_path)'"
+//                                        + "style='zoom:1;overflow:hidden;width:50px;height:50px;'/>";
+                content += '&nbsp;&nbsp;<img src=' + img_path + ' class="img" onclick="openWindowY(this, \'image\')" ' +
+                    'alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>'
+
+            }
+            content += '<br/>';
+        }
+        if(Data['vedios'] != null && Data['vedios'].length > 0) {
+            content += '<strong>视频</strong><br/>';
+            for (var j = 0; j < Data['vedios'].length; j++) {
+                var vedio_path = Data['vedios'][j];
+//                                content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + vedio_path + '" target="_blank" onclick="openWindowY(this, \'vedio\')">视频' + (j + 1) + '</a>');
+                content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + vedio_path +'" target="_blank">视频' + (j + 1) + '</a>');
+            }
+            content += '<br/>';
+        }
+        if(Data['audios'] != null && Data['audios'].length > 0) {
+            content += '<strong>音频</strong><br/>';
+            for (var j = 0; j < Data['audios'].length; j++) {
+                var audio_path = Data['audios'][j];
+                content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + audio_path +'" target="_blank">音频' + (j + 1) + '</a>');
+            }
+            content += '<br/>';
+        }
+        if(Data['models'] != null && Data['models'].length > 0) {
+            content += '<strong>模型</strong><br/>';
+            for (var j = 0; j < Data['models'].length; j++) {
+                var model_paths = Data['models'][j];
+                var model_pic = model_paths.split(':');
+                var model_path = model_pic[0];
+                var model_pic = model_pic[1];
+                content += '<img src=' + model_pic + ' class="img" href="' + model_path + '" ' +
+                    'target="_blank" alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>'
+//                                content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + vedio_path + '" onclick="getHref()">视频' + (j + 1) + '</a>');
+            }
+            content += '<br/>';
+        }
+        content += '</div>';
+        return content;
+    }
+
+    function createOverlay(Data) {
+
+        var pointStr = Data['position'];
+        if(pointStr != null && pointStr != undefined) {
+            var pointArray = pointStr.split(",");
+            var X = pointArray[0];
+            var Y = pointArray[1];
+            var Point = new BMap.Point(X, Y);
+            var marker = new BMap.Marker(Point);
+            marker.spaType = 1;
+            return marker;
+        }
+        var lineStr = Data['line'];
+        if(lineStr != null && lineStr != undefined) {
+            var polyline = getFigureByStr(lineStr, "line");
+            polyline.spaType = 3;
+            return polyline;
+        }
+        var polygonStr = Data['polygon'];
+        if(polygonStr != null && polygonStr != undefined) {
+            var polygon = getFigureByStr(polygonStr, "polygon");
+            polygon.spaType = 5;
+            return polygon;
+        }
+    }
+
+    function addOverlayAndWindow(overlay, DataData, content) {
+        overlay.name = DataData.name;
+        overlay.extData = DataData;
+        addClickHandler(overlay, content);
+        map.addOverlay(overlay);
+    }
+
+    function addClickHandler(overlay, content){
+        overlay.addEventListener("click",function(e) {
+            openInfoWin(content, e);
+        });
+    }
+
+    function openInfoWin(content, e){
+        var overlay = e.target;
+        var point;
+        if(overlay.spaType == 1) {
+            point = new BMap.Point(overlay.getPosition().lng, overlay.getPosition().lat);
+        } else if (overlay.spaType == 3 || overlay.spaType == 5) {
+            var first_point = overlay.getPath()[0];
+            point = new BMap.Point(first_point.lng, first_point.lat);
+        } else {
+            point = new BMap.Point(e.x, e.y);
+        }
+        if(content == null || content === undefined) {
+            content = createContent(overlay.extData);
+        }
+        infoWindow = new BMap.InfoWindow(content);
+        map.openInfoWindow(infoWindow, point);
+    }
+
+    function getFigureByStr(coordStr, type) {
+        var lineArr = JSON.parse(coordStr);
+        return getFigureJson(lineArr, type);
+    }
+
+    function getFigureJson(coordJson, type) {
+        if(type == "point" | type == 1) {
+            var marker = new BMap.Marker(coordJson[0], coordJson[1]);
+            return marker;
+        }
+        var bdPointArr = [];
+        for(var i = 0; i < coordJson.length; i++) {
+            var [_x, _y] = coordJson[i];
+            var bp = new BMap.Point(_x, _y);
+            bdPointArr.push(bp);
+        }
+        if(type == "line" || type == 3) {
+//            var polyline = new BMap.Polyline(bdPointArr);
+            var polyline = new BMap.Polyline(bdPointArr, {strokeColor:"red", strokeWeight:6, strokeOpacity:0.9});
+            return polyline;
+        } else {
+            var polygon = new BMap.Polygon(bdPointArr);
+            return polygon;
+        }
+    }
+
+    function getQueryString(name) {
+        var result = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
+        if (result == null || result.length < 1) {
+            return "";
+        }
+        return result[1];
+    }
+
+</script>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Basic DataGrid - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="../demo.css">
+	<script type="text/javascript" src="../../jquery.min.js"></script>
+	<script type="text/javascript" src="../../jquery.easyui.min.js"></script>
+</head>
+<body>
+	<!--<h2>Basic DataGrid</h2>-->
+	<!--<p>The DataGrid is created from markup, no JavaScript code needed.</p>-->
+	<!--<div style="margin:20px 0;"></div>-->
+	
+	<table class="easyui-datagrid" title="融合后北京2018年一月六日至十日零点监测数据" style="width:100%;height:925px"
+			data-options="singleSelect:true,collapsible:true,url:'readcoincide_06to10',method:'get',fitColumns : true,">
+		<thead>
+			<tr>
+				<th data-options="field:'监测点编码',width:80">监测点编码</th>
+				<th data-options="field:'监测点名称',width:80">监测点名称</th>
+				<th data-options="field:'城市',width:80">城市</th>
+				<!--<th data-options="field:'经度',width:80">经度</th>-->
+				<!--<th data-options="field:'纬度',width:80">纬度</th>-->
+				<th data-options="field:'AQI',width:80">AQI</th>
+				<th data-options="field:'PM2.5',width:80">PM2.5</th>
+				<th data-options="field:'PM10',width:80">PM10</th>
+			</tr>
+		</thead>
+	</table>
+</body>
+</html>

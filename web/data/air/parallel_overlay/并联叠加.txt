@@ -1,0 +1,4 @@
+案例2（并联叠加）：
+beijing_01to10_3.csv：北京1-10日空气质量（只有AQI,PM2.5,PM10）
+china_06to15_3.csv：全国6-15日空气质量（只有AQI,PM2.5,PM10）
+beijing_coincide_06to10.csv：两者重合部分的空气质量（北京的部分站点，6-10日）

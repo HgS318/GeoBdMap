@@ -91,6 +91,7 @@ function fuse_simple(first) {
 	}
 	openWin(win3);
 	openWin(tb3);
+	showPageBtns();
 }
 
 function split_simple() {
@@ -101,6 +102,7 @@ function split_simple() {
 	// openWin(win3);
 	closeWin(win3);
 	closeWin(tb3);
+	hidePageButns();
 }
 
 function initWindows() {
@@ -173,7 +175,7 @@ function initPages() {
     if(tPage2 == "" || tPage2 == null) {
         tPage2 = default_pages[4];
     }
-    if(tPage3 == "" || tPage31 == null) {
+    if(tPage3 == "" || tPage3 == null) {
         tPage3 = default_pages[5];
     }
 	$("#content1").html(createWindowHtml(page1));

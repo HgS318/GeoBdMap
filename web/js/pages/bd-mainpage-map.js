@@ -62,7 +62,9 @@ $(function() {
             var places = data;
 
             map = new BMap.Map("mapContainer");
-            map.centerAndZoom(new BMap.Point(110.79581, 30.88069), 11);
+            // map.centerAndZoom(new BMap.Point(110.79581, 30.88069), 11);
+            var _point = new BMap.Point(120.76387299284131, 31.92252143886308);
+            map.centerAndZoom(_point, 9);
             var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
             var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
             var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT}); //右上角，仅包含平移和缩放按钮
@@ -95,6 +97,7 @@ $(function() {
                 initTmpDists();
             }
             toResStat();
+            initGeoEntities();
             initRelpos();
         },
         error:function(data){
@@ -1126,10 +1129,15 @@ function placesCheckBox(checkbox) {
 
 //  行政区 checkbox
 function distsCheckBox(checkbox) {
+    // if (checkbox.checked) {
+    //     distsShow();
+    // } else {
+    //     distsHide();
+    // }
     if (checkbox.checked) {
-        distsShow();
+        showGeoEntities();
     } else {
-        distsHide();
+        hideGeoEntities();
     }
 }
 
@@ -1184,3 +1192,33 @@ function initMouseTool() {
     mouseTool.addEventListener('overlaycomplete', drawComplete);
 
 }
+
+
+function getFigureByStr(coordStr, type) {
+    var lineArr = JSON.parse(coordStr);
+    return getFigureJson(lineArr, type);
+}
+
+function getFigureJson(coordJson, type) {
+    if(type == "point" | type == 1) {
+        var marker = new BMap.Marker(coordJson[0], coordJson[1]);
+        return marker;
+    }
+    var bdPointArr = [];
+    for(var i = 0; i < coordJson.length; i++) {
+        var xy = coordJson[i];
+        var _x = xy[0];
+        var _y = xy[1];
+        var bp = new BMap.Point(_x, _y);
+        bdPointArr.push(bp);
+    }
+    if(type == "line" || type == 3) {
+//            var polyline = new BMap.Polyline(bdPointArr);
+        var polyline = new BMap.Polyline(bdPointArr, {strokeColor:"red", strokeWeight:6, strokeOpacity:0.9});
+        return polyline;
+    } else {
+        var polygon = new BMap.Polygon(bdPointArr);
+        return polygon;
+    }
+}
+

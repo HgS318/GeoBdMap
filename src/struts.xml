@@ -26,6 +26,19 @@
         <action name="testShpService" class="whu.eres.cartolab.controllers.JsonAction01" method="testShpService" />
         <action name="getShape" class="whu.eres.cartolab.controllers.JsonAction01" method="getShape" />
 
+        <action name="outputCoordsJson02" class="whu.eres.cartolab.controllers.JsonAction02" method="outputCoordsJson02" />
+        <action name="sortTracks01" class="whu.eres.cartolab.controllers.JsonAction02" method="sortTracks01" />
+        <action name="sortTracks02" class="whu.eres.cartolab.controllers.JsonAction02" method="sortTracks02" />
+        <action name="sortTracks03" class="whu.eres.cartolab.controllers.JsonAction02" method="sortTracks03" />
+
+        <action name="readcsv" class="whu.eres.cartolab.controllers.JsonAction03" method="readCsvTest" />
+        <action name="readbeijing_00" class="whu.eres.cartolab.controllers.JsonAction03" method="getBeijingAirMoment" />
+        <action name="readchina_00" class="whu.eres.cartolab.controllers.JsonAction03" method="getChinaAirMoment" />
+        <action name="readbeijing_coincide_00" class="whu.eres.cartolab.controllers.JsonAction03" method="getBeijingAirMomentMixed" />
+        <action name="geiAirMultiDays" class="whu.eres.cartolab.controllers.JsonAction03" method="geiAirMultiDays" />
+        <action name="readbeijing_01to10" class="whu.eres.cartolab.controllers.JsonAction03" method="geiBeijingAirMultiDaysSplit" />
+        <action name="readchina_06to15" class="whu.eres.cartolab.controllers.JsonAction03" method="getChinaAirMultiDaysSplit" />
+        <action name="readcoincide_06to10" class="whu.eres.cartolab.controllers.JsonAction03" method="getChinaAirMixedMultiDaysSplit" />
 
         <action name="searchPrepare" class="whu.eres.cartolab.controllers.JsonAction00" method="searchPrepare" />
         <action name="getSessionAttribute" class="whu.eres.cartolab.controllers.JsonAction00" method="getSessionAttribute" />

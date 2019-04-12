@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Basic DataGrid - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="../demo.css">
+	<script type="text/javascript" src="../../jquery.min.js"></script>
+	<script type="text/javascript" src="../../jquery.easyui.min.js"></script>
+</head>
+<body>
+	<!--<h2>Basic DataGrid</h2>-->
+	<!--<p>The DataGrid is created from markup, no JavaScript code needed.</p>-->
+	<!--<div style="margin:20px 0;"></div>-->
+	
+	<table class="easyui-datagrid" title="北京市23个站点空气质量监测数据" style="width:100%;height:925px"
+			data-options="singleSelect:true,collapsible:true,url:'readbeijing_00',method:'get',fitColumns : true,">
+		<thead>
+			<tr>
+				<!--<th data-options="field:'itemid',width:80">Item ID</th>-->
+				<!--<th data-options="field:'productid',width:100">Product</th>-->
+				<!--<th data-options="field:'listprice',width:80,align:'right'">List Price</th>-->
+				<!--<th data-options="field:'unitcost',width:80,align:'right'">Unit Cost</th>-->
+				<!--<th data-options="field:'attr1',width:250">Attribute</th>-->
+				<!--<th data-options="field:'status',width:60,align:'center'">Status</th>-->
+				<th data-options="field:'监测点',width:70">监测点</th>
+				<!--<th data-options="field:'经度',width:80">经度</th>-->
+				<!--<th data-options="field:'纬度',width:80">纬度</th>-->
+				<th data-options="field:'AQI',width:40">AQI</th>
+				<th data-options="field:'PM2.5',width:30">PM2.5</th>
+				<th data-options="field:'PM10',width:30">PM10</th>
+				<th data-options="field:'SO2',width:30">SO2</th>
+				<th data-options="field:'NO2',width:30">NO2</th>
+				<th data-options="field:'O3',width:30">O3</th>
+				<th data-options="field:'CO',width:30">CO</th>
+				<!--<th data-options="field:'nongzhanguan',width:80">农展馆</th>-->
+				<!--<th data-options="field:'wan_liu',width:80">万柳</th>-->
+
+
+			</tr>
+		</thead>
+	</table>
+</body>
+</html>
