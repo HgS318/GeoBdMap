@@ -7,34 +7,50 @@ var posadd = {
     post_overlays:[],
     area_overlays:[],
     ip_overlays:[],
-    city_polygons: {}
+    city_polygons: {},
+    addrs: [],
+    pointCollection: null
 
 };
 
-function extract_address() {
-    var address = $("#addrtext")[0].value;
-    posadd.geoCoder.getPoint(address, function(point){
+function geocodeSearch(addr, index){
+    if(index < posadd.addrs.length){
+        setTimeout(window.bdGEO, 400);
+    }
+    posadd.geoCoder.getPoint(addr, function(point){
         if (point) {
-            // document.getElementById("result").innerHTML +=  index + " " + add + ":" + point.lng + "," + point.lat + "</br>";
             var bp = new BMap.Point(point.lng, point.lat);
             var marker = new BMap.Marker(bp);
             marker.spaType = 1;
             addOverlayAndWin(marker, {
                 "name": "地名/地址",
-                "text":address,
+                "text": addr,
                 "winwidth": 200
             }, null, posadd.addr_overlays);
             map.centerAndZoom(bp, 16);
-            // addMarker(address, new BMap.Label(index+":"+add,{offset:new BMap.Size(20,-10)}));
         }
         else{
-            alert("暂无法定位，请检查输入");
+            document.getElementById("result").innerHTML +=  index + " " + addr + ":  " + "无法精确定位" + "</br>";
+            alert("暂无法定位" + addr + "，请检查输入");
         }
     });
 }
 
+function extract_address() {
+    var addrStr = $("#addrtext")[0].value;
+    var addrs = addrStr.split('\n');
+    for(var i = 0; i < addrs.length; i++) {
+        var address = addrs[i];
+        geocodeSearch(address, i);
+    }
+}
+
 function extract_coords() {
     var coordStr = $("#coordtext")[0].value;
+    if(coordStr.indexOf("http") > -1) {
+        setTimeout(showMassPoints, 800);
+        return;
+    }
     var xyStr = coordStr.split(',');
     if(xyStr.length != 2) {
         alert("暂无法定位，请检查输入");
@@ -43,12 +59,7 @@ function extract_coords() {
     try {
         var x = parseFloat(xyStr[0]);
         var y = parseFloat(xyStr[1]);
-        // var obj = document.getElementById("coordtext"); //定位id
-        // var index = obj.selectedIndex; // 选中索引
-        // var text = obj.options[index].text; // 选中文本
-        // var value = obj.options[index].value; // 选中值
         var text = $('#coordSys option:selected').text();//选中的文本
-
         var bp = new BMap.Point(x, y);
         var marker = new BMap.Marker(bp);
         marker.spaType = 1;
@@ -59,10 +70,48 @@ function extract_coords() {
         }, null, posadd.coord_overlays);
         map.centerAndZoom(bp, 16);
     } catch (e) {
-
         alert("暂无法定位，请检查输入");
     }
 
+}
+
+function showMassPoints() {
+    if(posadd.pointCollection != null) {
+        posadd.pointCollection.show();
+        return;
+    }
+    map.centerAndZoom(new BMap.Point(105.000, 38.000), 5);     // 初始化地图,设置中心点坐标和地图级别
+
+    if (document.createElement('canvas').getContext) {  // 判断当前浏览器是否支持绘制海量点
+        var points = [];  // 添加海量点数据
+        for (var i = 0; i < china_pois.length; i++) {
+            var poi = china_pois[i];
+            var bp = new BMap.Point(poi['wgsx'], poi['wgxy']);
+            bp.extData = poi;
+            points.push(bp);
+        }
+        var options = {
+            size: BMAP_POINT_SIZE_SMALL,
+            shape: BMAP_POINT_SHAPE_STAR,
+            color: '#d340c3'
+        };
+        var pointCollection = new BMap.PointCollection(points, options);  // 初始化PointCollection
+        posadd.pointCollection = pointCollection;
+        pointCollection.addEventListener('click', function (e) {
+            var info = JSON.stringify(e.point.extData);
+            alert(info);
+        });
+        map.addOverlay(pointCollection);  // 添加Overlay
+    } else {
+        alert('请在chrome、safari、IE8+以上浏览器查看海量点效果');
+    }
+}
+
+function hideMassPoints() {
+    if(posadd.pointCollection != null) {
+        posadd.pointCollection.hide();
+        return;
+    }
 }
 
 function extract_postcode() {

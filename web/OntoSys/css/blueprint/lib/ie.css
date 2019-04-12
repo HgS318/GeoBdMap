@@ -12,7 +12,7 @@ body        { }
 .container  { text-align: left; }
 
 
-/* This fixes the problem where IE6 adds an extra 3px margin to
+/* This fixes the problem where IE6 addrs an extra 3px margin to
    two columns that are floated up against each other. */
 
 * html .column { overflow-x: hidden; } /* IE6 fix */

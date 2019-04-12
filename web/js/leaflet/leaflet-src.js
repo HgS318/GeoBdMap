@@ -6501,7 +6501,7 @@ var Layer = Evented.extend({
  * Every layer should extend from `L.Layer` and (re-)implement the following methods.
  *
  * @method onAdd(map: Map): this
- * Should contain code that creates DOM elements for the layer, adds them to `map panes` where they should belong and puts listeners on relevant map events. Called on [`map.addLayer(layer)`](#map-addlayer).
+ * Should contain code that creates DOM elements for the layer, addrs them to `map panes` where they should belong and puts listeners on relevant map events. Called on [`map.addLayer(layer)`](#map-addlayer).
  *
  * @method onRemove(map: Map): this
  * Should contain all clean up code that removes the layer's elements from the DOM and removes listeners previously added in [`onAdd`](#layer-onadd). Called on [`map.removeLayer(layer)`](#map-removelayer).
@@ -8127,7 +8127,7 @@ var Polyline = Path.extend({
 	},
 
 	// @method addLatLng(latlng: LatLng, latlngs? LatLng[]): this
-	// Adds a given point to the polyline. By default, adds to the first ring of
+	// Adds a given point to the polyline. By default, addrs to the first ring of
 	// the polyline in case of a multi-polyline, but can be overridden by passing
 	// a specific ring as a LatLng array (that you can earlier access with [`getLatLngs`](#polyline-getlatlngs)).
 	addLatLng: function (latlng, latlngs) {

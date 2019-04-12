@@ -435,7 +435,7 @@ function showBoundMarkers(bmMarkers) {
         map.addOverlay(marker);
         marker.show();
     }
-    $("#toolbarBoundMarkers")[0].checked = true;
+    // $("#toolbarBoundMarkers")[0].checked = true;
 }
 
 //	产生新的点标注
@@ -512,7 +512,7 @@ function setResultItems(muldata, divname, clas) {
         }if(clas == "bound") {
             document.getElementById("boundintotal").innerText = "      路线：" + num +" 条记录";
         }if(clas == "boundmarker") {
-            document.getElementById("bmintotal").innerText = "      事件：" + num +" 条记录";
+            // document.getElementById("bmintotal").innerText = "      事件：" + num +" 条记录";
         }
     } else{
         document.getElementById("placeintotal").innerText = "      地点：" + num +" 条记录";
@@ -1143,10 +1143,15 @@ function distsCheckBox(checkbox) {
 
 //  行政界线 checkbox
 function boundsCheckBox(checkbox) {
+    // if (checkbox.checked) {
+    //     boundsShow();
+    // } else {
+    //     boundsHide();
+    // }
     if (checkbox.checked) {
-        boundsShow();
+        showMassPoints();
     } else {
-        boundsHide();
+        hideMassPoints();
     }
 }
 

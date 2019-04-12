@@ -50,6 +50,25 @@ function initGeoEntities() {
                         addOverlayAndWin(polygon, entity, content, geoEntities);
                     }
                 }
+                if((entity['shapes'] == null || entity['shapes'] == "") && (entity['position'] == null || entity['position'] == "")
+                   && (entity['line'] == null || entity['line'] == "") && (entity['polygon'] == null || entity['polygon'] == "")
+                    && entity['name'] != null && entity['name'] != undefined && entity['name'] != "") {
+                    var name = entity['name'];
+                    var bdary = new BMap.Boundary();
+                    bdary.get(name, function(rs){       //获取行政区域
+                        var count = rs.boundaries.length; //行政区域的点有多少个
+                        for(var i = 0; i < count; i++){
+                            console.log(rs.boundaries[i]);
+                            var distPolygon = new BMap.Polygon(rs.boundaries[i]);
+                            distPolygon.spaType = 5;
+                            addOverlayAndWin(distPolygon, entity, content, geoEntities);
+                        }
+                    });
+                    // var distPolygon = getDistBaiduPolygon(entity['name']);
+                    // distPolygon.spaType = 5;
+                    // addOverlayAndWin(distPolygon, entity, content, geoEntities);
+                }
+
 
             }
         },
@@ -58,6 +77,16 @@ function initGeoEntities() {
         }
     });
 
+}
+
+function getDistBaiduPolygon(name) {
+    var bdary = new BMap.Boundary();
+    bdary.get(name, function(rs){       //获取行政区域
+        var count = rs.boundaries.length; //行政区域的点有多少个
+        for(var i = 0; i < count; i++){
+            var ply = new BMap.Polygon(rs.boundaries[i]);
+        }
+    });
 }
 
 function showGeoEntities() {

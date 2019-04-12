@@ -76,6 +76,7 @@
 	<!--<script src="../../../js/bootstrap/js/bootstrap.js" type="text/javascript"></script>-->
 	<script src="js/plugins/right-menu/demo3.js"></script>
 	<script src="js/plugins/right-menu/context.js"></script>
+	<script type="text/javascript" src="data/geo/ChinaPOI_mod600.js"></script>
     
 </head>
 <body class="easyui-layout">
@@ -127,10 +128,10 @@
 								</h3>
 								<textarea id="addrtext" rows="4" cols="32"></textarea>
 								<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<!--<input type="file" id="addrfile" name="uploadFile" accept="text/plain"-->
-										   <!--onchange="openFile(event, 'addrtext')" />-->
+									<input type="file" id="addrfile" name="uploadFile" accept="text/plain"
+										   onchange="openFile(event, 'addrtext')" />
 								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="button" value="显示地名/地址" class="srhbtn" onclick="extract_address()">
+									<input type="button" value="接入地名/地址" class="srhbtn" onclick="extract_address()">
 									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="button" value="清除" class="srhbtn" onclick="clear_address()">
 								</p>
@@ -142,7 +143,8 @@
 									<!--&nbsp;&nbsp;&nbsp;&nbsp;<input type="file" id="coordfile" name="uploadFile" accept="text/plain"-->
 									<!--onchange="openFile(event, 'addrtext')" />-->
 								</h3>
-								<form method="post" action="/GeoBdMap/UploadShpServlet.do1" enctype="multipart/form-data">
+								<!--<form method="post" action="/GeoBdMap/UploadShpServlet.do1" enctype="multipart/form-data">-->
+								<form>
 									<!--<textarea id="coordtext" rows="4" cols="35"></textarea>-->
 									<p>输入坐标：<input id="coordtext" class="innerWord"/></p>
 									<p>坐标系：<select id="coordSys">
@@ -155,7 +157,8 @@
 											   onchange="openFileName(event, 'coordtext')" /></p>
 
 									<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-										<input type="submit" value="显示坐标位置" class="srhbtn" onclick="extract_coords()">
+										<!--<input type="submit" value="接入坐标位置" class="srhbtn" onclick="extract_coords()">-->
+										<input type="button" value="接入坐标位置" class="srhbtn" onclick="extract_coords()">
 										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										<input type="button" value="清除" class="srhbtn" onclick="clear_coords()">
 									</p>
@@ -169,8 +172,9 @@
 								</h3>
 								<!--<textarea id="coordtext" rows="4" cols="35"></textarea>-->
 								<p>输入邮编：<input id="posttext" class="innerWord"/></p>
+								<p>相关信息：<input id="postAbouttext" class="innerWord"/></p>
 								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="button" value="显示邮编范围" class="srhbtn" onclick="extract_postcode()">
+									<input type="button" value="接入邮编位置" class="srhbtn" onclick="extract_postcode()">
 									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="button" value="清除" class="srhbtn" onclick="clear_postcode()">
 								</p>
@@ -183,10 +187,10 @@
 								</h3>
 								<textarea id="phonetext" rows="3" cols="32"></textarea>
 								<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<!--<input type="file" id="phonefile" name="uploadFile" accept="text/plain"-->
-										   <!--onchange="openFile(event, 'phonetext')" />-->
+									<input type="file" id="phonefile" name="uploadFile" accept="text/plain"
+										   onchange="openFile(event, 'phonetext')" />
 								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="button" value="号码归属地" class="srhbtn" onclick="extract_phone_number()">
+									<input type="button" value="接入固话位置" class="srhbtn" onclick="extract_phone_number()">
 									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="button" value="清除" class="srhbtn" onclick="clear_phone_number()">
 								</p>
@@ -199,10 +203,10 @@
 								</h3>
 								<textarea id="iptext" rows="3" cols="32"></textarea>
 								<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<!--<input type="file" id="ipfile" name="uploadFile" accept="text/plain"-->
-										   <!--onchange="openFile(event, 'iptext')" />-->
+									<input type="file" id="ipfile" name="uploadFile" accept="text/plain"
+										   onchange="openFile(event, 'iptext')" />
 								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="button" value="IP归属地" class="srhbtn" onclick="extract_ip()">
+									<input type="button" value="接入IP位置" class="srhbtn" onclick="extract_ip()">
 									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="button" value="清除" class="srhbtn" onclick="clear_ip()">
 								</p>
@@ -284,14 +288,14 @@
 				</div>
 			</div>
 
-			<div id="listTab" title="用户分析" data-options="iconCls:'icon-search'">
+			<div id="listTab" title="地名消岐" data-options="iconCls:'icon-search'">
 				<br/>
 				<div id="searchDiv" class="searchDiv">
 					<div id="ClassCheckbox1" class="ClassCheckbox">
 						<div id="highsearch">
 							<div id="mapextent" class="nextTab" >
 								<h3>&nbsp; 用户属性分析 / 地名消歧 等</h3>
-								<p>建设中，详情请见：...</p>
+								<p>子功能集成中，详情请见：...</p>
 							</div>
 						</div>
 					</div>
@@ -319,10 +323,10 @@
 							<!--<p id="numcomu" style="text-align: center" onclick="toPlaceRes()">社区数：</p>-->
 							<!--<p id="subcom" style="text-align: center" onclick="toPlaceRes()">下属村、居委会：</p>-->
 						<!--</div>-->
-						<p id="placeintotal" style="text-align: center" onclick="toPlaceRes()">地点：0条记录</p>
+						<p id="placeintotal" style="text-align: center" onclick="toPlaceRes()">位置信息：0条记录</p>
 						<p id="distintotal" style="text-align: center" onclick="toDistRes()">区域：0条记录</p>
-						<p id="boundintotal" style="text-align: center" onclick="toBoundRes()">路线：0条记录</p>
-						<p id="bmintotal" style="text-align: center" onclick="toBmRes()">事件：0条记录</p>
+						<p id="boundintotal" style="text-align: center" onclick="toBoundRes()">海量点：0条记录</p>
+						<!--<p id="bmintotal" style="text-align: center" onclick="toBmRes()">事件：0条记录</p>-->
 
 						<br/>
 						<p style="text-align: center">
@@ -330,7 +334,7 @@
 								查询结果详情</button></p>
 					</div>
 
-					<div title="地点" id="placeresultsdiv" >
+					<div title="位置信息" id="placeresultsdiv" >
 						<div id="placeresults"></div>
 						<div id="hm_Paginate_places"></div>
 					</div>
@@ -340,7 +344,7 @@
 						<div id="hm_Paginate_dists"></div>
 					</div>
 
-					<div title="路线" id="boundresultsdiv">
+					<div title="海量点" id="boundresultsdiv">
 						<div id="boundresults"></div>
 						<div id="hm_Paginate_bounds"></div>
 					</div>
@@ -356,7 +360,7 @@
 
 			</div>
 
-			<div id="manageTab" title="功能列表" data-options="iconCls:'icon-man'">
+			<div id="manageTab" title="用户分析" data-options="iconCls:'icon-man'">
 
 				<div id="manageDiv" class="searchDiv">
 
@@ -412,10 +416,10 @@
         
         <div id="mapContainer" style="width:100%; height: 100%"></div>
 		<div class='button-group' style="background-color: #0d9bf2;right: 20px">
-			<input type="checkbox" id="toolbarPlaces" checked onclick="placesCheckBox(this)"/>地点
+			<input type="checkbox" id="toolbarPlaces" checked onclick="placesCheckBox(this)"/>位置信息
 			<input type="checkbox" id="toolbarDists" checked onclick="distsCheckBox(this)"/>区域
-			<input type="checkbox" id="toolbarBounds" checked onclick="boundsCheckBox(this)"/>路线
-			<input type="checkbox" id="toolbarBoundMarkers" checked onclick="boundMarksCheckBox(this)"/>事件
+			<input type="checkbox" id="toolbarBounds" onclick="boundsCheckBox(this)"/>海量点
+			<!--<input type="checkbox" id="toolbarBoundMarkers" checked onclick="boundMarksCheckBox(this)"/>事件-->
 			<!--<input type="checkbox" id="overview" disabled/>鹰眼-->
 			<!--<input type="checkbox" id="overviewOpen" disabled />展开鹰眼-->
 		</div>
