@@ -86,12 +86,14 @@ function fuse_simple(first) {
 	showPageBtns();
 }
 
-function split_simple() {
+function split_simple(first) {
 	openWin(win1);
 	openWin(win2);
 	// openWin(win3);
-	closeWin(win3);
-	hidePageButns();
+	if(first) {
+		closeWin(win3);
+		hidePageButns();
+	}
 }
 
 function initWindows() {
@@ -239,10 +241,10 @@ function openMenu(){
 							easeParams:[1.1,0.12]
 						});
 						if(inited) {
-							split_simple();
+							split_simple(false);
 						} else {
 							initPages();
-							split_simple();
+							split_simple(true);
 						}
 					}
 				})

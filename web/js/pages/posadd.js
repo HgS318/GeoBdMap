@@ -110,7 +110,8 @@ function clear_posadds() {
 }
 
 function gotoProtocolCases() {
-    
+    var url1 = "http://localhost:8081/GeoBdMap/fuse/fuse1.html?seq=0&h1=上确共位叠加&h2=路段与道路&top1=富民路 路段1&top2=富民路 路段2&top3=叠加后的 富民路 路段&page1=html2/BMapFuse02.html?id=1&page2=html2/BMapFuse02.html?id=2&page3=html2/BMapFuse02.html?id=3";
+    window.open(url1);
 }
 
 function doSearchAll() {
@@ -189,7 +190,7 @@ function getObjectURL(file) {
 
 function showAreacode(areacode) {
     $.ajax({
-        url: 'getCoordsByAreacode?areacode=' + areacode,
+        url: 'getCoordsByAreacode.action?areacode=' + areacode,
         type: 'get',
         dataType: 'json',
         success: function (dist) {
@@ -208,7 +209,7 @@ function showAreacode(areacode) {
 
 function showIpArea(ip) {
     $.ajax({
-        url: 'getCoordsByIP?ip=' + ip,
+        url: 'getCoordsByIP.action?ip=' + ip,
         type: 'get',
         dataType: 'json',
         success: function (dist) {
@@ -229,7 +230,7 @@ function showIpArea(ip) {
 function showPostcode(postcode) {
 
     $.ajax({
-        url: 'getPolygonByPostcode?postcode=' + postcode,
+        url: 'getPolygonByPostcode.action?postcode=' + postcode,
         type: 'get',
         dataType: 'json',
         success: function (data) {
@@ -281,7 +282,7 @@ function showPostcode(postcode) {
 
 function showPostcodeDistrict(postcode) {
     $.ajax({
-        url: 'getDistrictsByPostcode?postcode=' + postcode,
+        url: 'getDistrictsByPostcode.action?postcode=' + postcode,
         type: 'get',
         dataType: 'json',
         success: function (dists) {
@@ -310,7 +311,7 @@ function getShape(province, city, district, key, value) {
         return;
     }
     $.ajax({
-        url: 'getShape?province=' + province + '&city=' + city + '&district=' + district,
+        url: 'getShape.action?province=' + province + '&city=' + city + '&district=' + district,
         type: 'get',
         dataType: 'json',
         success: function (shp_data) {

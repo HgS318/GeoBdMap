@@ -8,7 +8,7 @@ function initGeoEntities() {
 
     $.ajax({
 //                url:"getAllSynData.action",
-        url:"getAllGeoEntities",
+        url:"getAllGeoEntities.action",
 //                url:"http://localhost:8081/GeoBdMap/getAllGeoEntities",
         type: 'get',
         dataType: 'json',
