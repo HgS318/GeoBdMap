@@ -91,6 +91,7 @@ function fuse_simple(first) {
 	}
 	openWin(win3);
 	openWin(tb3);
+	showPageBtns();
 }
 
 function split_simple() {
@@ -101,6 +102,7 @@ function split_simple() {
 	// openWin(win3);
 	closeWin(win3);
 	closeWin(tb3);
+	hidePageButns();
 }
 
 function initWindows() {

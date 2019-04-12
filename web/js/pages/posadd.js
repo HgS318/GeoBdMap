@@ -318,8 +318,7 @@ function getShape(province, city, district, key, value) {
             var lineArr = JSON.parse(shape);
             var pointArr = [];
             for(var i = 0; i < lineArr.length; i++) {
-                var [_x, _y] = lineArr[i];
-                var bp = new BMap.Point(_x, _y);
+                var bp = new BMap.Point(lineArr[i][0], lineArr[i][1]);
                 pointArr.push(bp);
             }
             var polygon = new BMap.Polygon(pointArr, {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
@@ -359,21 +358,21 @@ function getShape(province, city, district, key, value) {
             polygon.name = city;
             posadd.city_polygons[city] = polygon;
             addOverlayAndWin(polygon, extData, null, list);
-            gotoPolyOverlay(polygon);
-            // map.addOverlay(polygon);
-            // var _point = pointArr[0];
-            // map.centerAndZoom(_point, 9);
+            gotoPolyOverlay(polygon, 9);
         }, error: function (err) {
             console.log(err);
         }
     });
 }
 
-function gotoPolyOverlay(overlay) {
+function gotoPolyOverlay(overlay, scale) {
     var path = overlay.getPath();
     if(path.length > 0) {
         var bPoint = path[0];
-        map.centerAndZoom(bPoint, 10);
+        if(scale === undefined || scale == null) {
+            scale = 9;
+        }
+        map.centerAndZoom(bPoint, scale);
     }
 }
 

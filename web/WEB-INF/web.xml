@@ -15,7 +15,7 @@
     </filter-mapping>
 
     <welcome-file-list>
-        <welcome-file>wiki-map_v4.html</welcome-file>
-        <!--<welcome-file>instance.html</welcome-file>-->
+        <!--<welcome-file>wiki-map_v4.html</welcome-file>-->
+        <welcome-file>instance-bd.html</welcome-file>
     </welcome-file-list>
 </web-app>
