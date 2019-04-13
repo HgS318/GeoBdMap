@@ -47,7 +47,8 @@
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=n3xc9ALenVeuL9apmqs4ZjrluhhsX4mr"></script>
     <!--<script type="text/javascript" src="http://lbsyun.baidu.com/jsdemo/data/points-sample-data.js"></script>-->
     <!--<script type="text/javascript" src="../data/geo/ChinaPOI_mod300_1.js"></script>-->
-    <script type="text/javascript" src="../data/geo/ChinaPOI_mod600.js"></script>
+    <!--<script type="text/javascript" src="../data/geo/ChinaPOI_mod600.js"></script>-->
+    <script type="text/javascript" src="../data/geo/TDMapPOI_mod900.js"></script>
 </head>
 <body>
 <div id="map"></div>
@@ -59,7 +60,8 @@
         var points = [];  // 添加海量点数据
         for (var i = 0; i < china_pois.length; i++) {
             var poi = china_pois[i];
-            points.push(new BMap.Point(poi['wgsx'], poi['wgxy']));
+//            points.push(new BMap.Point(poi['wgsx'], poi['wgxy']));
+            points.push(new BMap.Point(poi['lon'], poi['lat']));
         }
         var options = {
             size: BMAP_POINT_SIZE_SMALL,

@@ -1,6 +1,3 @@
-// 创建Map实例
-
-// map.enableScrollWheelZoom(true);
 
 var geoEntities = [];
 
@@ -68,9 +65,9 @@ function initGeoEntities() {
                     // distPolygon.spaType = 5;
                     // addOverlayAndWin(distPolygon, entity, content, geoEntities);
                 }
-
-
             }
+            setResultItems(geoEntities, "placeresults", "entity");
+            $("#placeintotal")[0].innerHTML = "位置信息：" + geoEntities.length + "条记录";
         },
         error: function (err_data) {
             console.log(err_data);
@@ -103,13 +100,17 @@ function hideGeoEntities() {
 
 function createContent(entity) {
     // var content = '<br style="margin:0;line-height:10px;padding:2px;">';
-    var content = '';
+    var content = "";
     if(entity.address != null && entity.address != undefined) {
-        content += '地址：' + entity.address + '<br/>';
+        content += '地址：' + entity.address + '<br/><br/>';
+    }
+    if(entity['infoAmount'] != null && entity['infoAmount'] != undefined && entity['infoAmount']['figureLength']
+            != null && entity['infoAmount']['figureLength'] != undefined) {
+        content += '<strong>图形</strong>： (信息量: ' + entity['infoAmount']['figureLength'] + ' 字节)<br/>';
     }
     if(entity['text'] != null) {
         if(entity.infoAmount != undefined && entity.infoAmount != null) {
-            content += '<br/><strong>文字</strong>： (信息量: ' + entity['infoAmount']['textLenth'] + ' 字节)<br/>';
+            content += '<br/><strong>文本</strong>： (信息量: ' + entity['infoAmount']['textLenth'] + ' 字节)<br/>';
             for (var j = 0; j < entity['text'].length; j++) {
                 var content_text = entity['text'][j];
                 if (content_text.length > 45) {
@@ -196,7 +197,7 @@ function createContent(entity) {
 function addOverlayAndWin(overlay, data, content, list) {
     overlay.name = data['name'];
     overlay.extData = data;
-    if(content === undefined) {
+    if(content === undefined || content === null) {
         content = createContent(data);
     }
     addClickHandler(overlay, content);
@@ -212,36 +213,24 @@ function addClickHandler(overlay, content){
     );
 }
 
-// function openInfoWin(content, e){
-//     var overlay = e.target;
-//     var point;
-//     if(overlay.spaType == 1) {
-//         point = new BMap.Point(overlay.getPosition().lng, overlay.getPosition().lat);
-//     } else if (overlay.spaType == 5) {
-//         var first_point = overlay.getPath()[0];
-//         point = new BMap.Point(first_point.lng, first_point.lat);
-//     }
-//     var infoWindow = new BMap.InfoWindow(content, {
-//         width : 150,     // 信息窗口宽度
-//         // height: 50,     // 信息窗口高度
-//         title : overlay['title'] , // 信息窗口标题
-//         enableMessage:true//设置允许信息窗发送短息
-//     });
-//     map.openInfoWindow(infoWindow, point); //开启信息窗口
-// }
-
-function openInfoWin(e, content, title, width){
-    var overlay = e.target;
-    var point;
+function getOnePointOfOverlay(overlay) {
+    var point = null;
     if(overlay.spaType == 1) {
         point = new BMap.Point(overlay.getPosition().lng, overlay.getPosition().lat);
     } else if (overlay.spaType == 3 || overlay.spaType == 5) {
         var first_point = overlay.getPath()[0];
         point = new BMap.Point(first_point.lng, first_point.lat);
-    } else {
+    }
+    return point;
+}
+
+function openInfoWin(e, content, title, width) {
+    var overlay = e.target;
+    var point = getOnePointOfOverlay(overlay);
+    if(point == null) {
         point = new BMap.Point(e.x, e.y);
     }
-    if(width === undefined) {
+    if(width === undefined || width == null) {
         if(overlay.extData != undefined && overlay.extData.winwidth != undefined) {
             width = overlay.extData.winwidth;
         } else {

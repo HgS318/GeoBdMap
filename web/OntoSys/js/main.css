@@ -194,6 +194,11 @@ div.tabContainer{
     font-size: 12pt;
 	
 }
+ .searchDiv h1{
+     /*color: #4357CA;*/
+     font-family: 'Microsoft YaHei';
+     font-size: 14pt;
+ }
 .searchDiv h2{
 	color: #4357CA;
 	font-family: 'Microsoft YaHei';

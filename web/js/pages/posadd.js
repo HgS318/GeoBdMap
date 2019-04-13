@@ -5,13 +5,117 @@ var posadd = {
     addr_overlays :[],
     coord_overlays: [],
     post_overlays:[],
-    area_overlays:[],
+    phone_overlays:[],
     ip_overlays:[],
     city_polygons: {},
     addrs: [],
-    pointCollection: null
+    pointCollection: null,
+    mapvpDataset: null
 
 };
+var mapvpLayer = null;
+
+function showMassPoints() {
+    showPointCollection();
+    // showMapvpLayer();
+}
+
+function showPointCollection() {
+    if(posadd.pointCollection != null) {
+        posadd.pointCollection.show();
+        return;
+    }
+
+    // map.centerAndZoom(new BMap.Point(105.000, 38.000), 5);
+    map.centerAndZoom(new BMap.Point(105.000, 38.000), 5);  //  全国
+    map.centerAndZoom(new BMap.Point(114.26150872132702,30.544557867767217), 10);   //  武汉
+
+    if (document.createElement('canvas').getContext) {  // 判断当前浏览器是否支持绘制海量点
+        var points = [];  // 添加海量点数据
+        for (var i = 0; i < china_pois.length; i++) {
+            var poi = china_pois[i];
+            // var bp = new BMap.Point(poi['wgsx'], poi['wgxy']);  //  武汉
+            var bp = new BMap.Point(poi[0], poi[1]);    //  全国示例
+            bp.extData = poi;
+            bp.spaType = 1;
+            points.push(bp);
+        }
+        var options = {
+            size: BMAP_POINT_SIZE_SMALL,
+            shape: BMAP_POINT_SHAPE_STAR,
+            color: '#d340c3'
+        };
+        var pointCollection = new BMap.PointCollection(points, options);  // 初始化PointCollection
+        posadd.pointCollection = pointCollection;
+        pointCollection.addEventListener('click', function (e) {
+            // var info = JSON.stringify(e.point.extData);
+            // alert(info);
+            var extData = e.point.extData;
+            var width = 230;
+            var title = extData.name + '<span style="font-size:11px;color:#F00;">&nbsp;&nbsp;' + extData['type2'] + '</span>';
+            var content = "类型：" + extData.type2 + "<br/>" +"地址：" + extData.addr + "<br/>" +
+                "经度：" + extData['wgsx'] + "<br/>" + "纬度：" + extData['wgxy'];
+            openInfoWin({'x':extData['wgsx'], 'y': extData['wgxy'], 'target': {'spaType': -1}}, content, title, width);
+        });
+        map.addOverlay(pointCollection);  // 添加Overlay
+        $("#boundintotal")[0].innerHTML = "海量点：" + china_pois.length + "条记录";
+
+    } else {
+        alert('请在chrome、safari、IE8+以上浏览器查看海量点效果');
+    }
+}
+
+function showMapvpLayer() {
+
+    if(mapvpLayer != null) {
+        mapvpLayer.show();
+        return;
+    }
+    var dataset_path = "download/mapv/examples/data/Beijing_37w.csv";
+//        var dataset_path = "data/ShanghaiPOI_coords.csv";
+//        $.get('data/nyc-taxi.csv', function(csvstr) {
+    $.get(dataset_path, function(csvstr) {
+
+        map.centerAndZoom(new BMap.Point(116.402544,39.919583), 11);
+        var options = {
+            size: 1.5,
+            context: 'webgl',
+            fillStyle: 'rgba(250, 50, 50, 0.6)',
+            draw: 'simple'
+        };
+        var dataSet = mapv.csv.getDataSet(csvstr);
+        dataSet.initGeometry();
+        mapvpLayer = new mapv.baiduMapLayer(map, dataSet, options);
+
+        $("#boundintotal")[0].innerHTML = "海量点：" + dataSet.length + "条记录";
+    });
+}
+
+function showPosAdds() {
+    show_address();
+    show_coords();
+    show_postcode();
+    show_phone_number();
+    show_ip();
+    showRelposOverlays();
+}
+
+function hidePosAdds() {
+    clear_address();
+    clear_coords();
+    clear_postcode();
+    clear_phone_number();
+    clear_ip();
+    hideRelposOverlays();
+}
+
+
+function hideMassPoints() {
+    if(posadd.pointCollection != null) {
+        posadd.pointCollection.hide();
+        return;
+    }
+}
 
 function geocodeSearch(addr, index){
     if(index < posadd.addrs.length){
@@ -65,7 +169,7 @@ function extract_coords() {
         marker.spaType = 1;
         addOverlayAndWin(marker, {
             "name": "坐标",
-            "text":text,
+            "texts": [coordStr, "坐标系统: " + text],
             "winwidth": 150
         }, null, posadd.coord_overlays);
         map.centerAndZoom(bp, 16);
@@ -73,45 +177,6 @@ function extract_coords() {
         alert("暂无法定位，请检查输入");
     }
 
-}
-
-function showMassPoints() {
-    if(posadd.pointCollection != null) {
-        posadd.pointCollection.show();
-        return;
-    }
-    map.centerAndZoom(new BMap.Point(105.000, 38.000), 5);     // 初始化地图,设置中心点坐标和地图级别
-
-    if (document.createElement('canvas').getContext) {  // 判断当前浏览器是否支持绘制海量点
-        var points = [];  // 添加海量点数据
-        for (var i = 0; i < china_pois.length; i++) {
-            var poi = china_pois[i];
-            var bp = new BMap.Point(poi['wgsx'], poi['wgxy']);
-            bp.extData = poi;
-            points.push(bp);
-        }
-        var options = {
-            size: BMAP_POINT_SIZE_SMALL,
-            shape: BMAP_POINT_SHAPE_STAR,
-            color: '#d340c3'
-        };
-        var pointCollection = new BMap.PointCollection(points, options);  // 初始化PointCollection
-        posadd.pointCollection = pointCollection;
-        pointCollection.addEventListener('click', function (e) {
-            var info = JSON.stringify(e.point.extData);
-            alert(info);
-        });
-        map.addOverlay(pointCollection);  // 添加Overlay
-    } else {
-        alert('请在chrome、safari、IE8+以上浏览器查看海量点效果');
-    }
-}
-
-function hideMassPoints() {
-    if(posadd.pointCollection != null) {
-        posadd.pointCollection.hide();
-        return;
-    }
 }
 
 function extract_postcode() {
@@ -135,32 +200,79 @@ function extract_ip() {
 }
 
 function clear_address() {
-
+    for(var i = 0; i < posadd.addr_overlays; i++) {
+        posadd.addr_overlays[i].hide();
+    }
 }
 
 function clear_coords() {
-
+    for(var i = 0; i < posadd.coord_overlays; i++) {
+        posadd.coord_overlays[i].hide();
+    }
 }
 
 function clear_postcode() {
-
+    for(var i = 0; i < posadd.post_overlays; i++) {
+        posadd.post_overlays[i].hide();
+    }
 }
 
 function clear_phone_number() {
-
+    for(var i = 0; i < posadd.phone_overlays; i++) {
+        posadd.phone_overlays[i].hide();
+    }
 }
 
 function clear_ip() {
-
+    for(var i = 0; i < posadd.ip_overlays; i++) {
+        posadd.ip_overlays[i].hide();
+    }
 }
 
 function clear_posadds() {
-    
+    clear_address();
+    clear_coords();
+    clear_postcode();
+    clear_phone_number();
+    clear_ip();
 }
 
-function gotoProtocolCases() {
-    var url1 = "http://localhost:8081/GeoBdMap/fuse/fuse1.html?seq=0&h1=上确共位叠加&h2=路段与道路&top1=富民路 路段1&top2=富民路 路段2&top3=叠加后的 富民路 路段&page1=html2/BMapFuse02.html?id=1&page2=html2/BMapFuse02.html?id=2&page3=html2/BMapFuse02.html?id=3";
-    window.open(url1);
+function show_address() {
+    for(var i = 0; i < posadd.addr_overlays; i++) {
+        posadd.addr_overlays[i].show();
+    }
+}
+
+function show_coords() {
+    for(var i = 0; i < posadd.coord_overlays; i++) {
+        posadd.coord_overlays[i].show();
+    }
+}
+
+function show_postcode() {
+    for(var i = 0; i < posadd.post_overlays; i++) {
+        posadd.post_overlays[i].show();
+    }
+}
+
+function show_phone_number() {
+    for(var i = 0; i < posadd.phone_overlays; i++) {
+        posadd.phone_overlays[i].show();
+    }
+}
+
+function show_ip() {
+    for(var i = 0; i < posadd.ip_overlays; i++) {
+        posadd.ip_overlays[i].show();
+    }
+}
+
+function gotoProtocolCases(seq) {
+    if(seq === undefined || seq === null) {
+        seq = 0;
+    }
+    var url = "fuse/" + sequences[seq];
+    window.open(url);
 }
 
 function doSearchAll() {
@@ -392,7 +504,7 @@ function getShape(province, city, district, key, value) {
                 list = posadd.post_overlays;
             } else if(key == "areacode") {
                 texts = ["区号: " + value, disText];
-                list = posadd.area_overlays;
+                list = posadd.phone_overlays;
             } else if(key == "ip") {
                 texts = ["IP: " + value, disText];
                 list = posadd.ip_overlays;
