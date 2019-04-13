@@ -127,11 +127,20 @@ function createContent(entity) {
         // content += "<strong>文字</strong>";
         for(var j = 0; j < entity['texts'].length; j++) {
             var text = entity['texts'][j];
-            if(text.length > 60) {
-                text = text.substring(0, 60) + '...';
+            if(text.length > 48) {
+                text = text.substring(0, 45) + '...';
             }
             content += "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
         }
+    }
+    if(entity['flashes'] != null && entity['flashes'].length > 0) {
+        content += '<br/><strong>动画</strong>： (信息量: ' + entity['infoAmount']['flashLength'] + ' 秒)<br/>';
+        for (var j = 0; j < entity['flashes'].length; j++) {
+            var flash_path = entity['flashes'][j];
+            content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + flash_path + '' +
+            ' onclick="openWindowY(this, \'flash\', \'' + flash_path + '\')">动画' + (j + 1) + '</a>');
+        }
+        content += '<br/>';
     }
     if(entity['images'] != null && entity['images'].length > 0) {
         content += '<br/><strong>图像</strong>： (信息量: ' + entity['infoAmount']['imageLength'] + ' 字节)<br/>';
@@ -165,15 +174,7 @@ function createContent(entity) {
         }
         content += '<br/>';
     }
-    if(entity['flashes'] != null && entity['flashes'].length > 0) {
-        content += '<br/><strong>动画</strong>： (信息量: ' + entity['infoAmount']['flashLength'] + ' 秒)<br/>';
-        for (var j = 0; j < entity['flashes'].length; j++) {
-            var flash_path = entity['flashes'][j];
-            content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + flash_path + '' +
-            ' onclick="openWindowY(this, \'flash\', \'' + flash_path + '\')">动画' + (j + 1) + '</a>');
-        }
-        content += '<br/>';
-    }
+
     if(entity['models'] != null && entity['models'].length > 0) {
         content += '<br/><strong>模型</strong>： (信息量: ' + entity['infoAmount']['modelLength'] + ' 字节)<br/>';
         for (var j = 0; j < entity['models'].length; j++) {
