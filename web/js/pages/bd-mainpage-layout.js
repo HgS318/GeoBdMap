@@ -506,9 +506,18 @@ function toChooseGrade(checkbox) {
 //	对否要选择所在地区
 function toChooseDist(checkbox) {
 	if(checkbox.checked) {
-		$("#distscheckboxes").show();
+		$("#distscheckboxes2").show();
 	} else {
-		$("#distscheckboxes").hide();
+		$("#distscheckboxes2").hide();
+	}
+}
+
+//	对否要选择所在地区
+function toChooseTence(checkbox) {
+	if(checkbox.checked) {
+		$("#choosetense").show();
+	} else {
+		$("#choosetense").hide();
 	}
 }
 
@@ -530,12 +539,21 @@ function toChooseTime(checkbox) {
 	}
 }
 
-//	是否要选择时间
+//	是否要选择时态叠加
 function toChooseTime2(checkbox) {
 	if(checkbox.checked) {
-		$("#choosetimeitmes2").show();
+		$("#choosetense").show();
 	} else {
-		$("#choosetimeitmes2").hide();
+		$("#choosetense").hide();
+	}
+}
+
+//	是否要选择共位叠加
+function toChooseColo(checkbox) {
+	if(checkbox.checked) {
+		$("#chooseColo").show();
+	} else {
+		$("#chooseColo").hide();
 	}
 }
 
@@ -628,19 +646,19 @@ function toResStat() {
 //	右侧显示地名结果
 function toPlaceRes() {
 	$("#eastTabsDiv").tabs("select", "信息列表");
-	$("#resultsdiv").accordion("select", "地点");
+	$("#resultsdiv").accordion("select", 1);
 }
 
 //	右侧显示政区结果
 function toDistRes() {
 	$("#eastTabsDiv").tabs("select", "信息列表");
-	$("#resultsdiv").accordion("select", "区域");
+	$("#resultsdiv").accordion("select", 2);
 }
 
 //	右侧显示行政界线结果
 function toBoundRes() {
 	$("#eastTabsDiv").tabs("select", "信息列表");
-	$("#resultsdiv").accordion("select", "路线");
+	$("#resultsdiv").accordion("select", 3);
 }
 
 //	右侧显示界桩结果
@@ -829,4 +847,18 @@ function openResultWindow() {
 		"    " + $("#bmintotal")[0].innerText + "<br/>");
 	// document.cookie = "basicinfo="+basicinfo;
 	window.open("download/examplepage/easyui/basic.html");
+}
+
+function generateUUID() {
+	var d = new Date().getTime();
+	var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		var r = (d + Math.random()*16)%16 | 0;
+		d = Math.floor(d/16);
+		return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+	});
+	return uuid;
+}
+
+function myTrim(x) {
+    return x.replace(/^\s+|\s+$/gm,'');
 }

@@ -76,7 +76,8 @@
     map.centerAndZoom(_point, 4);
     map.enableScrollWheelZoom(true);
     $.ajax({
-        url: 'readchina_00.action',
+//        url: 'readchina_00.action',
+        url: '../../download/jquery-easyui-1.7.0/demo/datagrid/air_jsons/readchina_00.json',
         type: 'get',
         dataType: 'json',
         success: function (dataArr) {

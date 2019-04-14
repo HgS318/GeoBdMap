@@ -7411,7 +7411,7 @@
 				// Selector - node
 				if ( $.inArray( sel, nodes ) !== -1 ) {
 					return [ sel._DT_RowIndex ];// sel is a TR node that is in the table
-											// and DataTables adds a prop for fast lookup
+											// and DataTables addrs a prop for fast lookup
 				}
 			}
 	

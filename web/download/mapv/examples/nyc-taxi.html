@@ -61,7 +61,9 @@
         var map = new BMap.Map("map", {
             enableMapClick: false
         });    // 创建Map实例
-        map.centerAndZoom(new BMap.Point(121.25631249942352, 31.262593566467432), 12);  // 初始化地图,设置中心点坐标和地图级别
+//        map.centerAndZoom(new BMap.Point(121.25631249942352, 31.262593566467432), 12);  // 初始化地图,设置中心点坐标和地图级别
+//        map.centerAndZoom(new BMap.Point(114.26150872132702,30.544557867767217), 12);
+        map.centerAndZoom(new BMap.Point(116.402544,39.919583), 11);
         map.enableScrollWheelZoom(true); // 开启鼠标滚轮缩放
 
         /*
@@ -70,22 +72,24 @@
         });
         */
 
-        map.setMapStyle({
-            styleJson: [
-                {
-                    "featureType": "all",
-                    "elementType": "all",
-                    "stylers": {
-                        "lightness": 61,
-                        "saturation": -100
-                    }
-                }
-            ]
-        });
+//        map.setMapStyle({
+//            styleJson: [
+//                {
+//                    "featureType": "all",
+//                    "elementType": "all",
+//                    "stylers": {
+//                        "lightness": 61,
+//                        "saturation": -100
+//                    }
+//                }
+//            ]
+//        });
 
 //        var dataset_path = "data/nyc-taxi.csv";
 //        var dataset_path = "data/WuhanPOI_coords.csv";
-        var dataset_path = "data/ShanghaiPOI_coords.csv";
+//        var dataset_path = "data/Beijing_37w.csv";
+        var dataset_path = "data/BeijingPOI.csv";
+//        var dataset_path = "data/ShanghaiPOI_coords.csv";
 //        $.get('data/nyc-taxi.csv', function(csvstr) {
         $.get(dataset_path, function(csvstr) {
 
@@ -95,11 +99,8 @@
                 fillStyle: 'rgba(250, 50, 50, 0.8)',
                 draw: 'simple'
             };
-
             var dataSet = mapv.csv.getDataSet(csvstr);
             dataSet.initGeometry();
-
-
             <!-- map.centerAndZoom(new BMap.Point(dataSet._data[0].lng, dataSet._data[0].lat), 12); -->
 
             var mapvLayer = new mapv.baiduMapLayer(map, dataSet, options);

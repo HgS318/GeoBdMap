@@ -267,7 +267,7 @@ public class JsonAction03 {
                         double PM10_num = Double.parseDouble("".equals(context[6+l].toString())?"0.00":context[6+l].toString());
                         buf.append("{\"监测点名称\":" + "\"" + sites_name + "-1月" + k + "日\"" + "," + "\"城市\":" + "\"" + city + "\"" + ","
                                 + "\"经度\":" + lng_num + "," + "\"纬度\":" + lat_num + "," + "\"AQI\":" + AQI_num + "," + "\"PM2.5\":\"" + PM2_5_num + "\"," + "\"PM10\":" + PM10_num + " },");
-                        l += 3;
+//                        l += 3;
                         l += 3;
                         k++;
                     }

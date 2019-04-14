@@ -87,12 +87,12 @@ $(function() {
 
             placedata = places;
             showingPlaces = placedata;
-            initGeonames();
+            // initGeonames();
             setAutoComplete();
             setRightMenu();
-            initTrees(true);
-            initBounds(true);
-            initBoundMarkers(true);
+            // initTrees(true);
+            // initBounds(true);
+            // initBoundMarkers(true);
             if(admin) {
                 initTmpDists();
             }
@@ -435,7 +435,7 @@ function showBoundMarkers(bmMarkers) {
         map.addOverlay(marker);
         marker.show();
     }
-    $("#toolbarBoundMarkers")[0].checked = true;
+    // $("#toolbarBoundMarkers")[0].checked = true;
 }
 
 //	产生新的点标注
@@ -474,12 +474,14 @@ function setResultItems(muldata, divname, clas) {
                     str = consPlaceResult(data, i + 1);
                 } else if (clas == "dist") {
                     str = consDistResult(data, i + 1);
-                }
-                if (clas == "bound") {
+                } else if (clas == "bound") {
                     str = consBoundResult(data, i + 1);
-                }
-                if (clas == "boundmarker") {
+                }else if (clas == "boundmarker") {
                     str = consBoundMarkerResult(data, i + 1);
+                } else if(clas == "entity") {
+                    str = consGeoEntityResult(data, i + 1);
+                } else if(clas == "relpos") {
+                    str = consRelposResult(data, i + 1);
                 }
             } else {
                 str = consPlaceResult(data, i + 1);
@@ -512,7 +514,7 @@ function setResultItems(muldata, divname, clas) {
         }if(clas == "bound") {
             document.getElementById("boundintotal").innerText = "      路线：" + num +" 条记录";
         }if(clas == "boundmarker") {
-            document.getElementById("bmintotal").innerText = "      事件：" + num +" 条记录";
+            // document.getElementById("bmintotal").innerText = "      事件：" + num +" 条记录";
         }
     } else{
         document.getElementById("placeintotal").innerText = "      地点：" + num +" 条记录";
@@ -544,6 +546,25 @@ function consResultItem(clas, name, id, type, order, content){
 }
 
 //	产生右边结果栏的一条地点数据
+function consGeoEntityResult(entity, order) {
+    var content = '实体编号：' + entity['geid'];
+    var texts = entity['text'];
+    if(texts != null && texts != undefined && texts.length > 0) {
+        content = texts[0];
+        if(content.length > 36) {
+            content = content.substring(0, 34) + '...';
+        }
+    }
+    return consResultItem("entity" ,entity['name'], entity['geid'], '地理位置实体', order, content);
+}
+
+function consRelposResult(pos, order) {
+    var type = pos['rel'] == 0 ? '位置实体': '相对位置';
+    var content = pos['coords'].replace(/\[/g, '').replace(/\]/g, '');
+    return consResultItem("relpos" ,pos['addr'], pos['uuid'], type, order, content);
+}
+
+//	产生右边结果栏的一条信息数据
 function consPlaceResult(place, order) {
     return consResultItem("geoname" ,place.name, place.id, place['小类'], order,
         "区域代码：" + place.dist);
@@ -989,7 +1010,16 @@ function gotoOverlay(type, id) {
     } else if(type == "bm") {
         overlay = findOverlay(boundMarkers, id);
         center = overlay.getPosition();
-    } else {
+    } else if(type == "entity") {
+        overlay = findOverlay(geoEntities, id);
+        openInfoWin({target: overlay}, null, null, 225);
+        return;
+    } else if(type == "relpos") {
+        overlay = findOverlay(relpos.positions.concat(relpos.relPositions), id);
+        openInfoWin({target: overlay});
+        return;
+    }
+    else {
         overlay = findOverlay(showingMarkers, id);
         center = overlay.extData.spaType == 1 ?
             overlay.getPosition() : overlay.getBounds().getCenter();
@@ -1011,11 +1041,16 @@ function gotoOverlay(type, id) {
 function findOverlay(overlays, id) {
     for(var i = 0; i < overlays.length; i++) {
         var ov = overlays[i];
-        if(id == ov.extData['id'] || id == ov.extData['Id']) {
+        if(id == ov.extData['id'] || id == ov.extData['Id'] || id == ov.extData['geid']|| id == ov.extData['uuid']) {
             return ov;
         }
     }
-    return null;
+    try{
+        var ov = overlays[id];
+        return ov;
+    } catch (e) {
+        return null;
+    }
 }
 
 //  根据地区编码查询行政区要素
@@ -1121,9 +1156,9 @@ function bdmarksHide() {
 //  地名 checkbox
 function placesCheckBox(checkbox) {
     if (checkbox.checked) {
-        placesShow();
+        showGeoEntities();
     } else {
-        placesHide();
+        hideGeoEntities();
     }
 }
 
@@ -1135,18 +1170,23 @@ function distsCheckBox(checkbox) {
     //     distsHide();
     // }
     if (checkbox.checked) {
-        showGeoEntities();
+        showPosAdds();
     } else {
-        hideGeoEntities();
+        hidePosAdds();
     }
 }
 
 //  行政界线 checkbox
 function boundsCheckBox(checkbox) {
+    // if (checkbox.checked) {
+    //     boundsShow();
+    // } else {
+    //     boundsHide();
+    // }
     if (checkbox.checked) {
-        boundsShow();
+        showMassPoints();
     } else {
-        boundsHide();
+        hideMassPoints();
     }
 }
 
@@ -1195,6 +1235,10 @@ function initMouseTool() {
 
 
 function getFigureByStr(coordStr, type) {
+    if(coordStr === null) {
+        return null;
+    }
+    coordStr = coordStr.trim();
     var lineArr = JSON.parse(coordStr);
     return getFigureJson(lineArr, type);
 }
