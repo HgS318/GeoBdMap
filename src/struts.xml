@@ -16,6 +16,7 @@
 
     <package name="p1m" extends="default">
 
+        <action name="getPointGeoEntities" class="whu.eres.cartolab.controllers.JsonAction01" method="getPointGeoEntities" />
         <action name="getAllGeoEntities" class="whu.eres.cartolab.controllers.JsonAction01" method="getAllGeoEntities" />
         <action name="getAllSynData" class="whu.eres.cartolab.controllers.JsonAction01" method="getAllSynData" />
         <action name="getCoordsByPostcode" class="whu.eres.cartolab.controllers.JsonAction01" method="getCoordsByPostcode" />

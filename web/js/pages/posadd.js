@@ -68,6 +68,7 @@ function showPointCollection(load) {
         if(checkBox.checked != true) {
             checkBox.checked = true;
         }
+        $("#pointCollControl")[0].style.display = "block";
     } else {
         alert('请在chrome、safari、IE8+以上浏览器查看海量点效果');
     }
@@ -104,6 +105,7 @@ function showMapvpLayer(load) {
         if(checkBox.checked != true) {
             checkBox.checked = true;
         }
+        $("#mapvLayerControl")[0].style.display = "block";
     });
 }
 
@@ -125,13 +127,22 @@ function hidePosAdds() {
     hideRelposOverlays();
 }
 
-function hideMassPoints() {
+function hidePointCollection() {
     if(posadd.pointCollection != null) {
         posadd.pointCollection.hide();
     }
+}
+
+function hideMapv() {
     if(mapvpLayer != null) {
         mapvpLayer.hide();
     }
+}
+
+
+function hideMassPoints() {
+    hidePointCollection();
+    hideMapv();
 }
 
 function geocodeSearch(addr, index){
@@ -589,4 +600,82 @@ function gotoPolyOverlay(overlay, scale) {
 function addMarker(point) {
     var marker = new BMap.Marker(point);
     map.addOverlay(marker);
+}
+
+function addGo() {
+    setTimeout(clearGeoEntities, 800);
+}
+
+
+function clearGeoEntities() {
+    for(var i = 0; i < geoEntities.length; i++) {
+        geoEntities[i].hide();
+    }
+    geoEntities.splice(0, geoEntities.length);
+    setTimeout(initPointGeoEntities, 600);
+}
+
+
+function setAddStats() {
+    var info = "<p>&nbsp;&nbsp;<strong>叠加模式：</strong></p>"+
+        "<p>&nbsp;&nbsp;&nbsp;&nbsp;上确共位叠加，串联时态叠加，自选范围</p><br/>"+
+        "<p>&nbsp;&nbsp;<strong>处理的信息量：</strong></p>"+
+        "<p>&nbsp;&nbsp;&nbsp;&nbsp;文字：16304字节，图形：33256字节，<br/>"+
+        "&nbsp;&nbsp;&nbsp;&nbsp;图像：46926846字节，视频：2523秒，<br/>"+
+        "&nbsp;&nbsp;&nbsp;&nbsp;音频：865秒，动画：75秒</p>"+
+        "<p>&nbsp;&nbsp;&nbsp;&nbsp;处理了74条位置信息，<br/>"+
+        "&nbsp;&nbsp;&nbsp;&nbsp;叠加产生了23个组合地理实体</p><br/>"+
+        "<p>&nbsp;&nbsp;<strong>叠加产生要素的信息量：</strong></p>"+
+        "<p>&nbsp;&nbsp;&nbsp;&nbsp;文字：9102字节，图形：13368字节，<br/>"+
+        "&nbsp;&nbsp;&nbsp;&nbsp;图像：29105662字节，视频：1273秒，<br/>"+
+        "&nbsp;&nbsp;&nbsp;&nbsp;音频：241秒，动画：31秒</p>";
+    $("#infoStats").html(info);
+}
+
+function initPointGeoEntities() {
+
+    $.ajax({
+        url:"getPointGeoEntities.action",
+        type: 'get',
+        dataType: 'json',
+        success:function(syn_data) {
+            var dataJson = syn_data;
+            for (var i = 0; i < dataJson.length; i++) {
+                var entity = dataJson[i];
+                var content = createContent(entity);
+                var pointStr = entity['position'];
+                if(pointStr != null && pointStr != undefined) {
+                    var pointArray = pointStr.split(",");
+                    var X = pointArray[0];
+                    var Y = pointArray[1];
+                    var Point = new BMap.Point(X, Y);
+                    var marker = new BMap.Marker(Point);
+                    marker.spaType = 1;
+                    addOverlayAndWin(marker, entity, content, geoEntities);
+                }
+            }
+            setTimeout(initGeoEntities, 1000);
+            setAddStats(setAddStats, 1000);
+        },
+        error: function (err_data) {
+            console.log(err_data);
+        }
+    });
+
+}
+
+function toShowPointCool(checkbox) {
+    if(checkbox.checked) {
+        showPointCollection(false);
+    } else {
+        hidePointCollection();
+    }
+}
+
+function toShowMapv(checkbox) {
+    if (checkbox.checked) {
+        showMapvpLayer(false);
+    } else {
+        hideMapv();
+    }
 }

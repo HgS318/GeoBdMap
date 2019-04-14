@@ -1,22 +1,26 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" id="html">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href='images/fav.ico' rel='icon' type='image/x-ico' />
     <title>“位置网”课题一演示测试平台</title>
 
+    <!--<link rel="stylesheet" href="jsdemo/lib/codemirror.css?dev">-->
+    <!--<link rel="stylesheet" type="text/css" href="jsdemo/base.css?removeCopy">-->
+    <!--<link href="https://fonts.gdgdocs.org/css?family=Lobster" rel="stylesheet" type="text/css">&lt;!&ndash; CSS必用 &ndash;&gt;-->
+    <!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">-->
+
 	<link rel="stylesheet" type="text/css" href="download/jquery-easyui-1.7.0/themes/default/easyui.css">
 	<!--<link rel="stylesheet" type="text/css" href="download/jquery-easyui-1.7.0/themes/icon.css">-->
 	<link rel="stylesheet" type="text/css" href="download/jquery-easyui-1.7.0/demo/demo.css">
+
     <!--<link href="OntoSys/js/easyui/themes/default/easyui.css" rel="stylesheet" type="text/css" />-->
     <link href="OntoSys/js/easyui/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="OntoSys/js/galleryview/css/jquery.galleryview-3.0-dev.css" rel="stylesheet" type="text/css" />
     <link href="OntoSys/js/main.css" rel="stylesheet" />
     <link href="OntoSys/css/easy-responsive-tabs.css" rel="stylesheet" />
 
-    
     <!--<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">-->
 	<link href="font-awesome/css/font-awesome.css" rel="stylesheet">
 	<link href="css/plugins/social-buttons/social-buttons.css" rel="stylesheet">
@@ -94,11 +98,9 @@
 
     <div id="westDiv" data-options="region:'west',split:true,collapsed:false,title:'功能目录'" style="width: 350px; padding: 2px;">
         <div id="tabsDiv" class="easyui-tabs" data-options="fit:true" style="cursor:pointer">
-
 			<!--<div title="区域" data-options="iconCls:'icon-category'">-->
 				<!--<ul id="id_tree_dist" style="margin-top: 10px;"></ul>-->
             <!--</div>-->
-
 			<div title="位置感知" data-options="iconCls:'icon-category'">
 				<!--<ul id="id_tree_type" style="margin-top: 10px;"></ul>-->
 
@@ -306,6 +308,11 @@
 						</div>
 					</div>
 
+					<br/>
+					<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" value="开始叠加" class="srhbtn" onclick="addGo()">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" value="清空" class="srhbtn" onclick="window.location.reload()"></p>
 					<!--<div id="placesearch" class="nextTab">-->
 						<!--<h3><input type="checkbox" id="placecheckbox" onclick="toSearchDists(this)"/>&nbsp;关键词</h3>-->
 						<!--<div id="placeitems" class="nextTab">-->
@@ -315,24 +322,139 @@
 					<!--</div>-->
 
 				</div>
-
 				<!--<div id="searchAllDiv" class="datagrid-toolbar" style="margin-bottom: 10px; padding:8px 4px 4px 5px;"></div>-->
 
 			</div>
 
 			<div id="listTab" title="地名消岐" data-options="iconCls:'icon-search'">
-				<!--<br/>-->
 				<!--<div id="searchDiv" class="searchDiv">-->
-					<!--<div id="ClassCheckbox1" class="ClassCheckbox">-->
-						<!--<div id="highsearch">-->
-							<!--<div id="mapextent" class="nextTab" >-->
+					<!--<div class="ClassCheckbox">-->
+						<!--<div>-->
+							<!--<div class="nextTab" >-->
 								<!--<h3>&nbsp; 用户属性分析 / 地名消歧 等</h3>-->
 								<!--<p>子功能集成中，详情请见：...</p>-->
 							<!--</div>-->
 						<!--</div>-->
 					<!--</div>-->
 				<!--</div>-->
+                <!--<form action="xiaoqi" method="post">-->
+                    <!--<div class="input-group">-->
+                        <!--<input type="text" placeholder="https://you.ctrip.com/travels/wuhan145/3787772.html"  required class="form-control" name="url">-->
+                        <!--<span class="input-group-btn"><input class="btn btn-default btn-primary" type="submit"  value="提交"   /></span>-->
+                    <!--</div>-->
+                    <!--<br>-->
+                <!--</form>-->
+                <!--<div id="xiaoqiSearchDiv" class="datagrid-toolbar" style="margin-bottom: 10px; padding:8px 4px 4px 5px;">-->
+                    <!--<input class="easyui-searchbox" style="width: 100%; height: 30px; line-height: 30px"-->
+                           <!--data-options="prompt:'接入文本url',menu:'#xiaoqsearchtabsdiv',searcher:xiaoqiSearch" />-->
+                    <!--<div id="xiaoqsearchtabsdiv">-->
+                        <!--<div data-options="name:'allsimplesearch',iconCls:'icon-ok'">自动识别</div>-->
+                        <!--<div data-options="name:'coordsearch'">坐标</div>-->
+                        <!--<div data-options="name:'postcodesearch'">邮政编码</div>-->
+                        <!--<div data-options="name:'phonesearch'">固定电话</div>-->
+                        <!--<div data-options="name:'ipesearch'">固定IP</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="datagrid-toolbar" style="margin-bottom: 10px; padding:8px 4px 4px 5px;">
+                    <input class="easyui-searchbox" style="width: 100%; height: 30px; line-height: 30px"
+                           data-options="prompt:'输入消岐文本url',searcher:doSearchAll" />
+                </div>
 
+                <div class="searchDiv">
+
+                    <div class="nextTab" >
+                        <!--<br/>-->
+                        <h3>&nbsp;&nbsp;游记正文
+                            <!--&nbsp;&nbsp;&nbsp;&nbsp;<input type="file" id="coordfile" name="uploadFile" accept="text/plain"-->
+                            <!--onchange="openFile(event, 'addrtext')" />-->
+                        </h3>
+                        <textarea rows="6" cols="32"></textarea>
+                    </div>
+
+                    <div class="nextTab" >
+                        <!--<br/>-->
+                        <h4>&nbsp;&nbsp;文本中的时间</h4>
+                        <textarea rows="3" cols="32"></textarea>
+                    </div>
+                    <div class="nextTab" >
+                        <!--<br/>-->
+                        <h4>&nbsp;&nbsp;文本中的地名</h4>
+                        <textarea rows="3" cols="32"></textarea>
+                    </div>
+                    <div class="nextTab" >
+                        <!--<br/>-->
+                        <h4>&nbsp;&nbsp;结果：歧义地名</h4>
+                        <textarea rows="3" cols="32"></textarea>
+                    </div>
+                    <div class="nextTab" >
+                        <!--<br/>-->
+                        <h4>&nbsp;&nbsp;结果：歧义经纬度</h4>
+                        <textarea rows="3" cols="32"></textarea>
+                    </div>
+
+                    <br/>
+                    <div class="nextTab" >
+                        &nbsp;&nbsp;&nbsp;<button class="srhbtn" onclick="">PPA判断</button>
+                        &nbsp;&nbsp;&nbsp;<button class="srhbtn" onclick="">可达域判断</button>
+                        &nbsp;&nbsp;&nbsp;<button class="srhbtn" onclick="">概率判断</button>
+                    </div>
+                    <p></p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：地名消岐功能集成中，详情请
+                        <a href="http://106.12.93.49:8081/placedisambigution/final.jsp" target="_blank">点击</a></p>
+
+                </div>
+
+                <!--<div class="panel ">-->
+                    <!--<div class="panel-heading">-->
+                        <!--<h3 class="panel-title">游记正文</h3>-->
+                    <!--</div>-->
+                    <!--<div class="panel-body"  id="test" >-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="row">-->
+                    <!--<div class="col-md-6">-->
+                        <!--<div class="panel panel-info">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h5 class="panel-title">文本中的时间</h5>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body" id="test1" >-->
+
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-6">-->
+                        <!--<div class="panel panel-info">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h5 class="panel-title">文本中的地名</h5>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body" id="test2"  >-->
+
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="row">-->
+                    <!--<div class="col-md-6">-->
+                        <!--<div class="panel panel-info">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h5 class="panel-title">结果：歧义地名</h5>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body" id="diMing_result"  >-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-6">-->
+                        <!--<div class="panel panel-info">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h5 class="panel-title">结果：歧义经纬度</h5>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body" id="JingWei_result"  >-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+            </div>
 			</div>
 
         </div>
@@ -344,7 +466,6 @@
 
 			<div title="信息列表" data-options="iconCls:'icon-more'">
 
-
 				<div id="resultsdiv" class="easyui-accordion" style="width:100%;height:100%; float: right;">
 
 					<div id="searchstat" title="信息汇总" selected="true" style="overflow:auto;">
@@ -355,11 +476,11 @@
 							<!--<p id="numcomu" style="text-align: center" onclick="toPlaceRes()">社区数：</p>-->
 							<!--<p id="subcom" style="text-align: center" onclick="toPlaceRes()">下属村、居委会：</p>-->
 						<!--</div>-->
-
-						<p id="placeintotal" style="text-align: center" onclick="toPlaceRes()">位置信息：0条记录</p>
-						<p id="distintotal" style="text-align: center" onclick="toDistRes()">接入信息：0条记录</p>
-						<p id="boundintotal" style="text-align: center" onclick="toBoundRes()">海量点：0条记录</p>
-
+						<div id="infoStats">
+							<p id="placeintotal" style="text-align: center" onclick="toPlaceRes()">位置信息：0条记录</p>
+							<p id="distintotal" style="text-align: center" onclick="toDistRes()">接入信息：0条记录</p>
+							<p id="boundintotal" style="text-align: center" onclick="toBoundRes()">海量点：0条记录</p>
+						</div>
                         <!--<p>&nbsp;&nbsp;<strong>叠加模式：</strong></p>-->
                         <!--<p>&nbsp;&nbsp;&nbsp;&nbsp;上确共位叠加，串联时态叠加，自选范围</p><br/>-->
                         <!--<p>&nbsp;&nbsp;<strong>处理的信息量：</strong></p>-->
@@ -392,7 +513,27 @@
 					</div>
 
 					<div title="海量点" id="boundresultsdiv">
-						<div id="boundresults"></div>
+						<div id="boundresults" class="searchDiv">
+
+							<div class="nextTab" id="mapvLayerControl" style="display: none">
+								<h3><input type="checkbox" id="mapvpLayer" checked onclick="toShowMapv(this)"/>
+									&nbsp;beijing_mass_points</h3>
+								<div class="nextTab">
+									<p>类型： mapv图层</p>
+									<p>数据量： 20236 个点数据</p>
+								</div>
+							</div>
+
+							<div class="nextTab" id="pointCollControl" style="display: none">
+								<h3><input type="checkbox" id="pointCoolLayer" onclick="toShowPointCool(this)"
+										   checked/> &nbsp;WuhanPoints</h3>
+								<div class="nextTab">
+									<p>类型： BMap海量点集图层</p>
+									<p>数据量： 370827 个点数据</p>
+								</div>
+							</div>
+
+						</div>
 						<div id="hm_Paginate_bounds"></div>
 					</div>
 
@@ -414,7 +555,7 @@
 					<div id="ClassCheckbox1" class="ClassCheckbox">
 						<div id="highsearch">
 							<div id="mapextent" class="nextTab" >
-								<h3>&nbsp; 用户属性分析 / 地名消歧 等</h3>
+								<h3>&nbsp; 用户社会属性分析</h3>
 								<p>子功能集成中，详情请见：...</p>
 							</div>
 						</div>
@@ -452,10 +593,8 @@
 								<!--<p>2. 方法。</p>-->
 							<!--</div>-->
 						<!--</div>-->
-
 					<!--</div>-->
 					<div id="y" class="easyui-window" title="Basic Window" data-options="iconCls:'icon-save',closed:true" style="width:500px;height:500px;padding:10px;"></div>
-
 
 				</div>
 
@@ -466,7 +605,7 @@
 	</div>
 
 	<div id="centerDiv" data-options="region:'center',title:'图示'" style="padding: 6px; overflow-y: scroll">
-        <div 海量点class="floatDiv" id="floatDiv">
+        <div class="floatDiv" id="floatDiv">
         </div>
         
         <div id="mapContainer" style="width:100%; height: 100%"></div>
@@ -486,12 +625,7 @@
          <!--&lt;!&ndash; <div id="divContainer"></div> &ndash;&gt;   -->
     	<!--</div>-->
 
-
 	</div>
-    
-
-    
-
 
 </body>
 

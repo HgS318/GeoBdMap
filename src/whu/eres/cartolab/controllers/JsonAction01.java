@@ -12,6 +12,17 @@ import whu.eres.cartolab.geo.*;
 
 public class JsonAction01 {
 
+    public String getPointGeoEntities() {
+        try {
+            String str = test.test.getPointGeoEntities();
+            toBeJson(str);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ex.getMessage();
+        }
+        return null;
+    }
+
     public String getAllGeoEntities() {
         try {
             String str = test.test.getAllGeoEntities();
