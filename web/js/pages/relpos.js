@@ -16,7 +16,8 @@ function extract_positions(text) {
     }
     removeExtratOverlays();
     // removeAllOverlays();
-    $("#extraposinfo").html("位置信息提取中。。。");
+    // $("#extraposinfo").html("位置信息提取中。。。");
+    console.log("位置信息提取中。。。");
     // var url = 'http://localhost:5050/query_positions?text=' + text;
     var url = 'http://106.12.93.49:5050/query_positions?text=' + text;
     if(relpos.restart != null && "" != relpos.restart) {
@@ -30,7 +31,8 @@ function extract_positions(text) {
         //dataType:"jsonp",  //数据格式设置为jsonp
         //jsonp:"callback",  //Jquery生成验证参数的名称
         success: function (re_data) {
-            $("#extraposinfo").html("位置信息提取完成：\n<br/>" + JSON.stringify(re_data));
+            // $("#extraposinfo").html("位置信息提取完成：\n<br/>" + JSON.stringify(re_data));
+            console.log(JSON.stringify(re_data));
             var data = re_data['positions'];
             createPositions(re_data['positions']);
             createRelatives(re_data['afters']);

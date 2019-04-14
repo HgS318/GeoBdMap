@@ -1018,8 +1018,7 @@ function gotoOverlay(type, id) {
         overlay = findOverlay(relpos.positions.concat(relpos.relPositions), id);
         openInfoWin({target: overlay});
         return;
-    }
-    else {
+    } else {
         overlay = findOverlay(showingMarkers, id);
         center = overlay.extData.spaType == 1 ?
             overlay.getPosition() : overlay.getBounds().getCenter();
@@ -1184,7 +1183,7 @@ function boundsCheckBox(checkbox) {
     //     boundsHide();
     // }
     if (checkbox.checked) {
-        showMassPoints();
+        showMassPoints(false);
     } else {
         hideMassPoints();
     }

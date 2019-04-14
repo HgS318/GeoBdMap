@@ -99,18 +99,19 @@ function hideGeoEntities() {
 }
 
 function createContent(entity) {
-    // var content = '<br style="margin:0;line-height:10px;padding:2px;">';
+    if(entity.infoAmount === undefined || entity.infoAmount == null) {
+        return createSimpleContent(entity);
+    }
     var content = "";
+    if(entity['infoAmount'] != null && entity['infoAmount'] != undefined) {
+        content += '<strong>图形</strong>： (信息量: ' + entity['infoAmount']['figureLength'] + ' 字节)<br/>';
+    }
     if(entity.address != null && entity.address != undefined) {
         content += '地址：' + entity.address + '<br/><br/>';
     }
-    if(entity['infoAmount'] != null && entity['infoAmount'] != undefined && entity['infoAmount']['figureLength']
-            != null && entity['infoAmount']['figureLength'] != undefined) {
-        content += '<strong>图形</strong>： (信息量: ' + entity['infoAmount']['figureLength'] + ' 字节)<br/>';
-    }
     if(entity['text'] != null) {
+        content += '<br/><strong>文本</strong>： (信息量: ' + entity['infoAmount']['textLenth'] + ' 字节)<br/>';
         if(entity.infoAmount != undefined && entity.infoAmount != null) {
-            content += '<br/><strong>文本</strong>： (信息量: ' + entity['infoAmount']['textLenth'] + ' 字节)<br/>';
             for (var j = 0; j < entity['text'].length; j++) {
                 var content_text = entity['text'][j];
                 if (content_text.length > 45) {
@@ -119,8 +120,6 @@ function createContent(entity) {
                     content += (content_text + '<br/>' );
                 }
             }
-        } else {
-            content += entity['text'] + "<br/>";
         }
     }
     if(entity['texts'] != null) {
@@ -195,6 +194,87 @@ function createContent(entity) {
     return content;
 }
 
+function createSimpleContent(entity) {
+
+    // var content = '<br style="margin:0;line-height:10px;padding:2px;">';
+    var content = "";
+    if(entity.address != null && entity.address != undefined) {
+        content += '地址：' + entity.address + '<br/><br/>';
+    }
+
+    if(entity['text'] != null) {
+        content += entity['text'] + "<br/>";
+    }
+    if(entity['texts'] != null) {
+        // content += "<strong>文字</strong>";
+        for(var j = 0; j < entity['texts'].length; j++) {
+            var text = entity['texts'][j];
+            if(text.length > 48) {
+                text = text.substring(0, 45) + '...';
+            }
+            content += "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
+        }
+    }
+    if(entity['flashes'] != null && entity['flashes'].length > 0) {
+        content += '<br/><strong>动画</strong><br/>';
+        for (var j = 0; j < entity['flashes'].length; j++) {
+            var flash_path = entity['flashes'][j];
+            content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + flash_path + '' +
+            ' onclick="openWindowY(this, \'flash\', \'' + flash_path + '\')">动画' + (j + 1) + '</a>');
+        }
+        content += '<br/>';
+    }
+    if(entity['images'] != null && entity['images'].length > 0) {
+        content += '<br/><strong>图像</strong><br/>';
+        for (var j = 0; j < entity['images'].length; j++) {
+            var img_path = entity['images'][j];
+//                                content += "<img src='" + img_path + "' class='img' alt='' onclick='openWindowY(img_path)'"
+//                                        + "style='zoom:1;overflow:hidden;width:50px;height:50px;'/>";
+            content += '&nbsp;&nbsp;<img src=' + img_path + ' class="img" onclick="openWindowY(this, \'image\')" ' +
+                'alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>'
+
+        }
+        content += '<br/>';
+    }
+    if(entity['audios'] != null && entity['audios'].length > 0) {
+        content += '<br/><strong>音频</strong><br/>';
+        for (var j = 0; j < entity['audios'].length; j++) {
+            var audio_path = entity['audios'][j];
+            content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + audio_path + ' onclick="openWindowY(this, \'audio\', \'' +
+            audio_path + '\', \'' +
+            (entity['name'] + ' 音频' + (j + 1)) + '\')">音频' + (j + 1) + '</a>');
+        }
+        content += '<br/>';
+    }
+    if(entity['vedios'] != null && entity['vedios'].length > 0) {
+        content += '<br/><strong>视频</strong><br/>';
+        for (var j = 0; j < entity['vedios'].length; j++) {
+            var vedio_path = entity['vedios'][j];
+//                      content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + vedio_path + '" target="_blank" onclick="openWindowY(this, \'vedio\')">视频' + (j + 1) + '</a>');
+            content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + vedio_path + '' +
+            ' onclick="openWindowY(this, \'vedio\', \'' + vedio_path + '\')">视频' + (j + 1) + '</a>');
+        }
+        content += '<br/>';
+    }
+
+    if(entity['models'] != null && entity['models'].length > 0) {
+        content += '<br/><strong>模型</strong><br/>';
+        for (var j = 0; j < entity['models'].length; j++) {
+            var model_paths = entity['models'][j];
+            var model_pic = model_paths.split(':');
+            var model_path = model_pic[0];
+            var model_pic = model_pic[1];
+
+            content += '<a href="' + model_path + '"> <img class="img" alt="" ' +
+                'style="zoom:1;overflow:hidden;width:50px;height:50px;" src="' + model_pic + '" /> </a>';
+
+        }
+        content += '<br/>';
+    }
+    content += '</div>';
+    return content;
+}
+
 function addOverlayAndWin(overlay, data, content, list) {
     overlay.name = data['name'];
     overlay.extData = data;
@@ -258,46 +338,6 @@ function openInfoWin(e, content, title, width) {
     }
     map.openInfoWindow(infoWindow, point);
 }
-
-// function addClickHandler(overlay, content){
-//     overlay.addEventListener("click",function(e) {
-//         openInfoWin(content, e);
-//     });
-// }
-//
-// function openInfoWin(content, e){
-//     var overlay = e.target;
-//     var point;
-//     if(overlay.spaType == 1) {
-//         point = new BMap.Point(overlay.getPosition().lng, overlay.getPosition().lat);
-//     } else if (overlay.spaType == 3 || overlay.spaType == 5) {
-//         var first_point = overlay.getPath()[0];
-//         point = new BMap.Point(first_point.lng, first_point.lat);
-//     }
-// //        var infoWindow = new BMap.InfoWindow(content, {
-// //            width : 150,     // 信息窗口宽度
-// //            height: 50,     // 信息窗口高度
-// //            title : overlay['title'] , // 信息窗口标题
-// //            enableMessage:true//设置允许信息窗发送短息
-// //        });
-// //        var p = e.target;
-// //        var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
-// //        // var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象
-//     searchInfoWindow = new BMapLib.SearchInfoWindow(map, content, {
-//         title: e.target.name,
-//         width: 300,
-//         height: 280,
-//         panel: "panel",
-//         enableAutoPan: true,
-//         searchTypes: [
-//             BMAPLIB_TAB_SEARCH,
-//             BMAPLIB_TAB_TO_HERE,
-//             BMAPLIB_TAB_FROM_HERE
-//         ]
-//     });
-//     // map.openInfoWindow(searchInfoWindow,point); //开启信息窗口
-//     searchInfoWindow.open(point);
-// }
 
 function openWindowY(e, type, path, name) {
     var windowHtml = "";
