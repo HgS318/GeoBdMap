@@ -179,7 +179,7 @@ function extract_address() {
 
 function extract_coords() {
     var coordStr = $("#coordtext")[0].value;
-    if(coordStr.indexOf(".") > -1) {
+    if(coordStr.indexOf(",") < 0) {
         if(coordStr.indexOf('bei') > -1) {
             setTimeout(showMapvpLayer(true), 800);
         } else if(coordStr.indexOf('uhan') > -1) {
