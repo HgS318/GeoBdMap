@@ -30,7 +30,16 @@
                 "../../data/syn_data/shanghai/东方明珠/图片/2.jpg"],
             "vedios": ["../../data/syn_data/shanghai/东方明珠/视频/1.mp4",
                 "../../data/syn_data/shanghai/东方明珠/视频/2.mp4"],
-            "spaType": 1
+            "spaType": 1,
+            "infoAmount": {
+                "vedioLength": "49 秒",
+                "modelLength": "",
+                "imageLength": "100 KB",
+                "textLenth": "39 字节",
+                "audioLength": "",
+                "figureLength": "",
+                "flashLength": ""
+            }
         },
         "3": {
             "name": "富民路",
@@ -77,7 +86,6 @@
     }
 
     function createContent(entity) {
-
         var content = '<div style="width: 320px">' +
                 '<h4 style="margin: 0 0 0 0; padding: 0 0 0 0; color: #be2924; font-size: 18px">' + entity['name'] + '</h4><br/>';
         if(entity.address != null && entity.address != undefined) {
@@ -88,40 +96,63 @@
             if(text.length > 60) {
                 text = text.substring(0, 60) + '...';
             }
-            content += "<strong>文字</strong><p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
+            if(entity.infoAmount != undefined && entity.infoAmount != null) {
+                content += "<strong>文字</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+                        "(信息量：" + entity['infoAmount']['textLenth'] +
+                        ")<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
+            } else {
+                content += "<strong>文字</strong> <p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
+            }
         }
         if(entity['texts'] != null) {
+            if(entity.infoAmount != undefined && entity.infoAmount != null) {
+                content += "<strong>文字</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+                        "(信息量：" + entity['infoAmount']['textLenth'] + ")";
+            } else {
+                content += "<strong>文字</strong>";
+            }
             for(var j = 0; j < entity['texts'].length; j++) {
                 var text = entity['texts'][j];
                 if(text.length > 50) {
                     text = text.substring(0, 50) + '...';
                 }
-                content += "<strong>文字</strong><p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
+                content += "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
             }
         }
         if(entity['images'] != null && entity['images'].length > 0) {
-            content += '<strong>图像</strong><br/>';
+            if(entity.infoAmount != undefined && entity.infoAmount != null) {
+                content += '<strong>图像</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                    "(信息量：" + entity['infoAmount']['imageLength'] + ")<br/>";
+            } else {
+                content += '<strong>图像</strong><br/>';
+            }
             for (var j = 0; j < entity['images'].length; j++) {
                 var img_path = entity['images'][j];
-//                                content += "<img src='" + img_path + "' class='img' alt='' onclick='openWindowY(img_path)'"
-//                                        + "style='zoom:1;overflow:hidden;width:50px;height:50px;'/>";
                 content += '&nbsp;&nbsp;<img src=' + img_path + ' class="img" onclick="openWindowY(this, \'image\')" ' +
                         'alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>'
-
             }
             content += '<br/>';
         }
         if(entity['vedios'] != null && entity['vedios'].length > 0) {
-            content += '<strong>视频</strong><br/>';
+            if(entity.infoAmount != undefined && entity.infoAmount != null) {
+                content += '<strong>视频</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                        "(信息量：" + entity['infoAmount']['vedioLength'] + ")<br/>";
+            } else {
+                content += '<strong>视频</strong><br/>';
+            }
             for (var j = 0; j < entity['vedios'].length; j++) {
                 var vedio_path = entity['vedios'][j];
-//                                content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + vedio_path + '" target="_blank" onclick="openWindowY(this, \'vedio\')">视频' + (j + 1) + '</a>');
                 content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + vedio_path +'" target="_blank">视频' + (j + 1) + '</a>');
             }
             content += '<br/>';
         }
         if(entity['audios'] != null && entity['audios'].length > 0) {
-            content += '<strong>音频</strong><br/>';
+            if(entity.infoAmount != undefined && entity.infoAmount != null) {
+                content += '<strong>音频</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                        "(信息量：" + entity['infoAmount']['audioLength'] + ")<br/>";
+            } else {
+                content += '<strong>音频</strong><br/>';
+            }
             for (var j = 0; j < entity['audios'].length; j++) {
                 var audio_path = entity['audios'][j];
                 content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + audio_path +'" target="_blank">音频' + (j + 1) + '</a>');
@@ -129,7 +160,12 @@
             content += '<br/>';
         }
         if(entity['models'] != null && entity['models'].length > 0) {
-            content += '<strong>模型</strong><br/>';
+            if(entity.infoAmount != undefined && entity.infoAmount != null) {
+                content += '<strong>模型</strong><br/>';
+            } else {
+                content += '<strong>模型</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                        "(信息量：" + entity['infoAmount']['modelLength'] + ")<br/>";
+            }
             for (var j = 0; j < entity['models'].length; j++) {
                 var model_paths = entity['models'][j];
                 var model_pic = model_paths.split(':');
