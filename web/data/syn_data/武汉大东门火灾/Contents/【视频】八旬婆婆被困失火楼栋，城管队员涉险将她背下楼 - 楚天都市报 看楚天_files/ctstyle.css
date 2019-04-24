@@ -1,0 +1,137 @@
+﻿html,body,div,p,a,ul,li,dl,dt,h1,h2,h3,h4,h5,h6,img,input{margin: 0;padding: 0;font-family: "Open Sans",Tahoma,Arial,"Hiragino Sans GB","Microsoft YaHei","微软雅黑","STHeiti","WenQuanYi Micro Hei",SimSun,sans-serif;line-height: 1.5;}
+ul,li{
+	list-style: inline;list-style-type:none;
+}
+img{width:100%;text-indent: 0em}
+body{background:#f0f0f0;}
+a,a:hover{text-decoration: none;}
+a {
+  color: #494444;
+}
+.cl{clear: both;}
+i{font-style: normal;}
+input{border: none;outline: none;}
+.carousel-inner {
+	/* [disabled]height: 330px; */
+}
+.nav_header1 {height:40px;background:#DDDDDD;}
+.nav_header1 p{font-size:12px;color: #fff;line-height: 50px;float:left;}
+.nav_header1 p,.nav_header1 ul{
+	display: inline-block;
+
+*display:inline;*zoom:1;}
+.nav > li > a > img {
+  max-width: none;margin:-7px;
+}
+.nav_header1 li{display: inline-block;*display:inline;*zoom:1;padding-left: 10px;}
+.nav_header1 li i{float:left;background-image: url(../images/cticon.png);background-repeat: no-repeat;}
+.nav_header1 li a{font-size:12px;color: #666;line-height: 40px;}
+.nav_header1 .item0 i{background-position: -325px -5px; width: 19px; height: 19px;margin-top: 12px;margin-right: 10px;}
+.nav_header1 .item1 i{background-position: -216px -5px; width: 19px; height: 19px;margin-top: 12px;margin-right: 10px;}
+.nav_header1 .item3 i{background-position: -239px -5px; width: 19px; height: 19px;margin-top: 12px;margin-right: 10px;}
+.nav_header1 .item2 i{background-position: -194px -5px; width: 19px; height: 19px;margin-top: 12px;margin-right: 10px;}
+.nav_header1 .item4 i{background-position: -264px -5px; width: 19px; height: 19px;margin-top: 12px;margin-right: 10px;}
+.nav_header1 .item5 i{background-position: -153px -5px; width: 19px; height: 19px;margin-top: 12px;margin-right: 10px;}
+.nav_header1 .item1:hover .img{display:block;}
+.nav>li>a:focus,.nav>li>a:hover{
+	text-decoration: none;
+	}
+.shadow{box-shadow: rgba(0, 0, 0, 0.0980392) 0px 2px 2px 0px;}
+.bline{border-bottom: 2px solid #cc3333;}
+.aline{border: 1px solid #ccc;}
+.nav a{font-size: 16px;color: #000;}
+.bgw{background:#fff;}
+/***********头部导航结束***********/
+.cl {*zoom: 1;}
+.cl:before,
+.cl:after {display: table;line-height: 0;content: "";}
+.cl:after {clear: both;}
+.nav {border-bottom:2px;}
+.content9 {	color:#333;
+text-align:justify;word-wrap:break-word;
+}
+.content9 p{margin-top:10px;margin-bottom:10px;font-size:1.2em;line-height:1.5em;text-indent:2em;}
+.content9 .big-size{font-size:1.4em;line-height:1.6em;}
+.newspaper
+{
+-moz-column-count:2; /* Firefox */
+-webkit-column-count:2; /* Safari and Chrome */
+column-count:2;
+
+-moz-column-gap:40px; /* Firefox */
+-webkit-column-gap:40px; /* Safari and Chrome */
+column-gap:40px;
+}
+.ad {background-color: rgba(0,0,0,.8);
+position: fixed;
+bottom: 0;
+left: 0;
+width: 100%;
+font-size: 1rem;
+z-index: 99;}
+
+.ad .ad-close {
+background-image: url(../images/xx.png);
+background-size: 30px;
+width: 30px;
+height: 30px;
+position: absolute;
+right: 0;}
+
+.digg{background: url(../images/v9/num_list.png) no-repeat 10px 5px;
+	padding-left: 30px;line-height:200%}
+
+ .swiper-container {
+        width: 100%;
+        height: 100%;
+        
+    }
+    .swiper-slide {
+        text-align: center;
+        background: #fff;
+        
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+    }
+
+.caption-slide{
+	position: absolute;
+	z-index: 10;
+	left: 10px;
+	bottom: 10px;
+	padding-bottom:5px;
+	padding-left:10px;
+	color: #fff;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+}
+
+.carousel-control {
+	position:relative;
+	top: 5px;
+	bottom: 0;
+	left: 20px;
+	width: 80%;
+	font-size: 14px;
+	color: #fff;
+	text-align: left;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+	filter: alpha(opacity=50);
+	opacity: .05;
+	background-color: #221616;
+	padding:10px;
+}
+@media screen and (min-width: 768px) {
+.content9 p img{width:75%;}
+}
+#mood {width:75%;}

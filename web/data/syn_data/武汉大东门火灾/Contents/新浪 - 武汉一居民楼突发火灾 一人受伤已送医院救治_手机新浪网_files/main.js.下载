@@ -1,0 +1,182 @@
+
+(function () {
+    
+    var myUtil = {
+        stringSplice:function(src, k, e, sp) {
+            if (src == "") {
+                return "";
+            }
+            sp = (sp == "") ? "=" : sp;
+            k += sp;
+            var ps = src.indexOf(k);
+            if (ps < 0) {
+                return "";
+            }
+            ps += k.length;
+            var pe = src.indexOf(e, ps);
+            if (pe < ps) {
+                pe = src.length;
+            }
+            return src.substring(ps, pe);
+        },
+        getCookie:function(ckName) {
+            if (undefined == ckName || "" == ckName){
+                return "";
+            }
+            return this.stringSplice(document.cookie, ckName, ";", "");
+        }
+    };
+    window.ReleventNews = function (){
+        this.confInit();
+    }
+    ReleventNews.prototype.confInit = function(){
+        this.conf = {
+            statistics: {
+                data: {
+                    action: '', // recommend_wapexposure
+                    refer: '', // curpage uid
+                    t: 1,  //random
+                    uid: '', //uid,guid
+                    info: '', // xx,xxx,xx
+                    mod: '',
+                    cre: '',
+                },
+                keywords : ''
+            }
+        }
+        this.attributeName = 'tyTrack';
+    }
+    ReleventNews.prototype.addup = function(feedNodes) {
+        var _this = this;
+        if(feedNodes.length>0){
+            var feeds = this.checkDom(feedNodes.find('a'));
+            newExposure.pushListeningEle(feeds, (function(arr){
+                _this.track.ElemExpose.call(_this, $(arr)); // 猜你喜欢点击曝光
+            
+            }).bind(this))
+
+            if(!feedNodes.data(this.attributeName)){
+                feedNodes.data(this.attributeName,'1');
+                this.track.ElemClick.call(this, feedNodes); // 猜你喜欢点击曝光
+            }
+            
+        }
+    }
+    ReleventNews.prototype.checkDom = function(aA) {
+        var arr = [];
+        for(var i=0;i<aA.length;i++){
+            if(!aA.eq(i).data(this.attributeName)){
+                aA.eq(i).data(this.attributeName,'1');
+                arr.push(aA[i]);
+
+            }
+        }
+        return arr;
+    }
+    ReleventNews.prototype.track = {
+
+        ElemExpose : function(doms, action){
+            if(doms.find('a').length>0){
+                doms = doms.find('a');
+            }
+            
+            var exposeCnf = this.conf.statistics;
+        
+            var infoArr=[];
+            exposeCnf.data.action = action ||'exposure';
+            if(doms[0]){
+                exposeCnf.data.mod = this.track.getMod(doms[0].href) || this.track.getMod(doms[0].dataset.href)|| exposeCnf.data.mod;
+                exposeCnf.data.cre = this.track.getCre(doms[0].href) || this.track.getCre(doms[0].dataset.href)|| exposeCnf.data.cre;
+            }
+            doms.each(function(index){
+                if(!$(this).data('info')){
+                    return;
+                }
+                infoArr.push($(this).data('info'));
+
+            })
+            if(infoArr.length==0){
+                return;
+            }
+            exposeCnf.data.uid = this.track.getUid(); 
+            exposeCnf.data.t = parseInt(Math.random()*10); 
+            exposeCnf.data.info =infoArr.join(';');  
+            window.SIMA({
+                action : "_exposure",
+                data : exposeCnf.data
+            });
+        }
+        ,ElemClick : function(doms, action){
+            
+            var _this = this;
+            
+            doms.on('click tap', 'a', function(){
+                if(!this.getAttribute('data-info')){
+                    return;
+                }
+                var exposeCnf = _this.conf.statistics;
+                exposeCnf.data.uid = _this.track.getUid(); 
+                exposeCnf.data.action = action ||'click';
+                exposeCnf.data.info = this.getAttribute('data-info');
+                exposeCnf.data.mod = _this.track.getMod(this.href) ||_this.track.getMod(this.dataset.href) || exposeCnf.data.mod;
+                exposeCnf.data.cre = _this.track.getCre(this.href) ||_this.track.getCre(this.dataset.href) || exposeCnf.data.cre;
+                exposeCnf.data.t = parseInt(Math.random()*10);
+                if(!exposeCnf.data.info){
+                    return;
+                }
+                window.SIMA({
+                    "action" : "_click",
+                    "data" : exposeCnf.data
+                });
+            })
+        }
+        ,getUid: function(){
+            return (function(){
+                var guid,uid ;
+                if(typeof window.getCookie === 'function'){
+                    //alert(document.cookie)
+                    guid = getCookie('ustat')||'';
+                   
+                }
+                if(typeof window.userInfo === 'object'){
+                    uid = userInfo.uid || '';
+                   
+                }
+                return (uid || '') + ';' + (guid || '');
+            })();
+        }
+        ,getMod : function(str){
+            if(str){
+                return this.match(str, 'mod');
+            }
+            return ''; 
+        }
+        ,getCre : function(str){
+            if(str){
+                return this.match(str, 'cre');
+            }
+            return ''; 
+        }
+        ,match : function(str, name){
+            var reg = new RegExp(name +"\=(.*?)\&");
+            var r = str.match(reg);
+            if(r!=null)
+            {
+                return r[1]; 
+            }
+            return '';
+        },log : function(src){
+            if(window.location.protocol=='h'+'t'+'t'+'p:'){
+                var imgObj= new Image();
+                imgObj.src = src;
+            }
+            
+        }
+    }
+    
+
+    window.tyTrack=function(dom){
+        
+        new ReleventNews().addup(dom);
+    }
+})()
