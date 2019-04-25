@@ -91,11 +91,17 @@ function showSnap() {
     var text_val = document.getElementById('value').value;
     // alert(text_val);
     try {
-        var time = parseInt(text_val) * 2;
+        var time = parseInt(text_val.trim()) * 2;
         if(text_val.indexOf("17:16") > -1) {
             time = 8;
         } else if(text_val.indexOf("19:30") > -1) {
             time = 140;
+        } else {
+            var m_s = text_val.trim().split(':');
+            var hou = parseInt(m_s[0]);
+            var min = parseInt(m_s[1]);
+            var mins = hou * 60 + min;
+            time = mins;
         }
         removeMarkers();
         for (var k = 0; k < timeData.length; k++) {

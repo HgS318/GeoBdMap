@@ -341,7 +341,44 @@ function gotoProtocolCases(seq) {
 }
 
 function doSearchAll() {
-    
+    var word = $("#xqinput")[0].value;
+    var idx = 0;
+    try {
+        idx = parseInt(word);
+    } catch (e) {
+        idx = 0;
+    }
+
+    $.ajax({
+        url: 'getAllFireLocalSites.action',
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
+            // var sitesStr = data['sites'];
+            // var sites = JSON.parse(sitesStr);
+            var site = data[idx];
+            var windowHtml = "<div><iframe src='" + site +"' " + "width='500px' height='500px' /></div>";
+            document.getElementById("y").innerHTML = windowHtml;
+            var $win = $('#y').window({
+                title: "新闻",
+                width: 552,
+                height: 559,
+                top: 100,
+                left:100,
+                //shadow: true,
+                //modal:true,
+                //iconCls:'icon-add',
+                //closed:true,
+                //minimizable:false,
+                maximizable:false,
+                // collapsible:false
+            });
+            $win.window('open');
+        }, error: function (err) {
+            console.log(err);
+        }
+
+    });
 }
 
 var openFile = function(event, divName){

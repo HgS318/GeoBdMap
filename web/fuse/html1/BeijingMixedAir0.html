@@ -114,12 +114,9 @@
     function createContent(Data) {
 
         var content = '<div style="width: 240px">' +
-                '<h4 style="margin: 0 0 0 0; padding: 0 0 0 0; color: #be2924; font-size: 18px">' + Data['监测点'] + '</h4><br/>';
-        if(Data.address != null && Data.address != undefined) {
-            content += '地址：' + Data.address + '<br/>';
-        }
+                '<h4 style="margin: 0 0 0 0; padding: 0 0 0 0; color: #be2924; font-size: 18px">' + Data['监测点名称'] + '</h4><br/>';
         if(Data['air'] != null) {
-            content += "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + Data['air'] + "</p>";
+            content += "<strong>监测信息</strong><p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + Data['air'] + "</p>";
         }
         content += '</div>';
         return content;

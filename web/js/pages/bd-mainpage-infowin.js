@@ -403,7 +403,7 @@ function openWindowY(e, type, path, name) {
             title += ": " + name;
         }
         windowHtml ="<div><iframe src='download/mapv/examples/baidu-map-polyline-time.html' " +
-            "width='500px' height='500px' /></div>"
+            "width='500px' height='500px' /></div>";
         width = 552;
         height = 559;
     }

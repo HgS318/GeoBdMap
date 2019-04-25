@@ -9,8 +9,40 @@ import java.sql.*;
 
 public class test {
 
+    public static String getAllFireLocalSites() {
+
+        String sql = "SELECT * from search";
+        ResultSet rs = MysqlLocalConnection.executeQuery(sql);
+        List<String> sites = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                String site = rs.getString("local");
+                if(site!=null && !site.equals("")) {
+                    if(site.indexOf(".html") < 0) {
+                        site = site + ".html";
+//                        String stiePath = MysqlLocalConnection.websitePath + "data/syn_data/fires0227/Contents/" + site;
+                        String stiePath = "data/syn_data/fires0227/Contents/" + site;
+                        sites.add(stiePath);
+                    }
+                }
+            }
+        } catch (Exception e) {
+
+        }
+        JSONArray arr = new JSONArray();
+        int i = 0;
+        for(String site : sites) {
+            arr.put(i, site);
+            i++;
+        }
+
+//        String sitesStr = sites.toString();
+//        String outStr = sitesStr.replace("\"", "'");
+        return arr.toString();
+    }
+
+
     public static String getPointGeoEntities() {
-        MysqlLocalConnection conn = MysqlLocalConnection.getInstance();
         String sql = "SELECT * from info WHERE spaType = 1 order by geid";
         ResultSet rs = MysqlLocalConnection.executeQuery(sql);
         List<GeoInfo> infos = new ArrayList<>();
@@ -59,8 +91,7 @@ public class test {
     }
 
     public static String getAllGeoEntities() {
-        MysqlLocalConnection conn = MysqlLocalConnection.getInstance();
-        String sql = "SELECT * from info order by geid";
+        String sql = "SELECT * from info WHERE geid < 1000 order by geid";
         ResultSet rs = MysqlLocalConnection.executeQuery(sql);
         List<GeoInfo> infos = new ArrayList<>();
         List<GeoEntity> entities = new ArrayList<>();
@@ -109,7 +140,6 @@ public class test {
     }
 
     public static String getAllInfo() {
-        MysqlLocalConnection conn = MysqlLocalConnection.getInstance();
         String sql = "SELECT * from info";
         ResultSet rs = MysqlLocalConnection.executeQuery(sql);
         JSONArray results = new JSONArray();
@@ -128,7 +158,6 @@ public class test {
     }
 
     public static String getAllSynData() {
-        MysqlLocalConnection conn = MysqlLocalConnection.getInstance();
         String sql = "SELECT * from syn_data";
         ResultSet rs = MysqlLocalConnection.executeQuery(sql);
         JSONArray results = new JSONArray();

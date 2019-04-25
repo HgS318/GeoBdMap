@@ -16,6 +16,7 @@ var page2;
 var page3;
 var tPage1, tPage2, tPage3;
 var inited = false;
+var newSubTitle = null;
 
 // var btn1;
 // var btn2;
@@ -88,6 +89,9 @@ function fuse_simple(first) {
 	if(first) {
 		$("#content3").html(createWindowHtml(page3));
 		$("#tbCont3").html(createTbHtml(tPage3));
+		if(newSubTitle != null && newSubTitle != "") {
+			$("#subTitle")[0].innerHTML = newSubTitle;
+		}
 	}
 	openWin(win3);
 	openWin(tb3);
@@ -187,6 +191,10 @@ function initPages() {
 
 	var mainTitle = decodeURI(getQueryString("h1"));
 	var subTitle = decodeURI(getQueryString("h2"));
+	var h22 = decodeURI(getQueryString("h22"));
+	if(h22 != null && h22 != "") {
+		newSubTitle = h22;
+	}
 	var top1 = decodeURI(getQueryString("top1"));
 	var top2 = decodeURI(getQueryString("top2"));
 	var top3 = decodeURI(getQueryString("top3"));

@@ -12,6 +12,18 @@ import whu.eres.cartolab.geo.*;
 
 public class JsonAction01 {
 
+    public String getAllFireLocalSites() {
+        try {
+            String str = test.test.getAllFireLocalSites();
+            String outStr = "{\"sites\": \"" + str + "\"}";
+            toBeJson(str);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ex.getMessage();
+        }
+        return null;
+    }
+
     public String getPointGeoEntities() {
         try {
             String str = test.test.getPointGeoEntities();
