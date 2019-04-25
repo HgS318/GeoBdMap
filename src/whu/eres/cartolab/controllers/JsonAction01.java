@@ -12,6 +12,17 @@ import whu.eres.cartolab.geo.*;
 
 public class JsonAction01 {
 
+    public String getPointGeoEntities() {
+        try {
+            String str = test.test.getPointGeoEntities();
+            toBeJson(str);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ex.getMessage();
+        }
+        return null;
+    }
+
     public String getAllGeoEntities() {
         try {
             String str = test.test.getAllGeoEntities();
@@ -64,7 +75,7 @@ public class JsonAction01 {
                 geoParams.put("address", addr);
                 geoParams.put("output", "json");
                 geoParams.put("ak", "SycUWXeBU9Z1tkvcNqmFxvo93cS4jbU7");
-                String geocodingReturnStr = GetPostUrl(geocodingUrl, geoParams, "GET", null, 0, 0);
+                String geocodingReturnStr = queryAPI(geocodingUrl, geoParams, "GET");
                 JSONObject geocodingReturn = JSONObject.fromObject(geocodingReturnStr);
                 if (geocodingReturn.has("result")) {
                     coordArray.put(k, geocodingReturn.getJSONObject("result"));
@@ -119,7 +130,7 @@ public class JsonAction01 {
                 geoParams.put("address", addr);
                 geoParams.put("output", "json");
                 geoParams.put("ak", "SycUWXeBU9Z1tkvcNqmFxvo93cS4jbU7");
-                String geocodingReturnStr = GetPostUrl(geocodingUrl, geoParams, "GET", null, 0, 0);
+                String geocodingReturnStr = queryAPI(geocodingUrl, geoParams, "GET");
                 JSONObject geocodingReturn = JSONObject.fromObject(geocodingReturnStr);
                 if (geocodingReturn.has("result")) {
                     coordArray.put(k, geocodingReturn.getJSONObject("result"));
@@ -150,6 +161,10 @@ public class JsonAction01 {
 
 //            double[] metrics = lonlat2metrics(coords);
             MaxConvexPolygon mcp = new MaxConvexPolygon(ucoords);
+            for(int i = 0; i < ucoords.length; i += 2) {
+                System.out.println(ucoords[i] + ", " + ucoords[i + 1]);
+            }
+            System.out.println(ucoords);
             double[] polygon = mcp.run();
 //            double[] polygon = metrics2lonlat(polygonMerics);
 //            double[] polygon = MaxConvexPolygon.myTest();
@@ -194,7 +209,7 @@ public class JsonAction01 {
             postParams.put("appkey", "40713");
             postParams.put("sign", "b3afd3d892135334df45dd0db8655e3a");
             postParams.put("format", "json");
-            String postResultStr = GetPostUrl(postcodeApi, postParams, "GET", null, 0, 0);
+            String postResultStr = queryAPI(postcodeApi, postParams, "GET");
             System.out.println(postResultStr);
             JSONObject postReturn = JSONObject.fromObject(postResultStr);
             if(postReturn.has("result")) {
@@ -235,7 +250,7 @@ public class JsonAction01 {
             areaParams.put("appkey", "40713");
             areaParams.put("sign", "b3afd3d892135334df45dd0db8655e3a");
             areaParams.put("format", "json");
-            String areaReturnStr = GetPostUrl(areacodeApi, areaParams, "GET",null, 0, 0);
+            String areaReturnStr = queryAPI(areacodeApi, areaParams, "GET");
             JSONObject areaReturn = JSONObject.fromString(areaReturnStr);
             JSONObject areaResult = areaReturn.getJSONObject("result");
             JSONArray areaResultList = areaResult.getJSONArray("lists");
@@ -249,7 +264,7 @@ public class JsonAction01 {
             geocodingParams.put("address", cityName);
             geocodingParams.put("output", "json");
             geocodingParams.put("ak", "6wpuO5hwG9I1n2VRKzGeN1GLiUGRenf9");
-            String geoReturnStr = GetPostUrl(geocodingApi, geocodingParams, "GET", null, 0, 0);
+            String geoReturnStr = queryAPI(geocodingApi, geocodingParams, "GET");
             JSONObject geoReturn = JSONObject.fromString(geoReturnStr);
             JSONObject geoResult = geoReturn.getJSONObject("result");
             JSONObject resultJson = combineJson(geoResult, areaResult0);
@@ -273,7 +288,7 @@ public class JsonAction01 {
             ipParams.put("ak", BD_AK);
             ipParams.put("ip", ip);
             ipParams.put("coor", "bd09ll");
-            String ipReturnStr = GetPostUrl(ipApi, ipParams, "GET", null, 0, 0);
+            String ipReturnStr = queryAPI(ipApi, ipParams, "GET");
 //            JSONObject ipReturn = JSONObject.fromString(ipReturnStr);
             JsonAction00.toBeJson(ipReturnStr);
 
@@ -308,7 +323,7 @@ public class JsonAction01 {
         return null;
     }
 
-    //  测试读取shp输出上海市
+    //  根据省市地区空间多边形
     public String getShape() {
         HttpServletRequest request = ServletActionContext.getRequest();
         String outStr = "";
@@ -339,11 +354,12 @@ public class JsonAction01 {
         String postcodeApi = "http://v.juhe.cn/postcode/query";
         Map<String, String> postParams = new HashMap<>();
         postParams.put("postcode", postcode);
-        postParams.put("pagesize", "15");
+        postParams.put("pagesize", "48");
         postParams.put("page", Integer.toString(page));
         postParams.put("key", "9ab4f8036190fc2d63661391b5e7528e");
         try {
-            String postResultStr = GetPostUrl(postcodeApi, postParams, "GET", null, 0, 0);
+//            String postResultStr = queryUrl(postcodeApi, postParams, "GET", null, 0, 0);
+            String postResultStr = queryAPI(postcodeApi, postParams, "GET");
             System.out.println(postResultStr);
             JSONObject postReturn = JSONObject.fromObject(postResultStr);
             JSONObject postResult = postReturn.getJSONObject("result");
@@ -375,7 +391,7 @@ public class JsonAction01 {
             params.put("coords", buf.toString());
             params.put("from", Integer.toString(from));
             params.put("to", Integer.toString(to));
-            String returnStr = GetPostUrl(api, params, "GET", null, 0, 0);
+            String returnStr = queryAPI(api, params, "GET");
             JSONObject resultJson = JSONObject.fromString(returnStr);
             if(resultJson.has("result")) {
                 JSONArray jsonArray = resultJson.getJSONArray("result");
@@ -394,8 +410,61 @@ public class JsonAction01 {
         return null;
     }
 
-    public static String GetPostUrl(String sendUrl, Map<String, String> params,
-            String sendType, String charset, int repeat_request_count, int repeat_request_max_count) {
+    public static String queryAPI(String requestUrl, Map params, String reqMethod) {
+        //buffer用于接受返回的字符
+        StringBuffer buffer = new StringBuffer();
+        try {
+            //建立URL，把请求地址给补全，其中urlencode（）方法用于把params里的参数给取出来
+            URL url = new URL(requestUrl + "?" + urlencode(params));
+            //打开http连接
+            HttpURLConnection httpUrlConn = (HttpURLConnection) url.openConnection();
+            httpUrlConn.setDoInput(true);
+            if(reqMethod == null || "GET".equalsIgnoreCase(reqMethod)) {
+                httpUrlConn.setRequestMethod("GET");
+            } else {
+                httpUrlConn.setRequestMethod("POST");
+            }
+            httpUrlConn.connect();
+
+            //获得输入
+            InputStream inputStream = httpUrlConn.getInputStream();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "utf-8");
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+            //将bufferReader的值给放到buffer里
+            String str = null;
+            while ((str = bufferedReader.readLine()) != null) {
+                buffer.append(str);
+            }
+            //关闭bufferReader和输入流
+            bufferedReader.close();
+            inputStreamReader.close();
+            inputStream.close();
+            //断开连接
+            httpUrlConn.disconnect();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //返回字符串
+        return buffer.toString();
+    }
+
+    public static String urlencode(Map<String,Object>data) {
+        //将map里的参数变成像 showapi_appid=###&showapi_sign=###&的样子
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry i : data.entrySet()) {
+            try {
+                sb.append(i.getKey()).append("=").append(URLEncoder.encode(i.getValue()+"","UTF-8")).append("&");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        return sb.toString();
+    }
+
+    public static String queryUrl(String sendUrl, Map<String, String> params,
+                                  String sendType, String charset, int repeat_request_count, int repeat_request_max_count) {
         URL url = null;
         HttpURLConnection httpurlconnection = null;
         try {

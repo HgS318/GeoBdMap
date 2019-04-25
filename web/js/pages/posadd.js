@@ -15,14 +15,17 @@ var posadd = {
 };
 var mapvpLayer = null;
 
-function showMassPoints() {
-    showPointCollection();
-    // showMapvpLayer();
+function showMassPoints(load) {
+    showPointCollection(load);
+    showMapvpLayer(load);
 }
 
-function showPointCollection() {
+function showPointCollection(load) {
     if(posadd.pointCollection != null) {
         posadd.pointCollection.show();
+        return;
+    }
+    if(load === undefined || !load) {
         return;
     }
 
@@ -34,8 +37,8 @@ function showPointCollection() {
         var points = [];  // 添加海量点数据
         for (var i = 0; i < china_pois.length; i++) {
             var poi = china_pois[i];
-            // var bp = new BMap.Point(poi['wgsx'], poi['wgxy']);  //  武汉
-            var bp = new BMap.Point(poi[0], poi[1]);    //  全国示例
+            var bp = new BMap.Point(poi['wgsx'], poi['wgxy']);  //  武汉
+            // var bp = new BMap.Point(poi[0], poi[1]);    //  全国示例
             bp.extData = poi;
             bp.spaType = 1;
             points.push(bp);
@@ -59,16 +62,25 @@ function showPointCollection() {
         });
         map.addOverlay(pointCollection);  // 添加Overlay
         $("#boundintotal")[0].innerHTML = "海量点：" + china_pois.length + "条记录";
+        $("#distintotal")[0].innerHTML = "接入信息：" + china_pois.length + "条记录";
 
+        var checkBox = document.getElementById('toolbarBounds');
+        if(checkBox.checked != true) {
+            checkBox.checked = true;
+        }
+        $("#pointCollControl")[0].style.display = "block";
     } else {
         alert('请在chrome、safari、IE8+以上浏览器查看海量点效果');
     }
 }
 
-function showMapvpLayer() {
+function showMapvpLayer(load) {
 
     if(mapvpLayer != null) {
         mapvpLayer.show();
+        return;
+    }
+    if(load === undefined || !load) {
         return;
     }
     var dataset_path = "download/mapv/examples/data/Beijing_37w.csv";
@@ -87,7 +99,13 @@ function showMapvpLayer() {
         dataSet.initGeometry();
         mapvpLayer = new mapv.baiduMapLayer(map, dataSet, options);
 
-        $("#boundintotal")[0].innerHTML = "海量点：" + dataSet.length + "条记录";
+        $("#boundintotal")[0].innerHTML = "海量点：" + dataSet._data.length + "条记录";
+        $("#distintotal")[0].innerHTML = "接入信息：" + dataSet._data.length + "条记录";
+        var checkBox = document.getElementById('toolbarBounds');
+        if(checkBox.checked != true) {
+            checkBox.checked = true;
+        }
+        $("#mapvLayerControl")[0].style.display = "block";
     });
 }
 
@@ -109,12 +127,22 @@ function hidePosAdds() {
     hideRelposOverlays();
 }
 
-
-function hideMassPoints() {
+function hidePointCollection() {
     if(posadd.pointCollection != null) {
         posadd.pointCollection.hide();
-        return;
     }
+}
+
+function hideMapv() {
+    if(mapvpLayer != null) {
+        mapvpLayer.hide();
+    }
+}
+
+
+function hideMassPoints() {
+    hidePointCollection();
+    hideMapv();
 }
 
 function geocodeSearch(addr, index){
@@ -151,8 +179,14 @@ function extract_address() {
 
 function extract_coords() {
     var coordStr = $("#coordtext")[0].value;
-    if(coordStr.indexOf("http") > -1) {
-        setTimeout(showMassPoints, 800);
+    if(coordStr.indexOf(",") < 0) {
+        if(coordStr.indexOf('bei') > -1) {
+            setTimeout(showMapvpLayer(true), 800);
+        } else if(coordStr.indexOf('uhan') > -1) {
+            setTimeout(showPointCollection(true), 800);
+        } else {
+            setTimeout(showMassPoints(true), 800);
+        }
         return;
     }
     var xyStr = coordStr.split(',');
@@ -186,12 +220,43 @@ function extract_postcode() {
 
 function extract_phone_number() {
     var phoneNumber = $("#phonetext")[0].value;
-    var splashId = phoneNumber.indexOf('-');
-    if(splashId < 0) {
-        return;
+    var areaCode = getAreaNumFromPhnoeNum(phoneNumber);
+    showAreacode(areaCode, phoneNumber);
+}
+
+function getAreaNumFromPhnoeNum(phoneNum) {
+    var areaCode = null;
+    var splashId = phoneNum.indexOf('-');
+    if(splashId > 0) {
+        areaCode = phoneNum.substring(0, splashId);
+        return areaCode;
     }
-    var areaCode = phoneNumber.substring(0, splashId);
-    showAreacode(areaCode);
+    var spaceId = phoneNum.indexOf(' ');
+    if(spaceId > 0) {
+        areaCode = phoneNum.substring(0, spaceId);
+        return areaCode;
+    }
+    var bracket1 = phoneNum.indexOf('(');
+    if(bracket1 < 0) {
+        bracket1 = phoneNum.indexOf('（');
+    }
+    var bracket2 = phoneNum.indexOf(')');
+    if(bracket2 < 0) {
+        bracket2 = phoneNum.indexOf('）');
+    }
+    if(bracket1 > -1 && bracket2 > -1) {
+        areaCode = phoneNum.substring(bracket1 + 1, bracket2);
+        return areaCode;
+    }
+    var areaCodes3 = ["010", "020", "021", "022", "023", "024", "025", "026", "027", "028", "029"];
+    for(var i = 0; i < areaCodes3.length; i++) {
+        var areaCode3 = areaCodes3[i];
+        if(phoneNum.indexOf(areaCode3) == 0) {
+            return areaCode3;
+        }
+    }
+    areaCode = phoneNum.substring(0, 4);
+    return areaCode;
 }
 
 function extract_ip() {
@@ -297,26 +362,14 @@ var openFile = function(event, divName){
     reader.readAsText(input.files[0]);
 };
 
-var openFileName = function (event, divName) {
-    var input = event.target;
-    var file = input.files[0];
-    // var file = event.files[0];
-    var url = getObjectURL(file);
-    document.getElementById(divName).value = url;
-    // var reader = new FileReader();
-    // reader.onload = function(){
-    //     if(reader.result){
-    //         var text = reader.result;
-    //         alert(text);
-    //         document.getElementById(divName).value = text;
-    //         if(divName == "extrapostext") {
-    //             relpos.text = text;
-    //         } else if(divName == "addrtext") {
-    //
-    //         }
-    //     }
-    // };
-    // reader.readAsText(input.files[0]);
+var openFileName = function (event, showPathDivName) {
+    // document.getElementById(showPathDivName).value = document.getElementById(fileDivName).value;
+    // document.getElementById(showPathDivName).value = fileDiv.value;
+    // var input = event.target;
+    // var file = input.files[0];
+    document.getElementById(showPathDivName).value = event.target.files[0].name;
+    // var url = getObjectURL(file);files[0].name
+    // document.getElementById(showPathDivName).value = url;
 };
 
 function getObjectURL(file) {
@@ -349,7 +402,7 @@ function getObjectURL(file) {
 //     showAreacode(areacode);
 // }
 
-function showAreacode(areacode) {
+function showAreacode(areacode, phoneNum) {
     $.ajax({
         url: 'getCoordsByAreacode.action?areacode=' + areacode,
         type: 'get',
@@ -361,7 +414,7 @@ function showAreacode(areacode) {
             var province = elements[ele_len - 2];
             var city = elements[ele_len - 1];
             var district = "";
-            var areaShape = getShape(province, city, district, "areacode", areacode);
+            var areaShape = getShape(province, city, district, "areacode", phoneNum);
         }, error: function (err_data) {
             console.log(err_data);
         }
@@ -464,10 +517,18 @@ function showPostcodeDistrict(postcode) {
     });
 }
 
-function getShape(province, city, district, key, value) {
+function getShape(province, city, district, key, addValue) {
+    var type_show = {
+        "postcode": "邮编",
+        "areacode": "电话",
+        "ip": "IP"
+    }
+    if(city.lastIndexOf("市") == city.length - 1) {
+        city = city.substring(0, city.length - 1);
+    }
     if(posadd.city_polygons[city] != undefined) {
         var existOverlay = posadd.city_polygons[city];
-        existOverlay.extData.texts.push("  " + key + ": " + value);
+        existOverlay.extData.texts.push("  " + type_show[key] + ": " + addValue);
         gotoPolyOverlay(existOverlay);
         return;
     }
@@ -488,25 +549,22 @@ function getShape(province, city, district, key, value) {
             if(province != null && province != "") {
                 disText += "省份:" + province + "  ";
             }
-            if(city.lastIndexOf("市") == city.length - 1) {
-                city = city.substring(0, city.length - 1);
-            }
             if(city != null && city != "") {
                 disText += "城市:" + city + "  ";
             }
             if(district != null && district != "") {
                 disText += "地区:" + district + "  ";
             }
-            var texts = [];
+            var texts = [type_show[key] + ": " + addValue, disText];
             var list = null;
             if(key == "postcode") {
-                texts = ["邮编: " + value, disText];
+                // texts = ["邮编: " + value, disText];
                 list = posadd.post_overlays;
             } else if(key == "areacode") {
-                texts = ["区号: " + value, disText];
+                // texts = ["区号: " + value, disText];
                 list = posadd.phone_overlays;
             } else if(key == "ip") {
-                texts = ["IP: " + value, disText];
+                // texts = ["IP: " + value, disText];
                 list = posadd.ip_overlays;
             } else {
 
@@ -528,17 +586,96 @@ function getShape(province, city, district, key, value) {
 }
 
 function gotoPolyOverlay(overlay, scale) {
-    var path = overlay.getPath();
-    if(path.length > 0) {
-        var bPoint = path[0];
-        if(scale === undefined || scale == null) {
-            scale = 9;
-        }
-        map.centerAndZoom(bPoint, scale);
-    }
+    openInfoWin({target: overlay});
+    // var path = overlay.getPath();
+    // if(path.length > 0) {
+    //     var bPoint = path[0];
+    //     if(scale === undefined || scale == null) {
+    //         scale = 9;
+    //     }
+    //     map.centerAndZoom(bPoint, scale);
+    // }
 }
 
 function addMarker(point) {
     var marker = new BMap.Marker(point);
     map.addOverlay(marker);
+}
+
+function addGo() {
+    setTimeout(clearGeoEntities, 800);
+}
+
+
+function clearGeoEntities() {
+    for(var i = 0; i < geoEntities.length; i++) {
+        geoEntities[i].hide();
+    }
+    geoEntities.splice(0, geoEntities.length);
+    setTimeout(initPointGeoEntities, 600);
+}
+
+
+function setAddStats() {
+    var info = "<p>&nbsp;&nbsp;<strong>叠加模式：</strong></p>"+
+        "<p>&nbsp;&nbsp;&nbsp;&nbsp;上确共位叠加，串联时态叠加，自选范围</p><br/>"+
+        "<p>&nbsp;&nbsp;<strong>处理的信息量：</strong></p>"+
+        "<p>&nbsp;&nbsp;&nbsp;&nbsp;文字：16304字节，图形：33256字节，<br/>"+
+        "&nbsp;&nbsp;&nbsp;&nbsp;图像：46926846字节，视频：2523秒，<br/>"+
+        "&nbsp;&nbsp;&nbsp;&nbsp;音频：865秒，动画：75秒</p>"+
+        "<p>&nbsp;&nbsp;&nbsp;&nbsp;处理了74条位置信息，<br/>"+
+        "&nbsp;&nbsp;&nbsp;&nbsp;叠加产生了23个组合地理实体</p><br/>"+
+        "<p>&nbsp;&nbsp;<strong>叠加产生要素的信息量：</strong></p>"+
+        "<p>&nbsp;&nbsp;&nbsp;&nbsp;文字：9102字节，图形：13368字节，<br/>"+
+        "&nbsp;&nbsp;&nbsp;&nbsp;图像：29105662字节，视频：1273秒，<br/>"+
+        "&nbsp;&nbsp;&nbsp;&nbsp;音频：241秒，动画：31秒</p>";
+    $("#infoStats").html(info);
+}
+
+function initPointGeoEntities() {
+
+    $.ajax({
+        url:"getPointGeoEntities.action",
+        type: 'get',
+        dataType: 'json',
+        success:function(syn_data) {
+            var dataJson = syn_data;
+            for (var i = 0; i < dataJson.length; i++) {
+                var entity = dataJson[i];
+                var content = createContent(entity);
+                var pointStr = entity['position'];
+                if(pointStr != null && pointStr != undefined) {
+                    var pointArray = pointStr.split(",");
+                    var X = pointArray[0];
+                    var Y = pointArray[1];
+                    var Point = new BMap.Point(X, Y);
+                    var marker = new BMap.Marker(Point);
+                    marker.spaType = 1;
+                    addOverlayAndWin(marker, entity, content, geoEntities);
+                }
+            }
+            setTimeout(initGeoEntities, 1000);
+            setAddStats(setAddStats, 1000);
+        },
+        error: function (err_data) {
+            console.log(err_data);
+        }
+    });
+
+}
+
+function toShowPointCool(checkbox) {
+    if(checkbox.checked) {
+        showPointCollection(false);
+    } else {
+        hidePointCollection();
+    }
+}
+
+function toShowMapv(checkbox) {
+    if (checkbox.checked) {
+        showMapvpLayer(false);
+    } else {
+        hideMapv();
+    }
 }

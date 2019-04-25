@@ -9,6 +9,54 @@ import java.sql.*;
 
 public class test {
 
+    public static String getPointGeoEntities() {
+        MysqlLocalConnection conn = MysqlLocalConnection.getInstance();
+        String sql = "SELECT * from info WHERE spaType = 1 order by geid";
+        ResultSet rs = MysqlLocalConnection.executeQuery(sql);
+        List<GeoInfo> infos = new ArrayList<>();
+        List<GeoEntity> entities = new ArrayList<>();
+        String result = "";
+        try {
+            int i = 0;
+            while (rs.next()) {
+                GeoInfo geoInfo = new GeoInfo(rs);
+                infos.add(geoInfo);
+                i++;
+            }
+            rs.close();
+            int len = infos.size();
+            List<GeoInfo> group = new ArrayList<>();
+            int lastGeid = -1;
+            for(i = 0; i < len; i++) {
+                GeoInfo info = infos.get(i);
+                if(info.geid != lastGeid) {
+                    if(group.size() > 0) {
+                        GeoEntity entity = new GeoEntity(group);
+                        entities.add(entity);
+                        group.clear();
+                    }
+                }
+                group.add(info);
+                if(i == len - 1) {
+                    GeoEntity entity = new GeoEntity(group);
+                    entities.add(entity);
+                }
+                lastGeid = info.geid;
+            }
+            i = 0;
+            for(GeoEntity entity : entities) {
+                System.out.println(i + "\t-\t" + entity.infoAmount());
+//                System.out.println(i + "\t-\t" + entity.toJson());
+                i++;
+            }
+            String listStr = GeoEntity.toJson(entities);
+            System.out.println(listStr);
+            result = listStr;
+        } catch (Exception se) {
+            se.printStackTrace();
+        }
+        return result;
+    }
 
     public static String getAllGeoEntities() {
         MysqlLocalConnection conn = MysqlLocalConnection.getInstance();
