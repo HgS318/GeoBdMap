@@ -26,9 +26,18 @@
             "text": "恒盛·尚海湾项目位于上海市徐汇区宛平南路1455弄，地处宛平南路与龙腾大道交汇处，是世博会最佳观礼台，可直接眺望黄浦江对岸的世博会国家馆群。与黄浦江相隔仅50米，雄踞徐汇滨江板块一线江景资源，8万平米滨江亲水公园正对面，“西岸文化走廊”各项艺术配套环伺项目左右，毗邻徐家汇商圈，滨江龙腾大道连通外滩区域。",
 
             // "text2":"富民路北起延安中路，南至长乐路，一条短小精悍的路。从常德路一路往南走，经过宽阔的延安中路便来到了并不宽的富民路。开始的一段路还没有那么的窄，到了巨鹿路与富民路的路口，你会发现路明显就变窄了，只有两车宽。路上小店也明显的多了起来，由巨鹿路、富民路和长乐路组成的黄金工字区里可是小店扎堆的地方，很多小店都各具特色。 道旁梧桐掩映得幽暗，仿佛有着诱人秘密等你去探寻。越走越深、越走越静，路旁沉淀时间的建筑，散发出岁月的味道。",
-            "image": ["../../data/syn_data/建筑道路数据/尚海湾豪庭/2.jpg"],
+            "images": ["../../data/syn_data/建筑道路数据/尚海湾豪庭/2.jpg"],
             // "image2":"data/syn_data/建筑道路数据/富民路/2.jpg",
-            "spaType": 5
+            "spaType": 5,
+            "infoAmount": {
+                "vedioLength": "",
+                "modelLength": "",
+                "imageLength": "40.9 KB",
+                "textLenth": "148字节",
+                "audioLength": "",
+                "figureLength": "",
+                "flashLength": ""
+            }
         },
         "2": {
             "name": "尚海湾豪庭小区 - \"天鸿·尚海湾\"",
@@ -39,8 +48,17 @@
             "text": "新古典主义建筑风格、全天然石材外立面，搭配皇家园林内景，以及超2000㎡天际泳池、风雨连廊、海神广场等小品精心点缀。由香港两大国宝级室内设计师—高文安与梁志天领衔设计精装展示间。",
 
             // "image1":"data/syn_data/建筑道路数据/富民路/1.jpg",
-            "image": ["../../data/syn_data/建筑道路数据/尚海湾豪庭/3.jpg"],
-            "spaType": 5
+            "images": ["../../data/syn_data/建筑道路数据/尚海湾豪庭/3.jpg"],
+            "spaType": 5,
+            "infoAmount": {
+                "vedioLength": "",
+                "modelLength": "",
+                "imageLength": "32.5 KB",
+                "textLenth": "85字节",
+                "audioLength": "",
+                "figureLength": "",
+                "flashLength": ""
+            }
         },
         "3": {
             "name": "尚海湾豪庭 小区",
@@ -52,9 +70,18 @@
             "texts": ["恒盛·尚海湾项目位于上海市徐汇区宛平南路1455弄，地处宛平南路与龙腾大道交汇处，是世博会最佳观礼台，可直接眺望黄浦江对岸的世博会国家馆群。与黄浦江相隔仅50米，雄踞徐汇滨江板块一线江景资源，8万平米滨江亲水公园正对面，“西岸文化走廊”各项艺术配套环伺项目左右，毗邻徐家汇商圈，滨江龙腾大道连通外滩区域。",
                 "新古典主义建筑风格、全天然石材外立面，搭配皇家园林内景，以及超2000㎡天际泳池、风雨连廊、海神广场等小品精心点缀。由香港两大国宝级室内设计师—高文安与梁志天领衔设计精装展示间。"],
             // "image1":"data/syn_data/建筑道路数据/富民路/1.jpg",
-            "image": ["../../data/syn_data/建筑道路数据/尚海湾豪庭/2.jpg",
+            "images": ["../../data/syn_data/建筑道路数据/尚海湾豪庭/2.jpg",
                 "../../data/syn_data/建筑道路数据/尚海湾豪庭/3.jpg"],
-            "spaType": 5
+            "spaType": 5,
+            "infoAmount": {
+                "vedioLength": "",
+                "modelLength": "",
+                "imageLength": "73.4 KB",
+                "textLenth": "233字节",
+                "audioLength": "",
+                "figureLength": "",
+                "flashLength": ""
+            }
         }
     };
     var id = getQueryString("id");
@@ -98,68 +125,94 @@
         addOverlayAndWindow(overlay, Data, content);
     }
 
-    function createContent(Data) {
-
+    function createContent(entity) {
         var content = '<div style="width: 320px">' +
-                '<h4 style="margin: 0 0 0 0; padding: 0 0 0 0; color: #be2924; font-size: 18px">' + Data['name'] + '</h4><br/>';
-        if(Data.address != null && Data.address != undefined) {
-            content += '地址：' + Data.address + '<br/>';
+            '<h4 style="margin: 0 0 0 0; padding: 0 0 0 0; color: #be2924; font-size: 18px">' + entity['name'] + '</h4><br/>';
+        if(entity.address != null && entity.address != undefined) {
+            content += '地址：' + entity.address + '<br/>';
         }
-        if(Data['text'] != null) {
-            var text = Data['text'];
-            if(text.length > 60) {
-                text = text.substring(0, 60) + '...';
+        if(entity['text'] != null) {
+            var text = entity['text'];
+            if(text.length > 48) {
+                text = text.substring(0, 45) + '...';
             }
-            content += "<strong>文字</strong><p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
+            if(entity.infoAmount != undefined && entity.infoAmount != null) {
+                content += "<strong>文字</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+                    "(信息量：" + entity['infoAmount']['textLenth'] +
+                    ")<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
+            } else {
+                content += "<strong>文字</strong> <p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
+            }
         }
-        if(Data['texts'] != null) {
-            content += "<strong>文字</strong>";
-            for(var j = 0; j < Data['texts'].length; j++) {
-                var text = Data['texts'][j];
-                if(text.length > 45) {
-                    text = text.substring(0, 45) + '...';
+        if(entity['texts'] != null) {
+            if(entity.infoAmount != undefined && entity.infoAmount != null) {
+                content += "<strong>文字</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+                    "(信息量：" + entity['infoAmount']['textLenth'] + ")";
+            } else {
+                content += "<strong>文字</strong>";
+            }
+            for(var j = 0; j < entity['texts'].length; j++) {
+                var text = entity['texts'][j];
+                if(text.length > 50) {
+                    text = text.substring(0, 50) + '...';
                 }
                 content += "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
             }
         }
-        if(Data['image'] != null && Data['image'].length > 0) {
-            content += '<strong>图像</strong><br/>';
-            for (var j = 0; j < Data['image'].length; j++) {
-                var img_path = Data['image'][j];
-//                                content += "<img src='" + img_path + "' class='img' alt='' onclick='openWindowY(img_path)'"
-//                                        + "style='zoom:1;overflow:hidden;width:50px;height:50px;'/>";
+        if(entity['images'] != null && entity['images'].length > 0) {
+            if(entity.infoAmount != undefined && entity.infoAmount != null) {
+                content += '<strong>图像</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                    "(信息量：" + entity['infoAmount']['imageLength'] + ")<br/>";
+            } else {
+                content += '<strong>图像</strong><br/>';
+            }
+            for (var j = 0; j < entity['images'].length; j++) {
+                var img_path = entity['images'][j];
                 content += '&nbsp;&nbsp;<img src=' + img_path + ' class="img" onclick="openWindowY(this, \'image\')" ' +
-                        'alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>'
-
+                    'alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>'
             }
             content += '<br/>';
         }
-        if(Data['vedios'] != null && Data['vedios'].length > 0) {
-            content += '<strong>视频</strong><br/>';
-            for (var j = 0; j < Data['vedios'].length; j++) {
-                var vedio_path = Data['vedios'][j];
-//                                content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + vedio_path + '" target="_blank" onclick="openWindowY(this, \'vedio\')">视频' + (j + 1) + '</a>');
+        if(entity['vedios'] != null && entity['vedios'].length > 0) {
+            if(entity.infoAmount != undefined && entity.infoAmount != null) {
+                content += '<strong>视频</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                    "(信息量：" + entity['infoAmount']['vedioLength'] + ")<br/>";
+            } else {
+                content += '<strong>视频</strong><br/>';
+            }
+            for (var j = 0; j < entity['vedios'].length; j++) {
+                var vedio_path = entity['vedios'][j];
                 content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + vedio_path +'" target="_blank">视频' + (j + 1) + '</a>');
             }
             content += '<br/>';
         }
-        if(Data['audios'] != null && Data['audios'].length > 0) {
-            content += '<strong>音频</strong><br/>';
-            for (var j = 0; j < Data['audios'].length; j++) {
-                var audio_path = Data['audios'][j];
+        if(entity['audios'] != null && entity['audios'].length > 0) {
+            if(entity.infoAmount != undefined && entity.infoAmount != null) {
+                content += '<strong>音频</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                    "(信息量：" + entity['infoAmount']['audioLength'] + ")<br/>";
+            } else {
+                content += '<strong>音频</strong><br/>';
+            }
+            for (var j = 0; j < entity['audios'].length; j++) {
+                var audio_path = entity['audios'][j];
                 content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + audio_path +'" target="_blank">音频' + (j + 1) + '</a>');
             }
             content += '<br/>';
         }
-        if(Data['models'] != null && Data['models'].length > 0) {
-            content += '<strong>模型</strong><br/>';
-            for (var j = 0; j < Data['models'].length; j++) {
-                var model_paths = Data['models'][j];
+        if(entity['models'] != null && entity['models'].length > 0) {
+            if(entity.infoAmount != undefined && entity.infoAmount != null) {
+                content += '<strong>模型</strong><br/>';
+            } else {
+                content += '<strong>模型</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                    "(信息量：" + entity['infoAmount']['modelLength'] + ")<br/>";
+            }
+            for (var j = 0; j < entity['models'].length; j++) {
+                var model_paths = entity['models'][j];
                 var model_pic = model_paths.split(':');
                 var model_path = model_pic[0];
                 var model_pic = model_pic[1];
                 content += '<img src=' + model_pic + ' class="img" href="' + model_path + '" ' +
-                        'target="_blank" alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>'
+                    'target="_blank" alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>'
 //                                content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + vedio_path + '" onclick="getHref()">视频' + (j + 1) + '</a>');
             }
             content += '<br/>';
