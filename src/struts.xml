@@ -40,6 +40,7 @@
         <action name="readbeijing_01to10" class="whu.eres.cartolab.controllers.JsonAction03" method="geiBeijingAirMultiDaysSplit" />
         <action name="readchina_06to15" class="whu.eres.cartolab.controllers.JsonAction03" method="getChinaAirMultiDaysSplit" />
         <action name="readcoincide_06to10" class="whu.eres.cartolab.controllers.JsonAction03" method="getChinaAirMixedMultiDaysSplit" />
+        <action name="readbeijing_06to10" class="whu.eres.cartolab.controllers.JsonAction03" method="getBeijingAirMultiDaysSplit" />
 
         <action name="searchPrepare" class="whu.eres.cartolab.controllers.JsonAction00" method="searchPrepare" />
         <action name="getSessionAttribute" class="whu.eres.cartolab.controllers.JsonAction00" method="getSessionAttribute" />

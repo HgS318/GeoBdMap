@@ -352,7 +352,7 @@ public class JsonAction03 {
         return null;
     }
 
-    public String getBeijing0610Split() {
+    public String getBeijingAirMultiDaysSplit() {
         int i,l,j;
         MysqlLocalConnection.getInstance();
         File csv = new File(MysqlLocalConnection.websitePath + "data/air/parallel_overlay/beijing_coincide_06to10.csv");
