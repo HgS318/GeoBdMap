@@ -1,0 +1,99 @@
+(function () {
+    CUserSDK = typeof CUserSDK != 'undefined' ? CUserSDK : { // jshint ignore:line
+        /**
+         * CLogin版本号
+         * @example
+         * CLogin.version
+         */
+        version: "1.0"
+    };
+    CUserSDK.ApiUrlConfig = {
+        sendMessageByEmailUrl: "gateway/api/soa2/11448/sendMessageByEmail",
+        validateEmailCodeUrl: "gateway/api/soa2/10261/ValidateEmailCode",
+        sendMessageByPhoneUrl: "gateway/api/soa2/11448/sendMessageByPhone",
+        validateMobilePhoneUrl: "gateway/api/soa2/10261/ValidateMobilePhone",
+        userRegisterByTokenUrl: "gateway/api/soa2/12343/userRegisterByToken",
+        emailRegisterUrl: "gateway/api/soa2/12343/emailRegister",
+        resetPwdUrl: "gateway/api/soa2/12715/modifyUserPassword",
+        modifyPwdUrl: "gateway/api/soa2/12716/modifyUserPassword",
+        accountInfoUrl: "gateway/api/soa2/11871/getAccountInfoByLoginName",
+        loginUrl: "gateway/api/soa2/12559/userLogin",
+        writeAuthUrl: "ssoproxy/ssoCrossSetCookie",
+		getAuthUrl:"ssoproxy/ssoGetCookieValByCticket",
+        isLoginUrl:"ssoproxy/ssoIsLogon",
+        logOutUrl:"ssoproxy/ssoLogoutByTicket",
+        userValidateUrl: "gateway/api/soa2/12559/userValidate",
+        userAuthValidateUrl: "gateway/api/soa2/12560/userValidate",
+		userValidateNoRiskUrl: "gateway/api/soa2/12559/userValidateNoRisk",
+        bindMobilePhoneUrl: "gateway/api/soa2/12715/bindMobilePhone",
+        unbindMobilePhoneUrl: "gateway/api/soa2/12715/unBindMobilePhone",
+        getMemberTaskUrl: "gateway/api/soa2/11464/getMemberTaskByUID",
+        getLastLoginInfoUrl: "ssoproxy/getlastlogininfo",
+        setGuestDataUrl: "gateway/api/soa2/12770/setGuestData",
+        bindEmailUrl: "gateway/api/soa2/12715/bindEmail",
+        unbindEmailUrl: "gateway/api/soa2/12715/unBindEmail",
+        rebindEmailUrl: "gateway/api/soa2/12715/changeEmail",
+        sendCodeByAuthUrl:"gateway/api/soa2/13775/sendValidateCode",
+        validateCodeByAuthUrl:"gateway/api/soa2/13775/validateCode",
+        userLoginWithRiskUrl:"gateway/api/soa2/12559/userLoginWithRisk",
+        sendCodeWithRebindMobileOnlineUrl:"gateway/api/soa2/11449/sendMessageByPhone",
+        sendCodeWithRebindEmailOnlineUrl:"gateway/api/soa2/11449/sendMessageByEmail",
+        nonMemberLoginUrl:"gateway/api/soa2/10274/NonMemberRegisterAndLogin",
+		sendMessageH5:"gateway/api/soa2/11448/sendMessageH5",
+		sendRealNameH5Url: "gateway/api/soa2/11448/sendRealNameMsgH5",
+        isRealNameUrl: "gateway/api/soa2/13603/isUserRealName",
+        addIdentityByTokenUrl: "gateway/api/soa2/13603/addIdentityByToken",
+		assoicatedKeyUrl: "gateway/api/soa2/13191/associatedKey",
+        sendEmailCodeByLoginNameUrl:"gateway/api/soa2/13775/sendEmailCodeByLoginName",
+        sendMobileCodeByLoginNameUrl:"gateway/api/soa2/13775/sendMobileCodeByLoginName",
+		validateEmailCodeByLoginNameUrl:"gateway/api/soa2/13775/validateEmailCodeByLoginName",
+        validateMobileCodeByLoginNameUrl:"gateway/api/soa2/13775/validateMobileCodeByLoginName",
+		
+        thirdPartLoginUrl:"gateway/api/soa2/10209/ThirdPartLogin",
+        thirdPartBindAndLoginUrl:"gateway/api/soa2/10209/ThirdPartBindAndLogin",
+		userValidateH5Url: "gateway/api/soa2/12559/userValidateH5",
+		//扫码登录url
+		getQRCodeUrl:"gateway/api/soa2/14458/getQRCode",
+        checkQRCodeUrl:"gateway/api/soa2/14458/checkQRCode",
+
+        // 挂靠以及登录
+        assoicatedKeyAndLoginUrl: "gateway/api/soa2/13775/associateByTokenAndGetOrder",
+
+        JthirdPartLoginUrl:"gateway/api/soa2/13775/thirdPartyLogin",
+        JthirdPartBindAndLoginUrl:"gateway/api/soa2/13775/thirdPartyBindAndLogin",
+        authenticateUrl: "gateway/api/soa2/14553/authenticate",
+        sendResetpwSmsUrl: "gateway/api/soa2/11448/sendResetpwSms",
+        sendDynamicSmsUrl: "gateway/api/soa2/11448/sendDynamicSms",
+        thirdBindByTicketUrl: "gateway/api/soa2/12715/thirdbindbyticket",
+        getUidByMobileTokenUrl: "gateway/api/soa2/13191/getUidByMobileToken",
+        checkBindPermisssionUrl: "gateway/api/soa2/13191/checkPermission",
+        newBindOrRebindMobileUrl: "gateway/api/soa2/12715/bindOrReBindMobile",
+
+        nonMemberLoginWithRiskUrl:"gateway/api/soa2/15431/NonMemberRegisterAndLoginWithRisk",
+        // 扫码登录相关
+        getNewQRCodeUrl: "ssoproxy/QRCode/getNewQRCode",
+        checkNewQRCodeUrl: "ssoproxy/QRCode/checkQRCode",
+        updateQRCodeUrl: "gateway/api/soa2/14458/updateQRCode",
+
+
+    };
+	CUserSDK.loginUrlConfig={
+	    downloadCtripAppUrl:"http://m.ctrip.com/webapp/mkt/app-channel-statistics/H5View/centerpage/download.html"
+	};
+	
+    CUserSDK.jumpUrlConfig = {
+        retrievePwd: "/user/resetpwd/verifyIdentity",
+        register: "/user/reg/home",
+        companyLogin: "http://ct.ctrip.com/crpTravel/zh-cn",
+        serviceAgreement: "http://pages.ctrip.com/public/serve%20guideline.htm?1",
+        privacyPolicy: "http://pages.ctrip.com/public/serve%20guideline.htm?2",
+        getOrder: "https://passport.ctrip.com/user/member/fastOrder"
+    };
+    CUserSDK.headPicBase = {
+        "local": "https://uploadimg.fws.qa.nt.ctripcorp.com/upload/target",
+        "fat": "https://uploadimg.fws.qa.nt.ctripcorp.com/upload/target",
+        "uat": "https://uploadimg.uat.qa.nt.ctripcorp.com/upload/target",
+        "uatqa": "https://uploadimg.uat.qa.nt.ctripcorp.com/upload/target",
+        "pro": "https://dimg04.c-ctrip.com/images"
+    }
+})();

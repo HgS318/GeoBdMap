@@ -75,6 +75,7 @@
 	<script src="js/pages/bd-mainpage-infowin.js"></script>
 	<script src="js/pages/relpos.js"></script>
 	<script src="js/pages/posadd.js"></script>
+	<script src="js/pages/xiaoqi.js"></script>
 	<script src="fuse/js/fuse-seq.js"></script>
 	<!--<script src="OntoSys/js/my/instanceLoad.js" type="text/javascript" charset="utf-8"></script>-->
 
@@ -357,7 +358,7 @@
                 <!--</div>-->
                 <div class="datagrid-toolbar" style="margin-bottom: 10px; padding:8px 4px 4px 5px;">
                     <input id="xqinput" class="easyui-searchbox" style="width: 100%; height: 30px; line-height: 30px"
-                           data-options="prompt:'输入消岐文本url',searcher:doSearchAll" />
+                           data-options="prompt:'输入消岐文本地址',searcher:initXiaoqi" />
                 </div>
 
                 <div class="searchDiv">
@@ -368,38 +369,40 @@
                             <!--&nbsp;&nbsp;&nbsp;&nbsp;<input type="file" id="coordfile" name="uploadFile" accept="text/plain"-->
                             <!--onchange="openFile(event, 'addrtext')" />-->
                         </h3>
-                        <textarea rows="6" cols="32"></textarea>
+                        <textarea rows="10" cols="34" id="xiaoqiText"></textarea>
                     </div>
 
                     <div class="nextTab" >
                         <!--<br/>-->
                         <h4>&nbsp;&nbsp;文本中的时间</h4>
-                        <textarea rows="3" cols="32"></textarea>
+                        <textarea rows="3" cols="34" id="test1"></textarea>
                     </div>
                     <div class="nextTab" >
                         <!--<br/>-->
                         <h4>&nbsp;&nbsp;文本中的地名</h4>
-                        <textarea rows="3" cols="32"></textarea>
+                        <textarea rows="3" cols="34" id="test2"></textarea>
                     </div>
                     <div class="nextTab" >
                         <!--<br/>-->
                         <h4>&nbsp;&nbsp;结果：歧义地名</h4>
-                        <textarea rows="3" cols="32"></textarea>
+                        <textarea rows="3" cols="34" id="diMing_result"></textarea>
                     </div>
                     <div class="nextTab" >
                         <!--<br/>-->
                         <h4>&nbsp;&nbsp;结果：歧义经纬度</h4>
-                        <textarea rows="3" cols="32"></textarea>
+                        <textarea rows="3" cols="34" id="JingWei_result"></textarea>
                     </div>
 
                     <br/>
                     <div class="nextTab" >
-                        &nbsp;&nbsp;&nbsp;<button class="srhbtn" onclick="">PPA判断</button>
-                        &nbsp;&nbsp;&nbsp;<button class="srhbtn" onclick="">可达域判断</button>
-                        &nbsp;&nbsp;&nbsp;<button class="srhbtn" onclick="">概率判断</button>
+                        &nbsp;&nbsp;&nbsp;<button class="srhbtn" onclick="jia_ellipse();inTuoYuan();">PPA判断</button>
+                        &nbsp;&nbsp;&nbsp;<button class="srhbtn" onclick="rset();addke();inKeDaYu();">可达域判断</button>
+                        &nbsp;&nbsp;&nbsp;<button class="srhbtn" onclick="rset();gailv();">概率判断</button>
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;<button class="srhbtn" onclick="hideXiaoqi()">清除消岐要素</button>
                     </div>
                     <p></p>
-                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：地名消岐功能集成中，详情请
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：功能集成中，详情请
                         <a href="http://106.12.93.49:8080/placedisambigution/final.jsp" target="_blank">点击</a></p>
 
                 </div>

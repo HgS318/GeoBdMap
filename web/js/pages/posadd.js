@@ -348,7 +348,6 @@ function doSearchAll() {
     } catch (e) {
         idx = 0;
     }
-
     $.ajax({
         url: 'getAllFireLocalSites.action',
         type: 'get',
@@ -493,7 +492,7 @@ function showPostcode(postcode) {
             //         var x = location['lng'];
             //         var y = location['lat'];
             //         var point = new BMap.Point(x, y);
-            //         addMarker(point);
+            //         addWuqiyiMarker(point);
             //         if(i == 0) {
             //             map.centerAndZoom(point, 12);
             //         }

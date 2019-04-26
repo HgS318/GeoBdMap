@@ -1,0 +1,184 @@
+var isLizardUserBeta = !1, isInIE = !1, localStorageFlag;
+
+try {
+    localStorageFlag = !!window.localStorage;
+} catch (e) {
+    localStorageFlag = !1;
+    try {
+        var _mockLS = {
+            setItem: function() {},
+            getItem: function() {}
+        };
+        Object.defineProperty(window, "localStorage", {
+            value: _mockLS
+        });
+    } catch (e) {}
+}
+
+!function() {
+    function i() {
+        for (var i = [ "Ctrip_CtripWireless", "Unicom_CtripWireless", "Pro_CtripWireless", "Youth_CtripWireless", "gs_wireless", "sml_wireless", "we_wireless", "AndroidTV_CtripWireless", "Tieyou_TieyouWireless" ], t = RegExp, e = window.navigator.userAgent, n = {}, a = 0; a < i.length; a++) {
+            var o = i[a];
+            if (new t(i[a] + "_([\\d.]+)").test(e)) {
+                n.isInCtrip = !0, ("gs_wireless" == o || "sml_wireless" == o || "we_wireless" == o) && (n.isNeedWeb = !0), 
+                n.ctripUA = o;
+                break;
+            }
+        }
+        return n;
+    }
+    function t(i) {
+        function t() {
+            window.ActiveXObject ? a = new ActiveXObject("Microsoft.XMLHTTP") : window.XMLHttpRequest && (a = new XMLHttpRequest());
+        }
+        function e(i, e) {
+            o = i, t(), a.onreadystatechange = n, a.open("GET", e, !0), a.setRequestHeader("Cache-Control", "no-cache"), 
+            a.setRequestHeader("Content-Type", "text/plain"), a.send(null);
+        }
+        function n() {
+            if (4 == a.readyState) try {
+                var i = {}, t = a.response || a.responseText;
+                if (t) for (var e, n = 0; n < h.length; n++) e = h[n], i[e] = (t.match(new RegExp("lizard22ares/(beta|web)/" + e + ".([^.]+)", "g")) || []).sort(function(i) {
+                    return -1 == i.indexOf("beta") ? 1 : -1;
+                });
+                var o = JSON.stringify(i);
+                "{}" !== o ? (o += "&" + new Date().getTime() + "&" + u.replace(/(http(s)?)?:?\/\//, ""), 
+                window.localStorage.setItem("SEED22ARESMD5", o)) : window.localStorage.removeItem("SEED22ARESMD5");
+            } catch (r) {}
+        }
+        var a, o = "";
+        e("lastModified", i);
+    }
+    function e() {
+        try {
+            var i = window.localStorage.getItem("GUID");
+            if (i && 1 == i.substr(-1)) return !0;
+        } catch (t) {}
+        return !1;
+    }
+    function n() {
+        try {
+            var i = window.localStorage.getItem("SEED22ARESMD5");
+            if (i) try {
+                if (u.replace(/(http(s)?)?:?\/\//, "") !== i.split("&")[2]) return;
+                i = i.split("&")[0];
+                for (var t, e, n, a = JSON.parse(i), o = 0; o < h.length; o++) t = h[o], n = p[o], 
+                e = a[t], e && (e = -1 != n.indexOf("beta") ? e[0] : e[1]), -1 == n.indexOf(e) && (p[o] = n.replace(new RegExp("lizard22ares/(beta|web)/" + t + ".([^.]+)", "g"), e));
+            } catch (r) {}
+        } catch (r) {}
+    }
+    if (window.location.href.indexOf("lizarddebug=true") >= 0) {
+        var a = window.location.href.match(/lizardversion=(\d+(.\d+){0,2})/i)[1], o = "//webresource.c-ctrip.com/resaresonline/fx/lizard22ares/" + a + "/debug/web/lizard.seed.test.js";
+        return void document.write('<script crossorigin src="' + o + '"><\/script>');
+    }
+    var r = "pro_20190423135625_";
+    isLizardUserBeta = e();
+    var c, l = document.getElementsByTagName("script") || [], d = /lizard\.seed\.(src\.)*js.*$/gi, s = "/res/concat?f=", u = "", p = [], h = [ "lizard.parser", "3rdlibs/IEPlugins", "app/c.ty.start", "app/c.ty.start", "lizard.hybrid", "lizard.geoHybrid" ];
+    p = isLizardUserBeta ? [ "/resaresonline/fx/lizard22ares/beta/lizard.parser.bb6c7d01.js", "/resaresonline/fx/lizard22ares/beta/3rdlibs/IEPlugins.4b972551.js", "/resaresonline/fx/lizard22ares/beta/app/c.tv.start.7b74148d.js", "/resaresonline/fx/lizard22ares/beta/app/c.ty.start.995735ce.js", "/resaresonline/fx/lizard22ares/beta/lizard.hybrid.2557dc20.js", "/resaresonline/fx/lizard22ares/beta/lizard.geoHybrid.d7e463ec.js" ] : [ "/resaresonline/fx/lizard22ares/web/lizard.parser.447ffbc4.js", "/resaresonline/fx/lizard22ares/web/3rdlibs/IEPlugins.a9843282.js", "/resaresonline/fx/lizard22ares/web/app/c.tv.start.0c5b03d6.js", "/resaresonline/fx/lizard22ares/web/app/c.ty.start.c656fd10.js", "/resaresonline/fx/lizard22ares/web/lizard.hybrid.15a119b1.js", "/resaresonline/fx/lizard22ares/web/lizard.geoHybrid.0293f8aa.js" ], 
+    n();
+    var g = p.slice(0, 1), f = i();
+    try {
+        var b = new Image();
+        b.onload = b.onerror = function() {
+            window.supportWebP = !(1 != b.height);
+        }, b.src = "data:image/webp;base64,UklGRiYAAABXRUJQVlA4IBoAAAAwAQCdASoBAAEAAAAMJaQAA3AA/v89WAAAAA==";
+    } catch (x) {}
+    try {
+        if (-1 != window.navigator.userAgent.indexOf("IEMobile")) {
+            var _ = window.navigator.userAgent.match(/IEMobile\/\d+/);
+            _.length > 0 && (_ = _[0].split("/")[1], _ >= 10 && g.splice(0, 0, p[1]));
+        }
+        isInIE = window.navigator.userAgent.match(/MSIE\s([\d.]+)/) || window.navigator.userAgent.match(/Trident\/[\d](?=[^\?]+).*rv:([0-9.].)/);
+    } catch (x) {}
+    f.isInCtrip && ("AndroidTV_CtripWireless" === f.ctripUA ? g.push(p[2]) : "Tieyou_TieyouWireless" === f.ctripUA ? g.push(p[3]) : (g.push(p[4]), 
+    g.push(p[5])));
+    for (var v, w = 0; w < l.length; w++) {
+        v = l[w];
+        var o = v.getAttribute("src");
+        if (o && d.test(o)) {
+            c = o;
+            var y = o.replace(d, "");
+            u = y.substr(0, y.lastIndexOf("/code/lizard"));
+            break;
+        }
+    }
+    s = u + s + encodeURIComponent(g.join(",")), r && (s += "&" + r), document.write("<script crossorigin src='" + s + "'><\/script>");
+    var m = Element.prototype.appendChild;
+    if (Element.prototype.appendChild = function() {
+        if (this === document.head) {
+            var i = arguments[0];
+            return 1 === i.nodeType && "script" === i.tagName.toLowerCase() && i.src.indexOf("//webresource.c-ctrip.com/") > -1 && i.setAttribute("crossorigin", 1), 
+            m.apply(this, arguments);
+        }
+        return m.apply(this, arguments);
+    }, c) {
+        c = u + "/resaresonline/fx/lizard22ares/latest/default/web/lizard.seed.js";
+        try {
+            var k = window.localStorage.getItem("SEED22ARESMD5");
+            if (k) {
+                var A = k.split("&")[1];
+                (A && new Date().getTime() - A >= 3e5 || !A) && t(c);
+            } else t(c);
+        } catch (x) {}
+    }
+    var T, z;
+    void 0 === window.__bfi && (window.__bfi = []);
+    var j = function() {
+        var i, t = "TEST_PRIVATE_MODEL", e = "1";
+        try {
+            T = window.localStorage, z = T.setItem.bind(T), T.setItem(t, e), i = T.getItem(t), 
+            T.removeItem(t);
+        } catch (n) {
+            return "QuotaExceededError" != n.name && "NS_ERROR_DOM_QUOTA_REACHED" != n.name || 2 !== JSON.stringify(window.localStorage).length ? !1 : !0;
+        }
+        return i === e ? !1 : !0;
+    }();
+    j || isInIE || "undefined" == typeof T || "undefined" == typeof z || !localStorageFlag || (window.localStorage.setItem = function() {
+        var i = function() {
+            for (var i in T) i.toLowerCase().indexOf("_cache") >= 0 && T.removeItem(i);
+        }, t = function() {
+            for (var i in T) (i.indexOf("BMap_tile") >= 0 || i.indexOf("_AMap_main") >= 0) && T.removeItem(i);
+        }, e = function() {
+            var i = {
+                PAYMENT2_: 1,
+                SALESOBJ: 1,
+                SALES_OBJECT: 1,
+                UNION: 1,
+                SALES: 1,
+                AUTHSTORE: 1,
+                HEADSTORE: 1,
+                PAUTH: 1,
+                C_CLEAR_OVERDUE: 1,
+                SOURCEID: 1
+            };
+            for (var t in T) i.hasOwnProperty(t) || T.removeItem(t);
+        }, n = [ i, t, e ], a = function(i, t, e) {
+            var o = Array.prototype.slice.call(e ? e : n), r = "noneCachedKey";
+            try {
+                z(i, t), i.toLowerCase().indexOf("_cache") >= 0 && (r = "cachedKey");
+            } catch (c) {
+                if ("QuotaExceededError" == c.name || "NS_ERROR_DOM_QUOTA_REACHED" == c.name) {
+                    if (0 == o.length) return void window.__bfi.push([ "_trackMatrix", "101316", {
+                        message: "QuotaExceededError",
+                        key: i,
+                        tag: !0,
+                        type: r
+                    }, 1 ]);
+                    var l = encodeURIComponent(JSON.stringify(T)).length;
+                    window.__bfi.push([ "_trackMatrix", "101316", {
+                        message: "QuotaExceededError",
+                        key: i,
+                        type: r
+                    }, l ]);
+                    var d = o.shift();
+                    d(), a(i, t, o);
+                } else window.__bfi.push([ "_trackMatrix", "101316", {
+                    message: c.message,
+                    key: i,
+                    type: r
+                }, 1 ]);
+            }
+        };
+        return a;
+    }());
+}();

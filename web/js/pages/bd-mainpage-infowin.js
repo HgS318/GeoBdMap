@@ -282,7 +282,7 @@ function addOverlayAndWin(overlay, data, content, list) {
         content = createContent(data);
     }
     addClickHandler(overlay, content);
-    if(list != undefined) {
+    if(list != undefined && list != null) {
         list.push(overlay);
     }
     map.addOverlay(overlay);
@@ -296,9 +296,9 @@ function addClickHandler(overlay, content){
 
 function getOnePointOfOverlay(overlay) {
     var point = null;
-    if(overlay.spaType == 1) {
+    if(overlay.spaType == 1 || overlay.extData.spaType == 1) {
         point = new BMap.Point(overlay.getPosition().lng, overlay.getPosition().lat);
-    } else if (overlay.spaType == 3 || overlay.spaType == 5) {
+    } else if (overlay.spaType == 3 || overlay.spaType == 5 || overlay.extData.spaType == 3 || overlay.extData.spaType == 5) {
         var first_point = overlay.getPath()[0];
         point = new BMap.Point(first_point.lng, first_point.lat);
     }
