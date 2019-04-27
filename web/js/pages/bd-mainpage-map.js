@@ -89,7 +89,7 @@ $(function() {
             placedata = places;
             showingPlaces = placedata;
             // initGeonames();
-            setAutoComplete();
+            // setAutoComplete();
             setRightMenu();
             // initTrees(true);
             // initBounds(true);
@@ -98,7 +98,7 @@ $(function() {
                 initTmpDists();
             }
             toResStat();
-            // initGeoEntities();
+            initGeoEntities();
             initRelpos();
         },
         error:function(data){
@@ -451,140 +451,6 @@ function setNewMarkers(newdata) {
     showingMarkers = [];
     createGeonameFeature(newdata, showingMarkers);
     // map.setFitView();
-}
-
-//	在右边结果栏显示若干条结果，muldata为json
-function setResultItems(muldata, divname, clas) {
-
-    var parentdiv = document.getElementById(divname);
-    parentdiv.style.display="block";
-    var num = 0;
-    if(!muldata || "" == muldata || "{}" == muldata || !muldata.length || muldata.length < 1) {
-        parentdiv.innerHTML = "";
-    } else {
-        num = muldata.length;
-        var prestr = "<div class='list-group'>", endstr = "</div>", midstr = "";
-        for (var i = 0; i < muldata.length; i++) {
-            var data = muldata[i];
-            if(!data['g1m']) {
-                data = data.extData;
-            }
-            var str;
-            if (clas) {
-                if (clas == "geoname") {
-                    str = consPlaceResult(data, i + 1);
-                } else if (clas == "dist") {
-                    str = consDistResult(data, i + 1);
-                } else if (clas == "bound") {
-                    str = consBoundResult(data, i + 1);
-                }else if (clas == "boundmarker") {
-                    str = consBoundMarkerResult(data, i + 1);
-                } else if(clas == "entity") {
-                    str = consGeoEntityResult(data, i + 1);
-                } else if(clas == "relpos") {
-                    str = consRelposResult(data, i + 1);
-                }
-            } else {
-                str = consPlaceResult(data, i + 1);
-            }
-            midstr += str;
-        }
-        var totalstr = prestr + midstr + endstr;
-        parentdiv.innerHTML = totalstr;
-        // document.getElementById("distinfo").style.display = "none";
-    }
-
-    if(clas) {
-        if(clas == "geoname") {
-            document.getElementById("placeintotal").innerText = "      地点：" + num +" 条记录";
-        } else if(clas == "dist") {
-            if(num == 1) {
-                var distData = muldata[0];
-                document.getElementById("distintotal").innerHTML = "      区域：<strong>" + distData.name + "</strong>"
-                    + "<br/>      乡村数：" + distData.NumVillage
-                    + "<br/>      社区数：" + distData.NumCommu
-                    + "<br/>      下属村、居委会：" + distData.SubCommu
-                ;
-                // document.getElementById("distname").innerHTML = '      行政区名称：<strong>' + distData.name + '</strong>';
-                // document.getElementById("numval").innerHTML ='      乡村数：<strong>' + distData.NumVillage + '</strong>';
-                // document.getElementById("numcomu").innerHTML ='     社区数：<strong>' + distData.NumCommu + '</strong>';
-                // document.getElementById("subcom").innerHTML ='     下属村、居委会：<strong>' + distData.SubCommu + '</strong>';
-            } else {
-                document.getElementById("distintotal").innerText = "      区域：" + num + " 条记录";
-            }
-        }if(clas == "bound") {
-            document.getElementById("boundintotal").innerText = "      路线：" + num +" 条记录";
-        }if(clas == "boundmarker") {
-            // document.getElementById("bmintotal").innerText = "      事件：" + num +" 条记录";
-        }
-    } else{
-        document.getElementById("placeintotal").innerText = "      地点：" + num +" 条记录";
-    }
-}
-
-//	在左边结果栏显示若干条结果，items为html
-function setResultsInDiv(items, divname) {
-    var parentdiv = document.getElementById(divname);
-    parentdiv.style.display="block";
-    var prestr = "<div class='list-group'>", endstr = "</div>", midstr = "";
-    for(var i = 0; i < items.length; i++) {
-        midstr += items[i];
-    }
-    var totalstr = prestr + midstr + endstr;
-    parentdiv.innerHTML = totalstr;
-}
-
-//	产生右边结果栏的一条数据——名称，位置，起点/终点，最左序号，下方详情
-function consResultItem(clas, name, id, type, order, content){
-    str = "<div class='list-group-item'" +"onclick=\"gotoOverlay('"+ clas + "', '" + id + "')\"" +
-        "><div class='SearchResult_item_left' " +
-        "><p><strong>" + order +
-        "</strong></p></div><div class='SearchResult_item_content'>" +
-        "<p><font color='#0B73EB'>" + name +
-        "</font><span class='wikiTag'>" + type +
-        "</span></p><p>" + content + "</p></div></div>";
-    return str;
-}
-
-//	产生右边结果栏的一条地点数据
-function consGeoEntityResult(entity, order) {
-    var content = '实体编号：' + entity['geid'];
-    var texts = entity['text'];
-    if(texts != null && texts != undefined && texts.length > 0) {
-        content = texts[0];
-        if(content.length > 36) {
-            content = content.substring(0, 34) + '...';
-        }
-    }
-    return consResultItem("entity" ,entity['name'], entity['geid'], '地理位置实体', order, content);
-}
-
-function consRelposResult(pos, order) {
-    var type = pos['rel'] == 0 ? '位置实体': '相对位置';
-    var content = pos['coords'].replace(/\[/g, '').replace(/\]/g, '');
-    return consResultItem("relpos" ,pos['addr'], pos['uuid'], type, order, content);
-}
-
-//	产生右边结果栏的一条信息数据
-function consPlaceResult(place, order) {
-    return consResultItem("geoname" ,place.name, place.id, place['小类'], order,
-        "区域代码：" + place.dist);
-    // return consResultItem_old(place.name, place.position, place['小类'], order, "地域代码：" + place.dist);
-}
-//	产生右边结果栏的一条行政区域数据
-function consDistResult(dist, order) {
-    return consResultItem("dist" ,dist.name, dist.id, dist['Grade'], order,
-        "区域代码：" + dist.id + "&nbsp;&nbsp;&nbsp;所属地域:" + dist['上级行政区']);
-}
-//	产生右边结果栏的一条行政界线数据
-function consBoundResult(bound, order) {
-    return consResultItem("bound" ,bound.name, bound.Id, bound['Grade'], order,
-        "相关地域：" + bound.LeftName + ", " + bound.RightName);
-}
-//	产生右边结果栏的一条界桩数据
-function consBoundMarkerResult(bm, order) {
-    return consResultItem("bm" ,bm.name, bm.Id, bm['TypeName'], order,
-        "相关地域：" + bm.relatedDists);
 }
 
 //  根据json显示出地图要素，包括地名、行政区、行政界线、界桩
@@ -995,61 +861,6 @@ function gotoGeoname(placeid) {
     map.panTo(npos);
     if(pla) {
         openInfoWindow({target: pla});
-    }
-}
-
-//	地图前往某一覆盖物（地名、行政区、行政界线、界桩等）
-function gotoOverlay(type, id) {
-    var overlay, center;
-    var zom = 11;
-    if(type == "dist") {
-        overlay = findOverlay(distPolygons, id);
-        center = overlay.getBounds().getCenter();
-    } else if(type == "bound") {
-        overlay = findOverlay(boundPolylines, id);
-        center = overlay.getBounds().getCenter();
-    } else if(type == "bm") {
-        overlay = findOverlay(boundMarkers, id);
-        center = overlay.getPosition();
-    } else if(type == "entity") {
-        overlay = findOverlay(geoEntities, id);
-        openInfoWin({target: overlay}, null, null, 225);
-        return;
-    } else if(type == "relpos") {
-        overlay = findOverlay(relpos.positions.concat(relpos.relPositions), id);
-        openInfoWin({target: overlay});
-        return;
-    } else {
-        overlay = findOverlay(showingMarkers, id);
-        center = overlay.extData.spaType == 1 ?
-            overlay.getPosition() : overlay.getBounds().getCenter();
-        zom = 16;
-    }
-    // overlay.setMap(map);
-    overlay.show();
-    map.setZoom(zom);
-    map.panTo(center);
-    if(type == "geoname") {
-        openInfoWindow({target: overlay});
-    } else {
-        openSimpleInfoWindow({target: overlay, 'lnglat': center});
-    }
-
-}
-
-//  在覆盖物数组中根据id查询某一覆盖物
-function findOverlay(overlays, id) {
-    for(var i = 0; i < overlays.length; i++) {
-        var ov = overlays[i];
-        if(id == ov.extData['id'] || id == ov.extData['Id'] || id == ov.extData['geid']|| id == ov.extData['uuid']) {
-            return ov;
-        }
-    }
-    try{
-        var ov = overlays[id];
-        return ov;
-    } catch (e) {
-        return null;
     }
 }
 

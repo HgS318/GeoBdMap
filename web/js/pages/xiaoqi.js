@@ -22,6 +22,45 @@ var xiaoqi_text = "早上九点我们来到了武汉大学。朋友先带我参�
 
 var xiaoqi = null;
 
+function initXiaoqi() {
+    if (xiaoqi != null) {
+        hideXiaoqi();
+    }
+    xiaoqi = {
+        index: 0, //循环时的常量
+        myGeo: new BMap.Geocoder(), //一个实例
+        adds: ["武汉大学", "樱花大道", "万林艺术博物馆", "海底捞", "黄鹤楼"],
+        wuqiyi: [],//无歧义地名+经纬度的字符串
+        arrTitle: [],//无歧义地名
+        arrLatL: [],//无歧义经纬度数组（字符串）
+        points3: [],//上面数组转换成百度的标准格式，但还需要提取才可以使用
+        points1: [],//从points3提取两个点
+        points1title: [],//上面数组的地名，主要用于标签
+        qiyi: [],   //歧义地名
+        localsearchtitle: [],//歧义地名的所有名称
+        points2: [],//歧义地名的经纬度
+        // label1: new BMap.Label(xiaoqi.points1[0],{offset:new BMap.Size(20,-10)}),
+        // label2: BMap.Label(xiaoqi.points1[1],{offset:new BMap.Size(20,-10)}),
+        blueIcon: new BMap.Icon("./images/markers/blue.png", new BMap.Size(60, 60)),
+        yellowIcon: new BMap.Icon("./images/markers/yellow.png", new BMap.Size(60, 60)),
+        greenIcon: new BMap.Icon("./images/markers/green.png", new BMap.Size(60, 60)),
+        finalIcon: new BMap.Icon("./images/markers/brown.png", new BMap.Size(60, 60)),
+        points_ppa: [],
+        title_ppa: [],
+        points_keda: [],
+        title_keda: [],
+        point_marker: {},
+        polygons: []
+    };
+    openContentWindow('data/syn_data/fires0227/Contents/武大赏樱黄鹤楼-移动.html#text0', "地名消岐文本", 600, 500, 20, 300);
+    bdGEO();
+    console.log(xiaoqi.wuqiyi);
+    getfeiqi();
+    document.getElementById("xiaoqiText").value = "   " + xiaoqi_text;
+    document.getElementById("test1").value = "  早上, 九点, 春分, 中午十二点, 两个小时, 两点";
+    document.getElementById("test2").value = "  武汉大学, 樱花大道, 万林艺术博物馆, 海底捞, 黄鹤楼";
+}
+
 function showXiaoqi() {
     for(var i = 0; i < xiaoqi.polygons.length; i++) {
         var polygon = xiaoqi.polygons[i];
@@ -58,62 +97,6 @@ function hideXiaoqi() {
             marker.hide();
         }
     }
-}
-
-function initXiaoqi() {
-    if(xiaoqi != null) {
-        hideXiaoqi();
-    }
-    xiaoqi = {
-        index: 0, //循环时的常量
-        myGeo: new BMap.Geocoder(), //一个实例
-        adds: ["武汉大学", "樱花大道", "万林艺术博物馆", "海底捞", "黄鹤楼"],
-        wuqiyi: [],//无歧义地名+经纬度的字符串
-        arrTitle: [],//无歧义地名
-        arrLatL:[],//无歧义经纬度数组（字符串）
-        points3: [],//上面数组转换成百度的标准格式，但还需要提取才可以使用
-        points1: [],//从points3提取两个点
-        points1title: [],//上面数组的地名，主要用于标签
-        qiyi: [],   //歧义地名
-        localsearchtitle: [],//歧义地名的所有名称
-        points2: [],//歧义地名的经纬度
-        // label1: new BMap.Label(xiaoqi.points1[0],{offset:new BMap.Size(20,-10)}),
-        // label2: BMap.Label(xiaoqi.points1[1],{offset:new BMap.Size(20,-10)}),
-        blueIcon: new BMap.Icon("./images/markers/blue.png",new BMap.Size(60, 60)),
-        yellowIcon: new BMap.Icon("./images/markers/yellow.png",new BMap.Size(60, 60)),
-        greenIcon: new BMap.Icon("./images/markers/green.png",new BMap.Size(60, 60)),
-        finalIcon: new BMap.Icon("./images/markers/brown.png",new BMap.Size(60, 60)),
-        points_ppa: [],
-        title_ppa: [],
-        points_keda: [],
-        title_keda: [],
-        point_marker: {},
-        polygons: []
-    };
-    document.getElementById("xiaoqiText").value = "   " + xiaoqi_text;
-    document.getElementById("test1").value = "  早上, 九点, 春分, 中午十二点, 两个小时, 两点";
-    document.getElementById("test2").value = "  武汉大学, 樱花大道, 万林艺术博物馆, 海底捞, 黄鹤楼";
-    var windowHtml = "<div><iframe src='data/syn_data/fires0227/Contents/武大赏樱黄鹤楼-移动.html#text0' "
-        + "width='600px' height='500px' /></div>";
-    document.getElementById("y").innerHTML = windowHtml;
-    var $win = $('#y').window({
-        title: "地名消岐文本",
-        width: 652,
-        height: 559,
-        top: 20,
-        left: 300,
-        //shadow: true,
-        //modal:true,
-        //iconCls:'icon-add',
-        //closed:true,
-        //minimizable:false,
-        maximizable:false,
-        // collapsible:false
-    });
-    $win.window('open');
-    bdGEO();
-    console.log(xiaoqi.wuqiyi);
-    getfeiqi();
 }
 
 //------------数据准备阶段

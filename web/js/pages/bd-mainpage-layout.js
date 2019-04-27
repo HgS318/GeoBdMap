@@ -22,463 +22,6 @@ function setRightMenu() {
 	});
 }
 
-//	生成信息窗体的内容（参考）
-function createInfoWindow(feature) {
-	var extData = feature.properties;
-	var showobj = extData['desbrif'];
-	var title = '';
-	if (extData.name.length > 16) {
-		title = '<span style="font-size:7px">' + extData.name + '</span>';
-		// title = '<font size="7">' + extData.name + '</font>';
-	} else if (extData.name.length > 12) {
-		title = '<span style="font-size:7px">' + extData.name + '</span>'
-			+ '<span style="font-size:6px;color:#F00;">&nbsp;&nbsp;' + extData['type'] + '</span>';
-	} else {
-		title = extData.name + '<span style="font-size:11px;color:#F00;">&nbsp;&nbsp;' + extData['type'] + '</span>';
-	}
-	var content = "";
-	var pic_info = extData["pic"];
-	if(pic_info.indexOf('.jpg') <0 && pic_info.indexOf('.JPG')) {
-		pic_info = extData['name'] + "11.jpg"
-	}
-	var img_src = "data/media/201803/mini/" + pic_info;
-	// var img_src = "images/contentdemopic.jpg";
-
-	content = content + ("<img src='" + img_src +
-		"' onerror='this.src=\"images/contentdemopic.jpg\"' />"
-		+ "<strong>文本信息：</strong>" + extData['brif'] + "<br/>");
-	content = content + ("<strong>行政区：</strong>" + extData['adminarea'] + "<br/>");
-	var usetime = "现今地名/位置";
-	if('usetime' in extData && "" != extData['usetime']) {
-		usetime = extData['usetime'];
-	}
-	// content = content + ("<strong>使用时间：</strong>" + usetime + "<br/>");
-	content = content + ("<strong>类型：</strong>" + extData['type'] + "<br/>");
-	if(showobj.indexOf('...') <0) {
-		showobj = showobj + "...";
-	}
-	content = content + ("<strong>位置实体描述：</strong>" + showobj + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-		"<a href='html/wikiContent_fitall.html?zgid=" + extData['zgid'] + "' target='_blank'>详细信息</a>");
-	var info_window = document.createElement("div");
-	info_window.className = "info";
-	//info.style.width = "400px";
-	// 定义顶部标题
-	var top = document.createElement("div");
-	var titleD = document.createElement("div");
-//        var closeX = document.createElement("img");
-	top.className = "info-top";
-	titleD.innerHTML = "&nbsp;" + title;
-//        closeX.src = "images/close2.gif";
-//        closeX.onclick = closeInfoWindow;
-	top.appendChild(titleD);
-//        top.appendChild(closeX);
-	info_window.appendChild(top);
-	// 定义中部内容
-	var middle = document.createElement("div");
-	middle.className = "info-middle";
-	middle.style.backgroundColor = 'white';
-	middle.innerHTML = content;
-	info_window.appendChild(middle);
-	return info_window;
-}
-
-//	生成信息窗体的内容
-function constructInfoWindow(title, content, height) {
-
-	var info_window = document.createElement("div");
-	info_window.className = "info";
-
-	//可以通过下面的方式修改自定义窗体的宽高
-	if(height) {
-		info_window.style.width = height + "px";
-	} else {
-		info_window.style.width = "300px";
-	}
-	//info.style.width = "400px";
-	// 定义顶部标题
-	var top = document.createElement("div");
-	var titleD = document.createElement("div");
-//        var closeX = document.createElement("img");
-	top.className = "info-top";
-	titleD.innerHTML = "&nbsp;" + title;
-//        closeX.src = "images/close2.gif";
-//        closeX.onclick = closeInfoWindow;
-	top.appendChild(titleD);
-//        top.appendChild(closeX);
-	info_window.appendChild(top);
-	// 定义中部内容
-	var middle = document.createElement("div");
-	middle.className = "info-middle";
-	middle.style.backgroundColor = 'white';
-	middle.innerHTML = content;
-	info_window.appendChild(middle);
-	return info_window;
-}
-
-//	生成信息创意下部（搜索框）的内容
-function constructInfoDown() {
-	//	定义下部内容
-	var down = document.createElement("div");
-	down.className = "amap-info-combo status-origin";
-	down.setAttribute("id", "winbtm");
-//			down.setAttribute("style", "background-color: #FFFFFF");
-	var downstr = "" +
-//			"<div class=\"amap-info-combo status-origin\" id=\"winbtm\">" +
-			"<table><tbody>"+
-			"<tr class=\"amap-info-tabs\">" +
-			"<td class=\"tab\" id=\"findnear\" onclick=\"selectsrhmethod(this)\"><i class=\"tab-icon icon-around\"></i>在附近找</td>" +
-			"<td class=\"tab selected\" id=\"fromhere\" onclick=\"selectsrhmethod(this)\"><i class=\"tab-icon icon-start\"></i>这里出发</td>" +
-			"<td class=\"tab\" id=\"tothere\" onclick=\"selectsrhmethod(this)\"><i class=\"tab-icon icon-end\"></i>到这里去</td>" +
-			"</tr></tbody>" +
-			"</table>" +
-			"<table cellpadding=\"0\"><tbody>" +
-			"<tr>" +
-			"<td class=\"input-label\" id=\"startorend\">终点</td>" +
-			"<td>" +
-			"<div class=\"keyword-input\"><input class=\"keyword\" type=\"text\" id=\"winsrhword\" /></div>" +
-			"</td>" +
-			"<td>" +
-			"<div class=\"search-button hide\" id=\"poisrhbtn\" onclick=\"srhpoi();\">搜索</div>" +
-			"<div class=\"nav-button\" id=\"navsrhdiv\">" +
-			"<span class=\"nav-icon nav-drive\" id=\"drivesrhbtn\" onclick=\"srhdrive();\">驾车</span>" +
-			"<span class=\"nav-icon nav-bus\" id=\"bussrhbtn\" onclick=\"srhbus();\">公交</span>" +
-			"<span class=\"nav-icon nav-walk\" id=\"walksrhbtn\" onclick=\"srhwalk();\">步行</span>" +
-			"</div>" +
-			"</td>" +
-			"</tr></tbody>" +
-			"</table>"
-//			 + "</div>"
-		;
-	down.innerHTML = downstr;
-	return down;
-}
-
-//	打开信息窗体（地名）
-function openInfoWindow(e) {
-	markerHighlight(e);
-	var extData = e.target.extData;
-	extData["selected"] = true;
-	var title = extData.name + '<span style="font-size:11px;color:#F00;">&nbsp;&nbsp;' + extData['小类'] + '</span>';
-	//var title = '华荣正街' + '<span style="font-size:11px;color:#F00;">&nbsp;&nbsp;' + '街道' + '</span>';
-	var content = [];
-	var objdesc = extData['地理实体描述'], showobj = "";
-	if(objdesc) {
-		showobj = objdesc.replace("<br/>","：  ");
-		if(showobj.length > 29) {
-			showobj = showobj.substring(0, 27) + "...";
-		}
-	}
-	// showobj = extData['desbrif'];
-	// var mean = extData['所在跨行政区'], showmean = indist;
-
-	content.push("<img src='images/contentdemopic.jpg'>"
-		+ "<strong>文本信息：</strong>" + extData.brif);
-	content.push("<strong>所属区域：</strong>" + "<a href='html/placeContent.html?name=" + extData['所在跨行政区'] +
-		"' target='_blank'>" + extData['所在跨行政区'] + "</a>");
-	// content.push("<p></p>");
-	content.push("<strong>使用时间：</strong>" + extData['使用时间'].substring(0, 2));
-	if(admin) {
-		content.push("<strong>位置实体描述：</strong>" + showobj +
-			"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-			"<a href='html/placeEdit.html?admin=admin&name=" + extData.spell + "' target='_blank'>审核地名</a>");
-	} else {
-		content.push("<strong>位置实体描述：</strong>" + showobj +
-			"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-			"<a href='html/placeContent.html?name=" + extData.spell + "' target='_blank'>详细信息</a>" +
-			"&nbsp;&nbsp;&nbsp;&nbsp" +
-			"<a href='html/placeEdit.html?name=" + extData.spell + "' target='_blank'>编辑地名</a>");
-	}
-	closeInfoWindow();
-	// infoWindow = new AMap.InfoWindow({
-	// 	isCustom: true,  //使用自定义窗体
-	// 	content: constructInfoWindow(title, content.join("<br>")),
-	// 	offset: new AMap.Pixel(14, -47)	//-113, -140
-	// });
-	var sContent = constructInfoWindow(title, content.join("<br>"));
-	infoWindow = new BMap.InfoWindow(sContent);
-	// infoWindow.on('open', function () {
-	infoWindow.addEventListener('open', function () {
-		windata = extData;
-	});
-	infoWindow.addEventListener('close', function () {
-		hasAutoCom = false;
-		markerUnhighlight(e);
-//				var srhdiv = document.getElementById("winbtm");
-//				srhdiv.setAttribute("id", "oldwinbtm");
-//				srhdiv.innerHTML = " ";
-	});
-
-	// e.target.openInfoWindow(infoWindow);
-	map.openInfoWindow(infoWindow, e.point);
-	// infoWindow.open(map, extData.position);
-
-
-}
-
-//	打开信息窗体（行政区、界线、界桩）
-function openSimpleInfoWindow(e) {
-	overlayHighlight(e);
-	var extData = e.target.extData;
-	var type = extData['overlay'], tpname = type;
-	var winheight = 220;
-	extData["selected"] = true;
-	var content = [];
-	if("dist" == type) {
-		tpname = "区域";
-		winheight = 220;
-		content.push("<strong>等级：</strong>" + extData['Grade']);
-		content.push("<strong>所属区域：</strong>" + extData['上级行政区']);
-		var subdist = extData['下级行政区'] ? extData['下级行政区'] : '无';
-		content.push("<strong>包含位置实体：</strong>" + subdist);
-		if(extData['政府驻地']) {
-			content.push("<strong>政府驻地：</strong>" + extData['政府驻地']);
-			content.push("<strong>总面积：</strong>" + extData['总面积'] +
-				"&nbsp;&nbsp;&nbsp;&nbsp;" + "<strong>总人口：</strong>" + extData['总人口']);
-			// content.push("<strong>总人口：</strong>" + extData['总人口']);
-			content.push("<strong>地理位置：</strong>" + extData['地理位置']);
-		}
-		content.push("<a href='html/distEdit.html?id=" + extData['id'] +
-			"' target='_blank'>地域详情</a>"
-			// + "&nbsp;&nbsp;&nbsp;&nbsp;" + "<a href='html/boundEdit.html?distid=" +
-			// extData['id'] + "' target='_blank'>新增界线</a>"
-		);
-	} else if("bound" == type) {
-		// tpname = "路线";
-		tpname = extData['name'].substring(0, 2);
-		winheight = 220;
-		content.push("<strong>包含位置实体：</strong>" + extData['SymName']);
-		content.push("<strong>相关区域：</strong>" + extData['LeftName'] + ", " + extData['RightName']);
-		content.push("<a href='html/boundEdit.html?id=" + extData['Id'] +
-			"' target='_blank'>路线实体详情</a>"
-			// + "&nbsp;&nbsp;&nbsp;&nbsp;" +
-			// "<a href='html/boundMarkerEdit.html?boundid=" + extData['Id'] +
-			// // "&x=" + e.lnglat.lng + "&y="+ e.lnglat.lat +
-			// "&x=" + e.point.lng + "&y="+ e.point.lat +
-			// "' target='_blank'>新增界桩、界碑</a>"
-		);
-	} else if("boundmarker" == type) {
-		tpname = "事件";
-		winheight = 320;
-		content.push("<img src='images/boundmarkereg.jpg'>"
-			+ "<strong>时间：</strong>" + extData['Grade']);
-		// content.push("<p></p>");
-		// content.push("<strong>行政等级：</strong>" + extData['Grade']);
-		content.push("<strong>相关地域：</strong>" + extData['relatedDists']);
-		content.push("<strong>事件描述：</strong>" + extData['briefinfo']
-			+ "&nbsp;&nbsp;&nbsp;&nbsp;" + "<a href='html/boundMarkerEdit.html?id=" + extData['Id'] +
-			"' target='_blank'>详情</a>");
-		// content.push("<a href='html/boundMarkerEdit.html?id=" + extData['Id'] +
-		// 	"' target='_blank'>详情</a>");
-	}
-	var title = extData.name + '<span style="font-size:11px;color:#F00;">&nbsp;&nbsp;' + tpname + '</span>';
-	closeInfoWindow();
-	var sContent = constructInfoWindow(title, content.join("<br>"), winheight);
-	infoWindow = new BMap.InfoWindow(sContent);
-	// infoWindow.on('open', function () {
-	infoWindow.addEventListener('open', function () {
-		windata = extData;
-	});
-	infoWindow.addEventListener('close', function () {
-		hasAutoCom = false;
-		overlayUnhighlight(e);
-//				var srhdiv = document.getElementById("winbtm");
-//				srhdiv.setAttribute("id", "oldwinbtm");
-//				srhdiv.innerHTML = " ";
-	});
-
-	map.openInfoWindow(infoWindow, e.point);
-
-	// infoWindow = new AMap.InfoWindow({
-	// 	isCustom: true,  //使用自定义窗体
-	// 	content: constructInfoWindow(title, content.join("<br>"), winheight),
-	// 	offset: new AMap.Pixel(14, -47)	//-113, -140
-	// });
-	// infoWindow.on('open', function () {
-	// 	windata = extData;
-	// });
-	// infoWindow.on('close', function () {
-	// 	hasAutoCom = false;
-	// 	overlayUnhighlight(e);
-	// });
-	// infoWindow.on('change', function () {});
-	// // infoWindow.open(map, extData.position);
-	// infoWindow.open(map, [e.lnglat.lng, e.lnglat.lat]);
-
-
-
-}
-
-//	关闭地图中的信息窗体
-function closeInfoWindow() {
-	if(infoWindow) {
-		infoWindow.close();
-		// map.clearInfoWindow();
-		infoWindow = null;
-	}
-}
-
-//	设置自动补全
-function setAutoComplete() {
-	infoWinDown = constructInfoDown();
-	document.getElementById("hiddendiv").appendChild(infoWinDown);
-	$("#winsrhword").autocomplete(placedata, {
-		minChars: 1,
-		width: 100,
-		matchCase: false,//不区分大小写
-//				matchContains: "word",
-//				autoFill: true,
-		formatItem: function(row, i, max) {
-			return row.name;
-		},
-		formatMatch: function(row, i, max) {
-			return row.ChnSpell + row.name;
-		},
-		formatResult: function(row) {
-			return row.name;
-		},
-		reasultSearch:function(row,v) {//本场数据自定义查询语法 注意这是我自己新加的事件
-			//自定义在code或spell中匹配
-			if(row.data.ChnSpell.indexOf(v) == 0 || row.data.name.indexOf(v) == 0) {
-				return row;
-			}
-			else {
-				return false;
-			}
-		}
-	});
-	$("#winsrhword").keydown(function(e) {
-		if(e.keyCode != 13){
-			return;
-		}
-		if(!entered) {
-			entered = true;
-			return;
-		}
-		var navTxt = $("#startorend")[0].innerText;
-		entered = false;
-		if(navTxt =="起点" || navTxt =="终点") {
-			if(navMethod == "trans") {
-				srhbus();
-			} else if(navMethod == "drive") {
-				srhdrive();
-			} else if(navMethod == "walk") {
-				srhwalk();
-			}
-		} else {
-			srhpoi();
-		}
-	});
-}
-
-var typeinited = false;	//	所有地名类型是否已初始化完毕
-
-//	初始化所有地名类型和行政区，显示在左边树状列表中
-function initTrees(show) {
-
-	$("#searchStart").click(function(){ //检索
-		$("#ClassCheckbox").submit();
-	});
-
-	//	初始化行政区域
-	$('#id_tree_dist').tree({
-		lines: true,
-		animate: false,
-		url: 'wholeDists.action?zg=zg',
-		//queryParams: { id: '' },
-		formatter: function (node) {
-			// var s = '<p style=\'color:#0000FF; font-size: 14px; line-height: 15px \'>'
-			// 	+ node.name + '(' + node.id + ')' + '</p>';
-			var s = '<p style=\'color:#0000FF; font-size: 14px; line-height: 15px \'>'
-				+ node.SymName + '</p>';
-			if(!distsInited) {
-				node['selected'] = false;
-				if(admin) {
-
-				} else {
-					var polygon = createDistPolygon(node, distPolygons);
-				}
-			}
-			return s;
-		},
-		onLoadSuccess: function (node, data) {
-			distsInited = true;
-			if(!admin) {
-				showingDists = distPolygons;
-			}
-			setResultItems(data[0].children, "distresults", "dist");
-			if(show) {
-				showDists(distPolygons, false);
-			}
-			if ($('#id_tree_dist').tree('getRoots').length > 0 && k) {
-//				V($('#id_tree').tree('getRoots')[0].id);
-				k = false;
-			}
-		},
-		onClick: function (node) {
-			// V(node.id,1);
-			gotoDist(node.id);
-		},
-		onExpand: function (node) {
-			// if ($('#id_tree_dist').tree('getParent', node.target) == null) {
-			// 	$.each($('#id_tree_dist').tree('getRoots'), function (name, val) {
-			// 		if (val.id != node.id) {
-			// 			$('#id_tree_dist').tree('collapseAll', val.target);
-			// 		}
-			// 	});
-			// }
-		}
-	});
-
-	if(typeinited) {
-		return;
-	}
-
-// 	//	初始化地名类型
-// 	$('#id_tree_type').tree({
-// 		lines: true,
-// 		animate: false,
-// 		url: 'data/placetypes_treedata.json',
-// 		//queryParams: { id: '' },
-// 		formatter: function (node) {
-// 			var s = '<p style=\'color:#0000FF; font-size: 14px; line-height: 15px \'>'
-// 				+ node.name + '</p>';
-// 			return s;
-// 		},
-// 		onLoadSuccess: function () {
-// 			typeinited = true;
-// 			if ($('#id_tree_type').tree('getRoots').length > 0 && k) {
-// //				V($('#id_tree').tree('getRoots')[0].id);
-// 				k = false;
-// 			}
-// 		},
-// 		onClick: function (node) {
-// 			if(node.name == '全部类型') {
-// 				gotoAllType();
-// 			} else if(node.children) {
-// 				gotoBigType(node.name);
-// 			} else {
-// 				gotoSmallType(node.parent, node.name);
-// 			}
-// 			// V(node.id,1);
-// 		},
-// 		onExpand: function (node) {
-// 			// if ($('#id_tree_type').tree('getParent', node.target) == null) {
-// 			// 	$.each($('#id_tree_type').tree('getRoots'), function (name, val) {
-// 			// 		if (val.id != node.id) {
-// 			// 			$('#id_tree_type').tree('collapseAll', val.target);
-// 			// 		}
-// 			// 	});
-// 			// }
-// 		}
-// 	});
-
-}
-
-function reloadTree() {	//	重新加载树结构
-    $('#id_tree_dist').tree('reload');
-	$('#id_tree_type').tree('reload');
-};
-
 //	勾选查询范围
 function toChooseMapExtent(checkbox) {
 	if(checkbox.checked) {
@@ -494,15 +37,6 @@ function toChooseMapExtent(checkbox) {
 	}
 }
 
-//	是否要选择行政级别
-function toChooseGrade(checkbox) {
-	if(checkbox.checked) {
-		$("#gradecheckboxes").show();
-	} else {
-		$("#gradecheckboxes").hide();
-	}
-}
-
 //	对否要选择所在地区
 function toChooseDist(checkbox) {
 	if(checkbox.checked) {
@@ -513,29 +47,11 @@ function toChooseDist(checkbox) {
 }
 
 //	对否要选择所在地区
-function toChooseTence(checkbox) {
-	if(checkbox.checked) {
-		$("#choosetense").show();
-	} else {
-		$("#choosetense").hide();
-	}
-}
-
-//	对否要选择所在地区
 function toChooseDist2(checkbox) {
 	if(checkbox.checked) {
 		$("#distscheckboxes2").show();
 	} else {
 		$("#distscheckboxes2").hide();
-	}
-}
-
-//	是否要选择时间
-function toChooseTime(checkbox) {
-	if(checkbox.checked) {
-		$("#choosetimeitmes").show();
-	} else {
-		$("#choosetimeitmes").hide();
 	}
 }
 
@@ -554,42 +70,6 @@ function toChooseColo(checkbox) {
 		$("#chooseColo").show();
 	} else {
 		$("#chooseColo").hide();
-	}
-}
-
-//	是否要选择地名类型
-function toSearchGeonames(checkbox) {
-	if (checkbox.checked) {
-		$("#geoitems").show();
-	} else {
-		$("#geoitems").hide();
-	}
-}
-
-//	是否要搜索行政区域
-function toSearchDists(checkbox) {
-	if(checkbox.checked) {
-		$("#distitems").show();
-	} else {
-		$("#distitems").hide();
-	}
-}
-
-//	是否要搜索行政界线
-function toSearchBounds(checkbox) {
-	if(checkbox.checked) {
-		$("#bounditems").show();
-	} else {
-		$("#bounditems").hide();
-	}
-}
-
-//	是否要搜索界桩
-function toSearchBoundMarkers(checkbox) {
-	if(checkbox.checked) {
-		$("#boundmarkeritems").show();
-	} else {
-		$("#boundmarkeritems").hide();
 	}
 }
 
@@ -628,8 +108,7 @@ function unique1(array){
 	var n = []; //一个新的临时数组
 	//遍历当前数组
 	for(var i = 0; i < array.length; i++){
-		//如果当前数组的第i已经保存进了临时数组，那么跳过，
-		//否则把当前项push到临时数组里面
+		//如果当前数组的第i已经保存进了临时数组，那么跳过，否则把当前项push到临时数组里面
 		if (n.indexOf(array[i]) == -1) {
 			n.push(array[i]);
 		}
@@ -861,4 +340,213 @@ function generateUUID() {
 
 function myTrim(x) {
     return x.replace(/^\s+|\s+$/gm,'');
+}
+
+//	地图前往某一覆盖物
+function gotoOverlay(type, id) {
+	var overlay, center;
+	var zom = 11;
+	if (type == "dist") {
+		overlay = findOverlay(distPolygons, id);
+		center = overlay.getBounds().getCenter();
+	} else if (type == "bound") {
+		overlay = findOverlay(boundPolylines, id);
+		center = overlay.getBounds().getCenter();
+	} else if (type == "bm") {
+		overlay = findOverlay(boundMarkers, id);
+		center = overlay.getPosition();
+	} else if (type == "entity") {
+		overlay = findOverlay(geoEntities, id);
+		openInfoWin({target: overlay}, null, null, 225);
+		return;
+	} else if (type == "relpos") {
+		overlay = findOverlay(relpos.positions.concat(relpos.relPositions), id);
+		openInfoWin({target: overlay});
+		return;
+	} else if (type == "baiduSearch") {
+		var title = posadd.baiduSearch[id]['title'];
+		var url = posadd.baiduSearch[id]['url'];
+		var local = posadd.baiduSearch[id]['local'];
+		var src = id;
+		if(local === undefined || local == null || local == '') {
+			if(url != undefined && url != null && url != '') {
+				src = url;
+			}
+		} else {
+			src = local;
+		}
+		openContentWindow(src, title, 650, 500, 30, 280);
+		return;
+	} else {
+		overlay = findOverlay(showingMarkers, id);
+		center = overlay.extData.spaType == 1 ? overlay.getPosition() : overlay.getBounds().getCenter();
+		zom = 16;
+	}
+	overlay.show();
+	map.setZoom(zom);
+	map.panTo(center);
+	if (type == "geoname") {
+		openInfoWindow({target: overlay});
+	} else {
+		openSimpleInfoWindow({target: overlay, 'lnglat': center});
+	}
+
+}
+
+//  在覆盖物数组中根据id查询某一覆盖物
+function findOverlay(overlays, id) {
+	for(var i = 0; i < overlays.length; i++) {
+		var ov = overlays[i];
+		if(id == ov.extData['id'] || id == ov.extData['Id'] || id == ov.extData['geid']|| id == ov.extData['uuid']) {
+			return ov;
+		}
+	}
+	try{
+		var ov = overlays[id];
+		return ov;
+	} catch (e) {
+		return null;
+	}
+}
+
+//	在右边结果栏显示若干条结果，muldata为json
+function setResultItems(muldata, divname, clas, append) {
+
+	var parentDiv = document.getElementById(divname);
+	parentDiv.style.display = "block";
+	var num = 0;
+	if (!muldata || "" == muldata || "{}" == muldata || !muldata.length || muldata.length < 1) {
+		parentDiv.innerHTML = "";
+	} else {
+		num = muldata.length;
+		var prestr = "<div class='list-group'>", endstr = "</div>", midstr = "";
+		for (var i = 0; i < muldata.length; i++) {
+			var data = muldata[i];
+			if (!data['g1m']) {
+				data = data.extData;
+			}
+			var str;
+			if (clas) {
+				if (clas == "geoname") {
+					str = consPlaceResult(data, i + 1);
+				} else if (clas == "dist") {
+					str = consDistResult(data, i + 1);
+				} else if (clas == "bound") {
+					str = consBoundResult(data, i + 1);
+				} else if (clas == "boundmarker") {
+					str = consBoundMarkerResult(data, i + 1);
+				} else if (clas == "entity") {
+					str = consGeoEntityResult(data, i + 1);
+				} else if (clas == "relpos") {
+					str = consRelposResult(data, i + 1);
+				}
+			} else {
+				str = consPlaceResult(data, i + 1);
+			}
+			midstr += str;
+		}
+		var totalstr = null;
+		if(append === undefined || append == false || append == '' || append == 0) {
+			totalstr = prestr + midstr + endstr;
+		} else if(append == true || append == 'append' || append == 1) {
+			var oldHtml = parentDiv.innerHTML.replace(prestr, '');
+			var divIndex = oldHtml.lastIndexOf(endstr);
+			if(divIndex > 0) {
+				oldHtml = oldHtml.substring(0, divIndex);
+			}
+			totalstr = prestr + midstr + oldHtml + endstr;
+		}
+		parentDiv.innerHTML = totalstr;
+		// document.getElementById("distinfo").style.display = "none";
+	}
+
+	// if (clas) {
+	//     if (clas == "geoname") {
+	//         document.getElementById("placeintotal").innerText = "      地点：" + num + " 条记录";
+	//     } else if (clas == "dist") {
+	//         if (num == 1) {
+	//             var distData = muldata[0];
+	//             document.getElementById("distintotal").innerHTML = "      区域：<strong>" + distData.name + "</strong>"
+	//                 + "<br/>      乡村数：" + distData.NumVillage
+	//                 + "<br/>      社区数：" + distData.NumCommu
+	//                 + "<br/>      下属村、居委会：" + distData.SubCommu
+	//             ;
+	//             // document.getElementById("distname").innerHTML = '      行政区名称：<strong>' + distData.name + '</strong>';
+	//             // document.getElementById("numval").innerHTML ='      乡村数：<strong>' + distData.NumVillage + '</strong>';
+	//             // document.getElementById("numcomu").innerHTML ='     社区数：<strong>' + distData.NumCommu + '</strong>';
+	//             // document.getElementById("subcom").innerHTML ='     下属村、居委会：<strong>' + distData.SubCommu + '</strong>';
+	//         } else {
+	//             document.getElementById("distintotal").innerText = "      区域：" + num + " 条记录";
+	//         }
+	//     }
+	//     if (clas == "bound") {
+	//         document.getElementById("boundintotal").innerText = "      路线：" + num + " 条记录";
+	//     }
+	//     if (clas == "boundmarker") {
+	//         // document.getElementById("bmintotal").innerText = "      事件：" + num +" 条记录";
+	//     }
+	// } else {
+	//     document.getElementById("placeintotal").innerText = "      地点：" + num + " 条记录";
+	// }
+}
+
+//	在左边结果栏显示若干条结果，items为html
+function setResultsInDiv(items, divname) {
+	var parentdiv = document.getElementById(divname);
+	parentdiv.style.display="block";
+	var prestr = "<div class='list-group'>", endstr = "</div>", midstr = "";
+	for(var i = 0; i < items.length; i++) {
+		midstr += items[i];
+	}
+	var totalstr = prestr + midstr + endstr;
+	parentdiv.innerHTML = totalstr;
+}
+
+//	产生右边结果栏的一条数据——名称，位置，起点/终点，最左序号，下方详情
+function consResultItem(clas, name, id, type, order, content){
+	var str = "<div class='list-group-item'" +"onclick=\"gotoOverlay('"+ clas + "', '" + id + "')\"" +
+		"><div class='SearchResult_item_left' " + "><p><strong>" + order +
+		"</strong></p></div><div class='SearchResult_item_content'>" + "<p><font color='#0B73EB'>" + name +
+		"</font><span class='wikiTag'>" + type + "</span></p><p>" + content + "</p></div></div>";
+	return str;
+}
+
+function consGeoEntityResult(entity, order) {
+	var content = '实体编号：' + entity['geid'];
+	var texts = entity['text'];
+	if(texts != null && texts != undefined && texts.length > 0) {
+		content = texts[0];
+		if(content.length > 36) {
+			content = content.substring(0, 34) + '...';
+		}
+	}
+	return consResultItem("entity" ,entity['name'], entity['geid'], '地理位置实体', order, content);
+}
+
+function consRelposResult(pos, order) {
+	var type = pos['rel'] == 0 ? '位置实体': '相对位置';
+	var content = pos['coords'].replace(/\[/g, '').replace(/\]/g, '');
+	return consResultItem("relpos" ,pos['addr'], pos['uuid'], type, order, content);
+}
+
+//	产生右边结果栏的一条信息数据
+function consPlaceResult(place, order) {
+	return consResultItem("geoname" ,place.name, place.id, place['小类'], order,
+		"区域代码：" + place.dist);
+	// return consResultItem_old(place.name, place.position, place['小类'], order, "地域代码：" + place.dist);
+}
+//	产生右边结果栏的一条行政区域数据
+function consDistResult(dist, order) {
+	return consResultItem("dist" ,dist.name, dist.id, dist['Grade'], order,
+		"区域代码：" + dist.id + "&nbsp;&nbsp;&nbsp;所属地域:" + dist['上级行政区']);
+}
+//	产生右边结果栏的一条行政界线数据
+function consBoundResult(bound, order) {
+	return consResultItem("bound" ,bound.name, bound.Id, bound['Grade'], order,
+		"相关地域：" + bound.LeftName + ", " + bound.RightName);
+}
+//	产生右边结果栏的一条界桩数据
+function consBoundMarkerResult(bm, order) {
+	return consResultItem("bm" ,bm.name, bm.Id, bm['TypeName'], order,
+		"相关地域：" + bm.relatedDists);
 }

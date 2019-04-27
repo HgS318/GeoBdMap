@@ -10,7 +10,12 @@ var posadd = {
     city_polygons: {},
     addrs: [],
     pointCollection: null,
-    mapvpDataset: null
+    mapvpDataset: null,
+    road_conditions: [],
+    traffic_lines: [],
+    baiduSearch: {
+
+    },
 
 };
 var mapvpLayer = null;
@@ -138,7 +143,6 @@ function hideMapv() {
         mapvpLayer.hide();
     }
 }
-
 
 function hideMassPoints() {
     hidePointCollection();
@@ -340,46 +344,6 @@ function gotoProtocolCases(seq) {
     window.open(url);
 }
 
-function doSearchAll() {
-    var word = $("#xqinput")[0].value;
-    var idx = 0;
-    try {
-        idx = parseInt(word);
-    } catch (e) {
-        idx = 0;
-    }
-    $.ajax({
-        url: 'getAllFireLocalSites.action',
-        type: 'get',
-        dataType: 'json',
-        success: function (data) {
-            // var sitesStr = data['sites'];
-            // var sites = JSON.parse(sitesStr);
-            var site = data[idx];
-            var windowHtml = "<div><iframe src='" + site +"' " + "width='500px' height='500px' /></div>";
-            document.getElementById("y").innerHTML = windowHtml;
-            var $win = $('#y').window({
-                title: "新闻",
-                width: 552,
-                height: 559,
-                top: 100,
-                left:100,
-                //shadow: true,
-                //modal:true,
-                //iconCls:'icon-add',
-                //closed:true,
-                //minimizable:false,
-                maximizable:false,
-                // collapsible:false
-            });
-            $win.window('open');
-        }, error: function (err) {
-            console.log(err);
-        }
-
-    });
-}
-
 var openFile = function(event, divName){
     var input = event.target;
     var reader = new FileReader();
@@ -419,8 +383,6 @@ function getObjectURL(file) {
     }
     return url;
 }
-
-
 
 // var postcode = getQueryString('postcode');
 // var ip = getQueryString('ip');
@@ -714,4 +676,185 @@ function toShowMapv(checkbox) {
     } else {
         hideMapv();
     }
+}
+
+function isDefaultSearch(searchText) {
+    var list = [['武汉', '大东门', '火灾'], ['武汉', '火灾', '2月27']];
+    for(var i = 0; i < list.length; i++) {
+        var words = list[i];
+        var flag = true;
+        for(var j = 0; j < words.length; j++) {
+            var word = words[j];
+            if(searchText.indexOf(word) < 0) {
+                flag = false;
+                break;
+            }
+        }
+        if(flag) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function doSearchAll() {
+    var word = $("#posGeneral")[0].value;
+    var idx = 0;
+    try {
+        idx = parseInt(word);
+    } catch (e) {
+        idx = 0;
+    }
+    $.ajax({
+        url: 'getAllFireLocalSites.action',
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
+            // var sitesStr = data['sites'];
+            // var sites = JSON.parse(sitesStr);
+            var site = data[idx];
+            openContentWindow(site, "新闻", 650, 500, 20, 300);
+        }, error: function (err) {
+            console.log(err);
+        }
+
+    });
+}
+
+function baiduSearch() {
+    var word = $("#baiduSearchInput")[0].value;
+    // var url = 'http://localhost:5050/baidu_crawl?word=' + word;
+    var url = 'http://106.12.93.49:5050/baidu_crawl?word=' + word;
+    $.ajax({
+        url: url,
+        type: 'get',
+        dataType: 'json',
+        timeout: 60000,
+        //dataType:"jsonp",  //数据格式设置为jsonp
+        //jsonp:"callback",  //Jquery生成验证参数的名称
+        success: function (re_data) {
+
+            var searchText = $("#baiduSearchInput")[0].value;
+            if(!isDefaultSearch(searchText)) {
+                if(re_data['status'] != 0) {
+                    alert('搜索出现错误，请重试');
+                    return;
+                }
+                posadd.baiduSearch = re_data['results'];
+            } else {    //  默认搜索
+                if(re_data['status'] != 0) {
+                    alert('搜索出现错误，请重试');
+                    return;
+                }
+                posadd.baiduSearch = re_data['results'];
+                getRoadConditions();
+            }
+            setBaiduResultItems(posadd.baiduSearch, "bdSearchResults");
+        },
+        error: function (err_data) {
+            console.log(err_data);
+        }
+    });
+
+}
+
+//	在右边结果栏显示若干条结果，muldata为json
+function setBaiduResultItems(searchData, divname) {
+
+    var parentDiv = document.getElementById(divname);
+    parentDiv.style.display = "block";
+    if (searchData === undefined || searchData == null || "" == searchData || "{}" == searchData ) {
+        parentDiv.innerHTML = "";
+    } else {
+        var prestr = "<div class='list-group'>", endstr = "</div>", midstr = "";
+        var i = 0;
+        for(var oUrl in searchData) {
+            var title = searchData[oUrl]['title'];
+            var url = searchData[oUrl]['url'];
+            var name = title;
+            if(title.length > 20) {
+                name = title.substring(0, 18) + '...';
+            }
+            var showUrl = oUrl;
+            if(url != undefined && url != null && url != '') {
+                showUrl = url;
+            }
+            if(showUrl.length > 31) {
+                showUrl = showUrl.substring(0, 28) + '...';
+            }
+            var itemStr = "<div class='list-group-item'" + "onclick=\"gotoOverlay('baiduSearch', '" + oUrl + "')\"" +
+                "><div class='SearchResult_item_left' " +
+                "><p><strong>" + (i + 1) +
+                "</strong></p></div><div class='SearchResult_item_content'>" +
+                "<p><font color='#0B73EB'>" + name +
+                "</font></p><p>" + showUrl + "</p></div></div>";
+            // var itemStr = consResultItem("baiduSearch", name, oUrl, '搜索结果', i + 1, url);
+            midstr += itemStr;
+            i++;
+        }
+        var totalstr = prestr + midstr + endstr;
+        parentDiv.innerHTML = totalstr;
+    }
+
+}
+
+function getRoadConditions() {
+    var url = "getFireTraffics.action";
+    $.ajax({
+        url: url,
+        type: 'get',
+        dataType: 'json',
+        // timeout: 60000,
+        success: function (re_data) {
+            posadd.road_conditions = re_data;
+            for(var i = 0; i < posadd.road_conditions.length; i++) {
+                var lineData = posadd.road_conditions[i];
+                var polyline = getFigureJson(lineData['shape'], lineData['spaType']);
+                polyline.extData = lineData;
+                polyline.hide();
+                posadd.traffic_lines.push(polyline);
+                map.addOverlay(polyline);
+                // polyline.hide();
+            }
+            $("#trafficDiv")[0].style.display = 'block';
+        },
+        error: function (err_data) {
+            console.log(err_data);
+        }
+    });
+
+}
+
+function gotoTrafficTime(radio) {
+    var timeStr = radio.value;
+    try {
+        var time = parseInt(timeStr);
+        if(time < 0) {
+            for(var i = 0; i < posadd.traffic_lines.length; i++) {
+                var line = posadd.traffic_lines[i];
+                line.hide();
+            }
+        } else {
+            var fieldName = "status" + timeStr;
+            for(var i = 0; i < posadd.traffic_lines.length; i++) {
+                var line = posadd.traffic_lines[i];
+                var condition = line.extData[fieldName];
+                var color = "#0BFC03";
+                switch(condition) {
+                    case 0: color = "#0BFC03";break;
+                    case 1: color = "#FCFC03";break;
+                    case 2: color = "#FCBA03";break;
+                    case 3: color = "#FC2803";break;
+                    case 4: color = "#FF0000";break;
+                    default: color = "#0BFC03";
+                }
+                line.setStrokeColor(color);
+                line.show();
+            }
+
+        }
+    } catch (e) {
+        alert("路况数据有误!");
+    }
+
 }

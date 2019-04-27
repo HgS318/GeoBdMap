@@ -2,6 +2,7 @@
 var relpos = {
     restart: "",
     text: "",
+    more: false,
     relMarkerIcon: new BMap.Icon("images/markers/boundmarker_blue.png", new BMap.Size(25 ,37)),
     positions: [],
     relPositions: [],
@@ -22,6 +23,9 @@ function extract_positions(text) {
     var url = 'http://106.12.93.49:5050/query_positions?text=' + text;
     if(relpos.restart != null && "" != relpos.restart) {
         url = url + "&restart=1";
+    }
+    if(relpos.more == true) {
+        url = url + "&more=1";
     }
     $.ajax({
         url: url,
@@ -193,6 +197,14 @@ function toShowRelatives(checkbox) {
     }
 }
 
+function relativeMore(checkbox) {
+    if(checkbox.checked) {
+        relpos.more = true;
+    } else {
+        relpos.more = false;
+    }
+}
+
 function showRelatives() {
     for(var i = 0; i < relpos.relPositions.length; i++) {
         relpos.relPositions[i].show();
@@ -245,5 +257,5 @@ function removeExtratOverlays() {
 function setRelposResItem() {
     var total_data = relpos.positions.concat(relpos.relPositions);
     setResultItems(total_data, "distresults", "relpos");
-    $("#distintotal")[0].innerHTML = "位置信息：" + total_data.length + "条记录";
+    $("#distintotal")[0].innerHTML = "接入信息：" + total_data.length + "条记录";
 }

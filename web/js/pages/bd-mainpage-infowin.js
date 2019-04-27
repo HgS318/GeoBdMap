@@ -107,17 +107,17 @@ function createContent(entity) {
         content += '<strong>图形</strong>： (信息量: ' + entity['infoAmount']['figureLength'] + ' 字节)<br/>';
     }
     if(entity.address != null && entity.address != undefined) {
-        content += '地址：' + entity.address + '<br/><br/>';
+        content += '&nbsp;&nbsp;地址：' + entity.address + '<br/>';
     }
     if(entity['text'] != null) {
-        content += '<br/><strong>文本</strong>： (信息量: ' + entity['infoAmount']['textLenth'] + ' 字节)<br/>';
+        content += '<strong>文本</strong>： (信息量: ' + entity['infoAmount']['textLenth'] + ' 字节)<br/>';
         if(entity.infoAmount != undefined && entity.infoAmount != null) {
             for (var j = 0; j < entity['text'].length; j++) {
                 var content_text = entity['text'][j];
-                if (content_text.length > 45) {
-                    content += (content_text.substring(0, 45) + '...' + '<br/>' );
+                if (content_text.length > 56) {
+                    content += ('&nbsp;&nbsp;&nbsp;&nbsp;' + content_text.substring(0, 53) + '...' + '<br/>' );
                 } else {
-                    content += (content_text + '<br/>' );
+                    content += ('&nbsp;&nbsp;&nbsp;&nbsp;' + content_text + '<br/>' );
                 }
             }
         }
@@ -126,14 +126,14 @@ function createContent(entity) {
         // content += "<strong>文字</strong>";
         for(var j = 0; j < entity['texts'].length; j++) {
             var text = entity['texts'][j];
-            if(text.length > 48) {
-                text = text.substring(0, 45) + '...';
+            if(text.length > 56) {
+                text = text.substring(0, 53) + '...';
             }
-            content += "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
+            content += "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>&nbsp;&nbsp;&nbsp;&nbsp;" + text + "</p>";
         }
     }
     if(entity['flashes'] != null && entity['flashes'].length > 0) {
-        content += '<br/><strong>动画</strong>： (信息量: ' + entity['infoAmount']['flashLength'] + ' 秒)<br/>';
+        content += '<strong>动画</strong>： (信息量: ' + entity['infoAmount']['flashLength'] + ' 秒)<br/>';
         for (var j = 0; j < entity['flashes'].length; j++) {
             var flash_path = entity['flashes'][j];
             content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + flash_path + '' +
@@ -142,7 +142,7 @@ function createContent(entity) {
         content += '<br/>';
     }
     if(entity['images'] != null && entity['images'].length > 0) {
-        content += '<br/><strong>图像</strong>： (信息量: ' + entity['infoAmount']['imageLength'] + ' 字节)<br/>';
+        content += '<strong>图像</strong>： (信息量: ' + entity['infoAmount']['imageLength'] + ' 字节)<br/>';
         for (var j = 0; j < entity['images'].length; j++) {
             var img_path = entity['images'][j];
 //                                content += "<img src='" + img_path + "' class='img' alt='' onclick='openWindowY(img_path)'"
@@ -154,7 +154,7 @@ function createContent(entity) {
         content += '<br/>';
     }
     if(entity['audios'] != null && entity['audios'].length > 0) {
-        content += '<br/><strong>音频</strong>： (信息量: ' + entity['infoAmount']['audioLength'] + ' 秒)<br/>';
+        content += '<strong>音频</strong>： (信息量: ' + entity['infoAmount']['audioLength'] + ' 秒)<br/>';
         for (var j = 0; j < entity['audios'].length; j++) {
             var audio_path = entity['audios'][j];
             content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + audio_path + ' onclick="openWindowY(this, \'audio\', \'' +
@@ -164,7 +164,7 @@ function createContent(entity) {
         content += '<br/>';
     }
     if(entity['vedios'] != null && entity['vedios'].length > 0) {
-        content += '<br/><strong>视频</strong>： (信息量: ' + entity['infoAmount']['vedioLength'] + ' 秒)<br/>';
+        content += '<strong>视频</strong>： (信息量: ' + entity['infoAmount']['vedioLength'] + ' 秒)<br/>';
         for (var j = 0; j < entity['vedios'].length; j++) {
             var vedio_path = entity['vedios'][j];
 //                      content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + vedio_path + '" target="_blank" onclick="openWindowY(this, \'vedio\')">视频' + (j + 1) + '</a>');
@@ -175,7 +175,7 @@ function createContent(entity) {
     }
 
     if(entity['models'] != null && entity['models'].length > 0) {
-        content += '<br/><strong>模型</strong>： (信息量: ' + entity['infoAmount']['modelLength'] + ' 字节)<br/>';
+        content += '<strong>模型</strong>： (信息量: ' + entity['infoAmount']['modelLength'] + ' 字节)<br/>';
         for (var j = 0; j < entity['models'].length; j++) {
             var model_paths = entity['models'][j];
             var model_pic = model_paths.split(':');
@@ -339,81 +339,116 @@ function openInfoWin(e, content, title, width) {
     map.openInfoWindow(infoWindow, point);
 }
 
+//  从信息窗体打开小窗体
 function openWindowY(e, type, path, name) {
     var windowHtml = "";
     var title = "浏览多媒体数据";
-    var width = 492;
-    var height = 513;
-    if(path === undefined || path == null || path == "") {
-        if(e.src != undefined && e.src != null && e.scr != "") {
+    var width = 500;
+    var height = 521;
+    if (path === undefined || path == null || path == "") {
+        if (e.src != undefined && e.src != null && e.scr != "") {
             path = e.src;
-        } else{
+        } else {
             path = id;
         }
     }
-    if(type == "image") {
+    if (type == "image") {
         title = "查看图片";
-        if(name != undefined && name != null && name != "") {
+        if (name != undefined && name != null && name != "") {
             title += ": " + name;
         }
+        width = 469;
+        height = 497;
         windowHtml = "<div><img src='" + path +
             "' class='img' alt='' style='zoom:1;overflow:hidden;width:450px;height:450px;' /></div>";
-    } else if(type == "vedio") {
-//            windowHtml = "<div><iframe src='sp.html?url=download/220100SPCG1.flv' " +
-//                    "width='600px' height='450px' /></div>";
-//            width = 642;
-//            height = 513;
+    } else if (type == "vedio") {
         title = "观看视频";
-        if(name != undefined && name != null && name != "") {
+        if (name != undefined && name != null && name != "") {
             title += ": " + name;
         }
         var html0 = "<div><iframe src='download/vide7.4.1/sph5.html?url=../../" + path + "'";
-        if(name != undefined && name != null || name !="") {
+        if (name != undefined && name != null || name != "") {
             html0 = "<div><iframe src='download/vide7.4.1/sph5.html?url=../../" + path + "&name =" + name + "'";
         }
-        windowHtml = html0 + " width='615px' height='472px' /></div>";
-        width = 656;
-        height = 546;
-    } else if(type == "audio") {
+        windowHtml = html0 + " width='626px' height='482px' /></div>";
+        width = 644;
+        height = 528;
+    } else if (type == "audio") {
         title = "收听音频";
-        if(name != undefined && name != null && name != "") {
+        if (name != undefined && name != null && name != "") {
             title += ": " + name;
         }
         windowHtml = "<div><iframe src='download/bofq/yp.html?url=../../" + path + "' " +
             "width='460px' height='220px' /></div>";
-        width = 490;
-        height = 270;
-    } else if(type == "flash") {
+        width = 478;
+        height = 266;
+    } else if (type == "flash") {
         title = "收看动画";
-        if(name != undefined && name != null && name != "") {
+        if (name != undefined && name != null && name != "") {
             title += ": " + name;
         }
         windowHtml = "<div><iframe src='download/view_flash.html?url=../" + path + "' " +
-            "width='617px' height='465px' /></div>";
-        width = 656;
-        height = 546;
-    } else if(type == "model") {
+            "width='605px' height='466px' /></div>";
+        width = 623;
+        height = 512;
+    } else if (type == "model") {
         title = "查看模型";
-        if(name != undefined && name != null && name != "") {
+        if (name != undefined && name != null && name != "") {
             title += ": " + name;
         }
-    } else if(type == "track") {
+    } else if (type == "track") {
         title = "查看轨迹";
-        if(name != undefined && name != null && name != "") {
+        if (name != undefined && name != null && name != "") {
             title += ": " + name;
         }
-        windowHtml ="<div><iframe src='download/mapv/examples/baidu-map-polyline-time.html' " +
-            "width='500px' height='500px' /></div>";
-        width = 552;
-        height = 559;
+        windowHtml = "<div><iframe src='download/mapv/examples/baidu-map-polyline-time.html' " +
+            "width='510px' height='510px' /></div>";
+        width = 529;
+        height = 557;
     }
     document.getElementById("y").innerHTML = windowHtml;
     var $win = $('#y').window({
         title: title,
         width: width,
         height: height,
-        top: 100,
-        left:100,
+        top: 30,
+        left: 60,
+        //shadow: true,
+        //modal:true,
+        //iconCls:'icon-add',
+        //closed:true,
+        //minimizable:false,
+        maximizable: false,
+        // collapsible:false
+    });
+    $win.window('open');
+}
+
+//  打开小窗体
+function openContentWindow(url, title, width, height, top, left) {
+    if(title === undefined || title === null || title == '') {
+        title = "信息窗体";
+    }
+    if(width === undefined || width === null || width == 0) {
+        width = 500;
+    }
+    if(height === undefined || height === null || height == 0) {
+        height = 500;
+    }
+    if(top === undefined || top === null || top == 0) {
+        top = 100;
+    }
+    if(left === undefined || left === null || left == 0) {
+        left = 100;
+    }
+    var windowHtml = "<div><iframe src='" + url + "' width='" + width + "px' height='" + height + "px' /></div>";
+    document.getElementById("y").innerHTML = windowHtml;
+    var $win = $('#y').window({
+        title: title,
+        width: width + 19,
+        height: height + 47,
+        top: top,
+        left: left,
         //shadow: true,
         //modal:true,
         //iconCls:'icon-add',
@@ -422,6 +457,5 @@ function openWindowY(e, type, path, name) {
         maximizable:false,
         // collapsible:false
     });
-
     $win.window('open');
 }

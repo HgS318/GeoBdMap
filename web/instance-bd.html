@@ -58,7 +58,7 @@
 	<!--<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>-->
 
 
-	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=SycUWXeBU9Z1tkvcNqmFxvo93cS4jbU7"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=n3xc9ALenVeuL9apmqs4ZjrluhhsX4mr"></script>
 	<script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
 	<script type="text/javascript" src="download/mapv/build/mapv.js"></script>
     <!--  <script src="OntoSys/js/easyui/jquery-1.44-min.js" type="text/javascript"></script> -->
@@ -106,7 +106,7 @@
 				<!--<ul id="id_tree_type" style="margin-top: 10px;"></ul>-->
 
 				<div id="simpleSearchDiv" class="datagrid-toolbar" style="margin-bottom: 10px; padding:8px 4px 4px 5px;">
-					<input class="easyui-searchbox" style="width: 100%; height: 30px; line-height: 30px"
+					<input id="posGeneral" class="easyui-searchbox" style="width: 100%; height: 30px; line-height: 30px"
 						   data-options="prompt:'接入位置信息',menu:'#simplesearchtabsdiv',searcher:doSearchAll" />
 					<div id="simplesearchtabsdiv">
 						<div data-options="name:'allsimplesearch',iconCls:'icon-ok'">自动识别</div>
@@ -231,13 +231,11 @@
 									<input type="button" value="提取位置信息" class="srhbtn" onclick="extract_positions()">
 									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="button" value="清除" class="srhbtn" onclick="clear_ip()"></p>
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								&nbsp;
 								<input type="checkbox" id="relative_checkbox" onclick="toShowRelatives(this)"/>显示相对位置
+								&nbsp;&nbsp;&nbsp;
+								<input type="checkbox" id="relative_more" onclick="relativeMore(this)"/>模糊查询
 
-								<!--<br/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick="showRelposOverlays()" value="显示提取的位置">-->
-								<!--&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick="hideRelposOverlays()" value="隐藏提取的位置">-->
-								<!--&nbsp;&nbsp;&nbsp;&nbsp;<div id="extraposinfo"></div>-->
-								<!--</div>-->
 							</div>
 						</div>
 					</div>
@@ -402,7 +400,7 @@
 						&nbsp;&nbsp;&nbsp;<button class="srhbtn" onclick="hideXiaoqi()">清除消岐要素</button>
                     </div>
                     <p></p>
-                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：功能集成中，详情请
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;原系统请&nbsp;
                         <a href="http://106.12.93.49:8080/placedisambigution/final.jsp" target="_blank">点击</a></p>
 
                 </div>
@@ -458,10 +456,10 @@
                 <!--</div>-->
 
             </div>
-			</div>
+		</div>
 
-        </div>
-    </div>
+	</div>
+    <!--</div>-->
 
 	<div id="eastDiv" data-options="region:'east',split:true" title="位置信息" style="width: 350px; padding: 2px;overflow-x: hidden">
 
@@ -551,18 +549,48 @@
 
 			</div>
 
-			<div id="manageTab" title="用户分析" data-options="iconCls:'icon-man'">
-				<br/>
+			<div id="manageTab" title="全网搜索" data-options="iconCls:'icon-man'">
 
-				<div id="manageDiv" class="searchDiv">
-					<div id="ClassCheckbox1" class="ClassCheckbox">
-						<div id="highsearch">
-							<div id="mapextent" class="nextTab" >
-								<h3>&nbsp; 用户社会属性分析</h3>
-								<p>子功能集成中，详情请见：...</p>
+				<div class="datagrid-toolbar" style="margin-bottom: 1px; padding:8px 4px 4px 5px;">
+					<input id="baiduSearchInput" class="easyui-searchbox"  value="武汉 火灾 2月27日"
+						   style="width: 100%; height: 30px; line-height: 30px; margin-right: 8px; padding-right: 8px"
+						   data-options="prompt:'百度搜索',searcher:baiduSearch"/>
+				</div>
+
+				<div style="width: 99%; margin-left: 2px">
+					<div id="bdSearchResults">
+				</div>
+
+				<div style="width: 99%; margin-left: 2px">
+					<div id="trafficDiv" style="display: none">
+						<div class="nextTab">
+							<h3><input type="checkbox" id="trafficCheck" checked onclick="selectTrafficTime(this)"/>&nbsp;选择路况时间</h3>
+							<div id="trafficRadios" class="nextTab">
+								<p><label><input name="trafficRadio" type="radio" value="-1" checked
+												 onclick="gotoTrafficTime(this)" />关闭路况 </label></p>
+								<p><label><input name="trafficRadio" type="radio" value="9" onclick="gotoTrafficTime(this)" />9:30 </label></p>
+								<p><label><input name="trafficRadio" type="radio" value="10" onclick="gotoTrafficTime(this)" />10:30 </label></p>
+								<p><label><input name="trafficRadio" type="radio" value="11" onclick="gotoTrafficTime(this)" />11:30 </label></p>
+								<p><label><input name="trafficRadio" type="radio" value="12" onclick="gotoTrafficTime(this)" />12:30 </label></p>
 							</div>
 						</div>
 					</div>
+				</div>
+
+				<div id="y" class="easyui-window" title="Basic Window" data-options="iconCls:'icon-save',closed:true"
+					 style="width:500px;height:500px;padding: 3px 0px 0px 2px; overflow: hidden"></div>
+
+				<!--<div id="manageDiv" class="searchDiv">-->
+					<!--<div id="y" class="easyui-window" title="Basic Window" data-options="iconCls:'icon-save',closed:true" style="width:500px;height:500px;padding:10px;"></div>-->
+
+					<!--<div id="ClassCheckbox1" class="ClassCheckbox">-->
+						<!--<div id="highsearch">-->
+							<!--<div id="mapextent" class="nextTab" >-->
+								<!--<h3>&nbsp; 用户社会属性分析</h3>-->
+								<!--<p>子功能集成中，详情请见：...</p>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
 					<!--<div id="manageAll">-->
 
 						<!--<div id="geonamemag" class="nextTab" >-->
@@ -597,8 +625,6 @@
 							<!--</div>-->
 						<!--</div>-->
 					<!--</div>-->
-					<div id="y" class="easyui-window" title="Basic Window" data-options="iconCls:'icon-save',closed:true" style="width:500px;height:500px;padding:10px;"></div>
-
 				</div>
 
 			</div>
@@ -607,7 +633,7 @@
 
 	</div>
 
-	<div id="centerDiv" data-options="region:'center',title:'图示'" style="padding: 6px; overflow-y: scroll">
+	<div id="centerDiv" data-options="region:'center',title:'地图'" style="padding: 6px; overflow-y: scroll">
         <div class="floatDiv" id="floatDiv">
         </div>
         
