@@ -12,10 +12,20 @@ import whu.eres.cartolab.geo.*;
 
 public class JsonAction01 {
 
+    public String getFireTraffics() {
+        try {
+            String str = test.test.getFireTraffics();
+            toBeJson(str);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ex.getMessage();
+        }
+        return null;
+    }
+
     public String getAllFireLocalSites() {
         try {
             String str = test.test.getAllFireLocalSites();
-            String outStr = "{\"sites\": \"" + str + "\"}";
             toBeJson(str);
         } catch (Exception ex) {
             ex.printStackTrace();

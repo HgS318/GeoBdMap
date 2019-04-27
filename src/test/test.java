@@ -2,6 +2,7 @@ package test;
 
 import java.util.*;
 import net.sf.json.*;
+import whu.eres.cartolab.db.esri.*;
 import whu.eres.cartolab.db.mysql.connections.*;
 import whu.eres.cartolab.geo.*;
 
@@ -40,7 +41,6 @@ public class test {
 //        String outStr = sitesStr.replace("\"", "'");
         return arr.toString();
     }
-
 
     public static String getPointGeoEntities() {
         String sql = "SELECT * from info WHERE spaType = 1 order by geid";
@@ -210,6 +210,18 @@ public class test {
             se.printStackTrace();
         }
         return results.toString();
+    }
+
+    public static String getFireTraffics() {
+        List objs = ShapeUtils.readGisObject(MysqlLocalConnection.websitePath + "data/geo/Wuhan/lukuang3.shp");
+        JSONArray array = new JSONArray();
+        for(Object obj : objs) {
+            GISObjectBase geo = (GISObjectBase)obj;
+            JSONObject jo = geo.toJSONObject();
+            array.put(jo);
+        }
+        return array.toString();
+//        System.out.println(str);
     }
 
     public static void main(String[] args) throws Exception {

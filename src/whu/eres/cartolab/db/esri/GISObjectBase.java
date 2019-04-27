@@ -1,11 +1,10 @@
 package whu.eres.cartolab.db.esri;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import org.geotools.graph.build.line.DirectedLineStringGraphGenerator;
+import net.sf.json.*;
 import org.opengis.feature.simple.SimpleFeature;
 
 
@@ -15,7 +14,7 @@ import org.opengis.feature.simple.SimpleFeature;
  * @author elon
  * @version 2018年6月26日
  */
-public class GISObjectBase implements Serializable {
+public abstract class GISObjectBase implements Serializable {
 
     private static final long serialVersionUID = -6147262367078689317L;
 
@@ -51,6 +50,23 @@ public class GISObjectBase implements Serializable {
         return simpleFeature;
     }
 
+    public abstract String getSpatalString();
+
+    public JSONObject toJSONObject() {
+        JSONObject obj = new JSONObject();
+        for(String _key : attributeMap.keySet()) {
+            if("the_geom".equalsIgnoreCase(_key)) {
+                continue;
+            }
+            Object _val = attributeMap.get(_key);
+            obj.put(_key, _val);
+        }
+        obj.put("spaType", type.getSpaType());
+        String shape = getSpatalString();
+        obj.put("shape", shape);
+        return obj;
+    }
+
     public Map<String, Object> getAttributeMap() {
         return attributeMap;
     }
@@ -74,4 +90,5 @@ public class GISObjectBase implements Serializable {
     public void setAttrFieldList(List<ShapeFieldInfo> attrFieldList) {
         this.attrFieldList = attrFieldList;
     }
+
 }

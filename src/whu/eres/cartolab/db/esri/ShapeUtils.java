@@ -4,11 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
+import net.sf.json.*;
 import org.geotools.data.FeatureSource;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.data.shapefile.ShapefileDataStoreFactory;
@@ -29,6 +27,18 @@ import com.vividsolutions.jts.geom.Point;
  * @version 2018年6月24日
  */
 public class ShapeUtils {
+
+    public static void main(String[] args) {
+        List objs = readGisObject("D:\\try\\temp\\track\\baidu_track\\wuhan_fire0227\\lukuang2.shp");
+        JSONArray array = new JSONArray();
+        for(Object obj : objs) {
+            GISObjectBase geo = (GISObjectBase)obj;
+            JSONObject jo = geo.toJSONObject();
+            array.put(jo);
+        }
+        String str = array.toString();
+        System.out.println(str);
+    }
 
     /**
      * 提取shape文件包含的属性字段名称和类型信息。
@@ -114,8 +124,7 @@ public class ShapeUtils {
                 Object value = gisObject.getSimpleFeature().getAttribute(field.getFieldName());
                 gisObject.addAttribute(field.getFieldName(), value);
             }
-
-            System.out.println(gisObject.getAttributeMap());
+//            System.out.println(gisObject.getAttributeMap());
         }
     }
 

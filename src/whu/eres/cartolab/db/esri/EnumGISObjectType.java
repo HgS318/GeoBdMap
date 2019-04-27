@@ -19,4 +19,16 @@ public enum EnumGISObjectType {
     public int getType() {
         return type;
     }
+
+    public int getSpaType() {
+        int spaType = 1;
+        switch (type) {
+            case 1: spaType = 1; break;
+            case 2: spaType = 3; break;
+            case 4: spaType = 5; break;
+            default: spaType = 1;
+        }
+        return spaType;
+    }
+
 }

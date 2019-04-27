@@ -1,5 +1,6 @@
 package whu.eres.cartolab.db.esri;
 
+import com.vividsolutions.jts.geom.Coordinate;
 import org.opengis.feature.simple.SimpleFeature;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import java.util.List;
@@ -30,5 +31,17 @@ public class GisMultiPolygon extends GISObjectBase {
 
     public void setPolygon(MultiPolygon polygon) {
         this.polygon = polygon;
+    }
+
+    public String getSpatalString() {
+        Coordinate[] coords = polygon.getCoordinates();
+        StringBuffer buf = new StringBuffer();
+        buf.append("[");
+        for (Coordinate coord : coords) {
+            buf.append(" [ ").append(coord.x).append(", ").append(coord.y).append(" ],");
+        }
+        buf.deleteCharAt(buf.length() - 1);
+        buf.append(" ]");
+        return buf.toString();
     }
 }
