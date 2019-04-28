@@ -1,0 +1,33 @@
+.nvt_vote_wrap,.nvt_vote_cnt{ zoom:1; overflow:hidden; clear:both; line-height:21px; font-size:12px; text-align:left;}
+.nvt_vote_cnt,.nvt_vote_info{ margin-bottom:10px;}
+.nvt_vote_list dt{ line-height:25px;}
+.nvt_vote_list dd{ margin: 0;}
+.nvt_vote_list input{ margin:0 1px; *margin-bottom:2px; width:19px; height:19px; vertical-align:top; *vertical-align:middle;}
+.nvt_vote_info select{ height:21px; font-size:12px;}
+.nvt_vote_submit{ width:60px; height:23px;}
+.nvt_vote_iclock{ padding-left:16px; background:url(http://img1.cache.netease.com/cnews/img/vote10/vote24.gif) no-repeat left center;}
+.nvt_vote_btn{ vertical-align:top; *vertical-align:middle;}
+
+.nvt_vote_2{ clear:both; text-align:left; border:1px solid #C4D6EC;}
+.nvt_vote_2 .nvt_vote_til{ margin-bottom:10px; padding-left:30px; height:34px; line-height:34px; font-size:14px; font-weight:bold; background:#E5EEF8 url(http://img1.cache.netease.com/cnews/img/nvt10/voteicon.gif) no-repeat 9px center;}
+.nvt_vote_2 .nvt_vote_cnt{ margin-left:30px; margin-right:30px;}
+.nvt_vote_2 .nvt_vote_info{ padding:6px 30px; background:#E5EEF8;}
+
+.nvt_vote_3{ clear:both; text-align:left; border:1px solid #e6eaec; background:#f2f6f8}
+.nvt_vote_3 .nvt_vote_til{ margin-bottom:10px; padding-left:30px; height:34px; line-height:34px; font-size:14px; font-weight:bold; border:1px solid #fcfdfe; border-bottom:none; background:#ebf2f5 url(http://img1.cache.netease.com/cnews/img/nvt10/voteicon.gif) no-repeat 9px center;}
+.nvt_vote_3 .nvt_vote_cnt{ margin-left:30px; margin-right:30px;}
+.nvt_vote_3 .nvt_vote_info{ padding:6px 30px; background:#EBF2F5;}
+
+.nvt_vote_4{ clear:both; text-align:left; border:1px solid #c5d7ed; background:#fff; width:434px; margin:0 auto; padding:0 15px}
+.nvt_vote_4 .nvt_vote_til{padding-left:24px; height:32px; line-height:32px; margin-bottom:-5px; font-size:14px; background:url(http://img1.cache.netease.com/cnews/img/nvt10/voteicon.gif) no-repeat 2px 8px;}
+.nvt_vote_4 .nvt_vote_list{border-top:1px dotted #c5d7ed; margin-top:5px; padding-top:5px}
+.nvt_vote_4 .nvt_vote_info{ padding:6px 30px; background:#E5EEF8;}
+
+.nvt-bar{padding-left:21px; line-height:14px; margin:-3px 0 3px; display:none;}
+.nvt-bar-isend{padding-left:1px;}
+.nvt-bar-trough{ float:left; padding:0 3px 0 1px; width:150px; height:13px; text-align:left; background:url(http://img1.cache.netease.com/cnews/img/nvt10/bg16.png) no-repeat 0 0;}
+.nvt-bar-trough span{ display:block; overflow:hidden; margin-left:-1px; height:9px; border:1px solid #478B38; background:url(http://img1.cache.netease.com/cnews/img/nvt10/bg17.png) repeat-x 0 0;}
+.nvt-bar-count{margin-left:9px;}
+.nvt-bar-rate{margin-left:5px;}  
+.nvt-icon-success{ padding-left:18px; background:url(http://img1.cache.netease.com/cnews/img/nvt10/bg20.png) no-repeat 0 center;}
+.nvt-icon-error{ padding-left:18px; background:url(http://img1.cache.netease.com/cnews/img/nvt10/bg21.png) no-repeat 0 center;}

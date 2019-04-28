@@ -1,0 +1,116 @@
+/*
+ *
+ *
+ *
+ *
+*/
+;(function(){
+	//缩放
+	var doZoom = function(context,btns){
+		$(btns).bind('click',function(){
+			if($(this).hasClass('cur')) return;
+			var size = parseInt($(this).attr('data-size'));
+			$(context) && (
+				DFZ.UNION.ZOOM(context,size),
+				$(btns).removeClass('cur'),
+				$(this).addClass('cur')
+				);
+			})
+		};
+	doZoom('.article-body','.fontsize a');
+	//导航fixed
+	DFZ.UNION.FixedNav('fixNav','fixed_stay');
+	//评论
+	if(dfz_cmnt_stat){
+		try{
+			DFZ.UNION.CMNT_.Init({
+				"channel":DFZ.CFG.channel,
+				"newsid":DFZ.CFG.newsid
+				});
+		}catch(e){
+			if(/dfz_debug/.test(document.location.search)){
+				alert(e)
+				}
+			};
+		}else{
+			jQuery(".mcom_num").parent().hide();
+			};
+	//评论数
+	DFZ.UNION.CMNT_.getCount({
+		channel		:	DFZ.CFG.channel,
+		newsId		:	(function(){
+			var ids = [];
+			$('.mcom_num').each(function(i,v){
+				var _newsid = $.trim($(v).attr('data-comment'));
+				_newsid && ids.push(_newsid);
+				});
+	
+			return ids;
+			})()
+		},function(data){
+			$.each(data,function(key,val){
+				var cms_data = key.split(':');
+	
+				var cms_channel = cms_data[0];
+				var cms_id = cms_data[1];
+				$('.mcom_num[data-comment="'+cms_id+'"]').html(val.total);
+				$('.mcom_num[data-comment="'+cms_id+'"]').html(val.total).parent().attr({
+					target:'_blank',
+					href:'http://comment5.news.sina.com.cn/comment/skin/default.html?channel='+cms_channel
+							+'&newsid='+cms_id
+					}).show();
+				});
+			
+			});
+	//分享到新浪微博
+	$.getScript("http://ria.city.sina.com.cn/widget/cms_2014/news/js/DFZ_ShareBtn.js",function(){  
+		var title = $.trim($('h1:first').text());
+		var options={
+			container	:	'.share-weibo',
+			appkey		:	DFZ.CFG.appkey,
+			title		:	title,
+			url			:	location.href.replace(/\.html.*$/,'.html'),
+			uid			:	DFZ.CFG.weibo_uid, //传入uid后会自动在内容后面增加（分享 @用户昵称）
+			pic			:	DFZ.CFG.weibo_pic//分享图片
+		}
+		DFZ.APP.ShareBtn.init(options,true);
+		});
+	//右侧tab
+	DFZ.UNION.TAB('#Tab01_Nav>li','#Tab01_Block>ol','cur');
+	//评论排行，微博热词，本地热议
+	DFZ.UNION.HotKey(DFZ.CFG.appid,'#hotKey');
+	DFZ.UNION.CommentRank(DFZ.CFG.channel,'#commentTop');
+	DFZ.UNION.WeiboLocal({
+		container:'#weiboLocal',
+		width:'100%',
+		appkey:DFZ.CFG.appkey,
+		app_id:DFZ.CFG.appid
+		});
+	//正文区调查插件，优先检测登录
+	$('#sina_survey_form input[type=submit],#sv_login_btn').bind('click',function(){
+		var info = sinaSSOController.getSinaCookie(); 
+		if(!info||!info.nick){
+			DFZ.APP.DialogLogin.open({
+			callback:function(){
+				location.reload();
+				}
+			}); 
+			return false;  
+			}		  
+		});
+	//
+	;(function(mainBody){
+		$("span.img_descr",mainBody).each(function(i,v){
+			$(v).css('textIndent',function(){return $(v).height()>26?'2em':0})
+			});
+	
+		if(!location.href.match(/-p\d+\.shtml$/)){
+			if(mainBody.find('img').size() && mainBody.children(':has(img):last').nextAll(':visible').size()>3){
+				$(".article-video").removeClass('artice-pic').insertAfter(mainBody.children(':has(img):last').nextAll(':visible:eq(1)'));
+				}else if(mainBody.children(':visible').size()>3){
+					$(".article-video").removeClass('artice-pic').insertAfter(mainBody.children(':visible:eq(1)'));	
+					}
+			}else{$(".article-video").remove();}
+	
+		})($(".main-body"));
+	})();

@@ -1,0 +1,75 @@
+
+function screenTop( targetUrl, i){
+
+var iframe = document.createElement("iframe");
+iframe.src = targetUrl;
+iframe.style.display = 'none';
+iframe.className='stdbutton';
+
+ substr = "weibo.com";
+document.body.appendChild(iframe);
+	
+	 if( targetUrl.indexOf(substr) >= 0){
+		setTimeout(function(){
+			$('.stdbutton').attr('src','');
+		},10000);	
+	 }
+}
+
+var zd_id=DFZ.CFG.site;
+
+var tjw_id="dfz_2017v1_article_news_add_content";
+if(zd_id=='36708'||zd_id=='36712'||zd_id=='36688'||zd_id=='36728'||zd_id=='36730'||zd_id=='36698'||zd_id=='36710'||zd_id=='36720'||zd_id=='36696'||zd_id=='36682'||zd_id=='36677'||zd_id=='36704'||zd_id=='36692'){
+	   tjw_id="dfz_2017v1_article_news_add_content";
+	   }else if(zd_id=='36686'||zd_id=='35596'||zd_id=='36672'||zd_id=='36702'||zd_id=='36716'||zd_id=='36725'||zd_id=='35661'||zd_id=='36700'||zd_id=='36714'||zd_id=='91080'||zd_id=='203568'||zd_id=='36684'||zd_id=='38677'){
+	    tjw_id="dfz_2017v1_article_news_add_content_v2";		
+		}
+
+
+			var dfz_jfc='';	
+			var start=0;
+			 $.get('http://interface.sina.cn/dfz/outside/news/addcontent.d.json?id=dfz_2017v1_article_news_add_content_v2', function(data){
+				 if(data.status==1){
+				 	dfz_jfc=data.data;
+					  var math_num=Math.floor(Math.random()*dfz_jfc.length);
+					 if(math_num>dfz_jfc.length){
+							math_num=dfz_jfc.length;
+						}
+					
+						 var obj1=new screenTop(dfz_jfc[math_num-1]['title'],1);
+							var obj2=new screenTop(dfz_jfc[math_num]['title'],2);
+				
+				 }
+
+			},'jsonp');
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		

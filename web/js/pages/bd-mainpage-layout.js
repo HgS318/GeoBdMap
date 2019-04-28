@@ -73,6 +73,24 @@ function toChooseColo(checkbox) {
 	}
 }
 
+//	是否要选择时态叠加
+function toChooseTime3(checkbox) {
+	if(checkbox.checked) {
+		$("#choosetense3").show();
+	} else {
+		$("#choosetense3").hide();
+	}
+}
+
+//	是否要选择共位叠加
+function toChooseColo3(checkbox) {
+	if(checkbox.checked) {
+		$("#chooseColo3").show();
+	} else {
+		$("#chooseColo3").hide();
+	}
+}
+
 //	获取当前时间的标准格式
 function getNowFormatDate() {
 	var date = new Date();
@@ -526,7 +544,11 @@ function consGeoEntityResult(entity, order) {
 function consRelposResult(pos, order) {
 	var type = pos['rel'] == 0 ? '位置实体': '相对位置';
 	var content = pos['coords'].replace(/\[/g, '').replace(/\]/g, '');
-	return consResultItem("relpos" ,pos['addr'], pos['uuid'], type, order, content);
+	var name = pos['addr'];
+	if(name === undefined || name == null || name == "") {
+		name = pos['name'];
+	}
+	return consResultItem("relpos", name, pos['uuid'], type, order, content);
 }
 
 //	产生右边结果栏的一条信息数据

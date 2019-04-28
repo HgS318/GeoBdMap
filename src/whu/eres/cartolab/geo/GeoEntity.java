@@ -18,6 +18,7 @@ public class GeoEntity {
     public String polygon;
     public Map<String, Integer> shps = new HashMap<>();
     public List<String> texts = new ArrayList<>();
+    public List<String> links = new ArrayList<>();
     public List<String> images = new ArrayList<>();
     public Map<String, Long> vedios = new HashMap<>();
     public Map<String, Long> audios = new HashMap<>();

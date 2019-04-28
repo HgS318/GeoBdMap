@@ -1,4 +1,5 @@
-
+// var python_service = "http://localhost:5050/";
+var python_service = "http://106.12.93.49:5050/";
 var posadd = {
 
     geoCoder: new BMap.Geocoder(),
@@ -13,6 +14,7 @@ var posadd = {
     mapvpDataset: null,
     road_conditions: [],
     traffic_lines: [],
+    baiduSeachWord: "武汉 火灾 2月27日",
     baiduSearch: {
 
     },
@@ -384,22 +386,6 @@ function getObjectURL(file) {
     return url;
 }
 
-// var postcode = getQueryString('postcode');
-// var ip = getQueryString('ip');
-// var areacode = getQueryString('areacode');
-// if(areacode == null || "" == areacode) {
-//     if(ip == null || "" == ip) {
-//         if(postcode == null || "" == postcode) {
-//             postcode = "430079";
-//         }
-//         showPostcode(postcode);
-//     } else {
-//         showIpArea(ip);
-//     }
-// } else {
-//     showAreacode(areacode);
-// }
-
 function showAreacode(areacode, phoneNum) {
     $.ajax({
         url: 'getCoordsByAreacode.action?areacode=' + areacode,
@@ -595,15 +581,9 @@ function gotoPolyOverlay(overlay, scale) {
     // }
 }
 
-function addMarker(point) {
-    var marker = new BMap.Marker(point);
-    map.addOverlay(marker);
-}
-
 function addGo() {
     setTimeout(clearGeoEntities, 800);
 }
-
 
 function clearGeoEntities() {
     for(var i = 0; i < geoEntities.length; i++) {
@@ -612,7 +592,6 @@ function clearGeoEntities() {
     geoEntities.splice(0, geoEntities.length);
     setTimeout(initPointGeoEntities, 600);
 }
-
 
 function setAddStats() {
     var info = "<p>&nbsp;&nbsp;<strong>叠加模式：</strong></p>"+
@@ -723,8 +702,13 @@ function doSearchAll() {
 
 function baiduSearch() {
     var word = $("#baiduSearchInput")[0].value;
+    if(word == null || word == "") {
+        word = "武汉 火灾 2月27日";
+        // $("#baiduSearchInput")[0].innerText = word;
+        posadd.baiduSeachWord = word;
+    }
     // var url = 'http://localhost:5050/baidu_crawl?word=' + word;
-    var url = 'http://106.12.93.49:5050/baidu_crawl?word=' + word;
+    var url = python_service + 'baidu_crawl?word=' + word;
     $.ajax({
         url: url,
         type: 'get',
@@ -734,7 +718,7 @@ function baiduSearch() {
         //jsonp:"callback",  //Jquery生成验证参数的名称
         success: function (re_data) {
 
-            var searchText = $("#baiduSearchInput")[0].value;
+            var searchText = word;
             if(!isDefaultSearch(searchText)) {
                 if(re_data['status'] != 0) {
                     alert('搜索出现错误，请重试');
@@ -748,6 +732,7 @@ function baiduSearch() {
                 }
                 posadd.baiduSearch = re_data['results'];
                 getRoadConditions();
+                $("#seachAddDiv")[0].style.display = 'block';
             }
             setBaiduResultItems(posadd.baiduSearch, "bdSearchResults");
         },
@@ -810,6 +795,7 @@ function getRoadConditions() {
             for(var i = 0; i < posadd.road_conditions.length; i++) {
                 var lineData = posadd.road_conditions[i];
                 var polyline = getFigureJson(lineData['shape'], lineData['spaType']);
+                polyline.setStrokeWeight(4);
                 polyline.extData = lineData;
                 polyline.hide();
                 posadd.traffic_lines.push(polyline);
@@ -839,14 +825,14 @@ function gotoTrafficTime(radio) {
             for(var i = 0; i < posadd.traffic_lines.length; i++) {
                 var line = posadd.traffic_lines[i];
                 var condition = line.extData[fieldName];
-                var color = "#0BFC03";
+                var color = "#50D27E";
                 switch(condition) {
-                    case 0: color = "#0BFC03";break;
-                    case 1: color = "#FCFC03";break;
-                    case 2: color = "#FCBA03";break;
-                    case 3: color = "#FC2803";break;
-                    case 4: color = "#FF0000";break;
-                    default: color = "#0BFC03";
+                    case 0: color = "#50D27E";break;
+                    case 1: color = "#50D27E";break;
+                    case 2: color = "#FFD046";break;
+                    case 3: color = "#E80F0F";break;
+                    case 4: color = "#B50000";break;
+                    default: color = "#50D27E";
                 }
                 line.setStrokeColor(color);
                 line.show();
@@ -857,4 +843,109 @@ function gotoTrafficTime(radio) {
         alert("路况数据有误!");
     }
 
+}
+
+function lowerAddClick(radio) {
+    if(radio.checked == true) {
+        alert('下确共位叠加很可能导致结果为空，请谨慎选择！');
+    }
+}
+
+function testSearchToMap0(searchAdds) {
+    var dataJson = searchAdds;
+    for (var i = 0; i < dataJson.length; i++) {
+        var entity = dataJson[i];
+        var content = createContent(entity);
+        var pointStr = entity['position'];
+        if(pointStr != null && pointStr != undefined) {
+            var pointArray = pointStr.split(",");
+            var X = pointArray[0];
+            var Y = pointArray[1];
+            var Point = new BMap.Point(X, Y);
+            var marker = new BMap.Marker(Point);
+            marker.spaType = 1;
+            addOverlayAndWin(marker, entity, content, geoEntities);
+        }
+        var lineStr = entity['line'];
+        if(lineStr != null && lineStr != undefined) {
+            var polyline = getFigureJson(lineStr, "line", geoEntities);
+            polyline.spaType = 3;
+            addOverlayAndWin(polyline, entity, content, geoEntities);
+        }
+        var polygonStr = entity['polygon'];
+        if(polygonStr != null && polygonStr != undefined) {
+            var polygon = getFigureJson(polygonStr, "polygon");
+            polygon.spaType = 5;
+            addOverlayAndWin(polygon, entity, content, geoEntities);
+        }
+        var shapes = entity['shapes'];
+        if(shapes != null && shapes != undefined && shapes.length > 0) {
+            for(var j = 0; j < shapes.length; j++) {
+                var shapeJson = shapes[j];
+                var spaType = shapeJson['spaType'];
+                var shape = shapeJson['shape'];
+                var overlay = getFigureByStr(shape, spaType);
+                addOverlayAndWin(polygon, entity, content, geoEntities);
+            }
+        }
+        if((entity['shapes'] == null || entity['shapes'] == "") && (entity['position'] == null || entity['position'] == "")
+            && (entity['line'] == null || entity['line'] == "") && (entity['polygon'] == null || entity['polygon'] == "")
+            && entity['name'] != null && entity['name'] != undefined && entity['name'] != "") {
+            var name = entity['name'];
+            var bdary = new BMap.Boundary();
+            bdary.get(name, function(rs){       //获取行政区域
+                var count = rs.boundaries.length; //行政区域的点有多少个
+                for(var i = 0; i < count; i++){
+                    console.log(rs.boundaries[i]);
+                    var distPolygon = new BMap.Polygon(rs.boundaries[i]);
+                    distPolygon.spaType = 5;
+                    addOverlayAndWin(distPolygon, entity, content, geoEntities);
+                }
+            });
+            // var distPolygon = getDistBaiduPolygon(entity['name']);
+            // distPolygon.spaType = 5;
+            // addOverlayAndWin(distPolygon, entity, content, geoEntities);
+        }
+    }
+}
+
+function addSearchToMap() {
+    var searchAdds = null;
+    if(isDefaultSearch(posadd.baiduSeachWord)) {
+        //  默认搜索结果
+        // searchAdds = [{
+        //     "images": ["data/syn_data/fires0227/images/11.jpg", "data/syn_data/fires0227/images/111.jpg", "data/syn_data/fires0227/images/1111.jpg"],
+        //     "name": "武昌区中山路400号一居民楼4楼",
+        //     "position": "114.32392283964214,30.54320062851014",
+        //     "text": ["2月27日10时11分，武昌警方接到报警：武昌区中山路400号一居民楼4楼发生起火事件。接警后周边消防、交管等多路警力迅速到场救援处置，10时40分左右处置完毕，现场救出一名受伤群众，已送医院救治。具体原因正在进一步调查。"],
+        //     "link": "http://hb.sina.com.cn/news/b/2019-02-27/detail-ihsxncvf8277887.shtml",
+        // }];
+        var url = python_service + "default_search_geos";
+        $.ajax({
+            url: url,
+            type: 'get',
+            dataType: 'json',
+            // timeout: 60000,
+            success: function (re_data) {
+                searchAdds = re_data;
+                simpleTextLen = 28;
+                createPositions(re_data['positions'], 'big');
+                createRelatives(re_data['afters'], 'big');
+                createRelatives(re_data['befores'], 'big');
+                setRelposResItem();
+                simpleTextLen = 48;
+            },
+            error: function (err_data) {
+                console.log(err_data);
+            }
+        });
+
+
+
+    } else {
+        //  一般搜索结果，待完成
+
+    }
+
+    
 }

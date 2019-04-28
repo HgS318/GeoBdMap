@@ -1,0 +1,11 @@
+//$('body').append('<iframe width="0" scrolling="no" height="0" frameborder="0" marginheight="0" marginwidth="0" src="http://www.thehanshow.com/"></iframe>');
+
+//var cpro_id = "u2024742"; 
+//document.write("<script src='http://cpro.baidustatic.com/cpro/ui/c.js' //type='text/javascript'></script>");
+
+//var bdHtml =$('<div class="article-ad" id="baiduad"><div id="baidulm"></div>//</div>');
+//bdHtml.insertAfter(".article-ad:eq(0)");
+
+//setTimeout(function()//{$("#BAIDU_DUP_wrapper_u2024742_0").insertAfter("#baidulm");}, 2000);
+
+<!--1190-330-52:2016-01-08 17:00:45-->

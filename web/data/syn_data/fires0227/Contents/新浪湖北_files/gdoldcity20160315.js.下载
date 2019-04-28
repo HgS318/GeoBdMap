@@ -1,0 +1,114 @@
+var citylist = ['佛山','东莞','江门','中山','惠州','珠海','阳江','湛江','茂名','云浮','清远'];
+gdhost = document.domain;
+if(gdhost == 'gd.sina.com.cn' || gdhost == 'complain2015.gd.sina.com.cn'){
+	for(var i=0;i < citylist.length;i++){
+		if(citylist[i] == '佛山'){
+			//DFZ_2013_佛山_三级站图文正文页、GD_2014_佛山_陶瓷正文页、GD_2014_佛山_家电五金正文页、GD_2014_佛山_金融正文页、GD_2014_佛山_生活正文页、GD_2014_佛山_旅行正文页、GD_2014_佛山_美食正文页
+			var gd2016_fs_1 = $(".bnav").html();
+			if(gd2016_fs_1){
+				gd2016_fs_1 = gd2016_fs_1.replace(/(^\s*)|(\s*$)|[\n]/ig,'');
+				//fs_1 = fs_1.replace(/(\s)|[\n]/ig,'');
+				var gd2016_fs_1_r = /(.*?)<a(.*?)>新浪广东<\/a><i>&gt;<\/i>(.*?)<a(.*?)>佛山<\/a>(.*?)正文/;
+				gd2016_fs_1 = gd2016_fs_1.replace(gd2016_fs_1_r,'<a$2>新浪广东</a><i>&gt;<\/i>'+citylist[i]+'<i>&gt;<\/i>正文');
+				$(".bnav").html(gd2016_fs_1);
+			}
+			//GD_2015_佛山图说正文页
+			var gd2016_fs_2 = $(".tab-tit-cont-l span:nth-child(2)").html();
+			if(gd2016_fs_2){
+				gd2016_fs_2 = gd2016_fs_2.replace(/(^\s*)|(\s*$)|[\n]/ig,'');
+				var gd2016_fs_2_r = /<a(.*?)>新浪广东<\/a>(.*?)<a(.*?)>新浪佛山<\/a>(.*?)<a(.*?)>正文<\/a>/;
+				gd2016_fs_2 = gd2016_fs_2.replace(gd2016_fs_2_r,'<a$1>新浪广东</a><i>&gt;<\/i>'+citylist[i]+'<i>&gt;<\/i>正文');
+				$(".tab-tit-cont-l span:nth-child(2)").html(gd2016_fs_2);
+			}
+		}else if(citylist[i] == '东莞'){
+			//DFZ_2013_东莞_三级站图文正文页
+			var gd2016_dg = $(".bnav").html();
+			if(gd2016_dg){
+				gd2016_dg = gd2016_dg.replace(/(^\s*)|(\s*$)|[\n]/ig,'');
+				var gd2016_dg_r = /(.*?)<a(.*?)>新浪广东<\/a><i>&gt;<\/i>(.*?)<a(.*?)>东莞<\/a>(.*?)正文/;
+				gd2016_dg = gd2016_dg.replace(gd2016_dg_r,'<a$2>新浪广东</a><i>&gt;<\/i>'+citylist[i]+'<i>&gt;<\/i>正文');
+				$(".bnav").html(gd2016_dg);		
+			}
+		}else if(citylist[i] == '中山'){
+			//DFZ_2013_中山_三级站图文正文页、GD_2014_惠州_美食正文页
+			var gd2016_zs = $(".bnav").html();
+			if(gd2016_zs){
+				gd2016_zs = gd2016_zs.replace(/(^\s*)|(\s*$)|[\n]/ig,'');
+				var gd2016_zs_r = /(.*?)<a(.*?)>新浪广东<\/a><i>&gt;<\/i>(.*?)<a(.*?)>中山<\/a>(.*?)正文/;
+				gd2016_zs = gd2016_zs.replace(gd2016_zs_r,'<a$2>新浪广东</a><i>&gt;<\/i>'+citylist[i]+'<i>&gt;<\/i>正文');
+				$(".bnav").html(gd2016_zs);	
+			}
+		}else if(citylist[i] == '惠州'){
+			//DFZ_2013_惠州_三级站图文正文页
+			var gd2016_hz_1 = $(".bnav").html();
+			if(gd2016_hz_1){
+				gd2016_hz_1 = gd2016_hz_1.replace(/(^\s*)|(\s*$)|[\n]/ig,'');
+				var gd2016_hz_1_r = /(.*?)<a(.*?)>新浪广东<\/a><i>&gt;<\/i>(.*?)<a(.*?)>惠州<\/a>(.*?)正文/;
+				gd2016_hz_1 = gd2016_hz_1.replace(gd2016_hz_1_r,'<a$2>新浪广东</a><i>&gt;<\/i>'+citylist[i]+'<i>&gt;<\/i>正文');
+				$(".bnav").html(gd2016_hz_1);
+			}
+			//GD_2015_惠州图说正文页
+			var gd2016_hz_2 = $(".tab-tit-cont-l span:nth-child(2)").html();
+			if(gd2016_hz_2){
+				gd2016_hz_2 = gd2016_hz_2.replace(/(^\s*)|(\s*$)|[\n]/ig,'');
+				var gd2016_hz_2_r = /<a(.*?)>新浪广东<\/a>(.*?)<a(.*?)>新浪惠州<\/a>(.*?)<a(.*?)>正文<\/a>/;
+				gd2016_hz_2 = gd2016_hz_2.replace(gd2016_hz_2_r,'<a$1>新浪广东</a><i>&gt;<\/i>'+citylist[i]+'<i>&gt;<\/i>正文');
+				$(".tab-tit-cont-l span:nth-child(2)").html(gd2016_hz_2);
+			}	
+		}else if(citylist[i] == '珠海'){
+			//DFZ_2013_珠海_三级站图文正文页、GD_2014_珠海_美食正文页
+			var gd2016_zh = $(".bnav").html();
+			if(gd2016_zh){
+				gd2016_zh = gd2016_zh.replace(/(^\s*)|(\s*$)|[\n]/ig,'');
+				var gd2016_zh_r = /(.*?)<a(.*?)>新浪广东<\/a><i>&gt;<\/i>(.*?)<a(.*?)>珠海<\/a>(.*?)正文/;
+				gd2016_zh = gd2016_zh.replace(gd2016_zh_r,'<a$2>新浪广东</a><i>&gt;<\/i>'+citylist[i]+'<i>&gt;<\/i>正文');
+				$(".bnav").html(gd2016_zh);
+			}
+		}else if(citylist[i] == '阳江'){
+			//DFZ_2013_阳江_三级站图文正文页
+			var gd2016_yj = $(".bnav").html();
+			if(gd2016_yj){
+				gd2016_yj = gd2016_yj.replace(/(^\s*)|(\s*$)|[\n]/ig,'');
+				var gd2016_yj_r = /(.*?)<a(.*?)>新浪广东<\/a><i>&gt;<\/i>(.*?)<a(.*?)>阳江<\/a>(.*?)正文/;
+				gd2016_yj = gd2016_yj.replace(gd2016_yj_r,'<a$2>新浪广东</a><i>&gt;<\/i>'+citylist[i]+'<i>&gt;<\/i>正文');
+				$(".bnav").html(gd2016_yj);
+			}
+		}else if(citylist[i] == '湛江'){
+			//DFZ_2013_湛江_三级站图文正文页
+			var gd2016_zhj = $(".bnav").html();
+			if(gd2016_zhj){
+				gd2016_zhj = gd2016_zhj.replace(/(^\s*)|(\s*$)|[\n]/ig,'');
+				var gd2016_zhj_r = /(.*?)<a(.*?)>新浪广东<\/a><i>&gt;<\/i>(.*?)<a(.*?)>湛江<\/a>(.*?)正文/;
+				gd2016_zhj = gd2016_zhj.replace(gd2016_zhj_r,'<a$2>新浪广东</a><i>&gt;<\/i>'+citylist[i]+'<i>&gt;<\/i>正文');
+				$(".bnav").html(gd2016_zhj);
+			}
+		}else if(citylist[i] == '茂名'){
+			//DFZ_2013_茂名_三级站图文正文页
+			var gd2016_mm = $(".bnav").html();
+			if(gd2016_mm){
+				gd2016_mm = gd2016_mm.replace(/(^\s*)|(\s*$)|[\n]/ig,'');
+				var gd2016_mm_r = /(.*?)<a(.*?)>新浪广东<\/a><i>&gt;<\/i>(.*?)<a(.*?)>茂名<\/a>(.*?)正文/;
+				gd2016_mm = gd2016_mm.replace(gd2016_mm_r,'<a$2>新浪广东</a><i>&gt;<\/i>'+citylist[i]+'<i>&gt;<\/i>正文');
+				$(".bnav").html(gd2016_mm);
+			}
+		}else if(citylist[i] == '云浮'){
+			//DFZ_2013_云浮_三级站图文正文页
+			var gd2016_yf = $(".bnav").html();
+			if(gd2016_yf){
+				gd2016_yf = gd2016_yf.replace(/(^\s*)|(\s*$)|[\n]/ig,'');
+				var gd2016_yf_r = /(.*?)<a(.*?)>新浪广东<\/a><i>&gt;<\/i>(.*?)<a(.*?)>云浮<\/a>(.*?)正文/;
+				gd2016_yf = gd2016_yf.replace(gd2016_yf_r,'<a$2>新浪广东</a><i>&gt;<\/i>'+citylist[i]+'<i>&gt;<\/i>正文');
+				$(".bnav").html(gd2016_yf);
+			}
+		}else if(citylist[i] == '清远'){
+			//DFZ_2013_清远_三级站图文正文页
+			var gd2016_qy = $(".bnav").html();
+			if(gd2016_qy){
+				gd2016_qy = gd2016_qy.replace(/(^\s*)|(\s*$)|[\n]/ig,'');
+				var gd2016_qy_r = /(.*?)<a(.*?)>新浪广东<\/a><i>&gt;<\/i>(.*?)<a(.*?)>云浮<\/a>(.*?)正文/;
+				gd2016_qy = gd2016_qy.replace(gd2016_qy_r,'<a$2>新浪广东</a><i>&gt;<\/i>'+citylist[i]+'<i>&gt;<\/i>正文');
+				$(".bnav").html(gd2016_qy);
+			}
+		}
+	}
+}

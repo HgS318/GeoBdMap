@@ -1,0 +1,154 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if(typeof doyoo=='undefined' || !doyoo){
+var d_genId=function(){
+var id ='',ids='0123456789abcdef';
+for(var i=0;i<32;i++){ id+=ids.charAt(Math.floor(Math.random()*16)); } return id;
+};
+
+var schema='http';
+if(location.href.indexOf('https:') == 0){
+schema = 'https';
+}
+var doyoo={
+env:{
+secure:schema=='https',
+mon:schema+'://m9106.talk99.cn/monitor',
+chat:schema+'://chat2445.talk99.cn/chat',
+file:schema+'://yun-static.soperson.com/131221',
+compId:10039955,
+confId:10066170,
+workDomain:'',
+vId:d_genId(),
+lang:'',
+fixFlash:0,
+fixMobileScale:0,
+subComp:0,
+_mark:'b2162a86972358547a426f8d49c62d0a1b5d7a0538bff42404d2f4c18958bc6c45e8d4a935af576b'
+},
+chat:{
+mobileColor:'',
+mobileHeight:80,
+mobileChatHintBottom:0,
+mobileChatHintMode:0,
+mobileChatHintColor:'',
+mobileChatHintSize:0,
+priorMiniChat:0
+}
+
+, monParam:{
+index:-1,
+preferConfig:0,
+
+style:{mbg:'http://a.looyu.com/555/fe925afcebc6491fa4b5436fa01b1664.png',mh:253,mw:400,
+elepos:'0 0 0 0 0 0 0 0 119 48 98 30 303 218 36 29 11 48 98 30',
+mbabg:'',
+mbdbg:'',
+mbpbg:''},
+
+title:'\u5927\u5730\u6d88\u9632-\u60a8\u8eab\u8fb9\u7684\u81ea\u52a8\u706d\u706b\u4e13\u5bb6\uff01',
+text:'<p><span style="color: rgb(13, 102, 212); font-family: Simsun; line-height: 20px; widows: 1; background-color: rgb(243, 243, 243);">\u60a8\u597d\uff0c\u6211\u662f\u5728\u7ebf\u5ba2\u670d\u5c0f\u4efb</span></p><p><span style="color: rgb(13, 102, 212); font-family: Simsun; line-height: 20px; widows: 1; background-color: rgb(243, 243, 243);">\u7535\u8bdd\u53ca\u5fae\u4fe1\uff1a13536297119 &nbsp;</span><span style="background-color: rgb(243, 243, 243); color: rgb(13, 102, 212); font-family: Simsun; line-height: 20px; widows: 1;">QQ\uff1a3437329544\uff0c</span></p><p><span style="background-color: rgb(243, 243, 243); color: rgb(13, 102, 212); font-family: Simsun; line-height: 20px; widows: 1;">\u90ae\u7bb1\uff1a<span style="color: rgb(13, 102, 212); font-family: Simsun; line-height: 20px; widows: 1; background-color: rgb(243, 243, 243);">3437329544@qq.com \u8bf7\u95ee\u60a8</span>\u4eca\u5929\u60f3\u8981\u4e86\u89e3\u54ea\u4e9b\u4fe1\u606f\uff1f</span></p>',
+auto:10,
+group:'10065671',
+start:'00:00',
+end:'24:00',
+mask:false,
+status:true,
+fx:0,
+mini:1,
+pos:0,
+offShow:1,
+loop:60,
+autoHide:15,
+hidePanel:0,
+miniStyle:'#f5210a',
+miniWidth:'280',
+miniHeight:'360',
+showPhone:1,
+monHideStatus:[1,3,4],
+monShowOnly:'',
+autoDirectChat:5,
+allowMobileDirect:0,
+minBallon:0,
+chatFollow:1,
+backCloseChat:0,
+ratio:0
+}
+
+
+, panelParam:{
+mobileIcon:'',
+mobileIconWidth:0,
+mobileIconHeight:0,
+category:'icon',
+preferConfig:0,
+position:1,
+vertical:100,
+horizon:5
+
+
+,mode:0,
+target:'hyddadmin',
+online:'http://a.looyu.com/10006/e399a12c36a64004a3aabb5d8d8b10fc.png',
+offline:'http://a.looyu.com/10006/e399a12c36a64004a3aabb5d8d8b10fc.png',
+width:151,
+height:485,
+status:1,
+closable:0,
+regions:[],
+collapse:0
+
+
+
+}
+
+
+
+};
+
+if(typeof talk99Init == 'function'){
+talk99Init(doyoo);
+}
+if(!document.getElementById('doyoo_panel')){
+var supportJquery=typeof jQuery!='undefined';
+var doyooWrite=function(html){
+document.writeln(html);
+}
+
+doyooWrite('<div id="doyoo_panel"></div>');
+
+
+doyooWrite('<div id="doyoo_monitor"></div>');
+
+
+doyooWrite('<div id="talk99_message"></div>')
+
+doyooWrite('<div id="doyoo_share" style="display:none;"></div>');
+doyooWrite('<lin'+'k rel="stylesheet" type="text/css" href="'+schema+'://yun-static.soperson.com/131221/oms.css?181204"></li'+'nk>');
+doyooWrite('<scr'+'ipt type="text/javascript" src="'+schema+'://yun-static.soperson.com/131221/oms.js?181204" charset="utf-8"></scr'+'ipt>');
+}
+}

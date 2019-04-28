@@ -15,17 +15,21 @@ function extract_positions(text) {
     if("" === text) {
         alert("请输入文本...");
     }
+    var city = document.getElementById("relposCity").value;
     removeExtratOverlays();
     // removeAllOverlays();
     // $("#extraposinfo").html("位置信息提取中。。。");
     console.log("位置信息提取中。。。");
-    // var url = 'http://localhost:5050/query_positions?text=' + text;
-    var url = 'http://106.12.93.49:5050/query_positions?text=' + text;
+    var url = python_service + 'query_positions?text=' + text;
+    // var url = 'http://106.12.93.49:5050/query_positions?text=' + text;
     if(relpos.restart != null && "" != relpos.restart) {
         url = url + "&restart=1";
     }
     if(relpos.more == true) {
         url = url + "&more=1";
+    }
+    if(city != null && city != '' && city != '不设置' && city != '无' && city != '未设置') {
+        url = url + '&city=' + city;
     }
     $.ajax({
         url: url,
@@ -53,7 +57,7 @@ function extract_positions(text) {
 
 }
 
-function createPositions(pos_data) {
+function createPositions(pos_data, big) {
     if(pos_data == null || pos_data.length < 1) {
         return;
     }
@@ -63,29 +67,52 @@ function createPositions(pos_data) {
         try {
             var name = pos['name'];
             var coords_str = pos['coords'];
-            pos['name'] = "地理位置实体";
-            var uuid = generateUUID();
-            pos['uuid'] = uuid;
-            pos['addr'] = name;
-            pos['rel'] = 0;
-            pos['text'] = "<strong style='color: red'>" + name +
-                "</strong><br/>位置估计：" + coords_str.replace(/\[/g, '').replace(/\]/g, '');
-            pos['winwidth'] = 220;
-            if (coords_str.length < 5) {
-                continue;
-            }
             var coords = JSON.parse(coords_str);
             if (coords.length == 1) {
                 var x = coords[0][0];
                 var y = coords[0][1];
+                var x_round = x.toFixed(5);
+                var y_round = y.toFixed(5);
+                coords_str = x_round.toString() + ', ' + y_round.toString();
+            }
+            var uuid = generateUUID();
+            pos['uuid'] = uuid;
+            if(big == "big") {
+                pos['rel'] = 0;
+                pos['text'] = "位置估计：<strong style='color: red'>" + coords_str + "</strong>";
+                pos['winwidth'] = 225;
+            } else {
+                pos['name'] = "地理位置实体";
+                pos['addr'] = name;
+                pos['rel'] = 0;
+                pos['text'] = "<strong style='color: red'>" + name +
+                    "</strong><br/>&nbsp;&nbsp;&nbsp;&nbsp;位置估计：" + coords_str.replace(/\[/g, '').replace(/\]/g, '');
+                pos['winwidth'] = 220;
+            }
+            if (coords_str.length < 5) {
+                continue;
+            }
+            if (coords.length == 1) {
+                var x = coords[0][0];
+                var y = coords[0][1];
+                var conf = pos['confidence'];
                 var bp = new BMap.Point(x, y);
-                var marker = new BMap.Marker(bp);
-                marker.spaType = 1;
-                addOverlayAndWin(marker, pos, null, relpos.positions);
-                // marker.title = "地理位置实体";
-                // setRelposData(marker, pos);
-                // addClickHandler(marker, "  &nbsp;&nbsp;" + name);
-                // addExtratOverlay(marker);
+                var overlay = null;
+                overlay = new BMap.Marker(bp);
+                overlay.spaType = 1;
+                // if(conf === undefined  || conf == null || conf >=90) {
+                //     overlay = new BMap.Marker(bp);
+                //     overlay.spaType = 1;
+                // } else {
+                //     var buffer = getBufferFromConfidence(conf);
+                //     var overlay = new BMap.Circle(bp, buffer, {
+                //         strokeColor: "blue",
+                //         strokeWeight: 2,
+                //         strokeOpacity: 0.5
+                //     });
+                //     overlay.spaType = 5;
+                // }
+                addOverlayAndWin(overlay, pos, null, relpos.positions);
                 if (flag) {
                     map.centerAndZoom(bp, 10);
                     flag = false;
@@ -99,13 +126,7 @@ function createPositions(pos_data) {
     }
 }
 
-// function setRelposData(overlay, data) {
-//     overlay.name = data.name;
-//     data['winwidth'] = 150;
-//     overlay.extData = data;
-// }
-
-function createRelatives(rel_data) {
+function createRelatives(rel_data, big) {
     if(rel_data == null || rel_data.length < 1) {
         return;
     }
@@ -114,15 +135,28 @@ function createRelatives(rel_data) {
         try {
             var name = pos['name'];
             var coords_str = pos['coords'];
-            pos['name'] = "相对位置";
+            var coords = JSON.parse(coords_str);
+            if (coords.length == 1) {
+                var x = coords[0][0];
+                var y = coords[0][1];
+                var x_round = x.toFixed(5);
+                var y_round = y.toFixed(5);
+                coords_str = x_round.toString() + ', ' + y_round.toString();
+            }
             var uuid = generateUUID();
             pos['uuid'] = uuid;
-            pos['rel'] = 1;
-            pos['addr'] = name;
-            pos['text'] = "<strong style='color: red'>" + name +
-                "</strong><br/>位置估计：" + coords_str.replace(/\[/g, '').replace(/\]/g, '');
-            pos['winwidth'] = 220;
-            var coords = JSON.parse(coords_str);
+            if(big == 'big') {
+                pos['rel'] = 1;
+                pos['text'] = "位置估计：<strong style='color: red'>" + coords_str + "</strong>";
+                pos['winwidth'] = 225;
+            } else {
+                pos['name'] = "相对位置";
+                pos['rel'] = 1;
+                pos['addr'] = name;
+                pos['text'] = "<strong style='color: red'>" + name +
+                    "</strong><br/>&nbsp;&nbsp;&nbsp;&nbsp;位置估计：" + coords_str.replace(/\[/g, '').replace(/\]/g, '');
+                pos['winwidth'] = 220;
+            }
             if (coords_str.length < 5) {
                 continue;
             }
@@ -258,4 +292,31 @@ function setRelposResItem() {
     var total_data = relpos.positions.concat(relpos.relPositions);
     setResultItems(total_data, "distresults", "relpos");
     $("#distintotal")[0].innerHTML = "接入信息：" + total_data.length + "条记录";
+}
+
+function getBufferFromConfidence(confidence) {
+    if (confidence == 100) {
+        return 20;
+    } else if (confidence >= 90) {
+        return 50;
+    } else if (confidence >= 80) {
+        return 100;
+    } else if (confidence >= 75) {
+        return 200;
+    } else if (confidence >= 70) {
+        return 300;
+    } else if (confidence >= 60) {
+        return 500;
+    } else if (confidence >= 50) {
+        return 1000;
+    } else if (confidence >= 40) {
+        return 2000;
+    } else if (confidence >= 30) {
+        return 5000;
+    } else if (confidence >= 25) {
+        return 8000;
+    } else if (confidence >= 20) {
+        return 10000;
+    }
+    return 10000;
 }

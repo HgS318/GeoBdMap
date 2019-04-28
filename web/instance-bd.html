@@ -227,6 +227,7 @@
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								<input type="file" id="relposefile" name="uploadFile" accept="text/plain"
 									   onchange="openFile(event, 'extrapostext')" />
+								<p>设置城市：<input id="relposCity" class="innerWord" maxlength="19" value="不设置"/></p>
 								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="button" value="提取位置信息" class="srhbtn" onclick="extract_positions()">
 									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -461,6 +462,29 @@
 	</div>
     <!--</div>-->
 
+	<div id="centerDiv" data-options="region:'center',title:'地图'" style="padding: 6px; overflow-y: scroll">
+		<div class="floatDiv" id="floatDiv">
+		</div>
+
+		<div id="mapContainer" style="width:100%; height: 100%"></div>
+		<div class='button-group' style="background-color: #0d9bf2;right: 20px">
+			<input type="checkbox" id="toolbarPlaces" checked onclick="placesCheckBox(this)"/>位置信息
+			<input type="checkbox" id="toolbarDists" checked onclick="distsCheckBox(this)"/>接入信息
+			<input type="checkbox" id="toolbarBounds" onclick="boundsCheckBox(this)"/>海量点
+			<!--<input type="checkbox" id="toolbarBoundMarkers" checked onclick="boundMarksCheckBox(this)"/>事件-->
+			<!--<input type="checkbox" id="overview" disabled/>鹰眼-->
+			<!--<input type="checkbox" id="overviewOpen" disabled />展开鹰眼-->
+		</div>
+		<!--  <div id="divContainer">  -->
+		<!--<div id="divContainer1">-->
+		<!---->
+		<!--<ul id=tabs class="resp-tabs-list tabContainer tab1"></ul>-->
+		<!--<div id="AllContainer" class="resp-tabs-container tab1"></div>-->
+		<!--&lt;!&ndash; <div id="divContainer"></div> &ndash;&gt;   -->
+		<!--</div>-->
+
+	</div>
+
 	<div id="eastDiv" data-options="region:'east',split:true" title="位置信息" style="width: 350px; padding: 2px;overflow-x: hidden">
 
 		<div id="eastTabsDiv" class="easyui-tabs" data-options="fit:true" style="cursor:pointer;">
@@ -552,13 +576,42 @@
 			<div id="manageTab" title="全网搜索" data-options="iconCls:'icon-man'">
 
 				<div class="datagrid-toolbar" style="margin-bottom: 1px; padding:8px 4px 4px 5px;">
-					<input id="baiduSearchInput" class="easyui-searchbox"  value="武汉 火灾 2月27日"
+					<input id="baiduSearchInput" class="easyui-searchbox" value="武汉 火灾 2月27日"
 						   style="width: 100%; height: 30px; line-height: 30px; margin-right: 8px; padding-right: 8px"
 						   data-options="prompt:'百度搜索',searcher:baiduSearch"/>
 				</div>
 
 				<div style="width: 99%; margin-left: 2px">
-					<div id="bdSearchResults">
+					<div id="bdSearchResults"></div>
+				</div>
+
+				<div id="seachAddDiv" style="width: 99%; margin-left: 2px; display: block">
+
+					<div id="chooseColoTab3" class="nextTab">
+						<h3><input type="checkbox" id="colocheckbox3" checked onclick="toChooseColo3(this)"/>&nbsp;共位叠加</h3>
+						<div id="chooseColo3" class="nextTab">
+							<p><label><input name="coloMethod3" type="radio" value="colo1" checked />上确共位叠加 </label>
+								<label><input name="coloMethod3" type="radio" value="colo2" onclick="lowerAddClick(this)" />下确共位叠加 </label>
+						</div>
+					</div>
+
+					<div id="choosetensetab3" class="nextTab">
+						<h3><input type="checkbox" id="timecheckbox3" onclick="toChooseTime3(this)"/>&nbsp;时态叠加</h3>
+						<div id="choosetense3" class="nextTab" style="display: none">
+							<p><label><input name="tenseMethod" type="radio" value="tense1" checked />串联叠加 </label>
+								<label><input name="tenseMethod" type="radio" value="tense2" />并联叠加 </label>
+								<label><input name="tenseMethod" type="radio" value="tense3" />瞬间叠加 </label></p>
+							<p>起始时间 <input id="starttime3" type="text" class="easyui-datebox" style="width: 170px"></p>
+							<p>截止时间 <input id="endtime3" type="text" class="easyui-datebox" style="width: 170px"></p>
+						</div>
+					</div>
+
+					<br/>
+					<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" value="叠加搜索结果" class="srhbtn" onclick="addSearchToMap()">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" value="清空搜索结果" class="srhbtn" onclick=""></p>
+
 				</div>
 
 				<div style="width: 99%; margin-left: 2px">
@@ -568,10 +621,10 @@
 							<div id="trafficRadios" class="nextTab">
 								<p><label><input name="trafficRadio" type="radio" value="-1" checked
 												 onclick="gotoTrafficTime(this)" />关闭路况 </label></p>
-								<p><label><input name="trafficRadio" type="radio" value="9" onclick="gotoTrafficTime(this)" />9:30 </label></p>
-								<p><label><input name="trafficRadio" type="radio" value="10" onclick="gotoTrafficTime(this)" />10:30 </label></p>
-								<p><label><input name="trafficRadio" type="radio" value="11" onclick="gotoTrafficTime(this)" />11:30 </label></p>
-								<p><label><input name="trafficRadio" type="radio" value="12" onclick="gotoTrafficTime(this)" />12:30 </label></p>
+								<p><label><input name="trafficRadio" type="radio" value="9" onclick="gotoTrafficTime(this)" />2月27日 9:00 - 9:59</label></p>
+								<p><label><input name="trafficRadio" type="radio" value="10" onclick="gotoTrafficTime(this)" />2月27日 10:00 - 10:59</label></p>
+								<p><label><input name="trafficRadio" type="radio" value="11" onclick="gotoTrafficTime(this)" />2月27日 11:00 - 11:59</label></p>
+								<p><label><input name="trafficRadio" type="radio" value="12" onclick="gotoTrafficTime(this)" />2月27日 11:00 - 11:59</label></p>
 							</div>
 						</div>
 					</div>
@@ -625,36 +678,12 @@
 							<!--</div>-->
 						<!--</div>-->
 					<!--</div>-->
-				</div>
-
 			</div>
 
 		</div>
 
 	</div>
 
-	<div id="centerDiv" data-options="region:'center',title:'地图'" style="padding: 6px; overflow-y: scroll">
-        <div class="floatDiv" id="floatDiv">
-        </div>
-        
-        <div id="mapContainer" style="width:100%; height: 100%"></div>
-		<div class='button-group' style="background-color: #0d9bf2;right: 20px">
-			<input type="checkbox" id="toolbarPlaces" checked onclick="placesCheckBox(this)"/>位置信息
-			<input type="checkbox" id="toolbarDists" checked onclick="distsCheckBox(this)"/>接入信息
-			<input type="checkbox" id="toolbarBounds" onclick="boundsCheckBox(this)"/>海量点
-			<!--<input type="checkbox" id="toolbarBoundMarkers" checked onclick="boundMarksCheckBox(this)"/>事件-->
-			<!--<input type="checkbox" id="overview" disabled/>鹰眼-->
-			<!--<input type="checkbox" id="overviewOpen" disabled />展开鹰眼-->
-		</div>
-      <!--  <div id="divContainer">  -->  
-        <!--<div id="divContainer1">-->
-        	<!---->
-          <!--<ul id=tabs class="resp-tabs-list tabContainer tab1"></ul>-->
-          <!--<div id="AllContainer" class="resp-tabs-container tab1"></div>-->
-         <!--&lt;!&ndash; <div id="divContainer"></div> &ndash;&gt;   -->
-    	<!--</div>-->
-
-	</div>
 
 </body>
 

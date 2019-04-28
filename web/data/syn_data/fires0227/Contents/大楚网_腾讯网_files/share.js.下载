@@ -1,0 +1,116 @@
+/**
+ * Created by tangentguo on 2016/5/9.
+ */
+
+;(function($) {
+    var title = ARTICLE_INFO.title;
+    var url = ARTICLE_INFO.article_url;
+    var openCss = "height=540,width=720, top = " + (window.screen.height - 540) / 2 + ", left = " + (window.screen.width - 720) / 2 + ", toolbar=no,menubar=no,resizable=yes,location=yes,status=no";
+    //获取文章内的图片
+    var pictures = getPicture('|');
+    function getPicture(sp){
+        var t = [];
+        $('#Cnt-Main-Article-QQ img').each(function(el,i){
+            var el = $(this);
+            el.width()>150 && el.height() > 150 && t.push(el.attr('src'));
+        });
+        return encodeURIComponent(t.join(sp))
+    }
+
+    //微博分享
+    var shareTOsina = function() {
+        var t = pictures;
+        var i = "http://service.weibo.com/share/share.php"
+            , s = url
+            , o = title
+            , u = ""
+            , a = ""
+            , f = ""
+            , l = getPicture('||');
+        f = i + "?url=" + encodeURIComponent(s) + "&appkey=" + u + "&title=" + o + "&pic=" + l + "&ralateUid=" + a + "&language=&searchPic=" + !1,
+            window.open(f, "shareQQ", openCss)
+    };
+
+    var linkedIn = function(){
+        var shareUrl =  'http://www.linkedin.com/shareArticle?mini=true&ro=true&title='+encodeURIComponent(title)+'&url='+encodeURIComponent(url)+'&summary=&source=&armin=armin';
+        window.open(shareUrl, "shareLinkedIn", openCss);
+    };
+
+    //qq分享
+    var shareTOqq = function(){
+        var t = "http://connect.qq.com/widget/shareqq/index.html";
+        var k = t + "?url=" + encodeURIComponent(url) + "&showcount=0&desc=" + encodeURIComponent(title) + "&summary=&title=" + encodeURIComponent(title) + "&pics=&style=203&width=19&height=22";
+        window.open(k, "shareQQ", openCss)
+    }
+
+    //qzone分享
+    var shareTOqzone = function(e) {
+        var t = "http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey"
+            , n = title
+            , r = url
+            , i = ""
+            , s = ""
+            , f = pictures?("&pics=" + pictures):'';
+        i = t + "?to=qzone&url=" + encodeURIComponent(r) + "&title=" + encodeURIComponent(n) + f + "&summary=" + encodeURIComponent(s)
+        window.open(i, "shareQzone", openCss)
+    }
+
+    //腾讯微博分享
+    var shareTOqqweibo = function(){
+        var t = "http://share.v.t.qq.com/index.php"
+            , n = title
+            , r = url
+            , i = ""
+            , s = encodeURI("3eef3dc2a3254c5cb5b2506bc8f9765f")
+            , o = ""
+            , u = 0
+            , a = pictures?("&pic=" + pictures):''
+        o = t + "?c=share&a=index&f=q2&url=" + encodeURIComponent(r) + "&appkey=" + s + "&assname=" + i + "&title=" + n + a
+        window.open(o, "shareWeibo", openCss)
+    }
+    //从接口获取二维码图片地址
+    var code2Picture = '';
+    var get_code_2 = function(callback,qqurl){
+        if(code2Picture){
+            callback({url:code2Picture});
+        }
+        var url = qqurl||ARTICLE_INFO.article_url;
+        $.ajax({
+            url:'http://news.open.qq.com/qrcode/gen.php',
+            data:{url:url},
+            dataType:'jsonp',
+            jsonpCallback: 'callback',
+            success: function(d){
+                code2Picture = d.url;
+                callback(d);
+            }
+        });
+    };
+
+    //分派
+    var share = {
+        'sina':shareTOsina,
+        'qq':shareTOqq,
+        'qzone':shareTOqzone,
+        'qq_weibo':shareTOqqweibo,
+        'linkedIn':linkedIn
+    }
+
+
+    $(document).on('click','[data-tshare]',function(e){
+        e.preventDefault();
+        var self = $(this);
+        var t = $(this).attr('data-tshare');
+        if(t=='weixin'){
+            get_code_2(function(d){
+                //console.log(d);
+                self.find('img').attr('src', d.url);
+            });
+        }else{
+            share[t]();
+        }
+    });
+})(jQuery);
+
+
+/*  |xGv00|296b7e18ae495af99aa412c2807ca3bf */

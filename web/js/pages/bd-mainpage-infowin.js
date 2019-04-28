@@ -1,6 +1,8 @@
 
 var geoEntities = [];
 
+var simpleTextLen = 48;
+
 function initGeoEntities() {
 
     $.ajax({
@@ -167,13 +169,11 @@ function createContent(entity) {
         content += '<strong>视频</strong>： (信息量: ' + entity['infoAmount']['vedioLength'] + ' 秒)<br/>';
         for (var j = 0; j < entity['vedios'].length; j++) {
             var vedio_path = entity['vedios'][j];
-//                      content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + vedio_path + '" target="_blank" onclick="openWindowY(this, \'vedio\')">视频' + (j + 1) + '</a>');
             content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + vedio_path + '' +
-            ' onclick="openWindowY(this, \'vedio\', \'' + vedio_path + '\')">视频' + (j + 1) + '</a>');
+                ' onclick="openWindowY(this, \'vedio\', \'' + vedio_path + '\')">视频' + (j + 1) + '</a>');
         }
         content += '<br/>';
     }
-
     if(entity['models'] != null && entity['models'].length > 0) {
         content += '<strong>模型</strong>： (信息量: ' + entity['infoAmount']['modelLength'] + ' 字节)<br/>';
         for (var j = 0; j < entity['models'].length; j++) {
@@ -181,14 +181,19 @@ function createContent(entity) {
             var model_pic = model_paths.split(':');
             var model_path = model_pic[0];
             var model_pic = model_pic[1];
-
             content += '<a href="' + model_path + '"> <img class="img" alt="" ' +
                 'style="zoom:1;overflow:hidden;width:50px;height:50px;" src="' + model_pic + '" /> </a>';
-            // content += '<img src=' + model_pic + ' class="img" href="' + model_path + '"  onclick="openWindowY(this, \'track\')"' +
-            //     'target="_blank" alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>'
-//                                content += ('&nbsp;&nbsp;&nbsp;' + '<a href="' + vedio_path + '" onclick="getHref()">视频' + (j + 1) + '</a>');
         }
         content += '<br/>';
+    }
+    if(entity['links'] != null && entity['links'].length > 0) {
+        content += "<br/>";
+        for (var j = 0; j < entity['links'].length; j++) {
+            var link = entity['links'][j];
+            var linkContent = "&nbsp;&nbsp;&nbsp;<a href='#' onclick='openContentWindow(\"" + link
+                + "\", \"查看原网页\",650, 520, 30, 30)'>查看链接" + (j + 1) + "</a>";
+            content += linkContent;
+        }
     }
     content += '</div>';
     return content;
@@ -199,21 +204,36 @@ function createSimpleContent(entity) {
     // var content = '<br style="margin:0;line-height:10px;padding:2px;">';
     var content = "";
     if(entity.address != null && entity.address != undefined) {
-        content += '地址：' + entity.address + '<br/><br/>';
+        content += '&nbsp;&nbsp;地址：' + entity.address + '<br/><br/>';
     }
-
     if(entity['text'] != null) {
-        content += entity['text'] + "<br/>";
+        content +=  "&nbsp;&nbsp;&nbsp;&nbsp;" + entity['text'] + "<br/>";
     }
     if(entity['texts'] != null) {
         // content += "<strong>文字</strong>";
+        if(simpleTextLen == undefined || simpleTextLen == null || simpleTextLen == 0) {
+            simpleTextLen = 48;
+        }
+        if(simpleTextLen != 48) {
+            content += "<br/><strong>网页文本</strong>";
+        }
         for(var j = 0; j < entity['texts'].length; j++) {
             var text = entity['texts'][j];
-            if(text.length > 48) {
-                text = text.substring(0, 45) + '...';
+            if(text.length > simpleTextLen) {
+                text = text.substring(0, simpleTextLen - 3) + '...';
             }
-            content += "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + text + "</p>";
+            content += "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:1em'>" + text + "</p>";
         }
+    }
+    if(entity['links'] != null && entity['links'].length > 0) {
+        content += "<br/>";
+        for (var j = 0; j < entity['links'].length; j++) {
+            var link = entity['links'][j];
+            var linkContent = "&nbsp;&nbsp;&nbsp;<a href='#' onclick='openContentWindow(\"" + link
+                + "\", \"查看原网页\",650, 520, 30, 30)'>链接" + (j + 1) + "</a>";
+            content += linkContent;
+        }
+        content += "<br/>";
     }
     if(entity['flashes'] != null && entity['flashes'].length > 0) {
         content += '<br/><strong>动画</strong><br/>';
@@ -225,7 +245,7 @@ function createSimpleContent(entity) {
         content += '<br/>';
     }
     if(entity['images'] != null && entity['images'].length > 0) {
-        content += '<br/><strong>图像</strong><br/>';
+        content += '<br/><strong>图片</strong><br/>';
         for (var j = 0; j < entity['images'].length; j++) {
             var img_path = entity['images'][j];
 //                                content += "<img src='" + img_path + "' class='img' alt='' onclick='openWindowY(img_path)'"
@@ -264,13 +284,13 @@ function createSimpleContent(entity) {
             var model_pic = model_paths.split(':');
             var model_path = model_pic[0];
             var model_pic = model_pic[1];
-
             content += '<a href="' + model_path + '"> <img class="img" alt="" ' +
                 'style="zoom:1;overflow:hidden;width:50px;height:50px;" src="' + model_pic + '" /> </a>';
 
         }
         content += '<br/>';
     }
+
     content += '</div>';
     return content;
 }
@@ -318,9 +338,9 @@ function openInfoWin(e, content, title, width) {
             width = 225;
         }
     }
-    if(content == null || content === undefined) {
+    // if(content == null || content === undefined) {
         content = createContent(overlay.extData);
-    }
+    // }
     if(title === undefined || title == null || title == "") {
         title = overlay['title'];
     }
@@ -430,16 +450,16 @@ function openContentWindow(url, title, width, height, top, left) {
         title = "信息窗体";
     }
     if(width === undefined || width === null || width == 0) {
-        width = 500;
+        width = 650;
     }
     if(height === undefined || height === null || height == 0) {
         height = 500;
     }
     if(top === undefined || top === null || top == 0) {
-        top = 100;
+        top = 30;
     }
     if(left === undefined || left === null || left == 0) {
-        left = 100;
+        left = 70;
     }
     var windowHtml = "<div><iframe src='" + url + "' width='" + width + "px' height='" + height + "px' /></div>";
     document.getElementById("y").innerHTML = windowHtml;
@@ -451,7 +471,8 @@ function openContentWindow(url, title, width, height, top, left) {
         left: left,
         //shadow: true,
         //modal:true,
-        //iconCls:'icon-add',
+        // iconCls:'icon-tip',
+        iconCls: null,
         //closed:true,
         //minimizable:false,
         maximizable:false,

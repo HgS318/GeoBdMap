@@ -1,0 +1,541 @@
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+
+
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "http://storage.fedev.sina.com.cn/components/floatBarRight/";
+
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _tpl = __webpack_require__(1);
+
+	var _tpl2 = _interopRequireDefault(_tpl);
+
+	var _weixinTpl = __webpack_require__(2);
+
+	var _weixinTpl2 = _interopRequireDefault(_weixinTpl);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * Created by guangtian on 16/5/11.
+	 * source: http://gitlab/channel-fe-dev/components/floatBarRight.git
+	 */
+
+	__webpack_require__(3);
+	__webpack_require__(16);
+	__webpack_require__(18);
+
+
+	var $CCCFloatBarRight = $('#CCCFloatBarRight');
+	var weiboShare = {};
+	var PAGE_INFO = {};
+	var formList;
+	var $body = $('body');
+	var articleComment;
+
+	var FloatBarRight = function () {
+	    function FloatBarRight() {
+	        _classCallCheck(this, FloatBarRight);
+
+	        this.data = $SCOPE.SINA_COMPONENTS.floatBarRight || {};
+	        this.render();
+	        this.setPosition(); //设置位置
+	        this.setConfig(); //设置配置数据
+	        this.bindEvent();
+	    }
+
+	    FloatBarRight.prototype.render = function render() {
+	        var htmlTpl = doT.template((0, _tpl2['default'])());
+	        $('#CCCFloatBarRight').html(htmlTpl(this.data));
+	    };
+
+	    FloatBarRight.prototype.bindEvent = function bindEvent() {
+
+	        $(window).resize(function () {
+	            setTimeout(function () {
+	                var w = $(window).width();
+	                if (w >= 1440) {
+	                    var pageWidth = 1186;
+	                    $(".main_content").css("width", "1186px");
+	                    $(".content_wrappr_left").css("width", "850px");
+	                } else {
+	                    var pageWidth = 1000;
+	                    $(".main_content").css("width", "1000px");
+	                    $(".content_wrappr_left").css("width", "680px");
+	                }
+	                $CCCFloatBarRight.css('margin-left', pageWidth / 2 + 10);
+	            }, 500);
+	        });
+
+	        //浮动条滚动显示
+	        // $(document).scroll(function () {
+	        //     if ($(this).scrollTop() > 500) {
+	        //         !$CCCFloatBarRight.is(':visible') && $CCCFloatBarRight.show();
+	        //     } else {
+	        //         $CCCFloatBarRight.is(':visible') && $CCCFloatBarRight.hide();
+	        //     }
+	        // });
+	        /**
+	         * 回到顶部
+	         */
+	        $('#CCCFBRScrollToTop').on('click', function () {
+	            window.scrollTo(0, 1);
+	            window.location.hash = '';
+	        });
+	        /**
+	         * 评论功能
+	         */
+
+	        function cmtClick() {
+	            $('#CCCFBRComment').on('click', function () {
+	                articleComment.show();
+	                articleComment.openHome();
+	            });
+	            $("#CCCCommentClose").on("click", function () {
+	                articleComment.closeHome();
+	            });
+	        }
+	        function cmtClickNone() {
+	            $(".page-tool-c").hide();
+	            $('#CCCFBRComment').addClass("CCC-fbf-preventComment");
+	        }
+
+	        if (window.SINA_TEXT_PAGE_INFO === undefined) {
+	            cmtClick();
+	        } else {
+	            if (window.SINA_TEXT_PAGE_INFO.hideComment) {
+	                //去除评论按钮交互
+	                cmtClickNone();
+	            } else {
+	                //正常评论按钮点击功能
+	                cmtClick();
+	            }
+	        }
+
+	        /**
+	         * 分享
+	         */
+	        $('#CCCFBRShare').on("click", function () {
+	            bShare && bShare.more("click");
+	            _S_uaTrack && _S_uaTrack('index_news_content', 'share_down_click');
+	        });
+
+	        $('#CCCFBRShareWeibo').on('click', function () {
+	            var href = ['http://service.weibo.com/share/share.php?appkey=', '&title=' + encodeURIComponent(weiboShare.title), '&url=' + encodeURIComponent(location.href), '&summary=' + encodeURIComponent(weiboShare.summary), '&pic=' + encodeURIComponent(weiboShare.pic)].join('');
+	            window.open(href, '_blank', "width=650,height=500");
+	        });
+	        /**
+	         * 微信分享
+	         */
+	        $('#CCCFBRShareWeixin').on('click', function () {
+	            $('#CCCWeiXinBox').show();
+	        });
+	        /**
+	         * 隐藏微信分享二维码
+	         */
+	        $('#CCCWXBClose').on('click', function () {
+	            $('#CCCWeiXinBox').hide();
+	        });
+	    };
+
+	    /**
+	     * 设置位置
+	     */
+
+
+	    FloatBarRight.prototype.setPosition = function setPosition() {
+	        // var pageWidth = this.data.pageWidth || 1000;
+	        // $CCCFloatBarRight.css('margin-left', pageWidth / 2 + 10);
+	        var w = $(window).width();
+	        if (w >= 1440) {
+	            var pageWidth = 1186;
+	            $(".main_content").css("width", "1186px");
+	        } else if (w < 1440) {
+	            var pageWidth = 1000;
+	            $(".main_content").css("width", "1000px");
+	        }
+	        $CCCFloatBarRight.css('margin-left', pageWidth / 2 + 10);
+	    };
+
+	    /**
+	     * 设置配置数据
+	     */
+
+
+	    FloatBarRight.prototype.setConfig = function setConfig() {
+	        for (var _iterator = this.data['default'], _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+	            var _ref;
+
+	            if (_isArray) {
+	                if (_i >= _iterator.length) break;
+	                _ref = _iterator[_i++];
+	            } else {
+	                _i = _iterator.next();
+	                if (_i.done) break;
+	                _ref = _i.value;
+	            }
+
+	            var def = _ref;
+
+	            if (def.type === 'share' && bShare) {
+	                bShare.init();
+	                bShare.addEntry({
+	                    title: def.title,
+	                    url: location.href,
+	                    summary: def.summary,
+	                    pic: def.pic
+	                });
+	            } else if (def.type === 'share-weibo') {
+	                weiboShare = def;
+	            } else if (def.type === 'share-weixin') {
+	                var weixin = doT.template((0, _weixinTpl2['default'])());
+	                $body.append(weixin(def));
+	            } else if (def.type === 'comment') {
+	                if (!window.articleComment) {
+	                    PAGE_INFO = window.SINA_TEXT_PAGE_INFO || def.pageInfo;
+	                    var commentHtml = ['<div id="CCCCommentBox" class="CCC-comment-box">', '<a id="CCCCommentClose" href="javascript:;" title="关闭评论" class="CCC-comment-close">关闭评论</a>', '<div id="CCCCommentWrap" class="CCC-comment-wrap"></div>', '</div>'].join('');
+	                    $body.append(commentHtml);
+	                    this.initComment();
+	                }
+	            }
+	        }
+	    };
+
+	    /**
+	     * 文章评论
+	     */
+
+
+	    FloatBarRight.prototype.articleComment = function articleComment() {
+	        var $CCCCommentBox = $('#CCCCommentBox');
+	        var $CCCCommentWrap = $('#CCCCommentWrap');
+	        var $CCCCommentClose = $('#CCCCommentClose');
+	        var win = $(window);
+	        var cont = $('#pl_main_content');
+	        var toggleClz = 'CCC-comment-mode';
+	        var isShow = false;
+	        var minWidth = 570;
+	        var resize = function resize() {
+	            // var winWidth = win.outerWidth();
+	            // $CCCCommentBox.css('left', -winWidth);
+	            // $CCCCommentBox.css('width', winWidth);
+	        };
+	        var hide = function hide() {
+	            $body.removeClass(toggleClz);
+	            $('textarea', $CCCCommentWrap).blur();
+	            isShow = false;
+	        };
+	        var show = function show() {
+	            resize();
+	            $body.addClass(toggleClz);
+	            setHeight();
+	            isShow = true;
+	        };
+
+	        var openHome = function openHome() {
+	            $CCCFloatBarRight.css("zIndex", 99999);
+	            $CCCFloatBarRight.find(".CCC-fbr-box").hide();
+	            $CCCFloatBarRight.find(".CCC-fbr-home").show();
+	        };
+
+	        var closeHome = function closeHome() {
+	            $CCCFloatBarRight.css("zIndex", 0);
+	            $CCCFloatBarRight.find(".CCC-fbr-box").show();
+	        };
+
+	        var setHeight = function () {
+	            var form = null;
+	            var list = null;
+	            return function () {
+	                if (!list || list.length === 0) {
+	                    form = $('[comment-type=form]', $CCCCommentBox);
+	                    list = $('[comment-type=list]', $CCCCommentBox);
+	                    var onReachBottom = function onReachBottom(selector, proximity, fn) {
+	                        var obj = $(selector);
+	                        var el = obj[0];
+	                        var scrollHeight;
+	                        var scrollPosition;
+	                        obj.on('scroll', function () {
+	                            if (el == window) {
+	                                scrollHeight = $(document).height();
+	                            } else {
+	                                scrollHeight = el.scrollHeight;
+	                            }
+	                            scrollPosition = obj.height() + obj.scrollTop();
+	                            if ((scrollHeight - scrollPosition) / scrollHeight <= proximity) {
+	                                // 到达底部
+	                                if (typeof fn === 'function') {
+	                                    fn();
+	                                }
+	                            }
+	                        });
+	                    };
+	                    onReachBottom(list, 0.03, function () {
+	                        formList.commentList.getMoreLatest();
+	                    });
+	                }
+	                if (list.length) {
+	                    list.css({
+	                        // height: getVisibleSize().height - form.height(),
+	                        height: $(window).height() - form.height(),
+	                        overflow: 'auto'
+	                    });
+	                }
+	            };
+	        }();
+	        var eventType = 'click';
+	        var bind = function bind() {
+	            // var supportsOrientationChange = "onorientationchange" in window,
+	            //     orientationEvent = supportsOrientationChange ? "orientationchange resize" : "resize";
+	            $CCCCommentClose.on('click', hide);
+	            // win.on(orientationEvent, function () {
+	            //     setTimeout(function () {
+	            //         setHeight();
+	            //     }, 100);
+	            //     if (window.isIpad) {
+	            //         $('textarea', $CCCCommentWrap).blur();
+	            //         setTimeout(function () {
+	            //             resize();
+	            //         }, 100);
+	            //     }
+	            // });
+
+	            $body.on(eventType, '.comment2-small,.page-tool-c', function (e) {
+	                show();
+	                openHome();
+	            });
+
+	            /*
+	             $body.on(eventType, '.pad-side-tool .comment-small', function (e) {
+	             if (isShow) {
+	             hide();
+	             } else {
+	             show();
+	             }
+	             });
+	             */
+	            $body.on(eventType, '.close-small,.share-small', function (e) {
+	                hide();
+	            });
+	            /*
+	             $CCCCommentWrap.on('blur', 'textarea', function () {
+	             setTimeout(function () {
+	             setHeight();
+	             }, 100);
+	             });
+	             $CCCCommentWrap.on('focus', 'textarea', function () {
+	             setTimeout(function () {
+	             if (window.isIpad) {
+	             window.scrollTo();
+	             }
+	             }, 100);
+	             });
+	             */
+	        };
+	        resize();
+	        bind();
+	        return {
+	            show: show,
+	            hide: hide,
+	            setHeight: setHeight,
+	            openHome: openHome,
+	            closeHome: closeHome
+	        };
+	    };
+
+	    /**
+	     * 初始化评论组件
+	     */
+
+
+	    FloatBarRight.prototype.initComment = function initComment() {
+	        articleComment = this.articleComment();
+	        var setCSS = function () {
+	            var doc = document;
+	            var head = doc.getElementsByTagName('head')[0];
+	            return function (s, id) {
+	                var dom = doc.getElementById(id);
+	                if (dom) {
+	                    dom.parentNode.removeChild(dom);
+	                }
+	                dom = doc.createElement('style');
+	                dom.id = id;
+	                dom.type = 'text/css';
+	                dom.styleSheet ? dom.styleSheet.cssText = s : dom.appendChild(doc.createTextNode(s));
+	                head.appendChild(dom);
+	                return dom;
+	            };
+	        }();
+	        var commentHD = setInterval(function () {
+	            if (window.___sinacMNT___) {
+	                clearInterval(commentHD);
+	                setCmnt();
+	            }
+	        }, 200);
+
+	        var setCmnt = function setCmnt() {
+	            var sinacmnt = window.___sinacMNT___;
+	            var cmnt = sinacmnt && sinacmnt.cmnt;
+	            cmnt.config = {
+	                encoding: 'utf-8', // 保持和页面编码一致，gbk或utf-8
+	                fixFace: true
+	            };
+	            formList = new sinacmnt.cmnt.FormList('CCCCommentWrap', {
+	                // 频道编号
+	                channel: PAGE_INFO.channel,
+	                // 新闻id
+	                newsid: PAGE_INFO.newsid,
+	                // 默认为空
+	                parent: ''
+	            }, {
+	                channel: PAGE_INFO.channel,
+	                // 新闻id
+	                newsid: PAGE_INFO.newsid,
+	                // 默认为0，多条新闻（图片）集合的评论为1
+	                group: 0,
+	                // 开始页数，默认为1
+	                page: 1,
+	                // 每页评论条数
+	                pageSize: 20,
+	                showReplay: true,
+	                maxWordCount: 140,
+	                hotPageNum: 3,
+	                firstPageNum: 10,
+	                clickMoreTimes: 3,
+	                hideList: PAGE_INFO.hideCommentList,
+	                loaded: function loaded(self) {
+	                    setTimeout(function () {
+	                        // if (articleComment.setHeight) {
+	                        //     articleComment.setHeight();
+	                        // }
+	                    }, 500);
+	                    var numSplit = function numSplit(num) {
+	                        num = num + "";
+	                        var re = /(-?\d+)(\d{3})/;
+	                        while (re.test(num)) {
+	                            num = num.replace(re, "$1,$2");
+	                        }
+	                        return num;
+	                    };
+	                    if (self.data && self.data.count && self.data.count.total) {
+	                        // 设置评论数
+	                        $('#commentCount1').html(numSplit(self.data.count.total));
+	                    }
+	                }
+	            }, {});
+	        };
+	    };
+
+	    return FloatBarRight;
+	}();
+
+	new FloatBarRight();
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	/**
+	 * Created by guangtian on 16/5/15.
+	 * 模板
+	 */
+	var tpl = function tpl() {
+	    return ['<a class="CCC-fbr-box CCC-fbr-home" target="_blank" href="http://www.sina.com.cn/" suda-uatrack="key=index_content_right&value=www_back_click">', '<span class="CCC-fbr-dian"></span><span class="CCC-fbr-title">新浪首页</span>', '</a>', '{{ for (var item in it["default"]) { }}', '{{ if (it["default"][item].type === "comment") { }}', '<a class="CCC-fbr-box CCC-fbr-comment" id="CCCFBRComment" href="javascript:void(0);" suda-uatrack="key=index_content_right&value=comment_click">', '<span class="CCC-fbr-title">我要评论</span>', '</a>', '{{ } else if (it["default"][item].type === "share") { }}', '<a class="CCC-fbr-box CCC-fbr-share" id="CCCFBRShare" suda-uatrack="key=index_content_right&value=share_click" href="javascript:void(0);">', '<span class="CCC-fbr-title">分享文章</span>', '</a>', '{{ } else if (it["default"][item].type === "rel-read") { }}', '<a class="CCC-fbr-box CCC-fbr-rel-read" href="{{=it["default"][item].href}}" suda-uatrack="key=news_content_2014&value=right_related">', '<span class="CCC-fbr-title">相关阅读</span>', '</a>', '{{ } else if (it["default"][item].type === "rec-read") { }}', '<a class="CCC-fbr-box CCC-fbr-rec-read" href="{{=it["default"][item].href}}">', '<span class="CCC-fbr-title">推荐阅读</span>', '</a>', '{{ } else if (it["default"][item].type === "share-weibo") { }}', '<a class="CCC-fbr-box CCC-fbr-share-weibo" id="CCCFBRShareWeibo" href="javascript:void(0);">', '<span class="CCC-fbr-title">分享微博</span>', '</a>', '{{ } else if (it["default"][item].type === "share-weixin") { }}', '<a class="CCC-fbr-box CCC-fbr-share-weixin" id="CCCFBRShareWeixin" href="javascript:void(0);">', '<span class="CCC-fbr-title">分享微信</span>', '</a>', '{{ } }}', '{{ } }}', '{{for (var custom in it.custom) { }}', '<a class="CCC-fbr-box" style="background-image: url(\'{{=it.custom[custom].image}}\');" href="{{=it.custom[custom].href}}" suda-uatrack="{{=it.custom[custom].sudaUatrack}}">', '<span class="CCC-fbr-title">{{=it.custom[custom].content}}</span>', '</a>', '{{ } }}', '<a class="CCC-fbr-box CCC-fbr-to-top" id="CCCFBRScrollToTop" href="javascript:void(0);" suda-uatrack="key=index_content_right&value=top_back_click">', '<span class="CCC-fbr-title">回到顶部</span>', '</a>'].join('');
+	};
+
+	// export default tpl;
+	module.exports = tpl;
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	/**
+	 * Created by guangtian on 16/5/15.
+	 * 微信二维码模板
+	 */
+	var weixinTpl = function weixinTpl() {
+	    return ['<div id="CCCWeiXinBox" class="CCC-weixin-box">', '<div id="CCCWXBClose" class="CCC-wxb-close">X</div>', '<div class="CCC-wxb-top">', '<span>分享到 - 微信</span>', '</div>', '<div class="CCC-wxb-qrcode-box">', '<img src="{{=it.qrCode}}">', '</div>', '</div>'].join('');
+	};
+	// export default weixinTpl;
+	module.exports = weixinTpl;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 17 */,
+/* 18 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ }
+/******/ ]);
