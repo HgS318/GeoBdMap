@@ -479,6 +479,16 @@ function showPostcode(postcode) {
 }
 
 function showPostcodeDistrict(postcode) {
+    try {
+        var postNum = parseInt(postcode);
+        var postCityNum = postNum / 1000;
+        var cityPostCode = postCityNum * 1000;
+        var vagePostCode = cityPostCode.toString();
+    } catch (e) {
+        console.log(e);
+        alert("邮编输入有误！");
+        return;
+    }
     $.ajax({
         url: 'getDistrictsByPostcode.action?postcode=' + postcode,
         type: 'get',
@@ -497,6 +507,7 @@ function showPostcodeDistrict(postcode) {
             }
         }, error: function (err_data) {
             console.log(err_data);
+            alert("邮编输入有误！");
         }
     });
 }
