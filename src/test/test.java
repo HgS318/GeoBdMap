@@ -8,10 +8,46 @@ import org.apache.solr.common.util.Hash;
 import whu.eres.cartolab.db.esri.*;
 import whu.eres.cartolab.db.mysql.connections.*;
 import whu.eres.cartolab.geo.*;
+import org.jsoup.nodes.*;
+import cn.edu.hfut.dmic.contentextractor.*;
+
 
 import java.sql.*;
 
 public class test {
+
+    public static String ExtractContentSimple(String url) {
+        String content = null;
+        try {
+            content = ContentExtractor.getContentByUrl(url);
+//            System.out.println(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return content;
+    }
+
+    public static void WebCollectorTest() {
+        String url = "https://baijiahao.baidu.com/s?id=1632016228529187595&wfr=spider&for=pc";
+        try {
+    //		News news = ContentExtractor.getNewsByHtml(html, url);
+    //		News news = ContentExtractor.getNewsByHtml(html);
+//            News news = ContentExtractor.getNewsByUrl(url);
+//            System.out.println(news);
+
+    //		String content = ContentExtractor.getContentByHtml(html, url);
+    //		String content = ContentExtractor.getContentByHtml(html);
+            String content = ContentExtractor.getContentByUrl(url);
+            System.out.println(content);
+
+    //		Element contentElement = ContentExtractor.getContentElementByHtml(html, url);
+    //		Element contentElement = ContentExtractor.getContentElementByHtml(html);
+//            Element contentElement = ContentExtractor.getContentElementByUrl(url);
+//            System.out.println(contentElement);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static String getAllTestSearchPositions() {
         HashMap<String, String> positionMap =new HashMap<String, String>() {{
@@ -317,7 +353,8 @@ public class test {
     public static void main(String[] args) throws Exception {
 //        getAllSynData();
 //        getAllInfo();
-        getAllGeoEntities();
+//        getAllGeoEntities();
+        WebCollectorTest();
     }
 
 

@@ -30,12 +30,10 @@ import java.sql.*;
 public class ShapeFile {
 
     public static void main(String[] args) throws Exception{
-//        ShapeFile.readShp("D:\\try\\World\\china\\chinaWGS84\\A_ÊĞĞĞÕşÇø");
+//        ShapeFile.readShp("D:\\try\\World\\china\\chinaWGS84\\A_city");
 //        WriteSHP("D:\\try\\temp\\track\\osm_ways_sim.shp");
-//        System.out.println(getCityShapeByName("ÉÏº£ÊĞ"));
-        System.out.println(getShapeByFid("data/geo/chinaWGS84/L_ÏØ½çÏß", 1));
-        System.out.println(getShapeByFid("data/geo/chinaWGS84/L_ÏØ½çÏß", 50));
-//        ShapeUtils.readGisObject("D:\\try\\World\\china\\chinaWGS84\\L_Ê¡½çÏß");
+        System.out.println(getShapeByFid("data/geo/chinaWGS84/L_countyline", 1));
+        System.out.println(getShapeByFid("data/geo/chinaWGS84/L_countyline", 50));
     }
 
 
@@ -274,79 +272,79 @@ public class ShapeFile {
     }
 
     public static String getAreaShapeByName(String name, String scale) {
-        String fileName = "A_ÊĞĞĞÕşÇø";
-        if("ÏØ".equals(scale)) {
-            fileName = "A_ÏØĞĞÕşÇø";
-        } else if("ÏØ".equals(scale)) {
-            fileName = "A_ÊĞĞĞÕşÇø";
+        String fileName = "A_city";
+        if("å¿".equals(scale)) {
+            fileName = "A_county";
+        } else if("å¿".equals(scale)) {
+            fileName = "A_city";
         }
         String shapeFileName = "data/geo/chinaWGS84/" + fileName;
         return getShapeByName(shapeFileName, name);
     }
 
     public static String getCityShapeByName(String name) {
-        String shapeStr = getAreaShapeByName(name, "ÊĞ");
+        String shapeStr = getAreaShapeByName(name, "å¸‚");
         if(shapeStr == null || "".equals(shapeStr)) {
-            shapeStr = getAreaShapeByName(name + "ÊĞ", "ÊĞ");
+            shapeStr = getAreaShapeByName(name + "å¸‚", "å¸‚");
         }
         return shapeStr;
     }
 
     public static String getDistrictShapeByName(String name) {
-        return getAreaShapeByName(name, "ÏØ");
+        return getAreaShapeByName(name, "å¿");
     }
 
 
     /**
-     * ½«¼¸ºÎ¶ÔÏóĞÅÏ¢Ğ´ÈëÒ»¸öshapfileÎÄ¼ş
+     * å°†å‡ ä½•å¯¹è±¡ä¿¡æ¯å†™å…¥ä¸€ä¸ªshapfileæ–‡ä»¶
      *
      * @throws Exception
      */
     public static void WriteSHP(String path) throws Exception {
 
         //String path="C:\\my.shp";
-        //1.´´½¨shapeÎÄ¼ş¶ÔÏó
+        //1.åˆ›å»ºshapeæ–‡ä»¶å¯¹è±¡
         File file = new File(path);
         Map<String, Serializable> params = new HashMap<>();
-        //ÓÃÓÚ²¶»ñ²ÎÊıĞèÇóµÄÊı¾İÀà
+        //ç”¨äºæ•è·å‚æ•°éœ€æ±‚çš„æ•°æ®ç±»
         //URLP:url to the .shp file.
         params.put(ShapefileDataStoreFactory.URLP.key, file.toURI().toURL());
-        //2.´´½¨Ò»¸öĞÂµÄÊı¾İ´æ´¢¡ª¡ª¶ÔÓÚÒ»¸ö»¹²»´æÔÚµÄÎÄ¼ş¡£
+        //2.åˆ›å»ºä¸€ä¸ªæ–°çš„æ•°æ®å­˜å‚¨â€”â€”å¯¹äºä¸€ä¸ªè¿˜ä¸å­˜åœ¨çš„æ–‡ä»¶ã€‚
         ShapefileDataStore ds = (ShapefileDataStore) new ShapefileDataStoreFactory().createNewDataStore(params);
-        //3.¶¨ÒåÍ¼ĞÎĞÅÏ¢ºÍÊôĞÔĞÅÏ¢
-        //SimpleFeatureTypeBuilder ¹¹Ôì¼òµ¥ÌØĞÔÀàĞÍµÄ¹¹ÔìÆ÷
+        //3.å®šä¹‰å›¾å½¢ä¿¡æ¯å’Œå±æ€§ä¿¡æ¯
+        //SimpleFeatureTypeBuilder æ„é€ ç®€å•ç‰¹æ€§ç±»å‹çš„æ„é€ å™¨
         SimpleFeatureTypeBuilder tBuilder = new SimpleFeatureTypeBuilder();
-        //ÉèÖÃ
-        //WGS84:Ò»¸ö¶şÎ¬µØÀí×ø±ê²Î¿¼ÏµÍ³£¬Ê¹ÓÃWGS84Êı¾İ
+        //è®¾ç½®
+        //WGS84:ä¸€ä¸ªäºŒç»´åœ°ç†åæ ‡å‚è€ƒç³»ç»Ÿï¼Œä½¿ç”¨WGS84æ•°æ®
         tBuilder.setCRS(DefaultGeographicCRS.WGS84);
         tBuilder.setName("shapefile");
-        //Ìí¼Ó Ò»¸ö¼¸ºÎ¶ÔÏó
+        //æ·»åŠ  ä¸€ä¸ªå‡ ä½•å¯¹è±¡
 //        tBuilder.add("the_geom", Polygon.class);
         tBuilder.add("the_geom", LineString.class);
-//        //Ìí¼ÓÒ»¸öid
+//        //æ·»åŠ ä¸€ä¸ªid
 //        tBuilder.add("osm_id", Long.class);
-        //Ìí¼ÓÃû³Æ
+        //æ·»åŠ åç§°
         tBuilder.add("id", String.class);
 //        tBuilder.add("tags", String.class);
 //        tBuilder.add("latMin", Double.class);
 //        tBuilder.add("latMax", Double.class);
 //        tBuilder.add("lonMin", Double.class);
 //        tBuilder.add("lonMax", Double.class);
-//        //Ìí¼ÓÃèÊö
+//        //æ·»åŠ æè¿°
 //        tBuilder.add("des", String.class);
-        //ÉèÖÃ´ËÊı¾İ´æ´¢µÄÌØÕ÷ÀàĞÍ
+        //è®¾ç½®æ­¤æ•°æ®å­˜å‚¨çš„ç‰¹å¾ç±»å‹
         ds.createSchema(tBuilder.buildFeatureType());
-        //ÉèÖÃ±àÂë
+        //è®¾ç½®ç¼–ç 
         ds.setCharset(Charset.forName("GBK"));
-        //ÉèÖÃwriter
-        //Îª¸ø¶¨µÄÀàĞÍÃû³Æ´´½¨Ò»¸öÌØĞÔĞ´ÈëÆ÷
+        //è®¾ç½®writer
+        //ä¸ºç»™å®šçš„ç±»å‹åç§°åˆ›å»ºä¸€ä¸ªç‰¹æ€§å†™å…¥å™¨
 
-        //1.typeName£ºÌØÕ÷ÀàĞÍ
-        //2.transaction :ÊÂÎï,Ğ´ÈëÊ§°Ü£¬»Ø¹ö
+        //1.typeNameï¼šç‰¹å¾ç±»å‹
+        //2.transaction :äº‹ç‰©,å†™å…¥å¤±è´¥ï¼Œå›æ»š
         //3.ShapefileDataStore::getTypeNames:
 		/*public String[] getTypeNames()
-		 »ñÈ¡Õâ¸öÊı¾İ´æ´¢±£´æµÄÀàĞÍÃû³ÆÊı×é¡£
-		ShapefileDataStore×ÜÊÇ·µ»ØÒ»¸öÃû³Æ
+		 è·å–è¿™ä¸ªæ•°æ®å­˜å‚¨ä¿å­˜çš„ç±»å‹åç§°æ•°ç»„ã€‚
+		ShapefileDataStoreæ€»æ˜¯è¿”å›ä¸€ä¸ªåç§°
 		*/
         FeatureWriter<SimpleFeatureType, SimpleFeature> writer = ds.getFeatureWriter(
                 ds.getTypeNames()[0], Transaction.AUTO_COMMIT);
@@ -421,48 +419,48 @@ public class ShapeFile {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
 //            System.exit(0);
         }
-        //Ğ´Èë
+        //å†™å…¥
         writer.write();
-        //¹Ø±Õ
+        //å…³é—­
         writer.close();
-        //ÊÍ·Å×ÊÔ´
+        //é‡Šæ”¾èµ„æº
         ds.dispose();
         System.out.println("Operation done successfully");
 
-//        //Interface SimpleFeature£ºÒ»¸öÓÉ¹Ì¶¨ÁĞ±íÖµÒÔÒÑÖªË³Ğò×é³ÉµÄSimpleFeatureTypeÊµÀı¡£
-//        //Ğ´Ò»¸öµã
+//        //Interface SimpleFeatureï¼šä¸€ä¸ªç”±å›ºå®šåˆ—è¡¨å€¼ä»¥å·²çŸ¥é¡ºåºç»„æˆçš„SimpleFeatureTypeå®ä¾‹ã€‚
+//        //å†™ä¸€ä¸ªç‚¹
 //        SimpleFeature feature = writer.next();
 //        //SimpleFeature ::setAttribute(String attrName, Object val)
-//        //¸øÖ¸¶¨µÄÊôĞÔÃû³ÆÌí¼ÓÒ»¸ö¶ÔÏó POINT
+//        //ç»™æŒ‡å®šçš„å±æ€§åç§°æ·»åŠ ä¸€ä¸ªå¯¹è±¡ POINT
 //		/*
-//		 * Coordinate : GeoAPI¼¸ºÎ½Ó¿ÚµÄÊµÏÖ
-//		 Ò»¸öÇáÁ¿¼¶µÄÀà£¬ÓÃÓÚ´æ´¢¶şÎ¬µÑ¿¨¶ûÆ½ÃæÉÏµÄ×ø±ê¡£
-//		 Ëü²»Í¬ÓÚµã£¬ËüÊÇ¼¸ºÎµÄÒ»¸ö×ÓÀà¡£
-//		 ²»Í¬ÓÚÀàĞÍµãµÄ¶ÔÏó(°üº¬¶îÍâµÄĞÅÏ¢£¬ÈçĞÅ·â¡¢¾«È·Ä£ĞÍºÍ¿Õ¼äÒıÓÃÏµÍ³ĞÅÏ¢)£¬
-//		 ×ø±êÖ»°üº¬ÓĞĞòÖµºÍ·ÃÎÊ·½·¨¡£
+//		 * Coordinate : GeoAPIå‡ ä½•æ¥å£çš„å®ç°
+//		 ä¸€ä¸ªè½»é‡çº§çš„ç±»ï¼Œç”¨äºå­˜å‚¨äºŒç»´ç¬›å¡å°”å¹³é¢ä¸Šçš„åæ ‡ã€‚
+//		 å®ƒä¸åŒäºç‚¹ï¼Œå®ƒæ˜¯å‡ ä½•çš„ä¸€ä¸ªå­ç±»ã€‚
+//		 ä¸åŒäºç±»å‹ç‚¹çš„å¯¹è±¡(åŒ…å«é¢å¤–çš„ä¿¡æ¯ï¼Œå¦‚ä¿¡å°ã€ç²¾ç¡®æ¨¡å‹å’Œç©ºé—´å¼•ç”¨ç³»ç»Ÿä¿¡æ¯)ï¼Œ
+//		 åæ ‡åªåŒ…å«æœ‰åºå€¼å’Œè®¿é—®æ–¹æ³•ã€‚
 //		 */
 //        //Coordinate coordinate = new Coordinate(x, y);
 //
-//        //GeometryFactory:Ìá¹©Ò»Ì×ÊµÓÃµÄ·½·¨£¬ÓÃÓÚ´Ó×ø±êÁĞ±íÖĞ¹¹½¨¼¸ºÎ¶ÔÏó¡£
+//        //GeometryFactory:æä¾›ä¸€å¥—å®ç”¨çš„æ–¹æ³•ï¼Œç”¨äºä»åæ ‡åˆ—è¡¨ä¸­æ„å»ºå‡ ä½•å¯¹è±¡ã€‚
 //
-//        //¹¹ÔìÒ»¸ö¼¸ºÎÍ¼ĞÎ¹¤³§£¬Éú³É¾ßÓĞ¸¡¶¯¾«¶ÈÄ£ĞÍµÄ¼¸ºÎÍ¼ĞÎºÍÒ»¸ö0µÄ¿Õ¼äÒıÓÃID¡£
+//        //æ„é€ ä¸€ä¸ªå‡ ä½•å›¾å½¢å·¥å‚ï¼Œç”Ÿæˆå…·æœ‰æµ®åŠ¨ç²¾åº¦æ¨¡å‹çš„å‡ ä½•å›¾å½¢å’Œä¸€ä¸ª0çš„ç©ºé—´å¼•ç”¨IDã€‚
 //        //Point point = new GeometryFactory().createPoint(coordinate);
 ////		feature.setAttribute("the_geom",polygon);
 ////		feature.setAttribute("osm_id", 1234567890l);
-////		feature.setAttribute("name", "Ë§Óã");
-////		feature.setAttribute("des", "°®±¦±¦");
+////		feature.setAttribute("name", "å¸…é±¼");
+////		feature.setAttribute("des", "çˆ±å®å®");
 //
-//        //ÀûÓÃ¼¸ºÎ¶ÔÏó¹¹ÔìÆ÷´´½¨Ò»¸öÔ²
-//        double x = 116.123; //XÖá×ø±ê
-//        double y = 39.345 ; //YÖá×ø±ê
+//        //åˆ©ç”¨å‡ ä½•å¯¹è±¡æ„é€ å™¨åˆ›å»ºä¸€ä¸ªåœ†
+//        double x = 116.123; //Xè½´åæ ‡
+//        double y = 39.345 ; //Yè½´åæ ‡
 //        Polygon polygon = gCreator.createCircle(x, y, 20);
 //
 //        feature.setAttribute("the_geom",polygon);
 //        feature.setAttribute("osm_id", 1234567890l);
-//        feature.setAttribute("name", "Ì«Ñô");
-//        feature.setAttribute("des", "Ò»¸ö°ë¾¶µÈÓÚ20µÄÔ²");
+//        feature.setAttribute("name", "å¤ªé˜³");
+//        feature.setAttribute("des", "ä¸€ä¸ªåŠå¾„ç­‰äº20çš„åœ†");
 //
-//        //ÔÙÀ´Ò»¸öµã
+//        //å†æ¥ä¸€ä¸ªç‚¹
 ////
 ////		feature = writer.next();
 ////
@@ -473,25 +471,25 @@ public class ShapeFile {
 ////
 ////		feature.setAttribute("the_geom",point);
 ////		feature.setAttribute("osm_id", 1234567891l);
-////		feature.setAttribute("name", "±¦±¦");
-////		feature.setAttribute("des", "°®Ë§Óã");
+////		feature.setAttribute("name", "å®å®");
+////		feature.setAttribute("des", "çˆ±å¸…é±¼");
 //
-//        //Ğ´Èë
+//        //å†™å…¥
 //        writer.write();
-//        //¹Ø±Õ
+//        //å…³é—­
 //        writer.close();
-//        //ÊÍ·Å×ÊÔ´
+//        //é‡Šæ”¾èµ„æº
 //        ds.dispose();
 //
 //
-//        //¶ÁÈ¡shapefileÎÄ¼şµÄÍ¼ĞÎĞÅÏ¢
+//        //è¯»å–shapefileæ–‡ä»¶çš„å›¾å½¢ä¿¡æ¯
 //        ShpFiles shpFiles = new ShpFiles(path);
 //		/*ShapefileReader(
 //		 ShpFiles shapefileFiles,
-//		 boolean strict, --ÊÇ·ñÊÇÑÏ¸ñµÄ¡¢¾«È·µÄ
-//		 boolean useMemoryMapped,--ÊÇ·ñÊ¹ÓÃÄÚ´æÓ³Éä
-//		 GeometryFactory gf,     --¼¸ºÎÍ¼ĞÎ¹¤³§
-//		 boolean onlyRandomAccess--ÊÇ·ñÖ»Ëæ»ú´æÈ¡
+//		 boolean strict, --æ˜¯å¦æ˜¯ä¸¥æ ¼çš„ã€ç²¾ç¡®çš„
+//		 boolean useMemoryMapped,--æ˜¯å¦ä½¿ç”¨å†…å­˜æ˜ å°„
+//		 GeometryFactory gf,     --å‡ ä½•å›¾å½¢å·¥å‚
+//		 boolean onlyRandomAccess--æ˜¯å¦åªéšæœºå­˜å–
 //		 )
 //		*/
 //        ShapefileReader reader = new ShapefileReader(shpFiles,

@@ -181,13 +181,16 @@ public class JsonAction01 {
                 ucoords[i] = coords.get(i);
             }
 
-//            double[] metrics = lonlat2metrics(coords);
-            MaxConvexPolygon mcp = new MaxConvexPolygon(ucoords);
+            double[] metrics = lonlat2metrics(ucoords);
+//            MaxConvexPolygon mcp = new MaxConvexPolygon(ucoords);
             for(int i = 0; i < ucoords.length; i += 2) {
                 System.out.println(ucoords[i] + ", " + ucoords[i + 1]);
             }
-            System.out.println(ucoords);
-            double[] polygon = mcp.run();
+            for(int i = 0; i < metrics.length; i += 2) {
+                System.out.println(metrics[i] + ", " + metrics[i + 1]);
+            }
+//            System.out.println(ucoords);
+//            double[] polygon = mcp.run();
 //            double[] polygon = metrics2lonlat(polygonMerics);
 //            double[] polygon = MaxConvexPolygon.myTest();
 //            double[] polygon = ConvexPolygon01.test();
@@ -196,6 +199,9 @@ public class JsonAction01 {
 //            double[] polygon = ConvexPolygon01.createPolygon(ucoords);
 //            double[] polygon = ConvexHull.test();
 //            double[] polygon = ConvexHull.getConvexPolygon(ucoords);
+//            double[] polygonMetrics = ConvexHull.getConvexPolygon(metrics);
+            double[] polygonMetrics = GrahamScan.calculate(metrics);
+            double[] polygon = metrics2lonlat(polygonMetrics);
             int dpSize = polygon.length;
             StringBuffer buf = new StringBuffer();
             buf.append("[");
