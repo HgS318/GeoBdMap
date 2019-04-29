@@ -927,13 +927,8 @@ function addSearchToMap() {
             dataType: 'json',
             // timeout: 60000,
             success: function (re_data) {
-                searchAdds = re_data;
-                simpleTextLen = 28;
-                createPositions(re_data['positions'], 'big');
-                createRelatives(re_data['afters'], 'big');
-                createRelatives(re_data['befores'], 'big');
-                setRelposResItem();
-                simpleTextLen = 48;
+                posadd.baiduSearch = re_data;
+                setTimeout("showDeaultBdSearchPoses()", 5000);
             },
             error: function (err_data) {
                 console.log(err_data);
@@ -948,4 +943,17 @@ function addSearchToMap() {
     }
 
     
+}
+
+function showDeaultBdSearchPoses() {
+    var searchPoses = posadd.baiduSearch;
+    if(searchPoses  === null || searchPoses == {}) {
+        return;
+    }
+    simpleTextLen = 32;
+    createPositions(searchPoses['positions'], 'big');
+    createRelatives(searchPoses['afters'], 'big');
+    createRelatives(searchPoses['befores'], 'big');
+    setRelposResItem();
+    simpleTextLen = 48;
 }

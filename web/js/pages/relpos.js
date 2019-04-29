@@ -114,7 +114,8 @@ function createPositions(pos_data, big) {
                 // }
                 addOverlayAndWin(overlay, pos, null, relpos.positions);
                 if (flag) {
-                    map.centerAndZoom(bp, 10);
+                    // map.centerAndZoom(bp, 10);
+                    map.panTo(bp);
                     flag = false;
                 }
             } else {

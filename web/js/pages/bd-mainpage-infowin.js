@@ -201,7 +201,6 @@ function createContent(entity) {
 
 function createSimpleContent(entity) {
 
-    // var content = '<br style="margin:0;line-height:10px;padding:2px;">';
     var content = "";
     if(entity.address != null && entity.address != undefined) {
         content += '&nbsp;&nbsp;地址：' + entity.address + '<br/><br/>';
@@ -217,23 +216,35 @@ function createSimpleContent(entity) {
         if(simpleTextLen != 48) {
             content += "<br/><strong>网页文本</strong>";
         }
-        for(var j = 0; j < entity['texts'].length; j++) {
-            var text = entity['texts'][j];
-            if(text.length > simpleTextLen) {
-                text = text.substring(0, simpleTextLen - 3) + '...';
+        if(entity['links'] != null && entity['links'].length == entity['texts'].length) {
+            for(var j = 0; j < entity['texts'].length; j++) {
+                var text = entity['texts'][j];
+                if(text.length > simpleTextLen) {
+                    text = text.substring(0, simpleTextLen - 3) + '...';
+                }
+                var linkContent = "&nbsp;&nbsp;&nbsp;<a href='#' onclick='openContentWindow(\""
+                    + entity['links'][j] + "\", \"查看原网页\",650, 520, 30, 30)'>链接</a>";
+                content += "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:1em'>" + text + linkContent + "</p>";
             }
-            content += "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:1em'>" + text + "</p>";
+        } else {
+            for(var j = 0; j < entity['texts'].length; j++) {
+                var text = entity['texts'][j];
+                if(text.length > simpleTextLen) {
+                    text = text.substring(0, simpleTextLen - 3) + '...';
+                }
+                content += "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:1em'>" + text + "</p>";
+            }
+            if(entity['links'] != null && entity['links'].length > 0) {
+                content += "<br/>";
+                for (var j = 0; j < entity['links'].length; j++) {
+                    var link = entity['links'][j];
+                    var linkContent = "&nbsp;&nbsp;&nbsp;<a href='#' onclick='openContentWindow(\""
+                        + link + "\", \"查看原网页\",650, 520, 30, 30)'>链接" + (j + 1) + "</a>";
+                    content += linkContent;
+                }
+                content += "<br/>";
+            }
         }
-    }
-    if(entity['links'] != null && entity['links'].length > 0) {
-        content += "<br/>";
-        for (var j = 0; j < entity['links'].length; j++) {
-            var link = entity['links'][j];
-            var linkContent = "&nbsp;&nbsp;&nbsp;<a href='#' onclick='openContentWindow(\"" + link
-                + "\", \"查看原网页\",650, 520, 30, 30)'>链接" + (j + 1) + "</a>";
-            content += linkContent;
-        }
-        content += "<br/>";
     }
     if(entity['flashes'] != null && entity['flashes'].length > 0) {
         content += '<br/><strong>动画</strong><br/>';
