@@ -55,7 +55,7 @@ function extract_positions(text) {
 
 }
 
-function extract_search_positions(text, link) {
+function extract_search_positions(text, link, index) {
     if(text === undefined || text === null || "" === text) {
         return;
     }
@@ -76,6 +76,7 @@ function extract_search_positions(text, link) {
             createRelatives(re_data['befores'], "big", link, text);
             simpleTextLen = 48;
             setRelposResItem();
+            showBaiduSearchPos(index + 1);
         },
         error: function (err_data) {
             console.log(err_data);

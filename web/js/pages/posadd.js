@@ -19,6 +19,7 @@ var posadd = {
     baiduSearch: {
 
     },
+    baiduSearchUrls: [],
 
 };
 
@@ -981,15 +982,24 @@ function showBdSearchPoses() {
         return;
     }
     toDistRes();
+    var urls = [];
     for(var _key in searches) {
         var url = searches[_key]['url'];
-        showBaiduSearchPos(url);
+        urls.push(url);
     }
+    posadd.baiduSearchUrls = urls;
+    showBaiduSearchPos(0);
 }
 
 //  显示一个百度搜索网页中的位置(先调用java提取正文接口，再调用python提取正文接口)
-function showBaiduSearchPos(url) {
+function showBaiduSearchPos(index) {
+    var urls = posadd.baiduSearchUrls;
+    if(index >= urls.length) {
+        return;
+    }
+    var url = urls[index];
     if(url === undefined || url == null || url == "") {
+        showBaiduSearchPos(index + 1);
         return;
     }
     var java_ext_service = "extractContentSimple.action?url=" + url;
@@ -1002,15 +1012,15 @@ function showBaiduSearchPos(url) {
         // timeout: 60000,
         success: function (extract) {
             if(extract != null && extract.length > 0) {
-                extract_search_positions(extract, url);
+                extract_search_positions(extract, url, index);
             } else {
-                showBaiduSearchPosByPython(url);
+                showBaiduSearchPosByPython(url, index);
                 // showBaiduSearchPosByJava(url);
             }
         },
         error: function (err) {
             console.log("java extraxt failed: " + url);
-            showBaiduSearchPosByPython(url);
+            showBaiduSearchPosByPython(url, index);
             // console.log("python extraxt failed: " + url);
             // showBaiduSearchPosByJava(url);
         }
@@ -1019,7 +1029,7 @@ function showBaiduSearchPos(url) {
 }
 
 //  显示一个百度搜索网页中的位置(调用python提取正文接口)
-function showBaiduSearchPosByJava(url) {
+function showBaiduSearchPosByJava(url, index) {
     if(url === undefined || url == null || url == "") {
         return;
     }
@@ -1031,7 +1041,7 @@ function showBaiduSearchPosByJava(url) {
         // timeout: 60000,
         success: function (extract) {
             if(extract != null && extract.length > 0) {
-                extract_search_positions(extract);
+                extract_search_positions(extract, url, index);
             }
         },
         error: function (err) {
@@ -1041,7 +1051,7 @@ function showBaiduSearchPosByJava(url) {
 }
 
 //  显示一个百度搜索网页中的位置(调用python提取正文接口)
-function showBaiduSearchPosByPython(url) {
+function showBaiduSearchPosByPython(url, index) {
     if(url === undefined || url == null || url == "") {
         return;
     }
@@ -1053,11 +1063,12 @@ function showBaiduSearchPosByPython(url) {
         // timeout: 60000,
         success: function (extract) {
             if(extract != null && extract.length > 0) {
-                extract_search_positions(extract, url);
+                extract_search_positions(extract, url, index);
             }
         },
         error: function (err) {
             console.log("python extraxt failed: " + url);
+            showBaiduSearchPos(index + 1);
         }
     });
 }
