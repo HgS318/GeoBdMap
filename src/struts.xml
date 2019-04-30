@@ -16,6 +16,7 @@
 
     <package name="p1m" extends="default">
 
+        <action name="extractContentSimple" class="whu.eres.cartolab.controllers.JsonAction01" method="extractContentSimple" />
         <action name="getFireTraffics" class="whu.eres.cartolab.controllers.JsonAction01" method="getFireTraffics" />
         <action name="getAllFireLocalSites" class="whu.eres.cartolab.controllers.JsonAction01" method="getAllFireLocalSites" />
         <action name="getPointGeoEntities" class="whu.eres.cartolab.controllers.JsonAction01" method="getPointGeoEntities" />

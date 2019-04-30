@@ -16,7 +16,7 @@ import java.sql.*;
 
 public class test {
 
-    public static String ExtractContentSimple(String url) {
+    public static String extractContentSimple(String url) {
         String content = null;
         try {
             content = ContentExtractor.getContentByUrl(url);
@@ -28,7 +28,7 @@ public class test {
     }
 
     public static void WebCollectorTest() {
-        String url = "https://baijiahao.baidu.com/s?id=1632016228529187595&wfr=spider&for=pc";
+        String url = "http://hb.sina.com.cn/news/b/2019-02-27/detail-ihsxncvf8277887.shtml";
         try {
     //		News news = ContentExtractor.getNewsByHtml(html, url);
     //		News news = ContentExtractor.getNewsByHtml(html);

@@ -474,7 +474,16 @@ public class ContentExtractor {
     /*输入HTML和URL，获取正文文本*/
     public static String getContentByHtml(String html, String url) throws Exception {
         Document doc = Jsoup.parse(html, url);
-        return getContentElementByDoc(doc).text();
+//        return getContentElementByDoc(doc).text();
+        Element element = getContentElementByDoc(doc);
+//        String str1 = element.text();
+        String str2 = element.wholeText();
+//        String str3 = element.toString();
+//        String str4 = element.ownText();
+        if(str2 != null) {
+            str2 = str2.trim();
+        }
+        return str2;
     }
 
     /*输入URL，获取正文文本*/

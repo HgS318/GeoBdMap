@@ -12,6 +12,20 @@ import whu.eres.cartolab.geo.*;
 
 public class JsonAction01 {
 
+    public String extractContentSimple() {
+        HttpServletRequest request = ServletActionContext.getRequest();
+        try {
+            String url = request.getParameter("url");
+            String str = test.test.extractContentSimple(url);
+            toBeText(str);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            toBeText("");
+            return ex.getMessage();
+        }
+        return null;
+    }
+
     public String getFireTraffics() {
         try {
             String str = test.test.getFireTraffics();
