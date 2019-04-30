@@ -61,6 +61,9 @@ function extract_search_positions(text, link, index) {
     }
     console.log("搜索文本的位置信息提取中。。。");
     var url = python_service + 'query_positions?text=' + text;
+    if(relpos.more == true) {
+        url = url + "&more=1";
+    }
     $.ajax({
         url: url,
         type: 'get',
@@ -76,7 +79,7 @@ function extract_search_positions(text, link, index) {
             createRelatives(re_data['befores'], "big", link, text);
             simpleTextLen = 48;
             setRelposResItem();
-            showBaiduSearchPos(index + 1);
+            // showBaiduSearchPos(index + 1);
         },
         error: function (err_data) {
             console.log(err_data);

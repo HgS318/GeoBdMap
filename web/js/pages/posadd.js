@@ -1020,12 +1020,12 @@ function showBaiduSearchPos(index) {
         },
         error: function (err) {
             console.log("java extraxt failed: " + url);
-            showBaiduSearchPosByPython(url, index);
+            // showBaiduSearchPosByPython(url, index);
             // console.log("python extraxt failed: " + url);
             // showBaiduSearchPosByJava(url);
         }
     });
-
+    setTimeout("showBaiduSearchPos(" + (index + 1) + ")", 5000);
 }
 
 //  显示一个百度搜索网页中的位置(调用python提取正文接口)
@@ -1068,7 +1068,7 @@ function showBaiduSearchPosByPython(url, index) {
         },
         error: function (err) {
             console.log("python extraxt failed: " + url);
-            showBaiduSearchPos(index + 1);
+            // showBaiduSearchPos(index + 1);
         }
     });
 }
