@@ -17,11 +17,9 @@ function extract_positions(text) {
     }
     var city = document.getElementById("relposCity").value;
     removeExtratOverlays();
-    // removeAllOverlays();
     // $("#extraposinfo").html("位置信息提取中。。。");
     console.log("位置信息提取中。。。");
     var url = python_service + 'query_positions?text=' + text;
-    // var url = 'http://106.12.93.49:5050/query_positions?text=' + text;
     if(relpos.restart != null && "" != relpos.restart) {
         url = url + "&restart=1";
     }
@@ -57,11 +55,89 @@ function extract_positions(text) {
 
 }
 
-function createPositions(pos_data, big) {
+function extract_search_positions(text, link) {
+    if(text === undefined || text === null || "" === text) {
+        return;
+    }
+    console.log("搜索文本的位置信息提取中。。。");
+    var url = python_service + 'query_positions?text=' + text;
+    $.ajax({
+        url: url,
+        type: 'get',
+        dataType: 'json',
+        timeout: 60000,
+        //dataType:"jsonp",  //数据格式设置为jsonp
+        //jsonp:"callback",  //Jquery生成验证参数的名称
+        success: function (re_data) {
+            console.log(JSON.stringify(re_data));
+            simpleTextLen = 32;
+            createPositions(re_data['positions'], "big", link, text);
+            createRelatives(re_data['afters'], "big", link, text);
+            createRelatives(re_data['befores'], "big", link, text);
+            simpleTextLen = 48;
+            setRelposResItem();
+        },
+        error: function (err_data) {
+            console.log(err_data);
+        }
+    });
+
+}
+
+function addUrlLink(pos, url, text) {
+    if(text != undefined && text != null && text.length > 0) {
+        var snap = create_word_snap(pos['name'], text, 20);
+        if(pos['texts'] == undefined || pos['texts'] == null) {
+            pos['texts'] = [];
+        }
+        pos['texts'].push(snap);
+    }
+    if(url != undefined && url != null && url.length > 0) {
+        if(pos['links'] == undefined || pos['links'] == null) {
+            pos['links'] = [];
+        }
+        pos['links'].push(url);
+    }
+}
+
+// 生成网页中的文本快照
+function create_word_snap(word, content, length) {
+    if (word == null || word == '') {
+        return content;
+    }
+    var this_word = word;
+    var split_id = word.indexOf(' -');
+    if (split_id > 0) {
+        this_word = word.substring(0, split_id);
+    }
+    var word_len = this_word.length;
+    var cont_len = content.length;
+    var word_id = content.indexOf(this_word);
+    if (word_id < 0) {
+        return content;
+    }
+    var minus = parseInt((length - word_len) / 3);
+    var sid = word_id - minus;
+    if(sid < 0){
+        sid = 0;
+    }
+    var eid = sid + length;
+    if (eid > cont_len) {
+        eid = cont_len;
+    }
+    var snap = content.substring(sid, eid);
+    if (sid > 0) {
+        snap = '...' + snap + '...';
+    }
+    return snap;
+}
+
+function createPositions(pos_data, big, url, text) {
     if(pos_data == null || pos_data.length < 1) {
         return;
     }
     var flag = true;
+    var total_data = relpos.positions.concat(relpos.relPositions);
     for(var i = 0; i < pos_data.length; i++) {
         var pos = pos_data[i];
         try {
@@ -78,9 +154,15 @@ function createPositions(pos_data, big) {
             var uuid = generateUUID();
             pos['uuid'] = uuid;
             if(big == "big") {
+                var alreadyPos = findOverlayByName(relpos.positions ,name);
+                if(alreadyPos != null && alreadyPos.extData['coords'] == pos['coords']) {
+                    addUrlLink(alreadyPos.extData, url, text);
+                    return;
+                }
                 pos['rel'] = 0;
                 pos['text'] = "位置估计：<strong style='color: red'>" + coords_str + "</strong>";
                 pos['winwidth'] = 225;
+                addUrlLink(pos, url, text);
             } else {
                 pos['name'] = "地理位置实体";
                 pos['addr'] = name;
@@ -113,7 +195,7 @@ function createPositions(pos_data, big) {
                 //     overlay.spaType = 5;
                 // }
                 addOverlayAndWin(overlay, pos, null, relpos.positions);
-                if (flag) {
+                if (flag && (big == undefined || big == null)) {
                     // map.centerAndZoom(bp, 10);
                     map.panTo(bp);
                     flag = false;
@@ -127,7 +209,7 @@ function createPositions(pos_data, big) {
     }
 }
 
-function createRelatives(rel_data, big) {
+function createRelatives(rel_data, big, url, text) {
     if(rel_data == null || rel_data.length < 1) {
         return;
     }
@@ -147,9 +229,15 @@ function createRelatives(rel_data, big) {
             var uuid = generateUUID();
             pos['uuid'] = uuid;
             if(big == 'big') {
+                var alreadyPos = findOverlayByName(relpos.relPositions ,name);
+                if(alreadyPos != null && alreadyPos.extData['coords'] == pos['coords']) {
+                    addUrlLink(alreadyPos.extData, url, text);
+                    return;
+                }
                 pos['rel'] = 1;
                 pos['text'] = "位置估计：<strong style='color: red'>" + coords_str + "</strong>";
                 pos['winwidth'] = 225;
+                addUrlLink(pos, url, text);
             } else {
                 pos['name'] = "相对位置";
                 pos['rel'] = 1;

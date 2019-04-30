@@ -208,6 +208,7 @@ function createSimpleContent(entity) {
     if(entity['text'] != null) {
         content +=  "&nbsp;&nbsp;&nbsp;&nbsp;" + entity['text'] + "<br/>";
     }
+    var linkShown = false;
     if(entity['texts'] != null) {
         // content += "<strong>文字</strong>";
         if(simpleTextLen == undefined || simpleTextLen == null || simpleTextLen == 0) {
@@ -216,8 +217,9 @@ function createSimpleContent(entity) {
         if(simpleTextLen != 48) {
             content += "<br/><strong>网页文本</strong>";
         }
-        if(entity['links'] != null && entity['links'].length == entity['texts'].length) {
-            for(var j = 0; j < entity['texts'].length; j++) {
+        var textsLen = entity['texts'].length;
+        if(textsLen < 5 && entity['links'] != null && entity['links'].length == textsLen) {
+            for(var j = 0; j < textsLen; j++) {
                 var text = entity['texts'][j];
                 if(text.length > simpleTextLen) {
                     text = text.substring(0, simpleTextLen - 3) + '...';
@@ -226,25 +228,32 @@ function createSimpleContent(entity) {
                     + entity['links'][j] + "\", \"查看原网页\",650, 520, 30, 30)'>链接</a>";
                 content += "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:1em'>" + text + linkContent + "</p>";
             }
+            linkShown = true;
         } else {
-            for(var j = 0; j < entity['texts'].length; j++) {
+            var showTextNum = textsLen > 4 ? 4 : showTextNum;
+            for(var j = 0; j < showTextNum; j++) {
                 var text = entity['texts'][j];
                 if(text.length > simpleTextLen) {
                     text = text.substring(0, simpleTextLen - 3) + '...';
                 }
                 content += "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:1em'>" + text + "</p>";
             }
-            if(entity['links'] != null && entity['links'].length > 0) {
-                content += "<br/>";
-                for (var j = 0; j < entity['links'].length; j++) {
-                    var link = entity['links'][j];
-                    var linkContent = "&nbsp;&nbsp;&nbsp;<a href='#' onclick='openContentWindow(\""
-                        + link + "\", \"查看原网页\",650, 520, 30, 30)'>链接" + (j + 1) + "</a>";
-                    content += linkContent;
-                }
-                content += "<br/>";
+        }
+    }
+    if(linkShown == false && entity['links'] != null && entity['links'].length > 0) {
+        content += "<br/>";
+        if(entity['links'].length == 1) {
+            content += ("&nbsp;&nbsp;&nbsp;<a href='#' onclick='openContentWindow(\""
+                + entity['links'][0] + "\", \"查看原网页\",650, 520, 30, 30)'>链接</a>");
+        } else {
+            for (var j = 0; j < entity['links'].length; j++) {
+                var link = entity['links'][j];
+                var linkContent = "&nbsp;&nbsp;&nbsp;<a href='#' onclick='openContentWindow(\""
+                    + link + "\", \"查看原网页\",650, 520, 30, 30)'>链接" + (j + 1) + "</a>";
+                content += linkContent;
             }
         }
+        content += "<br/>";
     }
     if(entity['flashes'] != null && entity['flashes'].length > 0) {
         content += '<br/><strong>动画</strong><br/>';

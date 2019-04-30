@@ -1,5 +1,6 @@
-// var python_service = "http://localhost:5050/";
-var python_service = "http://106.12.93.49:5050/";
+var python_service = "http://localhost:5050/";
+// var python_service = "http://106.12.93.49:5050/";
+
 var posadd = {
 
     geoCoder: new BMap.Geocoder(),
@@ -20,6 +21,7 @@ var posadd = {
     },
 
 };
+
 var mapvpLayer = null;
 
 function showMassPoints(load) {
@@ -711,49 +713,6 @@ function doSearchAll() {
     });
 }
 
-function baiduSearch() {
-    var word = $("#baiduSearchInput")[0].value;
-    if(word == null || word == "") {
-        word = "武汉 火灾 2月27日";
-        // $("#baiduSearchInput")[0].innerText = word;
-        posadd.baiduSeachWord = word;
-    }
-    // var url = 'http://localhost:5050/baidu_crawl?word=' + word;
-    var url = python_service + 'baidu_crawl?word=' + word;
-    $.ajax({
-        url: url,
-        type: 'get',
-        dataType: 'json',
-        timeout: 60000,
-        //dataType:"jsonp",  //数据格式设置为jsonp
-        //jsonp:"callback",  //Jquery生成验证参数的名称
-        success: function (re_data) {
-
-            var searchText = word;
-            if(!isDefaultSearch(searchText)) {
-                if(re_data['status'] != 0) {
-                    alert('搜索出现错误，请重试');
-                    return;
-                }
-                posadd.baiduSearch = re_data['results'];
-            } else {    //  默认搜索
-                if(re_data['status'] != 0) {
-                    alert('搜索出现错误，请重试');
-                    return;
-                }
-                posadd.baiduSearch = re_data['results'];
-                getRoadConditions();
-                $("#seachAddDiv")[0].style.display = 'block';
-            }
-            setBaiduResultItems(posadd.baiduSearch, "bdSearchResults");
-        },
-        error: function (err_data) {
-            console.log(err_data);
-        }
-    });
-
-}
-
 //	在右边结果栏显示若干条结果，muldata为json
 function setBaiduResultItems(searchData, divname) {
 
@@ -863,6 +822,13 @@ function lowerAddClick(radio) {
 }
 
 function testSearchToMap0(searchAdds) {
+    // searchAdds = [{
+    //     "images": ["data/syn_data/fires0227/images/11.jpg", "data/syn_data/fires0227/images/111.jpg", "data/syn_data/fires0227/images/1111.jpg"],
+    //     "name": "武昌区中山路400号一居民楼4楼",
+    //     "position": "114.32392283964214,30.54320062851014",
+    //     "text": ["2月27日10时11分，武昌警方接到报警：武昌区中山路400号一居民楼4楼发生起火事件。接警后周边消防、交管等多路警力迅速到场救援处置，10时40分左右处置完毕，现场救出一名受伤群众，已送医院救治。具体原因正在进一步调查。"],
+    //     "link": "http://hb.sina.com.cn/news/b/2019-02-27/detail-ihsxncvf8277887.shtml",
+    // }];
     var dataJson = searchAdds;
     for (var i = 0; i < dataJson.length; i++) {
         var entity = dataJson[i];
@@ -920,51 +886,190 @@ function testSearchToMap0(searchAdds) {
     }
 }
 
-function addSearchToMap() {
-    var searchAdds = null;
-    if(isDefaultSearch(posadd.baiduSeachWord)) {
-        //  默认搜索结果
-        // searchAdds = [{
-        //     "images": ["data/syn_data/fires0227/images/11.jpg", "data/syn_data/fires0227/images/111.jpg", "data/syn_data/fires0227/images/1111.jpg"],
-        //     "name": "武昌区中山路400号一居民楼4楼",
-        //     "position": "114.32392283964214,30.54320062851014",
-        //     "text": ["2月27日10时11分，武昌警方接到报警：武昌区中山路400号一居民楼4楼发生起火事件。接警后周边消防、交管等多路警力迅速到场救援处置，10时40分左右处置完毕，现场救出一名受伤群众，已送医院救治。具体原因正在进一步调查。"],
-        //     "link": "http://hb.sina.com.cn/news/b/2019-02-27/detail-ihsxncvf8277887.shtml",
-        // }];
-        var url = python_service + "default_search_geos";
-        $.ajax({
-            url: url,
-            type: 'get',
-            dataType: 'json',
-            // timeout: 60000,
-            success: function (re_data) {
-                posadd.baiduSearch = re_data;
-                setTimeout("showDeaultBdSearchPoses()", 5000);
-            },
-            error: function (err_data) {
-                console.log(err_data);
-            }
-        });
-
-
-
-    } else {
-        //  一般搜索结果，待完成
-
+function baiduSearch() {
+    var word = $("#baiduSearchInput")[0].value;
+    if(word == null || word == "") {
+        word = "武汉 火灾 2月27日";
+        // $("#baiduSearchInput")[0].innerText = word;
     }
+    posadd.baiduSeachWord = word;
+    var url = python_service + 'baidu_crawl?word=' + word;
+    $.ajax({
+        url: url,
+        type: 'get',
+        dataType: 'json',
+        timeout: 60000,
+        //dataType:"jsonp",  //数据格式设置为jsonp
+        //jsonp:"callback",  //Jquery生成验证参数的名称
+        success: function (re_data) {
+            var searchText = word;
+            if(re_data['status'] != 0) {
+                alert('搜索出现错误，请重试');
+                return;
+            }
+            posadd.baiduSearch = re_data['results'];
+            if(isDefaultSearch(searchText)) {  //  默认搜索
+                getRoadConditions();
+            }
+            setBaiduResultItems(posadd.baiduSearch, "bdSearchResults");
+            $("#seachAddDiv")[0].style.display = 'block';
+        },
+        error: function (err_data) {
+            console.log(err_data);
+        }
+    });
 
+}
+
+//  将百度搜索结果中得网页文本位置显示在地图中（按钮调用）
+function addSearchToMap() {
+    clearBaiduSearchOverlay();
+    if(isDefaultSearch(posadd.baiduSeachWord)) {    //  默认搜索结果
+        showDeaultBdSearchPoses();
+    } else {    //  一般搜索结果，待完成
+        showBdSearchPoses();
+    }
+    console.log("extract website positions done.");
+    // showBdSearchPoses();
     
 }
 
+//  显示默认的百度搜索结果中的网页文本位置（武汉 火灾 2月27日）
 function showDeaultBdSearchPoses() {
+    var url = python_service + "default_search_geos";
+    $.ajax({
+        url: url,
+        type: 'get',
+        dataType: 'json',
+        success: function (re_data) {
+            posadd.baiduSearch = re_data;
+            var searchPoses = posadd.baiduSearch;
+            if(searchPoses  === null || searchPoses == {}) {
+                return;
+            }
+            setTimeout("showOneDefaultPos(0)", 1000);
+            toDistRes();
+        },
+        error: function (err_data) {
+            console.log(err_data);
+        }
+    });
+
+}
+
+//  显示一个默认结果的地点（其他地点一段时间后加载）
+function showOneDefaultPos(index) {
+    simpleTextLen = 32;
     var searchPoses = posadd.baiduSearch;
-    if(searchPoses  === null || searchPoses == {}) {
+    createPositions([searchPoses['positions'][index]], 'big');
+    var length = searchPoses['positions'].length;
+    setRelposResItem();
+    if(index == length - 1) {
+        createRelatives(searchPoses['afters'], 'big');
+        createRelatives(searchPoses['befores'], 'big');
+        setRelposResItem();
+        simpleTextLen = 48;
         return;
     }
-    simpleTextLen = 32;
-    createPositions(searchPoses['positions'], 'big');
-    createRelatives(searchPoses['afters'], 'big');
-    createRelatives(searchPoses['befores'], 'big');
+    setTimeout("showOneDefaultPos(" + (index + 1) + ")", 230);
+}
+
+//  显示一般的百度搜索结果中的网页文本位置
+function showBdSearchPoses() {
+    var searches = posadd.baiduSearch;
+    if(searches  === null || searches == {}) {
+        return;
+    }
+    toDistRes();
+    for(var _key in searches) {
+        var url = searches[_key]['url'];
+        showBaiduSearchPos(url);
+    }
+}
+
+//  显示一个百度搜索网页中的位置(先调用java提取正文接口，再调用python提取正文接口)
+function showBaiduSearchPos(url) {
+    if(url === undefined || url == null || url == "") {
+        return;
+    }
+    var java_ext_service = "extractContentSimple.action?url=" + url;
+    var python_ext_service = python_service + "extract_content?url=" + url;
+    $.ajax({
+        url: java_ext_service,
+        // url: python_ext_service,
+        type: 'get',
+        dataType: 'text',
+        // timeout: 60000,
+        success: function (extract) {
+            if(extract != null && extract.length > 0) {
+                extract_search_positions(extract, url);
+            } else {
+                showBaiduSearchPosByPython(url);
+                // showBaiduSearchPosByJava(url);
+            }
+        },
+        error: function (err) {
+            console.log("java extraxt failed: " + url);
+            showBaiduSearchPosByPython(url);
+            // console.log("python extraxt failed: " + url);
+            // showBaiduSearchPosByJava(url);
+        }
+    });
+
+}
+
+//  显示一个百度搜索网页中的位置(调用python提取正文接口)
+function showBaiduSearchPosByJava(url) {
+    if(url === undefined || url == null || url == "") {
+        return;
+    }
+    var java_ext_service = "extractContentSimple.action?url=" + url;
+    $.ajax({
+        url: java_ext_service,
+        type: 'get',
+        dataType: 'text',
+        // timeout: 60000,
+        success: function (extract) {
+            if(extract != null && extract.length > 0) {
+                extract_search_positions(extract);
+            }
+        },
+        error: function (err) {
+            console.log("python extraxt failed: " + url);
+        }
+    });
+}
+
+//  显示一个百度搜索网页中的位置(调用python提取正文接口)
+function showBaiduSearchPosByPython(url) {
+    if(url === undefined || url == null || url == "") {
+        return;
+    }
+    var python_ext_service = python_service + "extract_content?url=" + url;
+    $.ajax({
+        url: python_ext_service,
+        type: 'get',
+        dataType: 'text',
+        // timeout: 60000,
+        success: function (extract) {
+            if(extract != null && extract.length > 0) {
+                extract_search_positions(extract, url);
+            }
+        },
+        error: function (err) {
+            console.log("python extraxt failed: " + url);
+        }
+    });
+}
+
+function clearBaiduSearch() {
+    clearBaiduSearchOverlay();
+    $("#bdSearchResults")[0].innerHTML = "";
+    document.getElementById("seachAddDiv").style.display = 'none';
+    document.getElementById("trafficDiv").style.display = 'none';
+}
+
+function clearBaiduSearchOverlay() {
+    removeExtratOverlays();
     setRelposResItem();
-    simpleTextLen = 48;
 }

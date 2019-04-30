@@ -421,6 +421,31 @@ function findOverlay(overlays, id) {
 	}
 	try{
 		var ov = overlays[id];
+		if(ov === undefined) {
+			return null;
+		}
+		return ov;
+	} catch (e) {
+		return null;
+	}
+}
+
+//  在覆盖物数组中根据id查询某一覆盖物
+function findOverlayByName(overlays, name, field) {
+	if(field === undefined || field == null || field == "") {
+		field = "name";
+	}
+	for(var i = 0; i < overlays.length; i++) {
+		var ov = overlays[i];
+		if(name == ov.extData[field]) {
+			return ov;
+		}
+	}
+	try{
+		var ov = overlays[name];
+		if(ov === undefined) {
+			return null;
+		}
 		return ov;
 	} catch (e) {
 		return null;
