@@ -269,6 +269,17 @@
           <element id="file-copy" path="$PROJECT_DIR$/lib/JSONObject/commons-logging-1.1.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/lib/JSONObject/commons-beanutils-1.8.0.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/lib/JSONObject/commons-collections-3.2.1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/org.slf4j.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/webcollector-2.73-alpha-bin/je-5.0.73.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/webcollector-2.73-alpha-bin/gson-2.8.5.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/webcollector-2.73-alpha-bin/okio-1.14.0.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/webcollector-2.73-alpha-bin/jsoup-1.11.3.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/webcollector-2.73-alpha-bin/log4j-1.2.17.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/webcollector-2.73-alpha-bin/okhttp-3.11.0.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/webcollector-2.73-alpha-bin/slf4j-api-1.7.25.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/webcollector-2.73-alpha-bin/rocksdbjni-5.14.2.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/webcollector-2.73-alpha-bin/slf4j-log4j12-1.7.25.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/webcollector-2.73-alpha-bin/juniversalchardet-1.0.3.jar" />
         </element>
       </element>
     </root>

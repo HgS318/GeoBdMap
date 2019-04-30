@@ -71,5 +71,15 @@
         <jarDirectory url="file://$MODULE_DIR$/lib/JSONObject" recursive="false" />
       </library>
     </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib/webcollector-2.73-alpha-bin" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/lib/webcollector-2.73-alpha-bin" recursive="false" />
+      </library>
+    </orderEntry>
   </component>
 </module>
