@@ -103,20 +103,20 @@ function hideXiaoqi() {
 //将所有地名转换成无歧义数组
 function bdGEO(){
     var add = xiaoqi.adds[xiaoqi.index];
-    geocodeSearch(add);
+    geocodeSearchAddr(add);
     xiaoqi.index++;
 }
 
-function geocodeSearch(add){
+function geocodeSearchAddr(addr){
     if(xiaoqi.index < xiaoqi.adds.length){
         setTimeout(window.bdGEO, 40);
     }
-    xiaoqi.myGeo.getPoint(add, function(point){
+    xiaoqi.myGeo.getPoint(addr, function(point){
         if (point) {
-            //document.getElementById("addr_result").innerHTML +=  index + "、" + add + ":" + point.lng + "," + point.lat + "</br>";
+            //document.getElementById("addr_result").innerHTML +=  index + "、" + addr + ":" + point.lng + "," + point.lat + "</br>";
             var address = new BMap.Point(point.lng, point.lat);
-            //addWuqiyiMarker(address,new BMap.Label(index+":"+add,{offset:new BMap.Size(20,-10)}));
-            xiaoqi.wuqiyi.push(add + ":" + point.lng + "," + point.lat);
+            //addWuqiyiMarker(address,new BMap.Label(index+":"+addr,{offset:new BMap.Size(20,-10)}));
+            xiaoqi.wuqiyi.push(addr + ":" + point.lng + "," + point.lat);
             //wuqiyi.push(point.lng + "," + point.lat );
         }
     }, "武昌区");
@@ -212,7 +212,7 @@ function addWuqiyiMarker(point, label, icon){
     // marker.setLabel(label);
     // xiaoqi.point_marker[point] = marker;
     point.marker = marker;
-    addOverlayAndWin(marker, {'text': '&nbsp;&nbsp;无歧义地名', 'name': label, 'spaType': 1});
+    addOverlayAndInfowin(marker, {'text': '&nbsp;&nbsp;无歧义地名', 'name': label, 'spaType': 1});
     // map.addOverlay(marker);
 }
 

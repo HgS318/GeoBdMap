@@ -25,19 +25,19 @@ function initGeoEntities() {
                     var Point = new BMap.Point(X, Y);
                     var marker = new BMap.Marker(Point);
                     marker.spaType = 1;
-                    addOverlayAndWin(marker, entity, content, geoEntities);
+                    addOverlayAndInfowin(marker, entity, content, geoEntities);
                 }
                 var lineStr = entity['line'];
                 if(lineStr != null && lineStr != undefined) {
                     var polyline = getFigureJson(lineStr, "line", geoEntities);
                     polyline.spaType = 3;
-                    addOverlayAndWin(polyline, entity, content, geoEntities);
+                    addOverlayAndInfowin(polyline, entity, content, geoEntities);
                 }
                 var polygonStr = entity['polygon'];
                 if(polygonStr != null && polygonStr != undefined) {
                     var polygon = getFigureJson(polygonStr, "polygon");
                     polygon.spaType = 5;
-                    addOverlayAndWin(polygon, entity, content, geoEntities);
+                    addOverlayAndInfowin(polygon, entity, content, geoEntities);
                 }
                 var shapes = entity['shapes'];
                 if(shapes != null && shapes != undefined && shapes.length > 0) {
@@ -46,7 +46,7 @@ function initGeoEntities() {
                         var spaType = shapeJson['spaType'];
                         var shape = shapeJson['shape'];
                         var overlay = getFigureByStr(shape, spaType);
-                        addOverlayAndWin(polygon, entity, content, geoEntities);
+                        addOverlayAndInfowin(polygon, entity, content, geoEntities);
                     }
                 }
                 if((entity['shapes'] == null || entity['shapes'] == "") && (entity['position'] == null || entity['position'] == "")
@@ -60,12 +60,12 @@ function initGeoEntities() {
                             console.log(rs.boundaries[i]);
                             var distPolygon = new BMap.Polygon(rs.boundaries[i]);
                             distPolygon.spaType = 5;
-                            addOverlayAndWin(distPolygon, entity, content, geoEntities);
+                            addOverlayAndInfowin(distPolygon, entity, content, geoEntities);
                         }
                     });
                     // var distPolygon = getDistBaiduPolygon(entity['name']);
                     // distPolygon.spaType = 5;
-                    // addOverlayAndWin(distPolygon, entity, content, geoEntities);
+                    // addOverlayAndInfowin(distPolygon, entity, content, geoEntities);
                 }
             }
             setResultItems(geoEntities, "placeresults", "entity");
@@ -230,7 +230,7 @@ function createSimpleContent(entity) {
             }
             linkShown = true;
         } else {
-            var showTextNum = textsLen > 4 ? 4 : showTextNum;
+            var showTextNum = textsLen > 4 ? 4 : textsLen;
             for(var j = 0; j < showTextNum; j++) {
                 var text = entity['texts'][j];
                 if(text.length > simpleTextLen) {
@@ -315,7 +315,7 @@ function createSimpleContent(entity) {
     return content;
 }
 
-function addOverlayAndWin(overlay, data, content, list) {
+function addOverlayAndInfowin(overlay, data, content, list) {
     overlay.name = data['name'];
     overlay.extData = data;
     if(content === undefined || content === null) {

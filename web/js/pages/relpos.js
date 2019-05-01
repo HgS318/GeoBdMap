@@ -198,7 +198,7 @@ function createPositions(pos_data, big, url, text) {
                 //     });
                 //     overlay.spaType = 5;
                 // }
-                addOverlayAndWin(overlay, pos, null, relpos.positions);
+                addOverlayAndInfowin(overlay, pos, null, relpos.positions);
                 if (flag && (big == undefined || big == null)) {
                     // map.centerAndZoom(bp, 10);
                     map.panTo(bp);
@@ -300,7 +300,7 @@ function createRelatives(rel_data, big, url, text) {
                     // addClickHandler(marker, "  &nbsp;&nbsp;" + name);
                     // addExtratOverlay(marker, true);
                 }
-                addOverlayAndWin(overlay, pos, null, relpos.relPositions);
+                addOverlayAndInfowin(overlay, pos, null, relpos.relPositions);
             } else {
 
             }

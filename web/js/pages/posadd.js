@@ -4,6 +4,7 @@ var python_service = "http://localhost:5050/";
 var posadd = {
 
     geoCoder: new BMap.Geocoder(),
+    convertor: new BMap.Convertor(),
     addr_overlays :[],
     coord_overlays: [],
     post_overlays:[],
@@ -154,7 +155,11 @@ function hideMassPoints() {
     hideMapv();
 }
 
-function geocodeSearch(addr, index){
+function geocoderSearch(addrStr, index){
+    if(addrStr === undefined || addrStr == null || addrStr == "") {
+        return null;
+    }
+    var addr = addrStr.trim();
     if(index < posadd.addrs.length){
         setTimeout(window.bdGEO, 400);
     }
@@ -163,12 +168,12 @@ function geocodeSearch(addr, index){
             var bp = new BMap.Point(point.lng, point.lat);
             var marker = new BMap.Marker(bp);
             marker.spaType = 1;
-            addOverlayAndWin(marker, {
+            addOverlayAndInfowin(marker, {
                 "name": "地名/地址",
                 "text": addr,
                 "winwidth": 200
             }, null, posadd.addr_overlays);
-            map.centerAndZoom(bp, 16);
+            map.centerAndZoom(bp, 15);
         }
         else{
             document.getElementById("result").innerHTML +=  index + " " + addr + ":  " + "无法精确定位" + "</br>";
@@ -182,7 +187,7 @@ function extract_address() {
     var addrs = addrStr.split('\n');
     for(var i = 0; i < addrs.length; i++) {
         var address = addrs[i];
-        geocodeSearch(address, i);
+        geocoderSearch(address, i);
     }
 }
 
@@ -198,39 +203,126 @@ function extract_coords() {
         }
         return;
     }
-    var xyStr = coordStr.split(',');
-    if(xyStr.length != 2) {
+    var coords = parseCoordStr(coordStr);
+    if(coords == null) {
         alert("暂无法定位，请检查输入");
         return;
     }
-    try {
-        var x = parseFloat(xyStr[0]);
-        var y = parseFloat(xyStr[1]);
-        var text = $('#coordSys option:selected').text();//选中的文本
-        var bp = new BMap.Point(x, y);
-        var marker = new BMap.Marker(bp);
-        marker.spaType = 1;
-        addOverlayAndWin(marker, {
-            "name": "坐标",
-            "texts": [coordStr, "坐标系统: " + text],
-            "winwidth": 150
-        }, null, posadd.coord_overlays);
-        map.centerAndZoom(bp, 16);
-    } catch (e) {
-        alert("暂无法定位，请检查输入");
-    }
-
+    showXY(coords[0], coords[1]);
 }
 
 function extract_postcode() {
     var postcode = $("#posttext")[0].value;
-    showPostcode(postcode);
+    var post = parsePostcode(postcode);
+    if(post != null) {
+        showPostcode(postcode);
+    } else {
+        alert("邮编输入有误，请检查");
+    }
 }
 
 function extract_phone_number() {
-    var phoneNumber = $("#phonetext")[0].value;
-    var areaCode = getAreaNumFromPhnoeNum(phoneNumber);
-    showAreacode(areaCode, phoneNumber);
+    var phoneNumbersStr = $("#phonetext")[0].value;
+    var phoneNumbers = phoneNumbersStr.split('\n');
+    for(var i = 0; i < phoneNumbers.length; i++) {
+        var phoneNumber = phoneNumbers[i];
+        var areaCode = parsePhoneAreaCode(phoneNumber);
+        if(areaCode != null) {
+            showAreacode(areaCode, phoneNumber);
+        }
+    }
+}
+
+function extract_ip() {
+    var ipsStr = $("#iptext")[0].value;
+    var ips = ipsStr.split('\n');
+    for(var i = 0; i < ips.length; i++) {
+        var ipStr = ips[i];
+        var ip = parseIP(ipStr);
+        if(ip != null) {
+            showIpArea(ip);
+        }
+    }
+}
+
+function parsePostcode(postStr) {
+    if(postStr === undefined || postStr == null || postStr == "") {
+        return null;
+    }
+    try {
+        var post = postStr.trim();
+        var postNum = post;
+        if(postNum> 99999 && postNum < 1000000) {
+            return post;
+        }
+        return null;
+    } catch (e) {
+        return null;
+    }
+}
+
+function parseCoordStr(coordStr) {
+    if(coordStr === undefined || coordStr == null || coordStr == "") {
+        return null;
+    }
+    try {
+        var coords = coordStr.trim().split(",");
+        var xStr = coords[0].trim();
+        var yStr = coords[1].trim();
+        var x = parseFloat(xStr);
+        var y = parseFloat(yStr);
+        if(isNaN(x) || isNaN(y)) {
+            return null;
+        }
+        return [x, y];
+    } catch (e) {
+        return null;
+    }
+}
+
+function parseIP(ipStr) {
+    if(ipStr === undefined || ipStr == null || ipStr == "") {
+        return null;
+    }
+    try {
+        var numStrs = ipStr.trim().split('.');
+        var ip = "";
+        for (var i = 0; i < 4; i++) {
+            var num = parseInt(numStrs[i].trim());
+            if(num > -1 && num < 256) {
+                ip += num.toString();
+            } else {
+                return null;
+            }
+            if(i != 3) {
+                ip += ".";
+            }
+        }
+        return ip;
+    } catch (e) {
+        return null;
+    }
+    
+}
+
+function parsePhoneAreaCode(phoneNumberStr) {
+    if(phoneNumberStr === undefined || phoneNumberStr == "" || phoneNumberStr == null) {
+        return null;
+    }
+    try {
+        var phoneNumber = phoneNumberStr.trim();
+        var areaCode = getAreaNumFromPhnoeNum(phoneNumber);
+        var areaCodeNum = parseInt(areaCode);
+        if(isNaN(areaCodeNum)) {
+            return null;
+        }
+        if(areaCodeNum > 0 && areaCodeNum < 10000) {
+            return areaCode;
+        }
+        return null;
+    } catch (exp) {
+        return null;
+    }
 }
 
 function getAreaNumFromPhnoeNum(phoneNum) {
@@ -268,9 +360,278 @@ function getAreaNumFromPhnoeNum(phoneNum) {
     return areaCode;
 }
 
-function extract_ip() {
-    var ip = $("#iptext")[0].value;
-    showIpArea(ip);
+function autoAdd() {
+    var text = $("#posGeneral")[0].value;
+    var coords = parseCoordStr(text);
+    if(coords != null) {
+        showXY(coords[0], coords[1]);
+        return;
+    }
+    var post = parsePostcode(text);
+    if(post != null) {
+        showPostcode(post);
+        return;
+    }
+    var ip = parseIP(text);
+    if(ip != null) {
+        showIpArea(ip);
+        return;
+    }
+    var areaCode = parsePhoneAreaCode(text);
+    if(areaCode != null) {
+        showAreacode(areaCode, text);
+        return;
+    }
+    extract_positions(text);
+}
+
+function showXY(x, y) {
+    try {
+        var text = $('#coordSys option:selected').text();
+        var extData = {
+            "name": "坐标",
+            "texts": [x.toString() + ", " + y.toString(), "坐标系统: " + text],
+            "winwidth": 150
+        };
+        var obPoint = new BMap.Point(x, y);
+        var shown = false;
+        if(text != "百度坐标系") {
+            var from = 1;
+            if(text == "WGS 84") {
+                from = 1
+            } else if(text == "火星坐标系") {
+                from = 3;
+            }
+            posadd.convertor.translate([obPoint], from, 5, function (data, status, message) {
+                if (status) {
+                    var bp = obPoint;
+                    var marker = new BMap.Marker(bp);
+                    marker.spaType = 1;
+                    addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
+                    map.centerAndZoom(bp, 15);
+                } else {
+                    var bp = data.points[0];
+                    var marker = new BMap.Marker(bp);
+                    marker.spaType = 1;
+                    addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
+                    map.centerAndZoom(bp, 15);
+                    shown = true;
+                }
+            });
+        } else {
+            var bp = obPoint;
+            var marker = new BMap.Marker(bp);
+            marker.spaType = 1;
+            addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
+            map.centerAndZoom(bp, 15);
+        }
+    } catch (e) {
+        alert("暂无法定位，请检查输入");
+    }
+}
+
+function showAreacode(areacode, phoneNum) {
+    $.ajax({
+        url: 'getCoordsByAreacode.action?areacode=' + areacode,
+        type: 'get',
+        dataType: 'json',
+        success: function (dist) {
+            var simcall = dist['simcall'];
+            var elements = simcall.split(',');
+            var ele_len = elements.length;
+            var province = elements[ele_len - 2];
+            var city = elements[ele_len - 1];
+            var district = "";
+            var areaShape = getShape(province, city, district, "areacode", phoneNum);
+        }, error: function (err_data) {
+            console.log(err_data);
+        }
+    });
+}
+
+function showIpArea(ip) {
+    $.ajax({
+        url: 'getCoordsByIP.action?ip=' + ip,
+        type: 'get',
+        dataType: 'json',
+        success: function (dist) {
+            if(dist['status'] != 0) {
+                return;
+            }
+            var address_detail = dist['content']['address_detail'];
+            var province = address_detail['province'];
+            var city = address_detail['city'];
+            var district = "";
+            getShape(province, city, district, "ip", ip);
+        }, error: function (err_data) {
+            console.log(err_data);
+        }
+    });
+}
+
+function showPostcode(postcode) {
+
+    $.ajax({
+        url: 'getPolygonByPostcode.action?postcode=' + postcode,
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
+            var point_data = data['points'];
+            // if(point_data != null && point_data.length > 0) {
+            //     for (var i = 0; i < point_data.length; i++) {
+            //         var point = point_data[i];
+            //         var location = point['location'];
+            //         var x = location['lng'];
+            //         var y = location['lat'];
+            //         var point = new BMap.Point(x, y);
+            //         map.addOverlay(point);
+            //         if(i == 0) {
+            //             map.centerAndZoom(point, 12);
+            //         }
+            //     }
+            // }
+            var polygon_data = data['polygon'];
+            if(polygon_data != null && polygon_data.length > 2) {
+                var len = polygon_data.length;
+                var polyArr = [];
+                for (var i = 0; i < len; i++) {
+                    var bp = new BMap.Point(polygon_data[i][0], polygon_data[i][1]);
+                    polyArr.push(bp);
+                    if(i == 0) {
+                        map.centerAndZoom(bp, 12);
+                    }
+                }
+                var polygon = new BMap.Polygon(polyArr, {
+                    strokeColor: "blue",
+                    strokeWeight: 2,
+                    strokeOpacity: 0.5
+                });
+                posadd.post_overlays.push(polygon);
+                polygon.spaType = 5;
+                var texts = ["邮编：" + postcode];
+                var postInfo = $("#postAboutText")[0].value;
+                if(postInfo != null && postInfo != '') {
+                    texts.push(postInfo);
+                }
+                addOverlayAndInfowin(polygon, {
+                    "winwidth": 150,
+                    "texts": texts,
+                    "name": "邮编"
+                }, null, posadd.post_overlays);
+            }
+        }, error: function (err_data) {
+            showPostcodeDistrict(postcode);
+//                console.log(err_data);
+        }
+    });
+
+}
+
+function showPostcodeDistrict(postcode) {
+    try {
+        var postNum = parseInt(postcode);
+        var postCityNum = postNum / 1000;
+        var cityPostCode = postCityNum * 1000;
+        var vagePostCode = cityPostCode.toString();
+    } catch (e) {
+        console.log(e);
+        alert("邮编输入有误！");
+        return;
+    }
+    $.ajax({
+        url: 'getDistrictsByPostcode.action?postcode=' + postcode,
+        type: 'get',
+        dataType: 'json',
+        success: function (dists) {
+            var len = dists.length;
+            for (var i = 0; i < len; i++) {
+                var dist = dists[i];
+                var simcall = dist['simcall'];
+                var elements = simcall.split(',');
+                var ele_len = elements.length;
+                var province = elements[ele_len - 2];
+                var city = elements[ele_len - 1];
+                var district = "";
+                var addValue = postcode;
+                var postInfo = $("#postAboutText")[0].value;
+                if(postInfo != null && postInfo != '') {
+                    addValue += ("  (" + postInfo + ")");
+                }
+                getShape(province, city, district, "postcode", addValue);
+            }
+        }, error: function (err_data) {
+            console.log(err_data);
+            alert("邮编输入有误！");
+        }
+    });
+}
+
+function getShape(province, city, district, key, addValue) {
+    var type_show = {
+        "postcode": "邮编",
+        "areacode": "电话",
+        "ip": "IP"
+    }
+    if(city.lastIndexOf("市") == city.length - 1) {
+        city = city.substring(0, city.length - 1);
+    }
+    if(posadd.city_polygons[city] != undefined) {
+        var existOverlay = posadd.city_polygons[city];
+        existOverlay.extData.texts.push("  " + type_show[key] + ": " + addValue);
+        gotoPolyOverlay(existOverlay);
+        return;
+    }
+    $.ajax({
+        url: 'getShape.action?province=' + province + '&city=' + city + '&district=' + district,
+        type: 'get',
+        dataType: 'json',
+        success: function (shp_data) {
+            var shape = shp_data['shape'];
+            var lineArr = JSON.parse(shape);
+            var pointArr = [];
+            for(var i = 0; i < lineArr.length; i++) {
+                var bp = new BMap.Point(lineArr[i][0], lineArr[i][1]);
+                pointArr.push(bp);
+            }
+            var polygon = new BMap.Polygon(pointArr, {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
+            var disText = "";
+            if(province != null && province != "") {
+                disText += "省份:" + province + "  ";
+            }
+            if(city != null && city != "") {
+                disText += "城市:" + city + "  ";
+            }
+            if(district != null && district != "") {
+                disText += "地区:" + district + "  ";
+            }
+            var texts = [disText, type_show[key] + ": " + addValue];
+            var list = null;
+            if(key == "postcode") {
+                // texts = ["邮编: " + value, disText];
+                list = posadd.post_overlays;
+            } else if(key == "areacode") {
+                // texts = ["区号: " + value, disText];
+                list = posadd.phone_overlays;
+            } else if(key == "ip") {
+                // texts = ["IP: " + value, disText];
+                list = posadd.ip_overlays;
+            } else {
+
+            }
+            var extData = {
+                "name": city,
+                "winwidth": 200,
+                "texts": texts
+            };
+            polygon.spaType = 5;
+            polygon.name = city;
+            posadd.city_polygons[city] = polygon;
+            addOverlayAndInfowin(polygon, extData, null, list);
+            gotoPolyOverlay(polygon, 9);
+        }, error: function (err) {
+            console.log(err);
+        }
+    });
 }
 
 function clear_address() {
@@ -389,200 +750,6 @@ function getObjectURL(file) {
     return url;
 }
 
-function showAreacode(areacode, phoneNum) {
-    $.ajax({
-        url: 'getCoordsByAreacode.action?areacode=' + areacode,
-        type: 'get',
-        dataType: 'json',
-        success: function (dist) {
-            var simcall = dist['simcall'];
-            var elements = simcall.split(',');
-            var ele_len = elements.length;
-            var province = elements[ele_len - 2];
-            var city = elements[ele_len - 1];
-            var district = "";
-            var areaShape = getShape(province, city, district, "areacode", phoneNum);
-        }, error: function (err_data) {
-            console.log(err_data);
-        }
-    });
-}
-
-function showIpArea(ip) {
-    $.ajax({
-        url: 'getCoordsByIP.action?ip=' + ip,
-        type: 'get',
-        dataType: 'json',
-        success: function (dist) {
-            if(dist['status'] != 0) {
-                return;
-            }
-            var address_detail = dist['content']['address_detail'];
-            var province = address_detail['province'];
-            var city = address_detail['city'];
-            var district = "";
-            getShape(province, city, district, "ip", ip);
-        }, error: function (err_data) {
-            console.log(err_data);
-        }
-    });
-}
-
-function showPostcode(postcode) {
-
-    $.ajax({
-        url: 'getPolygonByPostcode.action?postcode=' + postcode,
-        type: 'get',
-        dataType: 'json',
-        success: function (data) {
-            var point_data = data['points'];
-            // if(point_data != null && point_data.length > 0) {
-            //     for (var i = 0; i < point_data.length; i++) {
-            //         var point = point_data[i];
-            //         var location = point['location'];
-            //         var x = location['lng'];
-            //         var y = location['lat'];
-            //         var point = new BMap.Point(x, y);
-            //         addWuqiyiMarker(point);
-            //         if(i == 0) {
-            //             map.centerAndZoom(point, 12);
-            //         }
-            //     }
-            // }
-            var polygon_data = data['polygon'];
-            if(polygon_data != null && polygon_data.length > 2) {
-                var len = polygon_data.length;
-                var polyArr = [];
-                for (var i = 0; i < len; i++) {
-                    var bp = new BMap.Point(polygon_data[i][0], polygon_data[i][1]);
-                    polyArr.push(bp);
-                    if(i == 0) {
-                        map.centerAndZoom(bp, 12);
-                    }
-                }
-                var polygon = new BMap.Polygon(polyArr, {
-                    strokeColor: "blue",
-                    strokeWeight: 2,
-                    strokeOpacity: 0.5
-                });
-                posadd.post_overlays.push(polygon);
-                polygon.spaType = 5;
-                addOverlayAndWin(polygon, {
-                    "winwidth": 150,
-                    "texts": ["邮编：" + postcode],
-                    "name": "邮编"
-                }, null, posadd.post_overlays);
-            }
-        }, error: function (err_data) {
-            showPostcodeDistrict(postcode);
-//                console.log(err_data);
-        }
-    });
-
-}
-
-function showPostcodeDistrict(postcode) {
-    try {
-        var postNum = parseInt(postcode);
-        var postCityNum = postNum / 1000;
-        var cityPostCode = postCityNum * 1000;
-        var vagePostCode = cityPostCode.toString();
-    } catch (e) {
-        console.log(e);
-        alert("邮编输入有误！");
-        return;
-    }
-    $.ajax({
-        url: 'getDistrictsByPostcode.action?postcode=' + postcode,
-        type: 'get',
-        dataType: 'json',
-        success: function (dists) {
-            var len = dists.length;
-            for (var i = 0; i < len; i++) {
-                var dist = dists[i];
-                var simcall = dist['simcall'];
-                var elements = simcall.split(',');
-                var ele_len = elements.length;
-                var province = elements[ele_len - 2];
-                var city = elements[ele_len - 1];
-                var district = "";
-                getShape(province, city, district, "postcode", postcode);
-            }
-        }, error: function (err_data) {
-            console.log(err_data);
-            alert("邮编输入有误！");
-        }
-    });
-}
-
-function getShape(province, city, district, key, addValue) {
-    var type_show = {
-        "postcode": "邮编",
-        "areacode": "电话",
-        "ip": "IP"
-    }
-    if(city.lastIndexOf("市") == city.length - 1) {
-        city = city.substring(0, city.length - 1);
-    }
-    if(posadd.city_polygons[city] != undefined) {
-        var existOverlay = posadd.city_polygons[city];
-        existOverlay.extData.texts.push("  " + type_show[key] + ": " + addValue);
-        gotoPolyOverlay(existOverlay);
-        return;
-    }
-    $.ajax({
-        url: 'getShape.action?province=' + province + '&city=' + city + '&district=' + district,
-        type: 'get',
-        dataType: 'json',
-        success: function (shp_data) {
-            var shape = shp_data['shape'];
-            var lineArr = JSON.parse(shape);
-            var pointArr = [];
-            for(var i = 0; i < lineArr.length; i++) {
-                var bp = new BMap.Point(lineArr[i][0], lineArr[i][1]);
-                pointArr.push(bp);
-            }
-            var polygon = new BMap.Polygon(pointArr, {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
-            var disText = "";
-            if(province != null && province != "") {
-                disText += "省份:" + province + "  ";
-            }
-            if(city != null && city != "") {
-                disText += "城市:" + city + "  ";
-            }
-            if(district != null && district != "") {
-                disText += "地区:" + district + "  ";
-            }
-            var texts = [type_show[key] + ": " + addValue, disText];
-            var list = null;
-            if(key == "postcode") {
-                // texts = ["邮编: " + value, disText];
-                list = posadd.post_overlays;
-            } else if(key == "areacode") {
-                // texts = ["区号: " + value, disText];
-                list = posadd.phone_overlays;
-            } else if(key == "ip") {
-                // texts = ["IP: " + value, disText];
-                list = posadd.ip_overlays;
-            } else {
-
-            }
-            var extData = {
-                "name": city,
-                "winwidth": 200,
-                "texts": texts
-            };
-            polygon.spaType = 5;
-            polygon.name = city;
-            posadd.city_polygons[city] = polygon;
-            addOverlayAndWin(polygon, extData, null, list);
-            gotoPolyOverlay(polygon, 9);
-        }, error: function (err) {
-            console.log(err);
-        }
-    });
-}
-
 function gotoPolyOverlay(overlay, scale) {
     openInfoWin({target: overlay});
     // var path = overlay.getPath();
@@ -642,7 +809,7 @@ function initPointGeoEntities() {
                     var Point = new BMap.Point(X, Y);
                     var marker = new BMap.Marker(Point);
                     marker.spaType = 1;
-                    addOverlayAndWin(marker, entity, content, geoEntities);
+                    addOverlayAndInfowin(marker, entity, content, geoEntities);
                 }
             }
             setTimeout(initGeoEntities, 1000);
@@ -671,26 +838,7 @@ function toShowMapv(checkbox) {
     }
 }
 
-function isDefaultSearch(searchText) {
-    var list = [['武汉', '大东门', '火灾'], ['武汉', '火灾', '2月27']];
-    for(var i = 0; i < list.length; i++) {
-        var words = list[i];
-        var flag = true;
-        for(var j = 0; j < words.length; j++) {
-            var word = words[j];
-            if(searchText.indexOf(word) < 0) {
-                flag = false;
-                break;
-            }
-        }
-        if(flag) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function doSearchAll() {
+function openDemoWebWindow() {
     var word = $("#posGeneral")[0].value;
     var idx = 0;
     try {
@@ -712,6 +860,25 @@ function doSearchAll() {
         }
 
     });
+}
+
+function isDefaultSearch(searchText) {
+    var list = [['武汉', '大东门', '火灾'], ['武汉', '火灾', '2月27']];
+    for(var i = 0; i < list.length; i++) {
+        var words = list[i];
+        var flag = true;
+        for(var j = 0; j < words.length; j++) {
+            var word = words[j];
+            if(searchText.indexOf(word) < 0) {
+                flag = false;
+                break;
+            }
+        }
+        if(flag) {
+            return true;
+        }
+    }
+    return false;
 }
 
 //	在右边结果栏显示若干条结果，muldata为json
@@ -842,19 +1009,19 @@ function testSearchToMap0(searchAdds) {
             var Point = new BMap.Point(X, Y);
             var marker = new BMap.Marker(Point);
             marker.spaType = 1;
-            addOverlayAndWin(marker, entity, content, geoEntities);
+            addOverlayAndInfowin(marker, entity, content, geoEntities);
         }
         var lineStr = entity['line'];
         if(lineStr != null && lineStr != undefined) {
             var polyline = getFigureJson(lineStr, "line", geoEntities);
             polyline.spaType = 3;
-            addOverlayAndWin(polyline, entity, content, geoEntities);
+            addOverlayAndInfowin(polyline, entity, content, geoEntities);
         }
         var polygonStr = entity['polygon'];
         if(polygonStr != null && polygonStr != undefined) {
             var polygon = getFigureJson(polygonStr, "polygon");
             polygon.spaType = 5;
-            addOverlayAndWin(polygon, entity, content, geoEntities);
+            addOverlayAndInfowin(polygon, entity, content, geoEntities);
         }
         var shapes = entity['shapes'];
         if(shapes != null && shapes != undefined && shapes.length > 0) {
@@ -863,7 +1030,7 @@ function testSearchToMap0(searchAdds) {
                 var spaType = shapeJson['spaType'];
                 var shape = shapeJson['shape'];
                 var overlay = getFigureByStr(shape, spaType);
-                addOverlayAndWin(polygon, entity, content, geoEntities);
+                addOverlayAndInfowin(polygon, entity, content, geoEntities);
             }
         }
         if((entity['shapes'] == null || entity['shapes'] == "") && (entity['position'] == null || entity['position'] == "")
@@ -877,12 +1044,12 @@ function testSearchToMap0(searchAdds) {
                     console.log(rs.boundaries[i]);
                     var distPolygon = new BMap.Polygon(rs.boundaries[i]);
                     distPolygon.spaType = 5;
-                    addOverlayAndWin(distPolygon, entity, content, geoEntities);
+                    addOverlayAndInfowin(distPolygon, entity, content, geoEntities);
                 }
             });
             // var distPolygon = getDistBaiduPolygon(entity['name']);
             // distPolygon.spaType = 5;
-            // addOverlayAndWin(distPolygon, entity, content, geoEntities);
+            // addOverlayAndInfowin(distPolygon, entity, content, geoEntities);
         }
     }
 }
