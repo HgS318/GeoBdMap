@@ -3,6 +3,7 @@ package whu.eres.cartolab.geo;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.geotools.geometry.jts.coordinatesequence.PackedCSBuilder;
+import org.geotools.resources.NIOUtilities;
 import org.omg.CORBA.OBJ_ADAPTER;
 import whu.eres.cartolab.db.esri.ShapeFile;
 import whu.eres.cartolab.db.mysql.connections.MysqlLocalConnection;
@@ -39,6 +40,8 @@ public class GeoInfo {
     public long flashLength;
     public Date time;
     public Date obsoleteTime;
+
+    public boolean dealed = false;
 
     public GeoInfo() {
 
@@ -114,6 +117,106 @@ public class GeoInfo {
         return "";
     }
 
+    public boolean canSwallow(GeoInfo other, int spaAdd, int timaAdd,
+            Date moment, Date start, Date end) {
+        int thisid = Math.abs(this.geid);
+        int otherid = Math.abs(other.geid);
+        if(thisid > otherid) {  //  后面的信息要素不能融合前面的信息要素
+            return false;
+        }
+        if(spaAdd == 2) {   //  下确共位
+            if(this.spaType  == other.spaType) {
+                if(spaType == 3) {  //  线暂时不做下确共位叠加
+
+                    return false;
+                }
+            } else {
+                if(this.spaType != 5 || other.spaType != 1) {   //  只有面可以融合点
+                    return false;
+                }
+            }
+        }
+        if(spaAdd == 1) {   //  上确共位
+
+        }
+        if(timaAdd == 1) {  //  串联叠加
+            return true;
+        } else if(timaAdd == 2) {   //  并联叠加
+            if(this.time == null) {
+                return true;
+            }
+            if(this.time.equals(other.time)) {
+                return true;
+            }
+            return false;
+        } else if(moment != null) { //  瞬间叠加
+            if(moment.equals(this.time) && moment.equals(other.time)) {
+                return true;
+            }
+            return false;
+        } else if(start != null && end != null) {   //  指定时间叠加
+            if(this.time == null || other.time == null) {
+                return false;
+            }
+            long thisTime = this.time.getTime();
+            long otherTime = other.time.getTime();
+            long startTime = start.getTime();
+            long endTime = end.getTime();
+            if(thisTime >= startTime && thisTime <= endTime && otherTime >= startTime && otherTime <= endTime) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public List<GeoEntity> posadd(List<GeoInfo> infos, int spaAdd, int timaAdd,
+                              Date moment, Date start, Date end) {
+        List<GeoEntity> entities = new ArrayList<>();
+        for(GeoInfo info : infos) {
+            if(spaAdd == 1) {
+                if(info.spaType == 3 && info.geid < 0) {
+                    info.dealed = true;
+                } else {
+                    info.dealed = false;
+                }
+            } else if(spaAdd == 2) {
+                if(info.spaType == 3 && info.geid > 0) {
+                    info.dealed = true;
+                } else {
+                    info.dealed = false;
+                }
+            }
+        }
+        int infoCount = infos.size();
+
+        for(int i = 0; i < infoCount; i++) {
+            GeoInfo thisInfo = infos.get(i);
+            if(thisInfo.dealed) {
+                continue;
+            }
+            List<GeoInfo> group = new ArrayList<>();
+            group.add(thisInfo);
+            for(int j = i + 1; j < infoCount; j++) {
+                GeoInfo other = infos.get(j);
+                if(other.dealed) {
+                    continue;
+                }
+                if(thisInfo.canSwallow(other, spaAdd, timaAdd, moment, start, end)) {
+                    group.add(other);
+                    other.dealed = true;
+                }
+            }
+            GeoEntity entity = new GeoEntity(group);
+            thisInfo.dealed = true;
+        }
+        return entities;
+    }
+
+    public List<GeoInfo> getGeoInfosByIdsString(String idsStr) {
+        return null;
+    }
+
 //    public String getImagesStr() {
 //        StringBuffer buf = new StringBuffer();
 //        for(String img : images) {
@@ -146,8 +249,8 @@ public class GeoInfo {
         obj.put("modelimg", modelimg);
         obj.put("flash", flash);
         obj.put("flashLength", flashLength);
-        obj.put("time", time);
-        obj.put("obsoleteTime", obsoleteTime);
+        obj.put("time", time == null ? null : time.toString());
+        obj.put("obsoleteTime", time == null ? null : time.toString());
         return obj;
     }
 

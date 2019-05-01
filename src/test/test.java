@@ -268,18 +268,21 @@ public class test {
     public static String getAllInfo() {
         String sql = "SELECT * from info";
         ResultSet rs = MysqlLocalConnection.executeQuery(sql);
-        JSONArray results = new JSONArray();
+        List<GeoInfo> infos = new ArrayList<>();
         try {
             int i = 0;
             while (rs.next()) {
                 GeoInfo geoInfo = new GeoInfo(rs);
-                System.out.println(i + "\t-\t" + geoInfo.infoAmount());
+                infos.add(geoInfo);
+//                System.out.println(i + "\t-\t" + geoInfo.infoAmount());
                 i++;
             }
             rs.close();
         } catch (Exception se) {
             se.printStackTrace();
         }
+        JSONArray results = GeoInfo.toJSONList(infos);
+        System.out.println(results);
         return results.toString();
     }
 
@@ -352,9 +355,9 @@ public class test {
 
     public static void main(String[] args) throws Exception {
 //        getAllSynData();
-//        getAllInfo();
+        getAllInfo();
 //        getAllGeoEntities();
-        WebCollectorTest();
+//        WebCollectorTest();
     }
 
 
