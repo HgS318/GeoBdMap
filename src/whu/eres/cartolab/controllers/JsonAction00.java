@@ -3,11 +3,9 @@ package whu.eres.cartolab.controllers;
 import java.io.*;
 import java.util.*;
 import javax.servlet.http.*;
-import java.net.*;
 import org.apache.struts2.ServletActionContext;
 import net.sf.json.*;
 
-import whu.eres.cartolab.db.esri.ShapeFile;
 import whu.eres.cartolab.db.mysql.queries.*;
 
 public class JsonAction00 {
@@ -212,19 +210,6 @@ public class JsonAction00 {
         }
         return null;
     }
-
-//    public String getEasyGeonamesByWords() {
-//        HttpServletRequest request = ServletActionContext.getRequest();
-//        try {
-//            String words_str = request.getParameter("initial"), str = null;
-//            str = PlaceQuery.getEasyGeonamesByWords(words_str);
-//            toBeJson(str);
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//            return ex.getMessage();
-//        }
-//        return null;
-//    }
 
     public String getGeonameByNickname() {
         HttpServletRequest request = ServletActionContext.getRequest();

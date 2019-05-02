@@ -9,14 +9,77 @@ import net.sf.json.*;
 
 import whu.eres.cartolab.db.esri.*;
 import whu.eres.cartolab.geo.*;
+import whu.eres.cartolab.db.mysql.queries.*;
 
 public class JsonAction01 {
+
+    public String posadd() {
+        HttpServletRequest request = ServletActionContext.getRequest();
+        try {
+            String spaMethod = request.getParameter("spaMethod");
+            String timeMethod = request.getParameter("timeMethod");
+            String time1 = request.getParameter("time1");
+            String time2 = request.getParameter("time2");
+            String ids = request.getParameter("ids");
+            String str = GeoInfoQuery.posadd(spaMethod, timeMethod, time1, time2, ids);
+            toBeJson(str);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ex.getMessage();
+        }
+        return null;
+    }
+
+    public String getAllGeoInfo() {
+        try {
+            String str = GeoInfoQuery.getAllGeoInfo();
+            toBeJson(str);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ex.getMessage();
+        }
+        return null;
+    }
+
+    public String getAllGeoEntities() {
+        try {
+            String str = GeoInfoQuery.getAllGeoEntities();
+            toBeJson(str);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ex.getMessage();
+        }
+        return null;
+    }
+
+    public String getPointGeoEntities() {
+        try {
+            String str = GeoInfoQuery.getPointGeoEntities();
+            toBeJson(str);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ex.getMessage();
+        }
+        return null;
+    }
+
+    //  获取所有综合信息(旧版syn_data)
+    public String getAllSynData() {
+        try {
+            String str = GeoInfoQuery.getAllSynData();
+            JsonAction00.toBeJson(str);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ex.getMessage();
+        }
+        return null;
+    }
 
     public String extractContentSimple() {
         HttpServletRequest request = ServletActionContext.getRequest();
         try {
             String url = request.getParameter("url");
-            String str = test.test.extractContentSimple(url);
+            String str = BaiduSearchQuery.extractContentSimple(url);
             toBeText(str);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -28,7 +91,7 @@ public class JsonAction01 {
 
     public String getFireTraffics() {
         try {
-            String str = test.test.getFireTraffics();
+            String str = BaiduSearchQuery.getFireTraffics();
             toBeJson(str);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -39,29 +102,7 @@ public class JsonAction01 {
 
     public String getAllFireLocalSites() {
         try {
-            String str = test.test.getAllFireLocalSites();
-            toBeJson(str);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return ex.getMessage();
-        }
-        return null;
-    }
-
-    public String getPointGeoEntities() {
-        try {
-            String str = test.test.getPointGeoEntities();
-            toBeJson(str);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return ex.getMessage();
-        }
-        return null;
-    }
-
-    public String getAllGeoEntities() {
-        try {
-            String str = test.test.getAllGeoEntities();
+            String str = BaiduSearchQuery.getAllFireLocalSites();
             toBeJson(str);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -336,18 +377,6 @@ public class JsonAction01 {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        return null;
-    }
-
-    //  获取所有综合信息
-    public String getAllSynData() {
-        try {
-            String str = test.test.getAllSynData();
-            JsonAction00.toBeJson(str);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return ex.getMessage();
         }
         return null;
     }

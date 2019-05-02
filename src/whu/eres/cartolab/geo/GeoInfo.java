@@ -14,9 +14,10 @@ import java.io.*;
 
 public class GeoInfo {
 
-//    int infoId;
+    public int infoId;
     public int id;
     public int geid;
+    public int lowerid;
     public String name;
     public String address;
     public double x;
@@ -50,6 +51,8 @@ public class GeoInfo {
     public GeoInfo(ResultSet rs) {
         try{
             id = rs.getInt("id");
+            infoId = rs.getInt("infoId");
+            lowerid = rs.getInt("lowerid");
 //            infoId = rs.getInt("infoId");
             geid = rs.getInt("geid");
             name = rs.getString("name");
@@ -117,106 +120,6 @@ public class GeoInfo {
         return "";
     }
 
-    public boolean canSwallow(GeoInfo other, int spaAdd, int timaAdd,
-            Date moment, Date start, Date end) {
-        int thisid = Math.abs(this.geid);
-        int otherid = Math.abs(other.geid);
-        if(thisid > otherid) {  //  后面的信息要素不能融合前面的信息要素
-            return false;
-        }
-        if(spaAdd == 2) {   //  下确共位
-            if(this.spaType  == other.spaType) {
-                if(spaType == 3) {  //  线暂时不做下确共位叠加
-
-                    return false;
-                }
-            } else {
-                if(this.spaType != 5 || other.spaType != 1) {   //  只有面可以融合点
-                    return false;
-                }
-            }
-        }
-        if(spaAdd == 1) {   //  上确共位
-
-        }
-        if(timaAdd == 1) {  //  串联叠加
-            return true;
-        } else if(timaAdd == 2) {   //  并联叠加
-            if(this.time == null) {
-                return true;
-            }
-            if(this.time.equals(other.time)) {
-                return true;
-            }
-            return false;
-        } else if(moment != null) { //  瞬间叠加
-            if(moment.equals(this.time) && moment.equals(other.time)) {
-                return true;
-            }
-            return false;
-        } else if(start != null && end != null) {   //  指定时间叠加
-            if(this.time == null || other.time == null) {
-                return false;
-            }
-            long thisTime = this.time.getTime();
-            long otherTime = other.time.getTime();
-            long startTime = start.getTime();
-            long endTime = end.getTime();
-            if(thisTime >= startTime && thisTime <= endTime && otherTime >= startTime && otherTime <= endTime) {
-                return true;
-            }
-            return false;
-        }
-        return false;
-    }
-
-    public List<GeoEntity> posadd(List<GeoInfo> infos, int spaAdd, int timaAdd,
-                              Date moment, Date start, Date end) {
-        List<GeoEntity> entities = new ArrayList<>();
-        for(GeoInfo info : infos) {
-            if(spaAdd == 1) {
-                if(info.spaType == 3 && info.geid < 0) {
-                    info.dealed = true;
-                } else {
-                    info.dealed = false;
-                }
-            } else if(spaAdd == 2) {
-                if(info.spaType == 3 && info.geid > 0) {
-                    info.dealed = true;
-                } else {
-                    info.dealed = false;
-                }
-            }
-        }
-        int infoCount = infos.size();
-
-        for(int i = 0; i < infoCount; i++) {
-            GeoInfo thisInfo = infos.get(i);
-            if(thisInfo.dealed) {
-                continue;
-            }
-            List<GeoInfo> group = new ArrayList<>();
-            group.add(thisInfo);
-            for(int j = i + 1; j < infoCount; j++) {
-                GeoInfo other = infos.get(j);
-                if(other.dealed) {
-                    continue;
-                }
-                if(thisInfo.canSwallow(other, spaAdd, timaAdd, moment, start, end)) {
-                    group.add(other);
-                    other.dealed = true;
-                }
-            }
-            GeoEntity entity = new GeoEntity(group);
-            thisInfo.dealed = true;
-        }
-        return entities;
-    }
-
-    public List<GeoInfo> getGeoInfosByIdsString(String idsStr) {
-        return null;
-    }
-
 //    public String getImagesStr() {
 //        StringBuffer buf = new StringBuffer();
 //        for(String img : images) {
@@ -228,16 +131,20 @@ public class GeoInfo {
     public JSONObject toJSONObject() {
         String shape = getShape();
 //        String imagesStr = getImagesStr();
+        InfoAmount infoAmount = infoAmount();
         JSONArray imageJson = toJSONArray(images);
         JSONObject obj = new JSONObject();
-        obj.put("id", id);
+        obj.put("id", infoId);
+        obj.put("infoId", infoId);
+        obj.put("geid", geid);
         obj.put("name", name);
         obj.put("address", address);
         obj.put("x", x);
         obj.put("y", y);
         obj.put("position", position);
-        obj.put("spaType", spaType);
+        obj.put("line", line);
         obj.put("polygon", polygon);
+        obj.put("spaType", spaType);
         obj.put("shape", shape);
         obj.put("text", text);
         obj.put("images", imageJson);
@@ -251,6 +158,65 @@ public class GeoInfo {
         obj.put("flashLength", flashLength);
         obj.put("time", time == null ? null : time.toString());
         obj.put("obsoleteTime", time == null ? null : time.toString());
+        obj.put("infoAmount", infoAmount.toJson());
+        return obj;
+    }
+
+    public JSONObject toJSONObjectLikeEntity() {
+        String shape = getShape();
+//        String imagesStr = getImagesStr();
+        InfoAmount infoAmount = infoAmount();
+        JSONArray imageJson = toJSONArray(images);
+        JSONObject obj = new JSONObject();
+        obj.put("id", infoId);
+        obj.put("infoId", infoId);
+        obj.put("geid", geid);
+        obj.put("name", name);
+        obj.put("address", address);
+        obj.put("x", x);
+        obj.put("y", y);
+        obj.put("position", position);
+        obj.put("line", line);
+        obj.put("polygon", polygon);
+        obj.put("spaType", spaType);
+        obj.put("shape", shape);
+//        obj.put("texts", text);
+        if(text != null && !"".equals(text)) {
+            obj.put("texts", new String[] {text});
+        } else {
+            obj.put("texts", text);
+        }
+        obj.put("images", imageJson);
+        if(vedio != null && !"".equals(vedio)) {
+            obj.put("vedios", new String[] {vedio});
+        } else {
+            obj.put("vedios", vedio);
+        }
+        obj.put("vedioLength", vedioLength);
+//        obj.put("audios", new String[] {audio});
+        if(audio != null && !"".equals(audio)) {
+            obj.put("audios", new String[] {audio});
+        } else {
+            obj.put("audios", audio);
+        }
+        obj.put("audioLength", audioLength);
+//        obj.put("models", new String[] {model});
+        if(model != null && !"".equals(model)) {
+            obj.put("models", new String[] {model + ":" + modelimg});
+        } else {
+            obj.put("models", model);
+        }
+        obj.put("modelimg", modelimg);
+//        obj.put("flashes", new String[] {flash});
+        if(flash != null && !"".equals(flash)) {
+            obj.put("flashes", new String[] {flash});
+        } else {
+            obj.put("flashes", flash);
+        }
+        obj.put("flashLength", flashLength);
+        obj.put("time", time == null ? null : time.toString());
+        obj.put("obsoleteTime", time == null ? null : time.toString());
+        obj.put("infoAmount", infoAmount.toJson());
         return obj;
     }
 
@@ -272,19 +238,30 @@ public class GeoInfo {
         return str;
     }
 
-    public static JSONArray toJSONList(List<GeoInfo> infos) {
+    public String toJsonLikeEntity() {
+        JSONObject obj = toJSONObjectLikeEntity();
+        String str = obj.toString();
+        return str;
+    }
+
+    public static JSONArray toJSONList(List<GeoInfo> infos, boolean likeEntity) {
         JSONArray jsonArray = new JSONArray();
         int i = 0;
         for(GeoInfo info : infos) {
-            JSONObject obj = info.toJSONObject();
+            JSONObject obj = null;
+            if(likeEntity) {
+                obj = info.toJSONObjectLikeEntity();
+            } else {
+                obj = info.toJSONObject();
+            }
             jsonArray.put(i, obj);
             i++;
         }
         return jsonArray;
     }
 
-    public static String toJson(List<GeoInfo> infos) {
-        JSONArray jsonArray = toJSONList(infos);
+    public static String toJson(List<GeoInfo> infos, boolean likeEntity) {
+        JSONArray jsonArray = toJSONList(infos, likeEntity);
         String str = jsonArray.toString();
         return str;
     }
@@ -334,6 +311,147 @@ public class GeoInfo {
         long modelAmount = modelInfoAmount();
         InfoAmount ia = new InfoAmount(textAmount, figureAmount, imageAmount, vedioLength, audioLength, flashLength, modelAmount);
         return ia;
+    }
+
+    public boolean canSwallow(GeoInfo other, int spaAdd, int timeAdd,
+                              Date moment, Date start, Date end) {
+        if(spaAdd == 1 && this.geid != other.geid) {
+            return false;
+        }
+        if(spaAdd == 2 && this.lowerid != other.lowerid) {
+            return false;
+        }
+        int thisid = Math.abs(this.infoId);
+        int otherid = Math.abs(other.infoId);
+        if(spaAdd == 1 && thisid > otherid) {
+            return false;
+        }
+        if(spaAdd == 2) {   //  下确共位
+            if(this.spaType  == other.spaType) {
+                if(thisid < otherid) {  //  下确共位中，只有大号能吞并小号
+                    return false;
+                }
+            } else {
+                if(this.spaType != 1 || other.spaType != 5) {   //  下确共位的非同类型中，只有点可以融合面
+                    return false;
+                }
+            }
+        }
+        if(timeAdd == 1) {  //  串联叠加
+            return true;
+        } else if(timeAdd == 2) {   //  并联叠加
+            if(this.time == null) {
+                return true;
+            }
+            if(this.time.equals(other.time)) {
+                return true;
+            }
+            return false;
+        } else if(moment != null) { //  瞬间叠加
+            if(moment.equals(this.time) && moment.equals(other.time)) {
+                return true;
+            }
+            return false;
+        } else if(start != null && end != null) {   //  指定时间叠加
+            if(this.time == null || other.time == null) {
+                return false;
+            }
+            long thisTime = this.time.getTime();
+            long otherTime = other.time.getTime();
+            long startTime = start.getTime();
+            long endTime = end.getTime();
+            if(thisTime >= startTime && thisTime <= endTime && otherTime >= startTime && otherTime <= endTime) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public static List<GeoEntity> posadd(List<GeoInfo> infos, int spaAdd, int timaAdd,
+                                         Date moment, Date start, Date end) {
+        List<GeoEntity> entities = new ArrayList<>();
+        for(GeoInfo info : infos) {
+            if(timaAdd == 3) {
+                if(info.time.getTime() == moment.getTime()) {
+                    info.dealed = false;
+                } else {
+                    info.dealed = true;
+                }
+            } else if(timaAdd == 4) {
+                long time =info.time.getTime();
+                if(time >= start.getTime() && time <= end.getTime()) {
+                    info.dealed = false;
+                } else {
+                    info.dealed = true;
+                }
+            }
+        }
+        int infoCount = infos.size();
+
+        //  第一步：先解决infoId<0的要素
+        for(int i = 0; i < infoCount; i++) {
+            GeoInfo thisInfo = infos.get(i);
+            if(thisInfo.infoId > 0) {
+                continue;
+            }
+            List<GeoInfo> group = new ArrayList<>();
+            group.add(thisInfo);
+            for(int j = 0; j < infoCount; j++) {
+                if(i == j) {
+                    continue;
+                }
+                GeoInfo other = infos.get(j);
+                if(other.dealed || other.infoId < 0) {
+                    continue;
+                }
+                if(thisInfo.canSwallow(other, spaAdd, timaAdd, moment, start, end)) {
+                    group.add(other);
+                    other.dealed = true;
+                }
+            }
+            if(group.size() > 1) {
+                if(spaAdd == 1) {
+                    GeoEntity entity = new GeoEntity(group);
+                    entities.add(entity);
+                } else if(spaAdd == 2) {
+                    List<GeoInfo> singleList = new ArrayList<>();
+                    singleList.add(thisInfo);
+                    GeoEntity entity = new GeoEntity(singleList);
+                    entities.add(entity);
+                }
+                thisInfo.dealed = true;
+            }
+        }
+        //  第二步，解决infoId > 0的普通要素
+        for(int i = 0; i < infoCount; i++) {
+            GeoInfo thisInfo = infos.get(i);
+            if(thisInfo.dealed || thisInfo.infoId < 0) {
+                continue;
+            }
+            List<GeoInfo> group = new ArrayList<>();
+            group.add(thisInfo);
+            for(int j = i + 1; j < infoCount; j++) {
+                GeoInfo other = infos.get(j);
+                if(other.dealed) {
+                    continue;
+                }
+                if(thisInfo.canSwallow(other, spaAdd, timaAdd, moment, start, end)) {
+                    if(spaAdd == 1 || (spaAdd == 2 && other.spaType == 1)) {
+                        group.add(other);
+                    }
+                    other.dealed = true;
+                }
+            }
+            GeoEntity entity = new GeoEntity(group);
+            entities.add(entity);
+            thisInfo.dealed = true;
+        }
+        return entities;
+    }
+
+    public static List<GeoInfo> getGeoInfosByIdsString(String idsStr) {
+        return null;
     }
 
 }

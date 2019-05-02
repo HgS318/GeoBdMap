@@ -16,10 +16,12 @@
 
     <package name="p1m" extends="default">
 
+        <action name="posadd" class="whu.eres.cartolab.controllers.JsonAction01" method="posadd" />
         <action name="extractContentSimple" class="whu.eres.cartolab.controllers.JsonAction01" method="extractContentSimple" />
         <action name="getFireTraffics" class="whu.eres.cartolab.controllers.JsonAction01" method="getFireTraffics" />
         <action name="getAllFireLocalSites" class="whu.eres.cartolab.controllers.JsonAction01" method="getAllFireLocalSites" />
         <action name="getPointGeoEntities" class="whu.eres.cartolab.controllers.JsonAction01" method="getPointGeoEntities" />
+        <action name="getAllGeoInfo" class="whu.eres.cartolab.controllers.JsonAction01" method="getAllGeoInfo" />
         <action name="getAllGeoEntities" class="whu.eres.cartolab.controllers.JsonAction01" method="getAllGeoEntities" />
         <action name="getAllSynData" class="whu.eres.cartolab.controllers.JsonAction01" method="getAllSynData" />
         <action name="getCoordsByPostcode" class="whu.eres.cartolab.controllers.JsonAction01" method="getCoordsByPostcode" />
@@ -59,7 +61,6 @@
         <action name="getEasyGeonamesByBigType" class="whu.eres.cartolab.controllers.JsonAction00" method="getEasyGeonamesByBigType" />
         <action name="getEasyGeonamesByType" class="whu.eres.cartolab.controllers.JsonAction00" method="getEasyGeonamesByType" />
         <action name="getEasyGeonamesByInitial" class="whu.eres.cartolab.controllers.JsonAction00" method="getEasyGeonamesByInitial" />
-        <action name="getEasyGeonamesByWords" class="whu.eres.cartolab.controllers.JsonAction00" method="getEasyGeonamesByWords" />
         <action name="getGeonameSpecificInfo" class="whu.eres.cartolab.controllers.JsonAction00" method="getGeonameSpecificInfo" />
 
         <action name="getGeonameByNickname" class="whu.eres.cartolab.controllers.JsonAction00" method="getGeonameByNickname" />

@@ -269,7 +269,7 @@ div.tabContainer{
  .list-group-item {
      position: relative;
      display: block;
-     padding: 8px 5px;
+     padding: 4px 2px;
      margin-bottom: -1px;
      background-color: #fff;
      border: 1px solid #ddd;

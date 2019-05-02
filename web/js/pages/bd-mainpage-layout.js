@@ -12,6 +12,36 @@ function getQueryString(name) {
     return result[1];
 }
 
+function initElements() {
+
+    var curr_time = new Date();
+    $("#starttime1").datebox("setValue",myformatter(curr_time));
+    $("#endtime1").datebox("setValue",myformatter(curr_time));
+    $("#starttime2").datebox("setValue",myformatter(curr_time));
+    $("#endtime2").datebox("setValue",myformatter(curr_time));
+}
+
+
+function myformatter(date){
+    var y = date.getFullYear();
+    var m = date.getMonth()+1;
+    var d = date.getDate();
+    return y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d);
+}
+
+function myparser(s){
+    if (!s) return new Date();
+    var ss = (s.split('-'));
+    var y = parseInt(ss[0],10);
+    var m = parseInt(ss[1],10);
+    var d = parseInt(ss[2],10);
+    if (!isNaN(y) && !isNaN(m) && !isNaN(d)){
+        return new Date(y,m-1,d);
+    } else {
+        return new Date();
+    }
+}
+
 //	初始化右键菜单
 function setRightMenu() {
 	context.init({preventDoubleContext: false});
@@ -29,8 +59,10 @@ function toChooseMapExtent(checkbox) {
 		alert('请在地图中勾画需要查询的范围!');
 		mouseTool.open();
 		// mouseTool.measureArea();
+
 	} else {
 		mouseTool.close();
+        posadd.mapExtent = null;
 		$("#mapextentdone")[0].innerHTML = "范围未定义";
 		$("#mapextentdone").hide();
 		map.removeOverlay(mouseTool.painting);
@@ -56,38 +88,38 @@ function toChooseDist2(checkbox) {
 }
 
 //	是否要选择时态叠加
-function toChooseTime2(checkbox) {
+function toChooseTime1(checkbox) {
 	if(checkbox.checked) {
-		$("#choosetense").show();
+		$("#choosetense1").show();
 	} else {
-		$("#choosetense").hide();
+		$("#choosetense1").hide();
 	}
 }
 
 //	是否要选择共位叠加
-function toChooseColo(checkbox) {
+function toChooseColo1(checkbox) {
 	if(checkbox.checked) {
-		$("#chooseColo").show();
+		$("#chooseColo1").show();
 	} else {
-		$("#chooseColo").hide();
+		$("#chooseColo1").hide();
 	}
 }
 
 //	是否要选择时态叠加
-function toChooseTime3(checkbox) {
+function toChooseTime2(checkbox) {
 	if(checkbox.checked) {
-		$("#choosetense3").show();
+		$("#choosetense2").show();
 	} else {
-		$("#choosetense3").hide();
+		$("#choosetense2").hide();
 	}
 }
 
 //	是否要选择共位叠加
-function toChooseColo3(checkbox) {
+function toChooseColo2(checkbox) {
 	if(checkbox.checked) {
-		$("#chooseColo3").show();
+		$("#chooseColo2").show();
 	} else {
-		$("#chooseColo3").hide();
+		$("#chooseColo2").hide();
 	}
 }
 
@@ -141,27 +173,27 @@ function toResStat() {
 }
 
 //	右侧显示地名结果
-function toPlaceRes() {
+function toInfoRes() {
 	$("#eastTabsDiv").tabs("select", "信息列表");
 	$("#resultsdiv").accordion("select", 1);
 }
 
 //	右侧显示政区结果
-function toDistRes() {
+function toPosaddRes() {
 	$("#eastTabsDiv").tabs("select", "信息列表");
 	$("#resultsdiv").accordion("select", 2);
 }
 
 //	右侧显示行政界线结果
-function toBoundRes() {
+function toEntityRes() {
 	$("#eastTabsDiv").tabs("select", "信息列表");
 	$("#resultsdiv").accordion("select", 3);
 }
 
 //	右侧显示界桩结果
-function toBmRes() {
+function toMassPointRes() {
 	$("#eastTabsDiv").tabs("select", "信息列表");
-	$("#resultsdiv").accordion("select", "事件");
+	$("#resultsdiv").accordion("select", 4);
 }
 
 //	简单查询（当前用随机结果代替）
@@ -377,6 +409,10 @@ function gotoOverlay(type, id) {
 		overlay = findOverlay(geoEntities, id);
 		openInfoWin({target: overlay}, null, null, 225);
 		return;
+	} else if (type == "geoinfo") {
+		overlay = findOverlay(geoInfos, id);
+		openInfoWin({target: overlay}, null, null, 220);
+		return;
 	} else if (type == "relpos") {
 		overlay = findOverlay(relpos.positions.concat(relpos.relPositions), id);
 		openInfoWin({target: overlay});
@@ -480,6 +516,8 @@ function setResultItems(muldata, divname, clas, append) {
 					str = consBoundMarkerResult(data, i + 1);
 				} else if (clas == "entity") {
 					str = consGeoEntityResult(data, i + 1);
+				} else if (clas == "geoinfo") {
+					str = consGeoInfoResult(data);
 				} else if (clas == "relpos") {
 					str = consRelposResult(data, i + 1);
 				}
@@ -502,35 +540,6 @@ function setResultItems(muldata, divname, clas, append) {
 		parentDiv.innerHTML = totalstr;
 		// document.getElementById("distinfo").style.display = "none";
 	}
-
-	// if (clas) {
-	//     if (clas == "geoname") {
-	//         document.getElementById("placeintotal").innerText = "      地点：" + num + " 条记录";
-	//     } else if (clas == "dist") {
-	//         if (num == 1) {
-	//             var distData = muldata[0];
-	//             document.getElementById("distintotal").innerHTML = "      区域：<strong>" + distData.name + "</strong>"
-	//                 + "<br/>      乡村数：" + distData.NumVillage
-	//                 + "<br/>      社区数：" + distData.NumCommu
-	//                 + "<br/>      下属村、居委会：" + distData.SubCommu
-	//             ;
-	//             // document.getElementById("distname").innerHTML = '      行政区名称：<strong>' + distData.name + '</strong>';
-	//             // document.getElementById("numval").innerHTML ='      乡村数：<strong>' + distData.NumVillage + '</strong>';
-	//             // document.getElementById("numcomu").innerHTML ='     社区数：<strong>' + distData.NumCommu + '</strong>';
-	//             // document.getElementById("subcom").innerHTML ='     下属村、居委会：<strong>' + distData.SubCommu + '</strong>';
-	//         } else {
-	//             document.getElementById("distintotal").innerText = "      区域：" + num + " 条记录";
-	//         }
-	//     }
-	//     if (clas == "bound") {
-	//         document.getElementById("boundintotal").innerText = "      路线：" + num + " 条记录";
-	//     }
-	//     if (clas == "boundmarker") {
-	//         // document.getElementById("bmintotal").innerText = "      事件：" + num +" 条记录";
-	//     }
-	// } else {
-	//     document.getElementById("placeintotal").innerText = "      地点：" + num + " 条记录";
-	// }
 }
 
 //	在左边结果栏显示若干条结果，items为html
@@ -554,16 +563,38 @@ function consResultItem(clas, name, id, type, order, content){
 	return str;
 }
 
-function consGeoEntityResult(entity, order) {
-	var content = '实体编号：' + entity['geid'];
-	var texts = entity['text'];
-	if(texts != null && texts != undefined && texts.length > 0) {
+function consGeoInfoResult(info) {
+	var content = '信息编号：' + info['infoId'];
+	var text = info['text'];
+	var texts = info['texts'];
+	if(text != null && text != undefined && text.length > 0) {
+		content = text;
+		if(content.length > 36) {
+			content = content.substring(0, 34) + '...';
+		}
+	} else if(texts != null && texts != undefined && texts.length > 0) {
 		content = texts[0];
 		if(content.length > 36) {
 			content = content.substring(0, 34) + '...';
 		}
 	}
-	return consResultItem("entity" ,entity['name'], entity['geid'], '地理位置实体', order, content);
+	return consResultItem("geoinfo" ,info['name'], info['infoId'], '位置信息', info['infoId'], content);
+}
+
+function consGeoEntityResult(entity, order) {
+	var content = '实体编号：' + entity['geid'];
+	// var texts = entity['texts'];
+	// if(texts != null && texts != undefined && texts.length > 0) {
+	// 	content = texts[0];
+	// 	if(content.length > 36) {
+	// 		content = content.substring(0, 34) + '...';
+	// 	}
+	// }
+	var infoIds = entity['infoIds'];
+	if(infoIds != null && infoIds != undefined && infoIds.length > 0) {
+		content = '原信息编号：' + entity['infoIds'];
+	}
+	return consResultItem("entity" ,entity['name'], entity['id'], '地理位置实体', order, content);
 }
 
 function consRelposResult(pos, order) {

@@ -315,15 +315,15 @@
 					<div id="searchstat" title="信息汇总" selected="true" style="overflow:auto;">
 						<h3 style="color:#0099FF; text-align: center">信息条目汇总</h3>
 						<!--<div id="distinfo" style="display: none">-->
-							<!--<p id="distname" style="text-align: center" onclick="toPlaceRes()">行政区名称：</p>-->
-							<!--<p id="numval" style="text-align: center" onclick="toPlaceRes()">乡村数：</p>-->
-							<!--<p id="numcomu" style="text-align: center" onclick="toPlaceRes()">社区数：</p>-->
-							<!--<p id="subcom" style="text-align: center" onclick="toPlaceRes()">下属村、居委会：</p>-->
+							<!--<p id="distname" style="text-align: center" onclick="toInfoRes()">行政区名称：</p>-->
+							<!--<p id="numval" style="text-align: center" onclick="toInfoRes()">乡村数：</p>-->
+							<!--<p id="numcomu" style="text-align: center" onclick="toInfoRes()">社区数：</p>-->
+							<!--<p id="subcom" style="text-align: center" onclick="toInfoRes()">下属村、居委会：</p>-->
 						<!--</div>-->
-						<p id="placeintotal" style="text-align: center" onclick="toPlaceRes()">地点：0条记录</p>
-						<p id="distintotal" style="text-align: center" onclick="toDistRes()">区域：0条记录</p>
-						<p id="boundintotal" style="text-align: center" onclick="toBoundRes()">路线：0条记录</p>
-						<p id="bmintotal" style="text-align: center" onclick="toBmRes()">事件：0条记录</p>
+						<p id="placeintotal" style="text-align: center" onclick="toInfoRes()">地点：0条记录</p>
+						<p id="distintotal" style="text-align: center" onclick="toPosaddRes()">区域：0条记录</p>
+						<p id="boundintotal" style="text-align: center" onclick="toEntityRes()">路线：0条记录</p>
+						<p id="bmintotal" style="text-align: center" onclick="toMassPointRes()">事件：0条记录</p>
 
 						<br/>
 						<p style="text-align: center">

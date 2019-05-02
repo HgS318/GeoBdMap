@@ -90,7 +90,12 @@
 
 .SearchResult_item_left {
     float: left;
-    width: 20px;
+    padding-top: 3px;
+    width: 30px;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 13px;
 }
 
 .SearchResult_item_right {
@@ -101,7 +106,7 @@
 }
 
 .SearchResult_item_content {
-    padding-left: 24px;
+    padding-left: 32px;
     line-height: 150%
 }
 

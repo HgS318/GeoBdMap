@@ -23,16 +23,45 @@ var distsInited = false;	//	地区是否已经初始化
 
 var mousePos;   //  鼠标位置
 
-var markerIcon = new BMap.Icon("images/markers/common_marker.png", new BMap.Size(17, 31), {
-        imageSize: new BMap.Size(17, 31), // 引用图片实际大小
-        imageOffset:new BMap.Size(0, 0)  // 图片相对视窗的偏移
-    }
-);
-var markerHighIcon = new BMap.Icon("images/markers/common_marker_selected.png", new BMap.Size(17, 31), {
-        imageSize: new BMap.Size(17, 31), // 引用图片实际大小
-        imageOffset:new BMap.Size(0, 0)  // 图片相对视窗的偏移
-    }
-);
+var overlay_styles = {
+
+    markerIcon: new BMap.Icon("images/markers/marker_red_sprite.png", new BMap.Size(21, 25)),
+    markerHighIcon: new BMap.Icon("images/markers/blue8.png", new BMap.Size(21, 25)),
+    relMarkerIcon: new BMap.Icon("images/markers/boundmarker_blue.png", new BMap.Size(25 ,37)),
+    lineStyle: {strokeColor: "#3366FF", strokeWeight: 5, strokeOpacity: 0.8},
+    lineHighStyle: {strokeColor: "#FF3322", strokeWeight: 6, strokeOpacity: 0.9},
+    polygonStyle: {
+        strokeWeight: 3,//折线的宽度，以像素为单位
+        strokeOpacity: 0.8,//折线的透明度，取值范围0 - 1
+        strokeColor: "#FF44FF", //折线颜色,
+        fillColor: "#1791fc", //填充色
+        fillOpacity: 0.3
+    },
+    polygonHighStyle: {
+        strokeWeight: 3,//折线的宽度，以像素为单位
+        strokeOpacity: 0.8,//折线的透明度，取值范围0 - 1
+        strokeColor: "#00FFFF", //折线颜色,
+        fillColor: "#1791fc", //填充色
+        fillOpacity: 0.5
+    },
+    newMarkerIcon: new BMap.Icon("images/markers/common_marker_selected_org.png", new BMap.Size(21, 31)),
+    newMarkerHighIcon: new BMap.Icon("images/markers/common_marker_org.png", new BMap.Size(21, 31)),
+    newPolygonStyle:{
+        strokeWeight: 2,//折线的宽度，以像素为单位
+        strokeOpacity: 0.6,//折线的透明度，取值范围0 - 1
+        strokeColor: "blue", //折线颜色,
+        fillColor: "#1791fc", //填充色
+        fillOpacity: 0.1
+    },
+    newPolygonHighStyle: {
+        strokeWeight: 2,//折线的宽度，以像素为单位
+        strokeOpacity: 0.8,//折线的透明度，取值范围0 - 1
+        strokeColor: "#00FFFF", //折线颜色,
+        fillColor: "#1791fc", //填充色
+        fillOpacity: 0.3
+    },
+};
+
 var bmIcon = new BMap.Icon("images/markers/boundmarker_blue.png", new BMap.Size(25, 37), {
         imageSize: new BMap.Size(25, 37), // 引用图片实际大小
         imageOffset:new BMap.Size(0, 0)  // 图片相对视窗的偏移
@@ -46,66 +75,37 @@ var bmHighIcon = new BMap.Icon("images/markers/boundmarker_red.png", new BMap.Si
 
 $(function() {
 
-    var wholepnurl = 'wholeGeonames.action';
-
-    var thisurl = window.location.href;
-    if(thisurl.indexOf('admin') > -1) {
-        admin = true;
-        wholepnurl = "wholeGeonames.action?admin=admin";
-    }
-
-    $.ajax({
-        url: wholepnurl,
-        type:'get',
-        dataType: 'json',
-        success:function(data){
-            var places = data;
-
-            map = new BMap.Map("mapContainer");
-            // map.centerAndZoom(new BMap.Point(110.79581, 30.88069), 11);
-            // var _point = new BMap.Point(120.76387299284131, 31.92252143886308);
-            var _point = new BMap.Point(114.371347,30.541142);
-            map.centerAndZoom(_point, 12);
-            var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
-            var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
-            var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT}); //右上角，仅包含平移和缩放按钮
-            var mapType1 = new BMap.MapTypeControl( {
-                    mapTypes: [BMAP_NORMAL_MAP,BMAP_HYBRID_MAP],
-                    anchor: BMAP_ANCHOR_TOP_LEFT
-                }
-            );
-            var overView = new BMap.OverviewMapControl();
-            var overViewOpen = new BMap.OverviewMapControl({isOpen:true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT});
-
-            map.addControl(top_left_control);
-            // map.addControl(top_left_navigation);
-            map.addControl(top_right_navigation);
-            map.addControl(mapType1);          //2D图，混合图
-            map.addControl(overView);          //添加默认缩略地图控件
-            map.addControl(overViewOpen);      //右下角，打开
-            map.enableScrollWheelZoom();
-            initMouseTool();
-
-            placedata = places;
-            showingPlaces = placedata;
-            // initGeonames();
-            // setAutoComplete();
-            setRightMenu();
-            // initTrees(true);
-            // initBounds(true);
-            // initBoundMarkers(true);
-            if(admin) {
-                initTmpDists();
-            }
-            toResStat();
-            initGeoEntities();
-            initRelpos();
-        },
-        error:function(data){
-            console.log(data);
+    map = new BMap.Map("mapContainer");
+    // map.centerAndZoom(new BMap.Point(110.79581, 30.88069), 11);
+    // var _point = new BMap.Point(120.76387299284131, 31.92252143886308);
+    var _point = new BMap.Point(114.371347,30.541142);
+    map.centerAndZoom(_point, 12);
+    var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+    var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+    var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT}); //右上角，仅包含平移和缩放按钮
+    var mapType1 = new BMap.MapTypeControl( {
+            mapTypes: [BMAP_NORMAL_MAP,BMAP_HYBRID_MAP],
+            anchor: BMAP_ANCHOR_TOP_LEFT
         }
-    })
+    );
+    var overView = new BMap.OverviewMapControl();
+    var overViewOpen = new BMap.OverviewMapControl({isOpen:true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT});
 
+    map.addControl(top_left_control);
+    // map.addControl(top_left_navigation);
+    map.addControl(top_right_navigation);
+    map.addControl(mapType1);          //2D图，混合图
+    map.addControl(overView);          //添加默认缩略地图控件
+    map.addControl(overViewOpen);      //右下角，打开
+    map.enableScrollWheelZoom();
+    initMouseTool();
+
+    initElements();
+    setRightMenu();
+    initGeoInfos();
+    toResStat();
+    initRelpos();
+    // initGeoEntities();
 });
 
 //	初始化并显示所有地点
@@ -572,92 +572,6 @@ function overlayFeatureClick(e){
     openSimpleInfoWindow(e);
 }
 
-//  行政区、行政界线、界桩要素高亮显示
-function overlayHighlight(e) {
-    var fea = e.target;
-    var data = fea.extData;
-    var type = data['overlay'];
-    if("dist" == type) {
-        // fea.setOptions({
-        //     fillColor: "#00FFFF", //填充色
-        //     fillOpacity: 0.5//填充透明度
-        // });
-        fea.setFillColor("#00FFFF");
-        fea.setFillOpacity(0.5);
-    } else if("bound" == type) {
-        // fea.setOptions({
-        //     strokeColor: "#FF3322",
-        //     strokeOpacity: 1,       //线透明度
-        //     strokeWeight: 7,        //线宽
-        //  });
-        fea.setStrokeWeight(7);
-        fea.setStrokeColor("#FF3322");
-        fea.setStrokeOpacity(1);
-    } else if("boundmarker" == type) {
-        // fea.setIcon("images/markers/boundmarker_red.png");
-        fea.setIcon(bmHighIcon);
-    }
-
-}
-
-//  取消行政区、行政界线、界桩要素高亮显示
-function overlayUnhighlight(e) {
-    var fea = e.target;
-    var data = fea.extData;
-    var type = data['overlay'];
-    data["selected"] = false;
-    if("dist" == type) {
-        // fea.setOptions({
-        //     fillColor: "#1791fc", //填充色
-        //     fillOpacity: 0.3//填充透明度
-        // });
-        fea.setFillColor("#1791fc");
-        fea.setFillOpacity(0.3);
-    } else if("bound" == type) {
-        // fea.setOptions({
-        //     strokeColor: "#FF33FF",
-        //     strokeOpacity: 0.9,       //线透明度
-        //     strokeWeight: 3,        //线宽
-        // });
-        fea.setStrokeWeight(3);
-        fea.setStrokeColor("#FF33FF");
-        fea.setStrokeOpacity(0.9);
-    } else if("boundmarker" == type) {
-        // fea.setIcon("images/markers/boundmarker_blue.png");
-        fea.setIcon(bmIcon);
-    }
-}
-
-//  鼠标移开行政区、行政界线、界桩要素时
-function overlayMouseOut(e) {
-    var fea = e.target;
-    var data = fea.extData;
-    var type = data['overlay'];
-    if(data["selected"]) {
-        return;
-    }
-    if("dist" == type) {
-        // fea.setOptions({
-        //     fillColor: "#1791fc", //填充色
-        //     fillOpacity: 0.3//填充透明度
-        // });
-        fea.setFillColor("#1791fc");
-        fea.setFillOpacity(0.3);
-    } else if("bound" == type) {
-        // fea.setOptions({
-        //     strokeColor: "#FF33FF",
-        //     strokeOpacity: 0.9,       //线透明度
-        //     strokeWeight: 3,        //线宽
-        // });
-        fea.setStrokeWeight(3);
-        fea.setStrokeColor("#FF33FF");
-        fea.setStrokeOpacity(0.9);
-    } else if("boundmarker" == type) {
-        // fea.setIcon("images/markers/boundmarker_blue.png");
-        fea.setIcon(bmIcon);
-    }
-}
-
 //	在所有地名中按属性查询
 function findPlaceByAttr(attr, _name) {
     var pla = null;
@@ -692,7 +606,7 @@ function gotoAllType() {
     showGeonames(tmpdata);
     setPlaceElseNone();
     setResultItems(tmpdata, "placeresults");
-    toPlaceRes();
+    toInfoRes();
 }
 
 //	显示某大类的所有地名
@@ -710,7 +624,7 @@ function gotoBigType(bigtype) {
         showGeonames(tmpdata);
         setPlaceElseNone();
         setResultItems(tmpdata, "placeresults");
-        toPlaceRes();
+        toInfoRes();
     } else {
         alert("暂无 " + bigtype + " 相关数据...");
     }
@@ -732,7 +646,7 @@ function gotoSmallType(bigtype, smalltype) {
         showGeonames(tmpdata);
         setPlaceElseNone();
         setResultItems(tmpdata, "placeresults");
-        toPlaceRes();
+        toInfoRes();
     } else {
         alert("暂无 " + bigtype +"-" + smalltype + " 相关数据...");
     }
@@ -792,7 +706,7 @@ function gotoDist(distcode) {
         // showingDists = distPolygons;
         // // showingDists.push(dp);
         // distsShow();
-        // toPlaceRes();
+        // toInfoRes();
         initTrees(true);
         initBounds(true);
         initBoundMarkers(true);
@@ -967,9 +881,9 @@ function bdmarksHide() {
 //  地名 checkbox
 function placesCheckBox(checkbox) {
     if (checkbox.checked) {
-        showGeoEntities();
+        showGeoInfo();
     } else {
-        hideGeoEntities();
+        hideGeoInfo();
     }
 }
 
@@ -984,6 +898,15 @@ function distsCheckBox(checkbox) {
         showPosAdds();
     } else {
         hidePosAdds();
+    }
+}
+
+//  融合要素 checkbox
+function entityCheckBox(checkbox) {
+    if (checkbox.checked) {
+        showGeoEntities();
+    } else {
+        hideGeoEntities();
     }
 }
 
@@ -1013,7 +936,16 @@ function boundMarksCheckBox(checkbox) {
 //	查询范围画完时
 var drawComplete = function(e){
     $("#mapextentdone")[0].innerHTML = "范围已在图中选择";
+    // var path = e.overlay.getPath();//Array<Point> 返回多边型的点数组
+    // var str = "[";
+    // for(var i=0;i < path.length;i++){
+    //     str += " [" + path[i].lng + ", " + path[i].lat + "],";
+    // }
+    // str = str.substring(0, str.length - 1);
+    // str += "]";
+    // $("#mapextentdone")[0].innerHTML = str;
     mouseTool.painting = e.overlay;
+    posadd.mapExtent = mouseTool.painting;
     mouseTool.close();
 };
 
@@ -1023,6 +955,7 @@ function initMouseTool() {
         isOpen: false, //是否开启绘制模式
         enableDrawingTool: false, //是否显示工具栏
         drawingMode:BMAP_DRAWING_POLYGON,//绘制模式  多边形
+        // drawingMode:BMAP_DRAWING_POLYLINE,//绘制模式  线
         drawingToolOptions: {
             anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
             offset: new BMap.Size(5, 5), //偏离值
@@ -1034,8 +967,8 @@ function initMouseTool() {
             strokeColor:"red",    //边线颜色。
             fillColor:"red",      //填充颜色。当参数为空时，圆形将没有填充效果。
             strokeWeight: 3,       //边线的宽度，以像素为单位。
-            strokeOpacity: 0.8,       //边线透明度，取值范围0 - 1。
-            fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
+            strokeOpacity: 0.7,       //边线透明度，取值范围0 - 1。
+            fillOpacity: 0.1,      //填充的透明度，取值范围0 - 1。
             strokeStyle: 'solid' //边线的样式，solid或dashed。
         }
     });
@@ -1044,6 +977,17 @@ function initMouseTool() {
 
 }
 
+function spaTypeName(spaType) {
+    if(spaType === undefined || spaType == null || spaType == 0) {
+        return "未知";
+    }
+    switch(spaType) {
+        case 1: return "点";
+        case 3: return "线";
+        case 5: return "多边形";
+        default: return "未知";
+    }
+}
 
 function getFigureByStr(coordStr, type) {
     if(coordStr === null) {
@@ -1054,26 +998,166 @@ function getFigureByStr(coordStr, type) {
     return getFigureJson(lineArr, type);
 }
 
-function getFigureJson(coordJson, type) {
-    if(type == "point" | type == 1) {
-        var marker = new BMap.Marker(coordJson[0], coordJson[1]);
-        return marker;
+//  行政区、行政界线、界桩要素高亮显示
+function overlayHighlight(e) {
+    var fea = e.target;
+    var data = fea.extData;
+    var type = data['overlay'];
+    if(fea.spaType == 5 || data.spaType == 5) {
+        fea.setStrokeWeight(overlay_styles.polygonHighStyle.strokeWeight);
+        fea.setFillColor(overlay_styles.polygonHighStyle.fillColor);
+        fea.setFillOpacity(overlay_styles.polygonHighStyle.fillOpacity);
+    } else if(fea.spaType == 3 || data.spaType == 3) {
+        fea.setStrokeWeight(overlay_styles.lineHighStyle.strokeWeight);
+        fea.setStrokeColor(overlay_styles.lineHighStyle.strokeColor);
+        fea.setStrokeOpacity(overlay_styles.lineHighStyle.strokeOpacity);
+    } else if(fea.spaType == 1 || data.spaType == 1) {
+        fea.setIcon(overlay_styles.markerHighIcon);
     }
-    var bdPointArr = [];
-    for(var i = 0; i < coordJson.length; i++) {
-        var xy = coordJson[i];
-        var _x = xy[0];
-        var _y = xy[1];
-        var bp = new BMap.Point(_x, _y);
-        bdPointArr.push(bp);
-    }
-    if(type == "line" || type == 3) {
-//            var polyline = new BMap.Polyline(bdPointArr);
-        var polyline = new BMap.Polyline(bdPointArr, {strokeColor:"red", strokeWeight:6, strokeOpacity:0.9});
-        return polyline;
-    } else {
-        var polygon = new BMap.Polygon(bdPointArr);
-        return polygon;
+
+}
+
+//  取消行政区、行政界线、界桩要素高亮显示
+function overlayUnhighlight(e) {
+    var fea = e.target;
+    var data = fea.extData;
+    var type = data['overlay'];
+    data["selected"] = false;
+    if(fea.spaType == 5 || data.spaType == 5) {
+        fea.setStrokeWeight(overlay_styles.polygonStyle.strokeWeight);
+        fea.setFillColor(overlay_styles.polygonStyle.fillColor);
+        fea.setFillOpacity(overlay_styles.polygonStyle.fillOpacity);
+    } else if(fea.spaType == 3 || data.spaType == 3) {
+        fea.setStrokeWeight(overlay_styles.lineStyle.strokeWeight);
+        fea.setStrokeColor(overlay_styles.lineStyle.strokeColor);
+        fea.setStrokeOpacity(overlay_styles.lineStyle.strokeOpacity);
+    } else if(fea.spaType == 1 || data.spaType == 1) {
+        fea.setIcon(overlay_styles.markerIcon);
     }
 }
 
+//  鼠标移开行政区、行政界线、界桩要素时
+function overlayMouseOut(e) {
+    var fea = e.target;
+    var data = fea.extData;
+    var type = data['overlay'];
+    if(data["selected"]) {
+        return;
+    }
+    if(fea.spaType == 5 || data.spaType == 5) {
+        fea.setStrokeWeight(overlay_styles.polygonStyle.strokeWeight);
+        fea.setFillColor(overlay_styles.polygonStyle.fillColor);
+        fea.setFillOpacity(overlay_styles.polygonStyle.fillOpacity);
+    } else if(fea.spaType == 3 || data.spaType == 3) {
+        fea.setStrokeWeight(overlay_styles.lineStyle.strokeWeight);
+        fea.setStrokeColor(overlay_styles.lineStyle.strokeColor);
+        fea.setStrokeOpacity(overlay_styles.lineStyle.strokeOpacity);
+    } else if(fea.spaType == 1 || data.spaType == 1) {
+        fea.setIcon(overlay_styles.markerIcon);
+    }
+}
+
+function getFigureJson(coordJson, type, refuse) {
+    var overlay = null;
+    if(type == "point" | type == 1) {
+        var bp = new BMap.Point(coordJson[0], coordJson[1]);
+        overlay = new BMap.Marker(bp, {icon: overlay_styles.markerIcon});
+        overlay.spaType = 1;
+    } else {
+        var bdPointArr = [];
+        for (var i = 0; i < coordJson.length; i++) {
+            var xy = coordJson[i];
+            var _x = xy[0];
+            var _y = xy[1];
+            var bp = new BMap.Point(_x, _y);
+            bdPointArr.push(bp);
+        }
+        if (type == "line" || type == 3) {
+            overlay = new BMap.Polyline(bdPointArr, overlay_styles.lineStyle);
+            overlay.spaType = 3;
+        } else {
+            overlay = new BMap.Polygon(bdPointArr, overlay_styles.polygonStyle);
+            overlay.spaType = 5;
+        }
+    }
+    if(refuse != true && refuse != 1) {
+        overlay.addEventListener("mouseover", overlayHighlight);
+        overlay.addEventListener("mouseout", overlayMouseOut);
+    }
+    return overlay;
+}
+
+function newHighLight(e) {
+    var fea = e.target;
+    var data = fea.extData;
+    var type = data['overlay'];
+    if(fea.spaType == 5 || data.spaType == 5) {
+        fea.setStrokeColor(overlay_styles.newPolygonHighStyle.strokeColor);
+        fea.setFillColor(overlay_styles.newPolygonHighStyle.fillColor);
+        fea.setFillOpacity(overlay_styles.newPolygonHighStyle.fillOpacity);
+    } else if(fea.spaType == 3 || data.spaType == 3) {
+        fea.setStrokeWeight(overlay_styles.lineHighStyle.strokeWeight);
+        fea.setStrokeColor(overlay_styles.lineHighStyle.strokeColor);
+        fea.setStrokeOpacity(overlay_styles.lineHighStyle.strokeOpacity);
+    } else if(fea.spaType == 1 || data.spaType == 1) {
+        fea.setIcon(overlay_styles.newMarkerHighIcon);
+    }
+}
+
+function newMouseOut(e) {
+    var fea = e.target;
+    var data = fea.extData;
+    var type = data['overlay'];
+    if(data["selected"]) {
+        return;
+    }
+    if(fea.spaType == 5 || data.spaType == 5) {
+        fea.setStrokeColor(overlay_styles.newPolygonStyle.strokeColor);
+        fea.setFillColor(overlay_styles.newPolygonStyle.fillColor);
+        fea.setFillOpacity(overlay_styles.newPolygonStyle.fillOpacity);
+    } else if(fea.spaType == 3 || data.spaType == 3) {
+        fea.setStrokeWeight(overlay_styles.lineStyle.strokeWeight);
+        fea.setStrokeColor(overlay_styles.lineStyle.strokeColor);
+        fea.setStrokeOpacity(overlay_styles.lineStyle.strokeOpacity);
+    } else if(fea.spaType == 1 || data.spaType == 1) {
+        fea.setIcon(overlay_styles.newMarkerIcon);
+    }
+}
+
+function createNewMarker(bp) {
+    var marker = new BMap.Marker(bp, {icon: overlay_styles.newMarkerIcon});
+    marker.spaType = 1;
+    marker.addEventListener("mouseover", newHighLight);
+    marker.addEventListener("mouseout", newMouseOut);
+    return marker;
+}
+
+function createNewPolygon(data, data_type) {
+    if(data_type == "string") {
+        var lineArr = JSON.parse(data);
+        return createNewPolygon(lineArr, "line_array");
+    }
+    if(data_type == "line_array") {
+        var pointArr = [];
+        for(var i = 0; i < data.length; i++) {
+            var bp = new BMap.Point(data[i][0], data[i][1]);
+            pointArr.push(bp);
+        }
+        return createNewPolygon(pointArr, "bp_array");
+    }
+    if(data_type == "bp_array") {
+        var polygon = new BMap.Polygon(data, overlay_styles.newPolygonStyle);
+        return createNewPolygon(polygon, "polygon");
+    }
+    if(data_type == "polygon") {
+        data.spaType = 5;
+        data.addEventListener("mouseover", newHighLight);
+        data.addEventListener("mouseout", newMouseOut);
+        data.addEventListener("mouseup", function (e) {
+            openInfoWin(e);
+        });
+
+        return data;
+    }
+    return null;
+}

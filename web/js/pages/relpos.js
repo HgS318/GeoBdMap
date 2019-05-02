@@ -4,6 +4,7 @@ var relpos = {
     text: "",
     more: false,
     relMarkerIcon: new BMap.Icon("images/markers/boundmarker_blue.png", new BMap.Size(25 ,37)),
+    relMarkerSeclectIcon: new BMap.Icon("images/markers/boundmarker_red.png", new BMap.Size(25 ,37)),
     positions: [],
     relPositions: [],
 };
@@ -183,9 +184,10 @@ function createPositions(pos_data, big, url, text) {
                 var y = coords[0][1];
                 var conf = pos['confidence'];
                 var bp = new BMap.Point(x, y);
-                var overlay = null;
-                overlay = new BMap.Marker(bp);
-                overlay.spaType = 1;
+                // var overlay = null;
+                // overlay = new BMap.Marker(bp);
+                // overlay.spaType = 1;
+                var overlay = createNewMarker(bp);
                 // if(conf === undefined  || conf == null || conf >=90) {
                 //     overlay = new BMap.Marker(bp);
                 //     overlay.spaType = 1;
@@ -267,21 +269,21 @@ function createRelatives(rel_data, big, url, text) {
                             strokeWeight: 2,
                             strokeOpacity: 0.5
                         }); //创建圆
-                        circle.spaType = 5;
-                        overlay = circle;
+                        // circle.spaType = 5;
+                        overlay = createNewPolygon(circle, "polygon");
                         // circle.title = "相对位置";
                         // setRelposData(circle, pos);
                         // addClickHandler(circle, "  &nbsp;&nbsp;" + name);
                         // addExtratOverlay(circle, true);
                     } else if (shape == 'rect') {
-                        var polygon = new BMap.Polygon([
+                        var pointArr = [
                             new BMap.Point(x - buffer, y - buffer),
                             new BMap.Point(x + buffer, y - buffer),
                             new BMap.Point(x + buffer, y + buffer),
                             new BMap.Point(x - buffer, y + buffer),
                             new BMap.Point(x - buffer, y - buffer)
-                        ], {strokeColor: "blue", strokeWeight: 2, strokeOpacity: 0.5});
-                        polygon.spaType = 5;
+                        ];
+                        var polygon = createNewPolygon(pointArr, "bp_array");
                         overlay = polygon;
                         // polygon.title = "相对位置";
                         // setRelposData(polygon, pos);
@@ -384,7 +386,7 @@ function removeExtratOverlays() {
 function setRelposResItem() {
     var total_data = relpos.positions.concat(relpos.relPositions);
     setResultItems(total_data, "distresults", "relpos");
-    $("#distintotal")[0].innerHTML = "接入信息：" + total_data.length + "条记录";
+    $("#distintotal")[0].innerHTML = "感知接入信息：" + total_data.length + "条记录";
 }
 
 function getBufferFromConfidence(confidence) {

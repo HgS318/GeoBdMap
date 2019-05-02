@@ -35,7 +35,7 @@ public class GeoEntity {
     public GeoEntity(List<GeoInfo> infos) {
         for(GeoInfo info : infos) {
             geid = info.geid;
-            infoIds.add(info.id);
+            infoIds.add(info.infoId);
             if(name == null || "".equals(name)) {
                 name = info.name;
             }
@@ -109,7 +109,7 @@ public class GeoEntity {
         obj.put("polygon", polygon);
         obj.put("line", line);
         obj.put("shapes", shapes);
-        obj.put("text", textsArr);
+        obj.put("texts", textsArr);
         obj.put("images", imagesArr);
         obj.put("vedios", vediosArr);
         obj.put("audios", audiosArr);
@@ -215,6 +215,7 @@ public class GeoEntity {
             if(i != len - 1) {
                 buf.append(", ");
             }
+            i++;
         }
         return buf.toString();
     }

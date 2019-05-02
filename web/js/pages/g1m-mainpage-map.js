@@ -728,7 +728,7 @@ function gotoAllType() {
     showGeonames(tmpdata);
     setPlaceElseNone();
     setResultItems(tmpdata, "placeresults");
-    toPlaceRes();
+    toInfoRes();
 }
 
 //	显示某大类的所有地名
@@ -746,7 +746,7 @@ function gotoBigType(bigtype) {
         showGeonames(tmpdata);
         setPlaceElseNone();
         setResultItems(tmpdata, "placeresults");
-        toPlaceRes();
+        toInfoRes();
     } else {
         alert("暂无 " + bigtype + " 相关数据...");
     }
@@ -768,7 +768,7 @@ function gotoSmallType(bigtype, smalltype) {
         showGeonames(tmpdata);
         setPlaceElseNone();
         setResultItems(tmpdata, "placeresults");
-        toPlaceRes();
+        toInfoRes();
     } else {
         alert("暂无 " + bigtype +"-" + smalltype + " 相关数据...");
     }
@@ -828,7 +828,7 @@ function gotoDist(distcode) {
         // showingDists = distPolygons;
         // // showingDists.push(dp);
         // distsShow();
-        // toPlaceRes();
+        // toInfoRes();
         initTrees(true);
         initBounds(true);
         initBoundMarkers(true);

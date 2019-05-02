@@ -1,13 +1,14 @@
 
+var geoInfos = [];
 var geoEntities = [];
 
 var simpleTextLen = 48;
 
-function initGeoEntities() {
+function initGeoInfos() {
 
     $.ajax({
 //                url:"getAllSynData.action",
-        url:"getAllGeoEntities.action",
+        url:"getAllGeoInfo.action",
 //                url:"http://localhost:8081/GeoBdMap/getAllGeoEntities",
         type: 'get',
         dataType: 'json',
@@ -20,24 +21,18 @@ function initGeoEntities() {
                 var pointStr = entity['position'];
                 if(pointStr != null && pointStr != undefined) {
                     var pointArray = pointStr.split(",");
-                    var X = pointArray[0];
-                    var Y = pointArray[1];
-                    var Point = new BMap.Point(X, Y);
-                    var marker = new BMap.Marker(Point);
-                    marker.spaType = 1;
-                    addOverlayAndInfowin(marker, entity, content, geoEntities);
+                    var marker = getFigureJson([pointArray[0], pointArray[1]], "point");
+                    addOverlayAndInfowin(marker, entity, content, geoInfos);
                 }
                 var lineStr = entity['line'];
                 if(lineStr != null && lineStr != undefined) {
-                    var polyline = getFigureJson(lineStr, "line", geoEntities);
-                    polyline.spaType = 3;
-                    addOverlayAndInfowin(polyline, entity, content, geoEntities);
+                    var polyline = getFigureJson(lineStr, "line");
+                    addOverlayAndInfowin(polyline, entity, content, geoInfos);
                 }
                 var polygonStr = entity['polygon'];
                 if(polygonStr != null && polygonStr != undefined) {
                     var polygon = getFigureJson(polygonStr, "polygon");
-                    polygon.spaType = 5;
-                    addOverlayAndInfowin(polygon, entity, content, geoEntities);
+                    addOverlayAndInfowin(polygon, entity, content, geoInfos);
                 }
                 var shapes = entity['shapes'];
                 if(shapes != null && shapes != undefined && shapes.length > 0) {
@@ -46,7 +41,7 @@ function initGeoEntities() {
                         var spaType = shapeJson['spaType'];
                         var shape = shapeJson['shape'];
                         var overlay = getFigureByStr(shape, spaType);
-                        addOverlayAndInfowin(polygon, entity, content, geoEntities);
+                        addOverlayAndInfowin(polygon, entity, content, geoInfos);
                     }
                 }
                 if((entity['shapes'] == null || entity['shapes'] == "") && (entity['position'] == null || entity['position'] == "")
@@ -60,7 +55,7 @@ function initGeoEntities() {
                             console.log(rs.boundaries[i]);
                             var distPolygon = new BMap.Polygon(rs.boundaries[i]);
                             distPolygon.spaType = 5;
-                            addOverlayAndInfowin(distPolygon, entity, content, geoEntities);
+                            addOverlayAndInfowin(distPolygon, entity, content, geoInfos);
                         }
                     });
                     // var distPolygon = getDistBaiduPolygon(entity['name']);
@@ -68,14 +63,84 @@ function initGeoEntities() {
                     // addOverlayAndInfowin(distPolygon, entity, content, geoEntities);
                 }
             }
-            setResultItems(geoEntities, "placeresults", "entity");
-            $("#placeintotal")[0].innerHTML = "位置信息：" + geoEntities.length + "条记录";
+            setResultItems(geoInfos, "placeresults", "geoinfo");
+            $("#placeintotal")[0].innerHTML = "位置信息：" + geoInfos.length + "条记录";
         },
         error: function (err_data) {
             console.log(err_data);
         }
     });
 
+}
+
+function initGeoEntities(entities) {
+    if(entities != undefined && entities != null && entities.length > 0) {
+        for (var i = 0; i < entities.length; i++) {
+            var entity = entities[i];
+            var uuid = generateUUID();
+            entity['id'] = uuid;
+            var content = createContent(entity);
+            var pointStr = entity['position'];
+            if(pointStr != null && pointStr != undefined) {
+                var pointArray = pointStr.split(",");
+                var marker = getFigureJson([pointArray[0], pointArray[1]], "point");
+                addOverlayAndInfowin(marker, entity, content, geoEntities);
+            }
+            var lineStr = entity['line'];
+            if(lineStr != null && lineStr != undefined) {
+                var polyline = getFigureJson(lineStr, "line", geoEntities);
+                addOverlayAndInfowin(polyline, entity, content, geoEntities);
+            }
+            var polygonStr = entity['polygon'];
+            if(polygonStr != null && polygonStr != undefined) {
+                var polygon = getFigureJson(polygonStr, "polygon");
+                addOverlayAndInfowin(polygon, entity, content, geoEntities);
+            }
+            var shapes = entity['shapes'];
+            if(shapes != null && shapes != undefined && shapes.length > 0) {
+                for(var j = 0; j < shapes.length; j++) {
+                    var shapeJson = shapes[j];
+                    var spaType = shapeJson['spaType'];
+                    var shape = shapeJson['shape'];
+                    var overlay = getFigureByStr(shape, spaType);
+                    addOverlayAndInfowin(polygon, entity, content, geoEntities);
+                }
+            }
+            if((entity['shapes'] == null || entity['shapes'] == "") && (entity['position'] == null || entity['position'] == "")
+                && (entity['line'] == null || entity['line'] == "") && (entity['polygon'] == null || entity['polygon'] == "")
+                && entity['name'] != null && entity['name'] != undefined && entity['name'] != "") {
+                var name = entity['name'];
+                var bdary = new BMap.Boundary();
+                bdary.get(name, function(rs){       //获取行政区域
+                    var count = rs.boundaries.length; //行政区域的点有多少个
+                    for(var i = 0; i < count; i++){
+                        console.log(rs.boundaries[i]);
+                        var distPolygon = new BMap.Polygon(rs.boundaries[i]);
+                        distPolygon.spaType = 5;
+                        addOverlayAndInfowin(distPolygon, entity, content, geoEntities);
+                    }
+                });
+                // var distPolygon = getDistBaiduPolygon(entity['name']);
+                // distPolygon.spaType = 5;
+                // addOverlayAndInfowin(distPolygon, entity, content, geoEntities);
+            }
+        }
+        setResultItems(geoEntities, "posaddRes", "entity");
+        $("#posaddtotal")[0].innerHTML = "叠加融合信息：" + geoEntities.length + "条记录";
+    } else {
+        $.ajax({
+            url: "getAllGeoEntities.action",
+            type: 'get',
+            dataType: 'json',
+            success: function (entities_data) {
+                initGeoEntities(entities_data);
+                
+            },
+            error: function (err_data) {
+                console.log(err_data);
+            }
+        });
+    }
 }
 
 function getDistBaiduPolygon(name) {
@@ -86,6 +151,18 @@ function getDistBaiduPolygon(name) {
             var ply = new BMap.Polygon(rs.boundaries[i]);
         }
     });
+}
+
+function showGeoInfo() {
+    for(var i = 0; i < geoInfos.length; i++) {
+        geoInfos[i].show();
+    }
+}
+
+function hideGeoInfo() {
+    for(var i = 0; i < geoInfos.length; i++) {
+        geoInfos[i].hide();
+    }
 }
 
 function showGeoEntities() {
@@ -105,41 +182,49 @@ function createContent(entity) {
         return createSimpleContent(entity);
     }
     var content = "";
-    if(entity['infoAmount'] != null && entity['infoAmount'] != undefined) {
-        content += '<strong>图形</strong>： (信息量: ' + entity['infoAmount']['figureLength'] + ' 字节)<br/>';
+    if(entity['infoIds'] != null && entity['infoIds'] != undefined) {
+        content += '<strong>原信息编号</strong>： ' + entity['infoIds'] + '<br/>';
     }
-    if(entity.address != null && entity.address != undefined) {
+    if(entity['infoAmount'] != null && entity['infoAmount'] != undefined) {
+        content += '<strong>图形</strong>：' + spaTypeName(entity['spaType']) +
+            '  (信息量: ' + entity['infoAmount']['figureLength'] + ' 字节)<br/>';
+    }
+    if(entity['address'] != null && entity['address'] != undefined) {
         content += '&nbsp;&nbsp;地址：' + entity.address + '<br/>';
     }
     if(entity['text'] != null) {
         content += '<strong>文本</strong>： (信息量: ' + entity['infoAmount']['textLenth'] + ' 字节)<br/>';
+        var content_text = entity['text'];
+        if (content_text.length > 36) {
+            content += ('&nbsp;&nbsp;&nbsp;&nbsp;' + content_text.substring(0, 33) + '...' + '<br/>' );
+        } else {
+            content += ('&nbsp;&nbsp;&nbsp;&nbsp;' + content_text + '<br/>' );
+        }
+    }
+    if(entity['texts'] != null) {
+        content += '<strong>文本</strong>： (信息量: ' + entity['infoAmount']['textLenth'] + ' 字节)<br/>';
         if(entity.infoAmount != undefined && entity.infoAmount != null) {
-            for (var j = 0; j < entity['text'].length; j++) {
-                var content_text = entity['text'][j];
-                if (content_text.length > 56) {
-                    content += ('&nbsp;&nbsp;&nbsp;&nbsp;' + content_text.substring(0, 53) + '...' + '<br/>' );
+            for (var j = 0; j < entity['texts'].length; j++) {
+                var content_text = entity['texts'][j];
+                if (content_text.length > 36) {
+                    content += ('&nbsp;&nbsp;&nbsp;&nbsp;' + content_text.substring(0, 33) + '...' + '<br/>' );
                 } else {
                     content += ('&nbsp;&nbsp;&nbsp;&nbsp;' + content_text + '<br/>' );
                 }
             }
         }
     }
-    if(entity['texts'] != null) {
-        // content += "<strong>文字</strong>";
-        for(var j = 0; j < entity['texts'].length; j++) {
-            var text = entity['texts'][j];
-            if(text.length > 56) {
-                text = text.substring(0, 53) + '...';
-            }
-            content += "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>&nbsp;&nbsp;&nbsp;&nbsp;" + text + "</p>";
-        }
-    }
     if(entity['flashes'] != null && entity['flashes'].length > 0) {
         content += '<strong>动画</strong>： (信息量: ' + entity['infoAmount']['flashLength'] + ' 秒)<br/>';
-        for (var j = 0; j < entity['flashes'].length; j++) {
-            var flash_path = entity['flashes'][j];
-            content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + flash_path + '' +
-            ' onclick="openWindowY(this, \'flash\', \'' + flash_path + '\')">动画' + (j + 1) + '</a>');
+        if(entity['flashes'].length == 1) {
+            content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + entity['flashes'][0] + '' +
+            ' onclick="openWindowY(this, \'flash\', \'' + flash_path + '\')">查看动画</a>');
+        } else {
+            for (var j = 0; j < entity['flashes'].length; j++) {
+                var flash_path = entity['flashes'][j];
+                content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + flash_path + '' +
+                ' onclick="openWindowY(this, \'flash\', \'' + flash_path + '\')">动画' + (j + 1) + '</a>');
+            }
         }
         content += '<br/>';
     }
@@ -147,30 +232,36 @@ function createContent(entity) {
         content += '<strong>图像</strong>： (信息量: ' + entity['infoAmount']['imageLength'] + ' 字节)<br/>';
         for (var j = 0; j < entity['images'].length; j++) {
             var img_path = entity['images'][j];
-//                                content += "<img src='" + img_path + "' class='img' alt='' onclick='openWindowY(img_path)'"
-//                                        + "style='zoom:1;overflow:hidden;width:50px;height:50px;'/>";
             content += '&nbsp;&nbsp;<img src=' + img_path + ' class="img" onclick="openWindowY(this, \'image\')" ' +
                 'alt="" style="zoom:1;overflow:hidden;width:50px;height:50px;"/>'
-
         }
         content += '<br/>';
     }
     if(entity['audios'] != null && entity['audios'].length > 0) {
         content += '<strong>音频</strong>： (信息量: ' + entity['infoAmount']['audioLength'] + ' 秒)<br/>';
-        for (var j = 0; j < entity['audios'].length; j++) {
-            var audio_path = entity['audios'][j];
-            content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + audio_path + ' onclick="openWindowY(this, \'audio\', \'' +
-            audio_path + '\', \'' +
-            (entity['name'] + ' 音频' + (j + 1)) + '\')">音频' + (j + 1) + '</a>');
+        if(entity['audios'].length == 1) {
+            content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + entity['audios'][0] + ' onclick="openWindowY(this, \'audio\', \'' +
+                entity['audios'][0] + '\', \'' + (entity['name'] + ' 音频') + '\')">收听音频</a>');
+        } else {
+            for (var j = 0; j < entity['audios'].length; j++) {
+                var audio_path = entity['audios'][j];
+                content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + audio_path + ' onclick="openWindowY(this, \'audio\', \'' +
+                    audio_path + '\', \'' + (entity['name'] + ' 音频' + (j + 1)) + '\')">音频' + (j + 1) + '</a>');
+            }
         }
         content += '<br/>';
     }
     if(entity['vedios'] != null && entity['vedios'].length > 0) {
         content += '<strong>视频</strong>： (信息量: ' + entity['infoAmount']['vedioLength'] + ' 秒)<br/>';
-        for (var j = 0; j < entity['vedios'].length; j++) {
-            var vedio_path = entity['vedios'][j];
-            content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + vedio_path + '' +
-                ' onclick="openWindowY(this, \'vedio\', \'' + vedio_path + '\')">视频' + (j + 1) + '</a>');
+        if(entity['vedios'].length == 1) {
+            content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + entity['vedios'][0] + '' +
+                ' onclick="openWindowY(this, \'vedio\', \'' + entity['vedios'][0] + '\')">查看视频</a>');
+        } else {
+            for (var j = 0; j < entity['vedios'].length; j++) {
+                var vedio_path = entity['vedios'][j];
+                content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + vedio_path + '' +
+                    ' onclick="openWindowY(this, \'vedio\', \'' + vedio_path + '\')">视频' + (j + 1) + '</a>');
+            }
         }
         content += '<br/>';
     }
@@ -188,19 +279,26 @@ function createContent(entity) {
     }
     if(entity['links'] != null && entity['links'].length > 0) {
         content += "<br/>";
-        for (var j = 0; j < entity['links'].length; j++) {
-            var link = entity['links'][j];
-            var linkContent = "&nbsp;&nbsp;&nbsp;<a href='#' onclick='openContentWindow(\"" + link
-                + "\", \"查看原网页\",650, 520, 30, 30)'>查看链接" + (j + 1) + "</a>";
-            content += linkContent;
+        if(entity['links'].length == 1) {
+            content += ("&nbsp;&nbsp;&nbsp;<a href='#' onclick='openContentWindow(\""
+            + entity['links'][0] + "\", \"查看原网页\",650, 520, 30, 30)'>链接</a>");
+        } else {
+            for (var j = 0; j < entity['links'].length; j++) {
+                var link = entity['links'][j];
+                var linkContent = "&nbsp;&nbsp;&nbsp;<a href='#' onclick='openContentWindow(\""
+                    + link + "\", \"查看原网页\",650, 520, 30, 30)'>链接" + (j + 1) + "</a>";
+                content += linkContent;
+            }
         }
+    }
+    if(entity['time'] != null && entity['time'] != undefined) {
+        content += '<strong>信息获取时间</strong>：' + entity['time'] + '<br/>';
     }
     content += '</div>';
     return content;
 }
 
 function createSimpleContent(entity) {
-
     var content = "";
     if(entity.address != null && entity.address != undefined) {
         content += '&nbsp;&nbsp;地址：' + entity.address + '<br/><br/>';
@@ -310,7 +408,6 @@ function createSimpleContent(entity) {
         }
         content += '<br/>';
     }
-
     content += '</div>';
     return content;
 }
@@ -336,20 +433,27 @@ function addClickHandler(overlay, content){
 
 function getOnePointOfOverlay(overlay) {
     var point = null;
-    if(overlay.spaType == 1 || overlay.extData.spaType == 1) {
-        point = new BMap.Point(overlay.getPosition().lng, overlay.getPosition().lat);
-    } else if (overlay.spaType == 3 || overlay.spaType == 5 || overlay.extData.spaType == 3 || overlay.extData.spaType == 5) {
-        var first_point = overlay.getPath()[0];
-        point = new BMap.Point(first_point.lng, first_point.lat);
+    try {
+        if (overlay.spaType == 1 || overlay.extData.spaType == 1) {
+            point = new BMap.Point(overlay.getPosition().lng, overlay.getPosition().lat);
+        } else if (overlay.spaType == 3 || overlay.spaType == 5 || overlay.extData.spaType == 3 || overlay.extData.spaType == 5) {
+            var first_point = overlay.getPath()[0];
+            point = new BMap.Point(first_point.lng, first_point.lat);
+        }
+    } catch (exp) {
+
     }
     return point;
 }
 
 function openInfoWin(e, content, title, width) {
     var overlay = e.target;
-    var point = getOnePointOfOverlay(overlay);
-    if(point == null) {
-        point = new BMap.Point(e.x, e.y);
+    var point = e.point;
+    if(point === undefined || point == null) {
+        point = getOnePointOfOverlay(overlay);
+        if(point == null) {
+            point = new BMap.Point(e.x, e.y);
+        }
     }
     if(width === undefined || width == null) {
         if(overlay.extData != undefined && overlay.extData.winwidth != undefined) {
@@ -359,7 +463,11 @@ function openInfoWin(e, content, title, width) {
         }
     }
     // if(content == null || content === undefined) {
+    try {
         content = createContent(overlay.extData);
+    } catch (exp) {
+        console.log(content);
+    }
     // }
     if(title === undefined || title == null || title == "") {
         title = overlay['title'];
