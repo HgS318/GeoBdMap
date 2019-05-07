@@ -1,7 +1,7 @@
 // var python_service = "http://localhost:5050/";
 var python_service = "http://106.12.93.49:5050/";
 
-var posadd = {
+var posadd_init = {
 
     geoCoder: new BMap.Geocoder(),
     convertor: new BMap.Convertor(),
@@ -11,7 +11,7 @@ var posadd = {
     phone_overlays:[],
     ip_overlays:[],
     city_polygons: {},
-    addrs: [],
+    tmp_addrs: [],
     pointCollection: null,
     mapvpDataset: null,
     spaMethod: 1,
@@ -26,6 +26,51 @@ var posadd = {
     baiduSearchUrls: [],
 
 };
+
+// var posadd = cloneObject(posadd_init);
+var posadd = posadd_init;
+
+function getPosaddsNum() {
+    var count = 0;
+    count += posadd.addr_overlays.length;
+    count += posadd.coord_overlays.length;
+    count += posadd.post_overlays.length;
+    count += posadd.phone_overlays.length;
+    count += posadd.ip_overlays.length;
+    count += posadd.road_conditions.length;
+    count += relpos.positions.length;
+    count += relpos.relPositions.length;
+    count += getMassPointsNum();
+
+    return count;
+
+}
+
+function getMassPointsNum() {
+    var count = 0;
+    if(mapvpLayer != null) {
+        try {
+            count += mapvpLayer.dataSet.length;
+        } catch (e1) {}
+    }
+    if(posadd.pointCollection != null) {
+        try {
+            count += posadd.pointCollection;
+        } catch (e2) {}
+    }
+    return count;
+}
+
+function updatePosaddNum() {
+    var count = getPosaddsNum();
+    $("#distintotal")[0].innerHTML = "感知接入信息：" + count + "条记录";
+    updateMassPointsNum();
+}
+
+function updateMassPointsNum() {
+    var count = getMassPointsNum();
+    $("#boundintotal")[0].innerHTML = "海量点：" + count + "条记录";
+}
 
 var mapvpLayer = null;
 
@@ -123,21 +168,13 @@ function showMapvpLayer(load) {
     });
 }
 
-function showPosAdds() {
-    show_address();
-    show_coords();
-    show_postcode();
-    show_phone_number();
-    show_ip();
-    showRelposOverlays();
-}
-
 function hidePosAdds() {
     clear_address();
     clear_coords();
     clear_postcode();
     clear_phone_number();
     clear_ip();
+    clear_cityPolygons();
     hideRelposOverlays();
 }
 
@@ -158,26 +195,33 @@ function hideMassPoints() {
     hideMapv();
 }
 
-function geocoderSearch(addrStr, index){
-    if(addrStr === undefined || addrStr == null || addrStr == "") {
-        return null;
+function geocoderSearch(index){
+    // if(addrStr === undefined || addrStr == null || addrStr == "") {
+    //     return null;
+    // }
+    if(index >= posadd.tmp_addrs.length) {
+        posadd.tmp_addrs = [];
+        return;
     }
+    var addrStr = posadd.tmp_addrs[index];
     var addr = addrStr.trim();
-    if(index < posadd.addrs.length){
-        setTimeout(window.bdGEO, 500);
+    if(index < posadd.tmp_addrs.length){
+        setTimeout("geocoderSearch(" + (index + 1) + ")", 300);
     }
     posadd.geoCoder.getPoint(addr, function(point){
         if (point) {
             // var bp = new BMap.Point(point.lng, point.lat);
             // var marker = new BMap.Marker(bp);
             // marker.spaType = 1;
-            var marker = createNewMarker(point)
+            var marker = createNewMarker(point);
             addOverlayAndInfowin(marker, {
                 "name": "地名/地址",
                 "text": addr,
-                "winwidth": 200
+                "winwidth": 200,
+                "id": generateUUID()
             }, null, posadd.addr_overlays);
-            map.centerAndZoom(point, 15);
+            map.centerAndZoom(point, 13);
+            setResultItems([posadd.addr_overlays[posadd.addr_overlays.length - 1]], "distresults", "addr_overlays", true);
         }
         else{
             document.getElementById("result").innerHTML +=  index + " " + addr + ":  " + "无法精确定位" + "</br>";
@@ -189,10 +233,12 @@ function geocoderSearch(addrStr, index){
 function extract_address() {
     var addrStr = $("#addrtext")[0].value;
     var addrs = addrStr.split('\n');
-    for(var i = 0; i < addrs.length; i++) {
-        var address = addrs[i];
-        geocoderSearch(address, i);
-    }
+    posadd.tmp_addrs = addrs;
+    geocoderSearch(0);
+    // for(var i = 0; i < addrs.length; i++) {
+    //     var address = addrs[i];
+    //     geocoderSearch(address, i);
+    // }
 }
 
 function extract_coords() {
@@ -219,6 +265,7 @@ function extract_postcode() {
     var postcode = $("#posttext")[0].value;
     var post = parsePostcode(postcode);
     if(post != null) {
+        // setTimeout("showPostcode('" + postcode + "')", 400 * i + 100);
         showPostcode(postcode);
     } else {
         alert("邮编输入有误，请检查");
@@ -232,11 +279,12 @@ function extract_phone_number() {
         var phoneNumber = phoneNumbers[i];
         var areaCode = parsePhoneAreaCode(phoneNumber);
         if(areaCode != null) {
-            if(i == 0) {
-                showAreacode(areaCode, phoneNumber);
-            } else {
-                setTimeout("showAreacode('" + areaCode + "', '" + phoneNumber + "')", 1200);
-            }
+            setTimeout("showAreacode('" + areaCode + "', '" + phoneNumber + "')", 400 * i + 100);
+            // if(i == 0) {
+            //     showAreacode(areaCode, phoneNumber);
+            // } else {
+            //     setTimeout("showAreacode('" + areaCode + "', '" + phoneNumber + "')", 300 * i);
+            // }
         }
     }
 }
@@ -248,11 +296,12 @@ function extract_ip() {
         var ipStr = ips[i];
         var ip = parseIP(ipStr);
         if(ip != null) {
-            if(i == 0) {
-                showIpArea(ip);
-            } else {
-                setTimeout("showIpArea('" + ip + "')", 1200);
-            }
+            setTimeout("showIpArea('" + ip + "')", 300 * i + 100);
+            // if(i == 0) {
+            //     showIpArea(ip);
+            // } else {
+            //     setTimeout("showIpArea('" + ip + "')", 300 * i);
+            // }
         }
     }
 }
@@ -404,7 +453,8 @@ function showXY(x, y) {
         var extData = {
             "name": "坐标",
             "texts": [x.toString() + ", " + y.toString(), "坐标系统: " + text],
-            "winwidth": 150
+            "winwidth": 150,
+            "id": generateUUID()
         };
         var obPoint = new BMap.Point(x, y);
         var shown = false;
@@ -416,20 +466,20 @@ function showXY(x, y) {
                 from = 3;
             }
             posadd.convertor.translate([obPoint], from, 5, function (data, status, message) {
+                var bp, marker;
                 if (status) {
-                    var bp = obPoint;
+                    bp = obPoint;
                     // var marker = new BMap.Marker(bp);
                     // marker.spaType = 1;
-                    var marker = createNewMarker(bp);
-                    addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
-                    map.centerAndZoom(bp, 15);
+                    marker = createNewMarker(bp);
                 } else {
-                    var bp = data.points[0];
-                    var marker = createNewMarker(bp);
-                    addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
-                    map.centerAndZoom(bp, 15);
+                    bp = data.points[0];
+                    marker = createNewMarker(bp);
                     shown = true;
                 }
+                addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
+                map.centerAndZoom(bp, 15);
+                setResultItems([posadd.coord_overlays[posadd.coord_overlays.length - 1]], "distresults", "coord_overlays", true);
             });
         } else {
             var bp = obPoint;
@@ -456,7 +506,7 @@ function showAreacode(areacode, phoneNum) {
             var province = elements[ele_len - 2];
             var city = elements[ele_len - 1];
             var district = "";
-            var areaShape = getShape(province, city, district, "areacode", phoneNum);
+            getShape(province, city, district, "areacode", phoneNum);
         }, error: function (err_data) {
             console.log(err_data);
         }
@@ -531,8 +581,10 @@ function showPostcode(postcode) {
                 addOverlayAndInfowin(polygon, {
                     "winwidth": 150,
                     "texts": texts,
-                    "name": "邮编"
+                    "name": "邮编",
+                    "id": generateUUID()
                 }, null, posadd.post_overlays);
+                setResultItems([posadd.post_overlays[posadd.post_overlays.length - 1]], "distresults", "post_overlays", true);
             }
         }, error: function (err_data) {
             showPostcodeDistrict(postcode);
@@ -637,7 +689,8 @@ function getShape_local(province, city, district, key, addValue) {
             var extData = {
                 "name": city,
                 "winwidth": 200,
-                "texts": texts
+                "texts": texts,
+                "id": generateUUID()
             };
             polygon.name = city;
             posadd.city_polygons[city] = polygon;
@@ -650,6 +703,10 @@ function getShape_local(province, city, district, key, addValue) {
 }
 
 function getShape(province, city, district, key, addValue) {
+    if(city.indexOf("南京") > -1) {
+        getShape_local(province, city, district, key, addValue);
+        return;
+    }
     var type_show = {
         "postcode": "邮编",
         "areacode": "电话",
@@ -692,43 +749,52 @@ function getShape(province, city, district, key, addValue) {
             var extData = {
                 "name": city,
                 "winwidth": 200,
-                "texts": texts
+                "texts": texts,
+                "id": city
             };
             posadd.city_polygons[city] = polygon;
             addOverlayAndInfowin(polygon, extData, null, list);
             gotoPolyOverlay(polygon, 8);
+            setResultItems([polygon], "distresults", "city_polygons", true);
         }
     });
 
 }
 
 function clear_address() {
-    for(var i = 0; i < posadd.addr_overlays; i++) {
+    for(var i = 0; i < posadd.addr_overlays.length; i++) {
         posadd.addr_overlays[i].hide();
     }
 }
 
 function clear_coords() {
-    for(var i = 0; i < posadd.coord_overlays; i++) {
+    for(var i = 0; i < posadd.coord_overlays.length; i++) {
         posadd.coord_overlays[i].hide();
     }
 }
 
 function clear_postcode() {
-    for(var i = 0; i < posadd.post_overlays; i++) {
+    for(var i = 0; i < posadd.post_overlays.length; i++) {
         posadd.post_overlays[i].hide();
     }
 }
 
 function clear_phone_number() {
-    for(var i = 0; i < posadd.phone_overlays; i++) {
+    for(var i = 0; i < posadd.phone_overlays.length; i++) {
         posadd.phone_overlays[i].hide();
     }
 }
 
 function clear_ip() {
-    for(var i = 0; i < posadd.ip_overlays; i++) {
+    for(var i = 0; i < posadd.ip_overlays.length; i++) {
         posadd.ip_overlays[i].hide();
+    }
+}
+
+function clear_cityPolygons() {
+    for(var city in posadd.city_polygons) {
+        var polygon = posadd.city_polygons[city];
+        polygon.hide();
     }
 }
 
@@ -738,36 +804,97 @@ function clear_posadds() {
     clear_postcode();
     clear_phone_number();
     clear_ip();
+    clear_cityPolygons();
+    posadd = {
+
+        geoCoder: new BMap.Geocoder(),
+        convertor: new BMap.Convertor(),
+        addr_overlays :[],
+        coord_overlays: [],
+        post_overlays:[],
+        phone_overlays:[],
+        ip_overlays:[],
+        city_polygons: {},
+        tmp_addrs: [],
+        pointCollection: null,
+        mapvpDataset: null,
+        spaMethod: 1,
+        timeMethod: 1,
+        startTime: null,
+        endTime: null,
+        mapExtent: null,
+        road_conditions: [],
+        traffic_lines: [],
+        baiduSeachWord: "武汉 火灾 2月27日",
+        baiduSearch: {},
+        baiduSearchUrls: [],
+    };
+    initComponents();
 }
 
+cloneObject = function(obj) {
+    if(typeof obj === "object") {
+        if(util.isArray(obj)) {
+            var newArr = [];
+            for(var i = 0; i < obj.length; i++) newArr.push(obj[i]);
+            return newArr;
+        } else {
+            var newObj = {};
+            for(var key in obj) {
+                newObj[key] = cloneObject(obj[key]);
+            }
+            return newObj;
+        }
+    } else {
+        return obj;
+    }
+};
+
 function show_address() {
-    for(var i = 0; i < posadd.addr_overlays; i++) {
+    for(var i = 0; i < posadd.addr_overlays.length; i++) {
         posadd.addr_overlays[i].show();
     }
 }
 
 function show_coords() {
-    for(var i = 0; i < posadd.coord_overlays; i++) {
+    for(var i = 0; i < posadd.coord_overlays.length; i++) {
         posadd.coord_overlays[i].show();
     }
 }
 
 function show_postcode() {
-    for(var i = 0; i < posadd.post_overlays; i++) {
+    for(var i = 0; i < posadd.post_overlays.length; i++) {
         posadd.post_overlays[i].show();
     }
 }
 
 function show_phone_number() {
-    for(var i = 0; i < posadd.phone_overlays; i++) {
+    for(var i = 0; i < posadd.phone_overlays.length; i++) {
         posadd.phone_overlays[i].show();
     }
 }
 
 function show_ip() {
-    for(var i = 0; i < posadd.ip_overlays; i++) {
+    for(var i = 0; i < posadd.ip_overlays.length; i++) {
         posadd.ip_overlays[i].show();
     }
+}
+
+function showCityPolygons() {
+    for(var city in posadd.city_polygons) {
+        var polygon = posadd.city_polygons[city];
+        polygon.show();
+    }
+}
+
+function showPosAdds() {
+    show_address();
+    show_coords();
+    show_postcode();
+    show_phone_number();
+    show_ip();
+    showRelposOverlays();
+    showCityPolygons();
 }
 
 function gotoProtocolCases(seq) {
@@ -888,9 +1015,11 @@ function addGo() {
             ids += (in_points[j] + ",");
         }
         url += ("&ids=" + ids);
-        posaddAction(url);
+        // posaddAction(url);
+        setTimeout("posaddAction('" + url + "')", 1000);
     } else {
-        posaddAction(url);
+        // posaddAction(url);
+        setTimeout("posaddAction('" + url + "')", 1000);
     }
 
 }
@@ -1242,14 +1371,14 @@ function baiduSearch() {
 
 //  将百度搜索结果中得网页文本位置显示在地图中（按钮调用）
 function addSearchToMap() {
-    clearBaiduSearchOverlay();
-    if(isDefaultSearch(posadd.baiduSeachWord)) {    //  默认搜索结果
-        showDeaultBdSearchPoses();
-    } else {    //  一般搜索结果，待完成
-        showBdSearchPoses();
-    }
-    console.log("extract website positions done.");
-    // showBdSearchPoses();
+    // clearBaiduSearchOverlay();
+    // if(isDefaultSearch(posadd.baiduSeachWord)) {    //  默认搜索结果
+    //     showDeaultBdSearchPoses();
+    // } else {    //  一般搜索结果，待完成
+    //     showBdSearchPoses();
+    // }
+    // console.log("extract website positions done.");
+    // // showBdSearchPoses();
     
 }
 

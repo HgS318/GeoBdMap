@@ -385,7 +385,7 @@ function removeExtratOverlays() {
 
 function setRelposResItem() {
     var total_data = relpos.positions.concat(relpos.relPositions);
-    setResultItems(total_data, "distresults", "relpos");
+    setResultItems(total_data, "distresults", "relpos", true);
     $("#distintotal")[0].innerHTML = "感知接入信息：" + total_data.length + "条记录";
 }
 

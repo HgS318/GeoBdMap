@@ -464,6 +464,7 @@ function openInfoWin(e, content, title, width) {
     }
     // if(content == null || content === undefined) {
     try {
+        overlay.show();
         content = createContent(overlay.extData);
     } catch (exp) {
         console.log(content);

@@ -117,7 +117,7 @@ public class GeoEntity {
         obj.put("models", modelsArr);
         obj.put("timeE", time == null ? null : time.toString());
         obj.put("obsoleteTimeE", obsoleteTime == null ? null : obsoleteTime.toString());
-        obj.put("infoIds", toString(infoIds));
+        obj.put("infoIds", toString(infoIds, true));
         obj.put("infoAmount", infoAmount.toJson());
         return obj;
     }
@@ -214,6 +214,29 @@ public class GeoEntity {
             buf.append(obj.toString());
             if(i != len - 1) {
                 buf.append(", ");
+            }
+            i++;
+        }
+        return buf.toString();
+    }
+
+    public static String toString(List objs, boolean noMinus) {
+        int len = objs.size(), i = 0;
+        StringBuffer buf = new StringBuffer();
+        for(Object obj : objs) {
+            if(noMinus) {
+                try {
+                    String objStr = obj.toString();
+                    int num = Integer.parseInt(objStr);
+                    if(num >= 0) {
+                        buf.append(objStr);
+                        if(i != len - 1) {
+                            buf.append(", ");
+                        }
+                    }
+                } catch (Exception exp) {
+
+                }
             }
             i++;
         }

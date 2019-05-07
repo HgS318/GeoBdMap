@@ -19,6 +19,10 @@ function initElements() {
     $("#endtime1").datebox("setValue",myformatter(curr_time));
     $("#starttime2").datebox("setValue",myformatter(curr_time));
     $("#endtime2").datebox("setValue",myformatter(curr_time));
+
+    $("#distresults")[0].innerHTML = "";
+    $("#posaddRes")[0].innerHTML = "";
+    updatePosaddNum();
 }
 
 
@@ -432,9 +436,12 @@ function gotoOverlay(type, id) {
 		openContentWindow(src, title, 650, 500, 30, 280);
 		return;
 	} else {
-		overlay = findOverlay(showingMarkers, id);
-		center = overlay.extData.spaType == 1 ? overlay.getPosition() : overlay.getBounds().getCenter();
-		zom = 16;
+		// overlay = findOverlay(showingMarkers, id);
+        // center = overlay.extData.spaType == 1 ? overlay.getPosition() : overlay.getBounds().getCenter();
+        // zom = 16;
+        overlay = findOverlay(posadd[type], id);
+        openInfoWin({target: overlay});
+        return;
 	}
 	overlay.show();
 	map.setZoom(zom);
@@ -494,6 +501,11 @@ function setResultItems(muldata, divname, clas, append) {
 	var parentDiv = document.getElementById(divname);
 	parentDiv.style.display = "block";
 	var num = 0;
+    var startId = 1;
+    if(append == true || append == 'append' || append == 1) {
+        var now_items = parentDiv.querySelectorAll('div[class=list-group-item]');
+        startId = now_items.length + 1;
+    }
 	if (!muldata || "" == muldata || "{}" == muldata || !muldata.length || muldata.length < 1) {
 		parentDiv.innerHTML = "";
 	} else {
@@ -507,22 +519,24 @@ function setResultItems(muldata, divname, clas, append) {
 			var str;
 			if (clas) {
 				if (clas == "geoname") {
-					str = consPlaceResult(data, i + 1);
+					str = consPlaceResult(data, i + startId);
 				} else if (clas == "dist") {
-					str = consDistResult(data, i + 1);
+					str = consDistResult(data, i + startId);
 				} else if (clas == "bound") {
-					str = consBoundResult(data, i + 1);
+					str = consBoundResult(data, i + startId);
 				} else if (clas == "boundmarker") {
-					str = consBoundMarkerResult(data, i + 1);
+					str = consBoundMarkerResult(data, i + startId);
 				} else if (clas == "entity") {
-					str = consGeoEntityResult(data, i + 1);
+					str = consGeoEntityResult(data, i + startId);
 				} else if (clas == "geoinfo") {
 					str = consGeoInfoResult(data);
 				} else if (clas == "relpos") {
-					str = consRelposResult(data, i + 1);
-				}
+					str = consRelposResult(data, i + startId);
+				} else {    //  posadd
+                    str = consPosaddResult(data, i + startId, clas);
+                }
 			} else {
-				str = consPlaceResult(data, i + 1);
+				str = consPlaceResult(data, i + startId);
 			}
 			midstr += str;
 		}
@@ -535,7 +549,8 @@ function setResultItems(muldata, divname, clas, append) {
 			if(divIndex > 0) {
 				oldHtml = oldHtml.substring(0, divIndex);
 			}
-			totalstr = prestr + midstr + oldHtml + endstr;
+			totalstr = prestr + oldHtml + midstr + endstr;
+			updatePosaddNum();
 		}
 		parentDiv.innerHTML = totalstr;
 		// document.getElementById("distinfo").style.display = "none";
@@ -579,6 +594,24 @@ function consGeoInfoResult(info) {
 		}
 	}
 	return consResultItem("geoinfo" ,info['name'], info['infoId'], '位置信息', info['infoId'], content);
+}
+
+function consPosaddResult(info, index, posType) {
+    var content = '';
+    var text = info['text'];
+    var texts = info['texts'];
+    if(text != null && text != undefined && text.length > 0) {
+        content = text;
+        if(content.length > 36) {
+            content = content.substring(0, 34) + '...';
+        }
+    } else if(texts != null && texts != undefined && texts.length > 0) {
+        content = texts[0];
+        if(content.length > 36) {
+            content = content.substring(0, 34) + '...';
+        }
+    }
+    return consResultItem(posType ,info['name'], info['id'], '感知信息', index, content);
 }
 
 function consGeoEntityResult(entity, order) {

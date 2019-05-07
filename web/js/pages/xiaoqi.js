@@ -102,14 +102,16 @@ function hideXiaoqi() {
 //------------数据准备阶段
 //将所有地名转换成无歧义数组
 function bdGEO(){
-    var add = xiaoqi.adds[xiaoqi.index];
-    geocodeSearchAddr(add);
-    xiaoqi.index++;
+    if(xiaoqi.index < xiaoqi.adds.length) {
+        var add = xiaoqi.adds[xiaoqi.index];
+        geocodeSearchAddr(add);
+        xiaoqi.index++;
+    }
 }
 
 function geocodeSearchAddr(addr){
     if(xiaoqi.index < xiaoqi.adds.length){
-        setTimeout(window.bdGEO, 40);
+        setTimeout(window.bdGEO, 100);
     }
     xiaoqi.myGeo.getPoint(addr, function(point){
         if (point) {

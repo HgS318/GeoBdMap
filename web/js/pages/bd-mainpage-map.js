@@ -74,6 +74,10 @@ var bmHighIcon = new BMap.Icon("images/markers/boundmarker_red.png", new BMap.Si
 );
 
 $(function() {
+    initComponents();
+});
+
+function initComponents() {
 
     map = new BMap.Map("mapContainer");
     // map.centerAndZoom(new BMap.Point(110.79581, 30.88069), 11);
@@ -101,12 +105,12 @@ $(function() {
     initMouseTool();
 
     initElements();
-    setRightMenu();
+    // setRightMenu();
     initGeoInfos();
     toResStat();
     initRelpos();
     // initGeoEntities();
-});
+}
 
 //	初始化并显示所有地点
 function initGeonames(pdata) {
@@ -1124,11 +1128,20 @@ function newMouseOut(e) {
     }
 }
 
+function newMouseDbClick(e) {
+    try {
+        e.target.hide();
+    } catch (e){}
+}
+
 function createNewMarker(bp) {
     var marker = new BMap.Marker(bp, {icon: overlay_styles.newMarkerIcon});
     marker.spaType = 1;
+    // marker.extData['id'] = generateUUID();
     marker.addEventListener("mouseover", newHighLight);
     marker.addEventListener("mouseout", newMouseOut);
+    marker.addEventListener("rightclick", newMouseDbClick);
+    marker.addEventListener("dblclick", newMouseDbClick);
     return marker;
 }
 
@@ -1151,11 +1164,14 @@ function createNewPolygon(data, data_type) {
     }
     if(data_type == "polygon") {
         data.spaType = 5;
+        // polygon.extData['id'] = generateUUID();
         data.addEventListener("mouseover", newHighLight);
         data.addEventListener("mouseout", newMouseOut);
-        data.addEventListener("mouseup", function (e) {
-            openInfoWin(e);
-        });
+        data.addEventListener("rightclick", newMouseDbClick);
+        data.addEventListener("dblclick", newMouseDbClick);
+        // data.addEventListener("mouseup", function (e) {
+        //     openInfoWin(e);
+        // });
 
         return data;
     }

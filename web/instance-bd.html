@@ -121,10 +121,10 @@
 								<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="file" id="addrfile" name="uploadFile" accept="text/plain"
 										   onchange="openFile(event, 'addrtext')" />
-								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="button" value="接入地名/地址" class="srhbtn" onclick="extract_address()">
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="button" value="清除" class="srhbtn" onclick="clear_address()">
+									<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+									<!--<input type="button" value="清除" class="srhbtn" onclick="clear_address()">-->
 								</p>
 							</div>
 
@@ -140,10 +140,10 @@
 									<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										<input type="file" id="coordfile" name="uploadFile"
 											   onchange="openFileName(event, 'coordtext')" /></p>
-									<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										<input type="button" value="接入坐标位置" class="srhbtn" onclick="extract_coords()">
-										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-										<input type="button" value="清除" class="srhbtn" onclick="clear_coords()">
+										<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+										<!--<input type="button" value="清除" class="srhbtn" onclick="clear_coords()">-->
 									</p>
 								</form>
 							</div>
@@ -152,10 +152,10 @@
 								<h3>&nbsp;&nbsp;邮政编码</h3>
 								<p>输入邮编：<input id="posttext" class="innerWord"/></p>
 								<p>相关信息：<input id="postAboutText" class="innerWord"/></p>
-								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="button" value="接入邮编位置" class="srhbtn" onclick="extract_postcode()">
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="button" value="清除" class="srhbtn" onclick="clear_postcode()">
+									<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+									<!--<input type="button" value="清除" class="srhbtn" onclick="clear_postcode()">-->
 								</p>
 							</div>
 
@@ -165,10 +165,10 @@
 								<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="file" id="phonefile" name="uploadFile" accept="text/plain"
 										   onchange="openFile(event, 'phonetext')" />
-								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="button" value="接入固话位置" class="srhbtn" onclick="extract_phone_number()">
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="button" value="清除" class="srhbtn" onclick="clear_phone_number()">
+									<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+									<!--<input type="button" value="清除" class="srhbtn" onclick="clear_phone_number()">-->
 								</p>
 							</div>
 
@@ -178,10 +178,10 @@
 								<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="file" id="ipfile" name="uploadFile" accept="text/plain"
 										   onchange="openFile(event, 'iptext')" />
-								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="button" value="接入IP位置" class="srhbtn" onclick="extract_ip()">
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="button" value="清除" class="srhbtn" onclick="clear_ip()">
+									<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+									<!--<input type="button" value="清除" class="srhbtn" onclick="clear_ip()">-->
 								</p>
 							</div>
 
@@ -196,7 +196,7 @@
 								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="button" value="提取位置信息" class="srhbtn" onclick="extract_positions()">
 									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="button" value="清除" class="srhbtn" onclick="clear_ip()"></p>
+									<input type="button" value="清除" class="srhbtn" onclick="clear_posadds()"></p>
 								&nbsp;
 								<input type="checkbox" id="relative_checkbox" onclick="toShowRelatives(this)"/>显示相对位置
 								&nbsp;&nbsp;&nbsp;
@@ -389,7 +389,7 @@
 		<div class='button-group' style="background-color: #0d9bf2;right: 20px">
 			<input type="checkbox" id="toolbarInfo" checked onclick="placesCheckBox(this)"/>位置信息
 			<input type="checkbox" id="toolbarPosadd" checked onclick="distsCheckBox(this)"/>接入信息
-			<input type="checkbox" id="toolbarEntities" onclick="entityCheckBox(this)"/>融合要素
+			<input type="checkbox" id="toolbarEntities" onclick="entityCheckBox(this)"/>叠加要素
 			<input type="checkbox" id="toolbarMassp" onclick="boundsCheckBox(this)"/>海量点
 			<!--<input type="checkbox" id="toolbarBoundMarkers" checked onclick="boundMarksCheckBox(this)"/>事件-->
 			<!--<input type="checkbox" id="overview" disabled/>鹰眼-->
@@ -424,7 +424,7 @@
 						<div id="infoStats">
 							<p id="placeintotal" style="text-align: center" onclick="toInfoRes()">位置信息：0条记录</p>
 							<p id="distintotal" style="text-align: center" onclick="toPosaddRes()">感知接入信息：0条记录</p>
-							<p id="posaddtotal" style="text-align: center" onclick="toEntityRes()">叠加融合要素：0条记录</p>
+							<p id="posaddtotal" style="text-align: center" onclick="toEntityRes()">叠加要素：0条记录</p>
 							<p id="boundintotal" style="text-align: center" onclick="toMassPointRes()">海量点：0条记录</p>
 						</div>
                         <!--<p>&nbsp;&nbsp;<strong>叠加模式：</strong></p>-->
@@ -458,7 +458,7 @@
 						<div id="hm_Paginate_dists"></div>
 					</div>
 
-					<div title="叠加融合要素" id="posaddResDiv">
+					<div title="叠加要素" id="posaddResDiv">
 						<div id="posaddRes"></div>
 						<div id="hm_Paginate_posadd"></div>
 					</div>
@@ -513,7 +513,7 @@
 
 				<div id="seachAddDiv" style="width: 99%; margin-left: 2px; display: none">
 
-					<div id="chooseColoTab2" class="nextTab">
+					<div id="chooseColoTab2" class="nextTab" style="display: none">
 						<h3><input type="checkbox" id="colocheckbox2" checked onclick="toChooseColo2(this)"/>&nbsp;共位叠加</h3>
 						<div id="chooseColo2" class="nextTab">
 							<p><label><input name="coloMethod2" type="radio" value="1" checked />上确共位叠加(推荐) </label>
@@ -521,7 +521,7 @@
 						</div>
 					</div>
 
-					<div id="choosetensetab2" class="nextTab">
+					<div id="choosetensetab2" class="nextTab" style="display: none">
 						<h3><input type="checkbox" id="timecheckbox2" onclick="toChooseTime2(this)"/>&nbsp;时态叠加</h3>
 						<div id="choosetense2" class="nextTab" style="display: none">
 							<p><label><input name="tenseMethod" type="radio" value="1" checked onclick="timeAddMehod(1, 2)" />串联叠加 </label>&nbsp;&nbsp;
@@ -546,7 +546,7 @@
 				<div style="width: 99%; margin-left: 2px">
 					<div id="trafficDiv" style="display: none">
 						<div class="nextTab">
-							<h3><input type="checkbox" id="trafficCheck" checked onclick="selectTrafficTime(this)"/>&nbsp;选择路况时间</h3>
+							<h3>&nbsp;&nbsp;选择路况时间</h3>
 							<div id="trafficRadios" class="nextTab">
 								<p><label><input name="trafficRadio" type="radio" value="-1" checked
 												 onclick="gotoTrafficTime(this)" />关闭路况 </label></p>
