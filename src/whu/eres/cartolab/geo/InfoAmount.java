@@ -136,6 +136,16 @@ public class InfoAmount {
                 "modelLength: " + modelLength;
     }
 
+    public String toInfoString() {
+        return "文本: " + textLenth + "字节, " +
+                "图形: " + figureLength + "字节, " +
+                "图像: " + imageLength + "字节, " +
+                "视频: " + vedioLength + "秒, " +
+                "音频: " + audioLength + "秒, " +
+                "动画: " + flashLength + "秒, " +
+                "三维模型: " + modelLength + "字节. ";
+    }
+
 
     public String toJson() {
         JSONObject jo = new JSONObject();

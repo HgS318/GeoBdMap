@@ -52,11 +52,26 @@ function initXiaoqi() {
         point_marker: {},
         polygons: []
     };
+    initXiaoqiWindow();
+    initXiaoqiText();
+    initXiaoqiComponents();
+    // setTimeout("initXiaoqiWindow()", 1000);
+    // setTimeout("initXiaoqiText()", 3000);
+    // setTimeout("initXiaoqiComponents()", 4000);
+}
+
+function initXiaoqiWindow() {
     openContentWindow('data/syn_data/fires0227/Contents/武大赏樱黄鹤楼-移动.html#text0', "地名消岐文本", 600, 500, 20, 300);
+}
+
+function initXiaoqiText() {
     bdGEO();
     console.log(xiaoqi.wuqiyi);
     getfeiqi();
     document.getElementById("xiaoqiText").value = "   " + xiaoqi_text;
+}
+
+function initXiaoqiComponents() {
     document.getElementById("test1").value = "  早上, 九点, 春分, 中午十二点, 两个小时, 两点";
     document.getElementById("test2").value = "  武汉大学, 樱花大道, 万林艺术博物馆, 海底捞, 黄鹤楼";
 }
@@ -189,6 +204,9 @@ function feiqi() {
 
     addWuqiyiMarker(xiaoqi.points1[0], xiaoqi.points1title[0], xiaoqi.blueIcon);
     addWuqiyiMarker(xiaoqi.points1[1], xiaoqi.points1title[1], xiaoqi.blueIcon);
+    // for(var j = 0; j < xiaoqi.points3.length; j++) {
+    //     addWuqiyiMarker(xiaoqi.points3[j], xiaoqi.arrTitle[j], xiaoqi.blueIcon);
+    // }
 
 }
 

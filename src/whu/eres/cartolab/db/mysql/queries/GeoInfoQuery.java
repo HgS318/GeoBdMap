@@ -48,11 +48,11 @@ public class GeoInfoQuery {
 //                sql += buf.substring(0, buf.length() - 2);
                 sql += buf.toString() + " infoId < 0 ";
             }
-//            if(spaMethod == 2) {    //  ä¸‹ç¡®å…±ä½å åŠ ï¼ŒåŠ ä¸ŠinfoIdä¸ºè´Ÿçš„å…ƒç´ 
+//            if(spaMethod == 2) {    //  ÏÂÈ·¹²Î»µþ¼Ó£¬¼ÓÉÏinfoIdÎª¸ºµÄÔªËØ
 //                sql += "OR infoId < 0 ";
 //            }
         } else {
-//            if(spaMethod == 1) {    //  ä¸‹ç¡®å…±ä½å åŠ ï¼ŒåŠ ä¸ŠinfoIdä¸ºè´Ÿçš„å…ƒç´ 
+//            if(spaMethod == 1) {    //  ÏÂÈ·¹²Î»µþ¼Ó£¬¼ÓÉÏinfoIdÎª¸ºµÄÔªËØ
 //                sql += "WHERE infoId > 0 ";
 //            }
             sql += "WHERE infoId is NOT NULL ";
@@ -71,9 +71,29 @@ public class GeoInfoQuery {
         } else if(timeMethod == 4) {
             entities = GeoInfo.posadd(infos, spaMethod, timeMethod, null, start, end);
         }
+        InfoAmount infoIA = GeoInfo.infoAmount(infos);
+        InfoAmount entityIA = GeoEntity.infoAmount(entities);
+        String brief1 = "ÎÄ±¾: " + infoIA.textLenth + "×Ö½Ú, " +
+                "Í¼ÐÎ: " + infoIA.figureLength + "×Ö½Ú, " +
+                "Í¼Ïñ: " + infoIA.imageLength + "×Ö½Ú, " +
+                "ÊÓÆµ: " + infoIA.vedioLength + "Ãë, " +
+                "ÒôÆµ: " + infoIA.audioLength + "Ãë, " +
+                "¶¯»­: " + infoIA.flashLength + "Ãë, " +
+                "ÈýÎ¬Ä£ÐÍ: " + infoIA.modelLength + "×Ö½Ú. ";
+        String brief2 = "ÎÄ±¾: " + entityIA.textLenth + "×Ö½Ú, " +
+                "Í¼ÐÎ: " + entityIA.figureLength + "×Ö½Ú, " +
+                "Í¼Ïñ: " + entityIA.imageLength + "×Ö½Ú, " +
+                "ÊÓÆµ: " + entityIA.vedioLength + "Ãë, " +
+                "ÒôÆµ: " + entityIA.audioLength + "Ãë, " +
+                "¶¯»­: " + entityIA.flashLength + "Ãë, " +
+                "ÈýÎ¬Ä£ÐÍ: " + entityIA.modelLength + "×Ö½Ú. ";
+        String infoStr = String.format("    ²ÎÓëµþ¼ÓµÄÒªËØ: %d ¸ö£¬µþ¼ÓÇ°ÐÅÏ¢Á¿: %s;" +
+                "    µþ¼Ó²úÉúµÄÒªËØ: %d ¸ö£¬µþ¼Ó²úÉúµÄÒªËØÐÅÏ¢Á¿: %s",
+                infos.size(), brief1, entities.size(), brief2);
         String entitiesStr = GeoEntity.toJson(entities);
         System.out.println(entitiesStr);
-        return entitiesStr;
+        String resultStr = "{" + "\"brief\": \"" + infoStr + "\", \"entities\":" + entitiesStr + "}";
+        return resultStr;
     }
 
     public static Date parseEasyuiDateStr(String dateStr) {

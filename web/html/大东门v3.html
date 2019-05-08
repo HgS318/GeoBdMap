@@ -1,0 +1,328 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+		body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+		#allmap{height:600px;width:100%;}
+		#r-result{width:100%;}
+	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=wsztT6g8Lzfrg8RGsT1el4q3NbiF7ZkQ"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/library/GeoUtils/1.2/src/GeoUtils.js"></script>
+        <title>添加/删除覆盖物</title>
+</head>
+<body>
+	<div id="allmap"></div>
+	<div id="r-result">
+		<input type="button" onclick="showGrid();" value="功能" />
+	</div>
+</body>
+</html>
+<script type="text/javascript">      // 百度地图API功能
+
+        var map = new BMap.Map("allmap");
+        map.enableScrollWheelZoom();//启动鼠标滚轮缩放地图
+        var point = new BMap.Point(114.324404,30.543133);
+        map.centerAndZoom(point, 15);
+
+
+        var pointsOI=[];     //全部POI数组
+        var POILng=[];       //全部POI经度数组
+        var POILat=[];       //全部POI经度数组
+	                     
+ 	function  searchPOI(){
+           var Lng;
+           var Lat;
+      	   var options = {    
+           	  renderOptions:{map:map,autoViewport:false,selectFirstResult: false},
+           	  pageCapacity : 90,
+	     	  onSearchComplete: function(results){      
+		 	if (local.getStatus() == BMAP_STATUS_SUCCESS){             // 判断状态是否正确
+	 		    for (var i=0; i<results.getCurrentNumPois(); i++){  
+                                 Lng= results.getPoi(i).point.lng;
+                                 Lat= results.getPoi(i).point.lat;
+			 	 pointsOI.push(new BMap.Point(Lng,Lat));
+                                 POILng.push(results.getPoi(i).point.lng);
+                                 POILat.push(results.getPoi(i).point.lat);
+	         	    }  
+	 	        }           
+  	           } 
+  	        }
+ 		var local = new BMap.LocalSearch(map,options);
+ 		local.search("大东门");
+ 	}
+        searchPOI();
+
+
+                        
+        function showGrid(){
+            function removeDuplicatedItem(arr){
+                for(var ir = 0; ir < arr.length-1;ir++){
+                    for(var jr = ir+1; jr < arr.length;jr++){
+                        if(map.getDistance(arr[ir],arr[jr]).toFixed(2) < 0.000001){ 
+                           arr.splice(jr,1);      //删除数组元素后数组长度减1后面的元素前移
+                           jr--;    //数组下标回退
+                        }
+                    }
+                }
+                return arr;
+            }
+
+            function removeDuplicatedLngLat(arr1,arr2){
+                for(var il = 0; il < arr1.length-1;il++){
+                    for(var jl = il+1; jl < arr1.length;jl++){
+                        if(arr1[il]==arr1[jl]&& arr2[il]==arr2[jl]){
+                           arr1.splice(jl,1);   
+                           arr2.splice(jl,1); 
+                           jl--;    
+                        }
+                    }
+                }
+                return arr1,arr2;
+            }
+
+//1.定义变量
+            var pointUpLeftLng =[];    //栅格左上角经度
+            var pointUpLeftLat =[];
+            var pointUpLeft =[];
+            var POIpolygon =[];       //包含POI的栅格
+            var Pro=[];               //POI出现的频次
+            var ProMax=[];
+            var cenGridIndex;       
+            var cenGridPoint;       //频次最高的栅格
+            var inscalePOI=[];
+            var inscalePOILng=[];
+            var inscalePOILat=[];
+            var countGrid=[];
+            var A = 0.1;                //网格范围（单位为经纬度）
+            var B = 0.05;
+            var d_x = 0.000008993231;     //距离与经纬度的转换系数
+            var d_y = 0.000010442655;
+            var r=180;
+
+//2.计算中心点
+     	    for(var i=0,sumLng=0,sumLat=0;i<POILng.length;i++){
+     	        sumLng += POILng[i];
+    	        sumLat += POILat[i];
+    	    }
+     	    var cenPoint=new BMap.Point((sumLng/pointsOI.length).toFixed(6), (sumLat/pointsOI.length).toFixed(6));   
+            map.addOverlay(new BMap.Marker(cenPoint));
+
+            function bs() {
+                var bs = map.getBounds(new BMap.Point(cenPoint.lng-2*A,cenPoint.lat-2*A),new BMap.Point(cenPoint.lng+2*A,cenPoint.lat+2*A));  //获取边界
+                var bssw = new BMap.Point(cenPoint.lng-2*A,cenPoint.lat-2*B);		//获取西南角的经纬度(左下端点)
+                var bsne = new BMap.Point(cenPoint.lng+2*A,cenPoint.lat+2*B);		//获取东北角的经纬度(右上端点)
+                return { 'x1': bssw.lng, 'y1': bssw.lat, 'x2': bsne.lng, 'y2': bsne.lat };
+            }
+            var XY = bs();
+            //循环：划分网格并筛选出包含POI的栅格
+            for(var k=0;k<pointsOI.length;k++){
+                for(var i = XY.x1; i < XY.x2; i = i + r*d_y) {
+            	    for (var j = XY.y2; j > XY.y1; j = j - r*d_x) {
+	                 var polygon = new BMap.Polygon([
+	                     new BMap.Point(i, j),    //网格左上端点
+	                     new BMap.Point(i, j-r*d_x),  //网格左下端点
+  	                     new BMap.Point(i+r*d_y, j-r*d_x),	 //网格右下端点
+  	                     new BMap.Point(i+r*d_y, j)			//网格右上端点
+	                 ], {strokeColor:"purple", strokeWeight:1, strokeOpacity:0.7,fillColor:"purple",fillOpacity:0.3}); 
+                         if (BMapLib.GeoUtils.isPointInPolygon(pointsOI[k],polygon)){  //判断点是否在矩形内
+	                     pointUpLeft.push(new BMap.Point(i, j));
+	                     pointUpLeftLng.push(i);
+	                     pointUpLeftLat.push(j);
+                             removeDuplicatedItem(pointUpLeft);//消除数组中重复的元素
+                             removeDuplicatedLngLat(pointUpLeftLng,pointUpLeftLat);
+                         }
+                         else 
+                              continue;
+                    }
+                }
+  	    }
+
+            for(var i = 0; i < pointUpLeftLng.length;i++) {
+	        mypolygon = new BMap.Polygon([
+	                  new BMap.Point(pointUpLeftLng[i], pointUpLeftLat[i]),    //网格左上端点
+	                  new BMap.Point(pointUpLeftLng[i], pointUpLeftLat[i]-r*d_x),  //网格左下端点
+  	                  new BMap.Point(pointUpLeftLng[i]+r*d_y, pointUpLeftLat[i]-r*d_x),	 //网格右下端点
+  	                  new BMap.Point(pointUpLeftLng[i]+r*d_y, pointUpLeftLat[i]),			//网格右上端点
+	        ], {strokeColor:"purple", strokeWeight:1, strokeOpacity:0.7,fillColor:"purple",fillOpacity:0.3});
+	        POIpolygon.push(mypolygon);
+                //循环：计算栅格中POI的数量，即POI出现的频次
+                for(var kk=0,p = 0;kk<pointsOI.length;kk++){
+                    if (BMapLib.GeoUtils.isPointInPolygon(pointsOI[kk],mypolygon)){  //判断点是否在矩形内
+                        p++;
+                    }
+                }
+	         Pro.push(p);
+	         ProMax.push(p);
+            }
+
+            ProMax.sort(function(Pro1, Pro2){
+                            if (Pro1< Pro2) return 1;
+                            else if(Pro1 >Pro2)   return -1;
+                                 else return 0;
+            });
+
+            //查找最大频次对应位置点的索引
+	    for(var ipro=0;ipro<Pro.length;ipro++){
+                if (Pro[ipro]==ProMax[0]) {cenGridIndex=ipro;break;};
+            }
+            cenGridPoint=new BMap.Point(pointUpLeftLng[cenGridIndex],pointUpLeftLat[cenGridIndex]);
+            map.addOverlay(new BMap.Marker(cenGridPoint));
+
+//3.判断POI是否位于栅格内
+
+            //查找1000米范围内的POI
+            for(var ind=0;ind<pointsOI.length;ind++){
+                if(map.getDistance(pointsOI[ind],cenGridPoint).toFixed(2)<900){
+                   inscalePOI.push(pointsOI[ind]);
+                   inscalePOILng.push(POILng[ind]);
+                   inscalePOILat.push(POILat[ind]);
+                }  
+            }
+
+
+//4.计算外接矩形
+            var Lngsort=inscalePOILng;
+            var Latsort=inscalePOILat;
+            Lngsort.sort((a,b)=>b-a);
+            Latsort.sort((a,b)=>b-a);
+            console.log(Lngsort);
+            console.log(Latsort);
+
+	    rectpolygon = new BMap.Polygon([
+	        new BMap.Point(Lngsort[Lngsort.length-1], Latsort[0]),  //网格左上端点
+  	        new BMap.Point(Lngsort[Lngsort.length-1], Latsort[Latsort.length-1]),	 //网格左下端点
+  	        new BMap.Point(Lngsort[0], Latsort[Latsort.length-1]),			//网格右下端点
+	        new BMap.Point(Lngsort[0], Latsort[0]),    //网格右上端点
+	    ], {strokeColor:"cyan", strokeWeight:1, strokeOpacity:0.5,fillColor:"cyan",fillOpacity:0.3});
+	    map.addOverlay(rectpolygon);
+       
+            var a=Lngsort[0]-Lngsort[Lngsort.length-1];
+            var b=Latsort[0]-Latsort[Latsort.length-1];
+            var deltaLng=r*d_y;
+            var deltaLat=r*d_x;
+            var mx=Math.ceil(a/deltaLng);
+            var my=Math.ceil(b/deltaLat);
+
+
+//5.定义二维矩阵  i:行  j:列
+            var matrix= new Array();
+            for(var i = 0;i < my;i++) {
+
+
+                matrix[i]=new Array(mx);
+                for(var j=0;j<mx;j++){
+                    matrix[i][j]=0;
+                }
+            
+
+}
+ 
+            
+//6.对矩阵中的每一个栅格统计POI的个数，并将个数赋值到二维数组
+            
+for(var i = 0;i < matrix.length;i++) {
+
+    
+                
+
+for(var j = 0;j < matrix[0].length;j++) {
+
+
+                       var thispolygon = new BMap.Polygon([
+	                   new BMap.Point(Lngsort[Lngsort.length-1]+j*deltaLng, Latsort[0]-i*deltaLat),    //网格左上端点
+	                   new BMap.Point(Lngsort[Lngsort.length-1]+j*deltaLng, Latsort[0]-i*deltaLat-r*d_x),  //网格左下端点
+  	                   new BMap.Point(Lngsort[Lngsort.length-1]+j*deltaLng+deltaLng, Latsort[0]-i*deltaLat-r*d_x),	 //网格右下端点
+  	                   new BMap.Point(Lngsort[Lngsort.length-1]+j*deltaLng+deltaLng, Latsort[0]-i*deltaLat)			//网格右上端点
+	               ], {strokeColor:"purple", strokeWeight:1, strokeOpacity:0.5,fillColor:"purple",fillOpacity:0.3});
+
+                      for(var k=0;k<inscalePOI.length;k++){
+                        if (BMapLib.GeoUtils.isPointInPolygon(pointsOI[k],thispolygon)){  //判断点是否在矩形内
+                           matrix[i][j]++;
+                        }
+                     }
+                 }
+            }
+            console.log(matrix);          
+
+//7.将被内含POI的栅格包围的空白栅格填补
+            for(var k = 0;k < 10;k++) {
+
+
+                //按行补空
+                
+
+for(var i = 0;i < matrix.length;i++) {
+
+    
+                    
+
+for(var j = 0;j < matrix[0].length-2;j++) {
+
+
+                        if(matrix[i][j]!=0&&matrix[i][j+1]==0&&(matrix[i][j+2]!=0)){
+                             matrix[i][j+1]=1;
+                             break;
+                        }
+                    }
+                
+
+}
+                //按列补空
+                
+
+for(var i = 0;i < matrix.length-2;i++) {
+
+    
+                    
+
+for(var j = 0;j < matrix[0].length;j++) {
+
+
+                        if(matrix[i][j]!=0&&matrix[i+1][j]==0&&(matrix[i+2][j]!=0)){
+                             matrix[i+1][j]=1;
+                             break;
+                        }
+                    }
+                
+
+}
+            }
+            console.log(matrix);
+
+            //展示地名语义区域
+            
+
+for(var i = 0;i < matrix[0].length;i++) {
+
+    
+                
+
+for(var j = 0;j < matrix.length;j++) {
+
+
+                    if(matrix[j][i]!=0){
+                       var polygon = new BMap.Polygon([
+	                   new BMap.Point(Lngsort[Lngsort.length-1]+i*deltaLng, Latsort[0]-j*deltaLat),    //网格左上端点
+	                   new BMap.Point(Lngsort[Lngsort.length-1]+i*deltaLng, Latsort[0]-j*deltaLat-r*d_x),  //网格左下端点
+  	                   new BMap.Point(Lngsort[Lngsort.length-1]+i*deltaLng+deltaLng, Latsort[0]-j*deltaLat-r*d_x),	 //网格右下端点
+  	                   new BMap.Point(Lngsort[Lngsort.length-1]+i*deltaLng+deltaLng, Latsort[0]-j*deltaLat)			//网格右上端点
+	               ], {strokeColor:"purple", strokeWeight:1, strokeOpacity:0.5,fillColor:"purple",fillOpacity:0.3});
+	               //polygon.addEventListener("click",function clickFunction(){   alert("该栅格内有"+Dimension2[j][i]+"个POI。");   }); 
+                       function myshowgoalPolygon(){
+	                   map.addOverlay(polygon);
+                       }
+                       myshowgoalPolygon();
+                    }
+                }
+            
+
+}
+        }
+
+
+
+      
+
+</script>

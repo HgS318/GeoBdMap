@@ -17,51 +17,51 @@ function initGeoInfos() {
             for (var i = 0; i < dataJson.length; i++) {
                 var entity = dataJson[i];
                 var content = createContent(entity);
-
-                var pointStr = entity['position'];
-                if(pointStr != null && pointStr != undefined) {
-                    var pointArray = pointStr.split(",");
-                    var marker = getFigureJson([pointArray[0], pointArray[1]], "point");
-                    addOverlayAndInfowin(marker, entity, content, geoInfos);
-                }
-                var lineStr = entity['line'];
-                if(lineStr != null && lineStr != undefined) {
-                    var polyline = getFigureJson(lineStr, "line");
-                    addOverlayAndInfowin(polyline, entity, content, geoInfos);
-                }
-                var polygonStr = entity['polygon'];
-                if(polygonStr != null && polygonStr != undefined) {
-                    var polygon = getFigureJson(polygonStr, "polygon");
-                    addOverlayAndInfowin(polygon, entity, content, geoInfos);
-                }
-                var shapes = entity['shapes'];
-                if(shapes != null && shapes != undefined && shapes.length > 0) {
-                    for(var j = 0; j < shapes.length; j++) {
-                        var shapeJson = shapes[j];
-                        var spaType = shapeJson['spaType'];
-                        var shape = shapeJson['shape'];
-                        var overlay = getFigureByStr(shape, spaType);
-                        addOverlayAndInfowin(polygon, entity, content, geoInfos);
-                    }
-                }
-                if((entity['shapes'] == null || entity['shapes'] == "") && (entity['position'] == null || entity['position'] == "")
-                   && (entity['line'] == null || entity['line'] == "") && (entity['polygon'] == null || entity['polygon'] == "")
-                    && entity['name'] != null && entity['name'] != undefined && entity['name'] != "") {
-                    var name = entity['name'];
-                    var bdary = new BMap.Boundary();
-                    bdary.get(name, function(rs){       //获取行政区域
-                        var count = rs.boundaries.length; //行政区域的点有多少个
-                        for(var i = 0; i < count; i++){
-                            console.log(rs.boundaries[i]);
-                            var distPolygon = new BMap.Polygon(rs.boundaries[i]);
-                            distPolygon.spaType = 5;
-                            addOverlayAndInfowin(distPolygon, entity, content, geoInfos);
-                        }
-                    });
-                    // var distPolygon = getDistBaiduPolygon(entity['name']);
-                    // distPolygon.spaType = 5;
-                    // addOverlayAndInfowin(distPolygon, entity, content, geoEntities);
-                }
+                createFigure(entity, content, geoInfos);
+                // var pointStr = entity['position'];
+                // if(pointStr != null && pointStr != undefined) {
+                //     var pointArray = pointStr.split(",");
+                //     var marker = getFigureJson([pointArray[0], pointArray[1]], "point");
+                //     addOverlayAndInfowin(marker, entity, content, geoInfos);
+                // }
+                // var lineStr = entity['line'];
+                // if(lineStr != null && lineStr != undefined) {
+                //     var polyline = getFigureJson(lineStr, "line");
+                //     addOverlayAndInfowin(polyline, entity, content, geoInfos);
+                // }
+                // var polygonStr = entity['polygon'];
+                // if(polygonStr != null && polygonStr != undefined) {
+                //     var polygon = getFigureJson(polygonStr, "polygon");
+                //     addOverlayAndInfowin(polygon, entity, content, geoInfos);
+                // }
+                // var shapes = entity['shapes'];
+                // if(shapes != null && shapes != undefined && shapes.length > 0) {
+                //     for(var j = 0; j < shapes.length; j++) {
+                //         var shapeJson = shapes[j];
+                //         var spaType = shapeJson['spaType'];
+                //         var shape = shapeJson['shape'];
+                //         var overlay = getFigureByStr(shape, spaType);
+                //         addOverlayAndInfowin(polygon, entity, content, geoInfos);
+                //     }
+                // }
+                // if((entity['shapes'] == null || entity['shapes'] == "") && (entity['position'] == null || entity['position'] == "")
+                //    && (entity['line'] == null || entity['line'] == "") && (entity['polygon'] == null || entity['polygon'] == "")
+                //     && entity['name'] != null && entity['name'] != undefined && entity['name'] != "") {
+                //     var name = entity['name'];
+                //     var bdary = new BMap.Boundary();
+                //     bdary.get(name, function(rs){       //获取行政区域
+                //         var count = rs.boundaries.length; //行政区域的点有多少个
+                //         for(var i = 0; i < count; i++){
+                //             console.log(rs.boundaries[i]);
+                //             var distPolygon = new BMap.Polygon(rs.boundaries[i]);
+                //             distPolygon.spaType = 5;
+                //             addOverlayAndInfowin(distPolygon, entity, content, geoInfos);
+                //         }
+                //     });
+                //     // var distPolygon = getDistBaiduPolygon(entity['name']);
+                //     // distPolygon.spaType = 5;
+                //     // addOverlayAndInfowin(distPolygon, entity, content, geoEntities);
+                // }
             }
             setResultItems(geoInfos, "placeresults", "geoinfo");
             $("#placeintotal")[0].innerHTML = "位置信息：" + geoInfos.length + "条记录";
@@ -75,55 +75,13 @@ function initGeoInfos() {
 
 function initGeoEntities(entities) {
     if(entities != undefined && entities != null && entities.length > 0) {
+        geoEntities = [];
         for (var i = 0; i < entities.length; i++) {
             var entity = entities[i];
             var uuid = generateUUID();
             entity['id'] = uuid;
             var content = createContent(entity);
-            var pointStr = entity['position'];
-            if(pointStr != null && pointStr != undefined) {
-                var pointArray = pointStr.split(",");
-                var marker = getFigureJson([pointArray[0], pointArray[1]], "point");
-                addOverlayAndInfowin(marker, entity, content, geoEntities);
-            }
-            var lineStr = entity['line'];
-            if(lineStr != null && lineStr != undefined) {
-                var polyline = getFigureJson(lineStr, "line", geoEntities);
-                addOverlayAndInfowin(polyline, entity, content, geoEntities);
-            }
-            var polygonStr = entity['polygon'];
-            if(polygonStr != null && polygonStr != undefined) {
-                var polygon = getFigureJson(polygonStr, "polygon");
-                addOverlayAndInfowin(polygon, entity, content, geoEntities);
-            }
-            var shapes = entity['shapes'];
-            if(shapes != null && shapes != undefined && shapes.length > 0) {
-                for(var j = 0; j < shapes.length; j++) {
-                    var shapeJson = shapes[j];
-                    var spaType = shapeJson['spaType'];
-                    var shape = shapeJson['shape'];
-                    var overlay = getFigureByStr(shape, spaType);
-                    addOverlayAndInfowin(polygon, entity, content, geoEntities);
-                }
-            }
-            if((entity['shapes'] == null || entity['shapes'] == "") && (entity['position'] == null || entity['position'] == "")
-                && (entity['line'] == null || entity['line'] == "") && (entity['polygon'] == null || entity['polygon'] == "")
-                && entity['name'] != null && entity['name'] != undefined && entity['name'] != "") {
-                var name = entity['name'];
-                var bdary = new BMap.Boundary();
-                bdary.get(name, function(rs){       //获取行政区域
-                    var count = rs.boundaries.length; //行政区域的点有多少个
-                    for(var i = 0; i < count; i++){
-                        console.log(rs.boundaries[i]);
-                        var distPolygon = new BMap.Polygon(rs.boundaries[i]);
-                        distPolygon.spaType = 5;
-                        addOverlayAndInfowin(distPolygon, entity, content, geoEntities);
-                    }
-                });
-                // var distPolygon = getDistBaiduPolygon(entity['name']);
-                // distPolygon.spaType = 5;
-                // addOverlayAndInfowin(distPolygon, entity, content, geoEntities);
-            }
+            createFigure(entity, content, geoEntities);
         }
         setResultItems(geoEntities, "posaddRes", "entity");
         $("#posaddtotal")[0].innerHTML = "叠加融合信息：" + geoEntities.length + "条记录";
@@ -143,38 +101,57 @@ function initGeoEntities(entities) {
     }
 }
 
-function getDistBaiduPolygon(name) {
-    var bdary = new BMap.Boundary();
-    bdary.get(name, function(rs){       //获取行政区域
-        var count = rs.boundaries.length; //行政区域的点有多少个
-        for(var i = 0; i < count; i++){
-            var ply = new BMap.Polygon(rs.boundaries[i]);
+function createFigure(entity, content, list) {
+    var polygonStr = entity['polygon'];
+    if(polygonStr != null && polygonStr != undefined) {
+        var polygon = getFigureJson(polygonStr, "polygon");
+        addOverlayAndInfowin(polygon, entity, content, list);
+        return polygon;
+    }
+    var lineStr = entity['line'];
+    if(lineStr != null && lineStr != undefined) {
+        var polyline = getFigureJson(lineStr, "line", list);
+        addOverlayAndInfowin(polyline, entity, content, list);
+        return polyline;
+    }
+    var pointStr = entity['position'];
+    if(pointStr != null && pointStr != undefined) {
+        var pointArray = pointStr.split(",");
+        var marker = getFigureJson([pointArray[0], pointArray[1]], "point");
+        addOverlayAndInfowin(marker, entity, content, list);
+        return marker;
+    }
+    var shapes = entity['shapes'];
+    if(shapes != null && shapes != undefined && shapes.length > 0) {
+        for(var j = 0; j < shapes.length; j++) {
+            var shapeJson = shapes[j];
+            var spaType = shapeJson['spaType'];
+            var shape = shapeJson['shape'];
+            var overlay = getFigureByStr(shape, spaType);
+            addOverlayAndInfowin(overlay, entity, content, list);
+            return overlay;
         }
-    });
-}
-
-function showGeoInfo() {
-    for(var i = 0; i < geoInfos.length; i++) {
-        geoInfos[i].show();
     }
-}
-
-function hideGeoInfo() {
-    for(var i = 0; i < geoInfos.length; i++) {
-        geoInfos[i].hide();
+    if((entity['shapes'] == null || entity['shapes'] == "") && (entity['position'] == null || entity['position'] == "")
+        && (entity['line'] == null || entity['line'] == "") && (entity['polygon'] == null || entity['polygon'] == "")
+        && entity['name'] != null && entity['name'] != undefined && entity['name'] != "") {
+        var name = entity['name'];
+        var bdary = new BMap.Boundary();
+        bdary.get(name, function(rs){       //获取行政区域
+            var count = rs.boundaries.length; //行政区域的点有多少个
+            for(var i = 0; i < count; i++){
+                console.log(rs.boundaries[i]);
+                var distPolygon = new BMap.Polygon(rs.boundaries[i]);
+                distPolygon.spaType = 5;
+                addOverlayAndInfowin(distPolygon, entity, content, list);
+                return distPolygon;
+            }
+        });
+        // var distPolygon = getDistBaiduPolygon(entity['name']);
+        // distPolygon.spaType = 5;
+        // addOverlayAndInfowin(distPolygon, entity, content, list);
     }
-}
-
-function showGeoEntities() {
-    for(var i = 0; i < geoEntities.length; i++) {
-        geoEntities[i].show();
-    }
-}
-
-function hideGeoEntities() {
-    for(var i = 0; i < geoEntities.length; i++) {
-        geoEntities[i].hide();
-    }
+    return null;
 }
 
 function createContent(entity) {
@@ -410,6 +387,40 @@ function createSimpleContent(entity) {
     }
     content += '</div>';
     return content;
+}
+
+function getDistBaiduPolygon(name) {
+    var bdary = new BMap.Boundary();
+    bdary.get(name, function(rs){       //获取行政区域
+        var count = rs.boundaries.length; //行政区域的点有多少个
+        for(var i = 0; i < count; i++){
+            var ply = new BMap.Polygon(rs.boundaries[i]);
+        }
+    });
+}
+
+function showGeoInfo() {
+    for(var i = 0; i < geoInfos.length; i++) {
+        geoInfos[i].show();
+    }
+}
+
+function hideGeoInfo() {
+    for(var i = 0; i < geoInfos.length; i++) {
+        geoInfos[i].hide();
+    }
+}
+
+function showGeoEntities() {
+    for(var i = 0; i < geoEntities.length; i++) {
+        geoEntities[i].show();
+    }
+}
+
+function hideGeoEntities() {
+    for(var i = 0; i < geoEntities.length; i++) {
+        geoEntities[i].hide();
+    }
 }
 
 function addOverlayAndInfowin(overlay, data, content, list) {

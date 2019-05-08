@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" id="html">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<title>批量反地址解析+商圈</title>
+	<style type="text/css">
+		body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+		#l-map{height:300px;width:100%;}
+		#l-result{width:50%; font-size:14px;line-height:20px;}
+		#r-result{width:50%; font-size:14px;line-height:20px;}
+	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=a4bZG4vQC80FlPAmQLeKCpHvhWAac4Cy"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js" charset=UTF-8></script>
+    
+</head>
+<body>
+	<div id="l-map"></div>
+	<div id="r-result">
+    <input type='file'  accept='text/plain' onchange='openFile(event)' accept='txt'  /><br> 
+    <div id="output"></div>     
+        
+	<input type="button" value="地址解析" onclick="post_test()" />
+	<!--<input type="button" value="批量反地址解析" onclick="bdbGEO(0)" />-->
+		
+		<div id="result"></div>
+	</div>
+</body>
+</html>
+
+
+
+
+
+<script type="text/javascript">
+        
+       
+	// 百度地图API功能
+	var map = new BMap.Map("l-map");
+	map.centerAndZoom(new BMap.Point(116.413384,39.910925), 8);
+	map.enableScrollWheelZoom(true);
+	var index = 0;
+	var myGeo = new BMap.Geocoder();
+    var adds = [];
+//	var adds = [
+//		"包河区金寨路1号（金寨路与望江西路交叉口）",
+//		"庐阳区凤台路209号（凤台路与蒙城北路交叉口）",
+//		"蜀山区金寨路217号(近安医附院公交车站)",
+//		"蜀山区梅山路10号(近安徽饭店) ",
+//		"蜀山区 长丰南路159号铜锣湾广场312室",
+//		"合肥市寿春路93号钱柜星乐町KTV（逍遥津公园对面）",
+//		"庐阳区长江中路177号",
+//		"新站区胜利路89"
+//	];
+	/*var adds1 = [
+		new BMap.Point(116.361969,39.966918),
+		new BMap.Point(116.313082,40.047674),
+		new BMap.Point(116.328749,40.026922),
+		new BMap.Point(116.347571,39.988698),
+		new BMap.Point(116.316163,39.997753),
+		new BMap.Point(116.345867,39.998333),
+		new BMap.Point(116.403472,39.999411),
+		new BMap.Point(116.307901,40.05901)
+	];
+	for(var i = 0; i<adds1.length; i++){
+		var marker = new BMap.Marker(adds1[i]);
+		map.addOverlay(marker);
+		marker.setLabel(new BMap.Label("我是商圈:"+(i+1),{offset:new BMap.Size(20,-10)}));
+	}
+	function bdbGEO(){	
+		var pt = adds1[index];
+		geocodeSearch1(pt);
+		index++;
+	}
+	function geocodeSearch1(pt){
+		if(index < adds1.length-1){
+			setTimeout(window.bdbGEO,400);
+		} 
+		myGeo.getLocation(pt, function(rs){
+			var addComp = rs.addressComponents;
+			document.getElementById("result").innerHTML += index + ". " +adds1[index-1].lng + "," + adds1[index-1].lat + "："  + "商圈(" + rs.business + ")  结构化数据(" + addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber + ")<br/><br/>";
+		});
+	}
+	
+    
+	// 编写自定义函数,创建标注
+	function addMarker1(point,label){
+		var marker = new BMap.Marker(point);
+		map.addOverlay(marker);
+		marker.setLabel(label);
+	}*/
+    
+    
+    //自己的WebAPI接口功能 
+    
+    
+    var openFile = function(event){
+        var input = event.target;
+        var reader = new FileReader();
+        reader.onload = function(){
+            if(reader.result){
+                $("#output").html(reader.result);
+                raw_text = reader.result; 
+                alert(raw_text);
+                
+                }
+            }
+        reader.readAsText(input.files[0]);
+	}; 
+    
+    
+    
+    
+    
+    
+    function get_test(){
+      $.ajax({
+
+                url : "http://106.12.93.49:5020/demo_output",
+                type : "GET",
+                dataType : "jsonp", // 返回的数据类型，设置为JSONP方式
+                jsonp : 'callback', //指定一个查询参数名称来覆盖默认的 jsonp 回调参数名 callback
+                jsonpCallback: 'successCallback', //设置回调函数名
+                success: function(data){
+                     alert("与服务器API的链接正常");
+                        }
+                    });
+    }
+
+
+
+    function post_test(){
+
+    //var data = { data:,}
+        var text = raw_text; //需要解析的文本
+        
+        $.ajax({
+
+            url : "http://106.12.93.49:5020/post",
+            type : 'POST',
+//          contentType: "application/json; charset=utf-8",
+            data : JSON.stringify({'text' : text}),
+            dataType : "json", // 返回的数据类型，设置为JSONP方式
+            success: function(res){  
+                     var i = 0 
+                     for(var d in res){
+ //                        adds.push(res[d]);   
+                         geocodeSearch(res[d],i);
+                         i+= 1;
+                    }
+
+                 }
+            });
+
+}
+    
+
+    
+    
+//	function bdGEO(){
+//		var add = adds[index];
+//		geocodeSearch(add);
+//		index++;
+//	}
+	function geocodeSearch(add,index){
+		if(index < adds.length){
+			setTimeout(window.bdGEO,400);
+		} 
+		myGeo.getPoint(add, function(point){
+			if (point) {
+				document.getElementById("result").innerHTML +=  index + " " + add + ":" + point.lng + "," + point.lat + "</br>";
+				var address = new BMap.Point(point.lng, point.lat);
+				addMarker(address,new BMap.Label(index+":"+add,{offset:new BMap.Size(20,-10)}));
+			}
+            
+            else{
+                document.getElementById("result").innerHTML +=  index + " " + add + ":  " + "无法精确定位" + "</br>";
+            }
+		});
+	}
+	// 编写自定义函数,创建标注
+	function addMarker(point,label){
+		var marker = new BMap.Marker(point);
+		map.addOverlay(marker);
+		marker.setLabel(label);
+	}
+</script>

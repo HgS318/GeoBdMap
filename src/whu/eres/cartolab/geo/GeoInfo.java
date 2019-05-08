@@ -18,6 +18,7 @@ public class GeoInfo {
     public int id;
     public int geid;
     public int lowerid;
+    public int common = 0;
     public String name;
     public String address;
     public double x;
@@ -44,6 +45,7 @@ public class GeoInfo {
 
     public boolean dealed = false;
 
+
     public GeoInfo() {
 
     }
@@ -52,9 +54,9 @@ public class GeoInfo {
         try{
             id = rs.getInt("id");
             infoId = rs.getInt("infoId");
-            lowerid = rs.getInt("lowerid");
-//            infoId = rs.getInt("infoId");
             geid = rs.getInt("geid");
+            lowerid = rs.getInt("lowerid");
+            common = rs.getInt("common");
             name = rs.getString("name");
             address = rs.getString("address");
             x = rs.getDouble("X");
@@ -330,8 +332,18 @@ public class GeoInfo {
             return false;
         }
         if(spaAdd == 2 && this.lowerid != other.lowerid) {
-            return false;
+            if(this.geid != other.geid) {
+                return false;
+            }
+            if(other.common != 1) {
+                return false;
+            }
         }
+//        if(spaAdd == 2) {
+//           if(this.lowerid != other.lowerid) {
+//               return false;
+//           }
+//        }
         int thisid = Math.abs(this.infoId);
         int otherid = Math.abs(other.infoId);
         if(spaAdd == 1 && thisid > otherid) {
@@ -383,19 +395,24 @@ public class GeoInfo {
                                          Date moment, Date start, Date end) {
         List<GeoEntity> entities = new ArrayList<>();
         for(GeoInfo info : infos) {
-            if(timeAdd == 3) {
-                if(info.time.getTime() == moment.getTime()) {
-                    info.dealed = false;
-                } else {
-                    info.dealed = true;
-                }
-            } else if(timeAdd == 4) {
-                long time =info.time.getTime();
-                if(time >= start.getTime() && time <= end.getTime()) {
-                    info.dealed = false;
-                } else {
-                    info.dealed = true;
-                }
+//            if(timeAdd == 3) {
+//                if(info.time.getTime() == moment.getTime()) {
+//                    info.dealed = false;
+//                } else {
+//                    info.dealed = true;
+//                }
+//            } else if(timeAdd == 4) {
+//                long time =info.time.getTime();
+//                if(time >= start.getTime() && time <= end.getTime()) {
+//                    info.dealed = false;
+//                } else {
+//                    info.dealed = true;
+//                }
+//            }
+            if(info.fitTime(timeAdd, moment, start, end)) {
+                info.dealed = false;
+            } else {
+                info.dealed = true;
             }
         }
         int infoCount = infos.size();
@@ -429,12 +446,16 @@ public class GeoInfo {
                 } else if(spaAdd == 2) {
                     List<GeoInfo> singleList = new ArrayList<>();
                     singleList.add(thisInfo);
+                    //  下确共位叠加：叠加要素不能包含原要素的属性信息，但要包含原要素的编号
                     GeoEntity entity = new GeoEntity(singleList);
                     entity.posUp = 0;
+                    for(GeoInfo subInfo : group) {
+                        entity.infoIds.add(subInfo.infoId);
+                    }
                     entities.add(entity);
                 }
-                thisInfo.dealed = true;
             }
+            thisInfo.dealed = true;
         }
         //  第二步，解决infoId > 0的普通要素
         for(int i = 0; i < infoCount; i++) {
@@ -450,17 +471,61 @@ public class GeoInfo {
                     continue;
                 }
                 if(thisInfo.canSwallow(other, spaAdd, timeAdd, moment, start, end)) {
-                    if(spaAdd == 1 || (spaAdd == 2 && other.spaType == 1)) {
+                    if(spaAdd == 1 || (spaAdd == 2 && other.spaType != 3)) {
                         group.add(other);
                     }
-                    other.dealed = true;
+                    if(other.common != 1) {
+                        other.dealed = true;
+                    }
                 }
             }
-            GeoEntity entity = new GeoEntity(group);
-            entities.add(entity);
+            if(group.size() > 1) {
+                if(spaAdd == 1) {
+                    GeoEntity entity = new GeoEntity(group);
+                    entity.posUp = 1;
+                    entities.add(entity);
+                } else if(spaAdd == 2) {
+                    List<GeoInfo> singleList = new ArrayList<>();
+//                    singleList.add(thisInfo);
+                    for(GeoInfo subInfo : group) {
+                        if(subInfo.spaType == thisInfo.spaType) {
+                            singleList.add(subInfo);
+                        }
+                    }
+                    //  下确共位叠加：叠加要素不能包含原要素的属性信息，但要包含原要素的编号
+                    GeoEntity entity = new GeoEntity(singleList);
+                    entity.posUp = 0;
+                    entity.infoIds.clear();
+                    for(GeoInfo subInfo : group) {
+                        entity.infoIds.add(subInfo.infoId);
+                    }
+                    entities.add(entity);
+                }
+            }
             thisInfo.dealed = true;
         }
         return entities;
+    }
+
+    public boolean fitTime(int timeAdd, Date moment, Date start, Date end) {
+        if(timeAdd == 1 || timeAdd == 2 || timeAdd == 0) {
+            return true;
+        }
+        if(timeAdd == 3) {
+            if(moment != null) {
+                if(Math.abs(this.time.getTime() - moment.getTime()) < 86400000) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        if(timeAdd == 4) {
+            long thisTime = time.getTime();
+            if(thisTime >= start.getTime() && thisTime <= end.getTime()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static List<GeoInfo> getGeoInfosByIdsString(String idsStr) {

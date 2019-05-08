@@ -47,7 +47,7 @@ function extract_positions(text) {
             if(!$("#relative_checkbox")[0].checked) {
                 hideRelatives();
             }
-            setRelposResItem();
+            // setRelposResItem();
         },
         error: function (err_data) {
             console.log(err_data);
@@ -79,7 +79,7 @@ function extract_search_positions(text, link, index) {
             createRelatives(re_data['afters'], "big", link, text);
             createRelatives(re_data['befores'], "big", link, text);
             simpleTextLen = 48;
-            setRelposResItem();
+            // setRelposResItem();
             // showBaiduSearchPos(index + 1);
         },
         error: function (err_data) {
@@ -201,6 +201,8 @@ function createPositions(pos_data, big, url, text) {
                 //     overlay.spaType = 5;
                 // }
                 addOverlayAndInfowin(overlay, pos, null, relpos.positions);
+                setResultItems([overlay], "distresults", "relpos", true);
+                updatePosaddNum();
                 if (flag && (big == undefined || big == null)) {
                     // map.centerAndZoom(bp, 10);
                     map.panTo(bp);
@@ -303,6 +305,8 @@ function createRelatives(rel_data, big, url, text) {
                     // addExtratOverlay(marker, true);
                 }
                 addOverlayAndInfowin(overlay, pos, null, relpos.relPositions);
+                setResultItems([overlay], "distresults", "relpos", true);
+                updatePosaddNum();
             } else {
 
             }
@@ -383,10 +387,14 @@ function removeExtratOverlays() {
     relpos.relPositions.splice(0, relpos.relPositions.length);
 }
 
-function setRelposResItem() {
+function setRelposResItem(append) {
+    if(append === undefined || append == null) {
+        append = true;
+    }
     var total_data = relpos.positions.concat(relpos.relPositions);
-    setResultItems(total_data, "distresults", "relpos", true);
-    $("#distintotal")[0].innerHTML = "感知接入信息：" + total_data.length + "条记录";
+    setResultItems(total_data, "distresults", "relpos", append);
+    // $("#distintotal")[0].innerHTML = "感知接入信息：" + total_data.length + "条记录";
+    updatePosaddNum();
 }
 
 function getBufferFromConfidence(confidence) {
