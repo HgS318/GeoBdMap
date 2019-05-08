@@ -16,6 +16,8 @@ public class InfoAmount {
     public long flashLength = 0;
     public long modelLength = 0;
 
+    public InfoAmount() {}
+
     public InfoAmount(long textLenth, long figureLength, long imageLength, long vedioLength,
                       long audioLength, long flashLength, long modelLength) {
         this.textLenth = textLenth;
@@ -148,5 +150,17 @@ public class InfoAmount {
         return str;
     }
 
+
+    public static InfoAmount add(InfoAmount ia1, InfoAmount ia2) {
+        InfoAmount ia = new InfoAmount();
+        ia.textLenth = ia1.textLenth + ia2.textLenth;
+        ia.figureLength = ia1.figureLength + ia2.figureLength;
+        ia.imageLength = ia1.imageLength + ia2.imageLength;
+        ia.vedioLength = ia1.vedioLength + ia2.vedioLength;
+        ia.audioLength = ia1.audioLength + ia2.audioLength;
+        ia.flashLength = ia1.flashLength + ia2.flashLength;
+        ia.modelLength = ia1.modelLength + ia2.modelLength;
+        return ia;
+    }
 
 }

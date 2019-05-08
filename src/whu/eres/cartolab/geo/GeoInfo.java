@@ -60,6 +60,9 @@ public class GeoInfo {
             x = rs.getDouble("X");
             y = rs.getDouble("Y");
             position = rs.getString("position");
+            if("".equals(position)) {
+                position = null;
+            }
             if(x == 0.0 & y == 0.0 && position != null && position.length() > 2) {
                 String[] xyStr = position.split(",");
                 if(xyStr.length == 2) {
@@ -313,6 +316,14 @@ public class GeoInfo {
         return ia;
     }
 
+    public static InfoAmount infoAmount(List<GeoInfo> infos) {
+        InfoAmount ia = new InfoAmount();
+        for(GeoInfo info : infos) {
+            ia = InfoAmount.add(ia, info.infoAmount());
+        }
+        return ia;
+    }
+
     public boolean canSwallow(GeoInfo other, int spaAdd, int timeAdd,
                               Date moment, Date start, Date end) {
         if(spaAdd == 1 && this.geid != other.geid) {
@@ -368,17 +379,17 @@ public class GeoInfo {
         return false;
     }
 
-    public static List<GeoEntity> posadd(List<GeoInfo> infos, int spaAdd, int timaAdd,
+    public static List<GeoEntity> posadd(List<GeoInfo> infos, int spaAdd, int timeAdd,
                                          Date moment, Date start, Date end) {
         List<GeoEntity> entities = new ArrayList<>();
         for(GeoInfo info : infos) {
-            if(timaAdd == 3) {
+            if(timeAdd == 3) {
                 if(info.time.getTime() == moment.getTime()) {
                     info.dealed = false;
                 } else {
                     info.dealed = true;
                 }
-            } else if(timaAdd == 4) {
+            } else if(timeAdd == 4) {
                 long time =info.time.getTime();
                 if(time >= start.getTime() && time <= end.getTime()) {
                     info.dealed = false;
@@ -405,7 +416,7 @@ public class GeoInfo {
                 if(other.dealed || other.infoId < 0) {
                     continue;
                 }
-                if(thisInfo.canSwallow(other, spaAdd, timaAdd, moment, start, end)) {
+                if(thisInfo.canSwallow(other, spaAdd, timeAdd, moment, start, end)) {
                     group.add(other);
                     other.dealed = true;
                 }
@@ -413,11 +424,13 @@ public class GeoInfo {
             if(group.size() > 1) {
                 if(spaAdd == 1) {
                     GeoEntity entity = new GeoEntity(group);
+                    entity.posUp = 1;
                     entities.add(entity);
                 } else if(spaAdd == 2) {
                     List<GeoInfo> singleList = new ArrayList<>();
                     singleList.add(thisInfo);
                     GeoEntity entity = new GeoEntity(singleList);
+                    entity.posUp = 0;
                     entities.add(entity);
                 }
                 thisInfo.dealed = true;
@@ -436,7 +449,7 @@ public class GeoInfo {
                 if(other.dealed) {
                     continue;
                 }
-                if(thisInfo.canSwallow(other, spaAdd, timaAdd, moment, start, end)) {
+                if(thisInfo.canSwallow(other, spaAdd, timeAdd, moment, start, end)) {
                     if(spaAdd == 1 || (spaAdd == 2 && other.spaType == 1)) {
                         group.add(other);
                     }

@@ -21,7 +21,7 @@
 	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=SycUWXeBU9Z1tkvcNqmFxvo93cS4jbU7"></script>
 	<script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
 	<link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
-	<title>百度地图 - 多边形坐标</title>
+	<title>百度地图 - 绘制图形</title>
 </head>
 <body>
 	<div id="l-map"></div>
@@ -31,11 +31,13 @@
 		<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="gotoXY" value="转到坐标" onclick="gotoXY()"/>
 
 		<br/><br/><br/>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;勾画坐标：<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;勾绘坐标：<br/>&nbsp;&nbsp;&nbsp;&nbsp;
 		<textarea id="coords" rows="15" cols="30"></textarea><br>
-		<br/><br/><br/>
-		&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="获取绘制的覆盖物个数" onclick="alert(overlays.length)"/>
-		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="清除所有覆盖物" onclick="clearAll()"/>
+		<br/><br/>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="获取绘制的覆盖物个数" onclick="alert(overlays.length)"/>
+		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="清除所有覆盖物" onclick="clearAll()"/>
+		<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="https://map.baidu.com/">百度地图</a>
+		<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://api.map.baidu.com/lbsapi/getpoint/index.html" target="_blank">百度地图拾取坐标系统</a>
 	</div>
 </body>
 </html>
@@ -55,7 +57,7 @@ function gotoXY() {
 	try {
 		var x = document.getElementById("x").value;
 		var y = document.getElementById("y").value;
-		map.centerAndZoom(new BMap.Point(x, y), 13);
+		map.centerAndZoom(new BMap.Point(x, y), 17);
 	} catch (e) {
 		alert("x, y输入有误...");
 	}
@@ -67,7 +69,19 @@ var map = new BMap.Map("l-map");            // 创建Map实例
 //	var cood = [114.363039, 30.532864];
 //	var midx = cood[0], midy = cood[1];
 map.enableScrollWheelZoom(true);
-
+var size = new BMap.Size(10, 20);
+map.addControl(new BMap.CityListControl({
+    anchor: BMAP_ANCHOR_TOP_RIGHT,
+    offset: size,
+    // 切换城市之间事件
+    // onChangeBefore: function(){
+    //    alert('before');
+    // },
+    // 切换城市之后事件
+    // onChangeAfter:function(){
+    //   alert('after');
+    // }
+}));
 map.centerAndZoom(new BMap.Point(116.400244, 39.92556), 11);
 
 //鼠标绘制完成回调方法   获取各个点的经纬度
@@ -80,7 +94,7 @@ var overlaycomplete = function(e){
 //		console.log("lng:"+path[i].lng+"\n lat:"+path[i].lat);
 		str += " [" + path[i].lng + ", " + path[i].lat + "],";
 	}
-	str.trim(",");
+	str = str.substring(0, str.length - 1);
 	str += "]";
 	document.getElementById("coords").value = str;
 };
@@ -89,7 +103,7 @@ var styleOptions = {
 	fillColor:"red",      //填充颜色。当参数为空时，圆形将没有填充效果。
 	strokeWeight: 3,       //边线的宽度，以像素为单位。
 	strokeOpacity: 0.8,       //边线透明度，取值范围0 - 1。
-	fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
+	fillOpacity: 0.1,      //填充的透明度，取值范围0 - 1。
 	strokeStyle: 'solid' //边线的样式，solid或dashed。
 }
 //实例化鼠标绘制工具
@@ -98,7 +112,7 @@ var drawingManager = new BMapLib.DrawingManager(map, {
 	enableDrawingTool: true, //是否显示工具栏
 	drawingMode:BMAP_DRAWING_POLYGON,//绘制模式  多边形
 	drawingToolOptions: {
-		anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
+		anchor: BMAP_ANCHOR_TOP_LEFT, //位置
 		offset: new BMap.Size(5, 5), //偏离值
 		drawingModes:[
 			BMAP_DRAWING_POLYGON,

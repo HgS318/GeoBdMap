@@ -28,6 +28,8 @@ public class GeoEntity {
     public Date obsoleteTime;
     public List<Integer> infoIds = new ArrayList<>();
 
+    public int posUp = 1;
+
     public GeoEntity() {
 
     }
@@ -118,6 +120,7 @@ public class GeoEntity {
         obj.put("timeE", time == null ? null : time.toString());
         obj.put("obsoleteTimeE", obsoleteTime == null ? null : obsoleteTime.toString());
         obj.put("infoIds", toString(infoIds, true));
+        obj.put("posUp", posUp);
         obj.put("infoAmount", infoAmount.toJson());
         return obj;
     }
@@ -311,6 +314,14 @@ public class GeoEntity {
 
     }
 
+
+    public static InfoAmount infoAmount(List<GeoEntity> entities) {
+        InfoAmount ia = new InfoAmount();
+        for(GeoEntity entity : entities) {
+            ia = InfoAmount.add(ia, entity.infoAmount());
+        }
+        return ia;
+    }
 
 
 }
