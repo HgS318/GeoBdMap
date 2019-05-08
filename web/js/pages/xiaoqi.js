@@ -52,12 +52,12 @@ function initXiaoqi() {
         point_marker: {},
         polygons: []
     };
-    initXiaoqiWindow();
-    initXiaoqiText();
-    initXiaoqiComponents();
-    // setTimeout("initXiaoqiWindow()", 1000);
-    // setTimeout("initXiaoqiText()", 3000);
-    // setTimeout("initXiaoqiComponents()", 4000);
+    // initXiaoqiWindow();
+    // initXiaoqiText();
+    // initXiaoqiComponents();
+    setTimeout("initXiaoqiWindow()", 1000);
+    setTimeout("initXiaoqiText()", 3000);
+    setTimeout("initXiaoqiComponents()", 4000);
 }
 
 function initXiaoqiWindow() {
@@ -177,6 +177,7 @@ function feiqi() {
         //         //document.getElementById("bbr_result").innerHTML =localsearchtitle.join("<br>");
         //     }
         // },
+        pageCapacity: 15,
         onMarkersSet: function (pois) {
             for (var i = 0; i < pois.length; i++) {
                 var poi = pois[i];
@@ -185,6 +186,9 @@ function feiqi() {
                 var qiyiPoint = poi.point;
                 xiaoqi.points2.push(qiyiPoint);
                 qiyiPoint.marker = marker;
+                if(poi.title.indexOf('街道口') > -1) {
+                    marker.hide();
+                }
                 // xiaoqi.point_marker[qiyiPoint] = marker;
                 // marker.setIcon();
             }
