@@ -81,7 +81,9 @@ function showMassPoints(load) {
 
 function showPointCollection(load) {
     if(posadd.pointCollection != null) {
+        posadd.pointCollection.addEventListener('click', pointCollectionListener);
         posadd.pointCollection.show();
+
         return;
     }
     if(load === undefined || !load) {
@@ -109,16 +111,7 @@ function showPointCollection(load) {
         };
         var pointCollection = new BMap.PointCollection(points, options);  // 初始化PointCollection
         posadd.pointCollection = pointCollection;
-        pointCollection.addEventListener('click', function (e) {
-            // var info = JSON.stringify(e.point.extData);
-            // alert(info);
-            var extData = e.point.extData;
-            var width = 230;
-            var title = extData.name + '<span style="font-size:11px;color:#F00;">&nbsp;&nbsp;' + extData['type2'] + '</span>';
-            var content = "类型：" + extData.type2 + "<br/>" +"地址：" + extData.addr + "<br/>" +
-                "经度：" + extData['wgsx'] + "<br/>" + "纬度：" + extData['wgxy'];
-            openInfoWin({'x':extData['wgsx'], 'y': extData['wgxy'], 'target': {'spaType': -1}}, content, title, width);
-        });
+        pointCollection.addEventListener('click', pointCollectionListener);
         map.addOverlay(pointCollection);
         // $("#boundintotal")[0].innerHTML = "海量点：" + china_pois.length + "条记录";
         // $("#distintotal")[0].innerHTML = "感知接入信息：" + china_pois.length + "条记录";
@@ -131,6 +124,17 @@ function showPointCollection(load) {
     } else {
         alert('请在chrome、safari、IE8+以上浏览器查看海量点效果');
     }
+}
+
+var pointCollectionListener = function (e) {
+    // var info = JSON.stringify(e.point.extData);
+    // alert(info);
+    var extData = e.point.extData;
+    var width = 230;
+    var title = extData.name + '<span style="font-size:11px;color:#F00;">&nbsp;&nbsp;' + extData['type2'] + '</span>';
+    var content = "类型：" + extData.type2 + "<br/>" +"地址：" + extData.addr + "<br/>" +
+        "经度：" + extData['wgsx'] + "<br/>" + "纬度：" + extData['wgxy'];
+    openInfoWin({'x':extData['wgsx'], 'y': extData['wgxy'], 'target': {'spaType': -1}}, content, title, width);
 }
 
 function showMapvpLayer(load) {
@@ -181,6 +185,7 @@ function hidePosAdds() {
 
 function hidePointCollection() {
     if(posadd.pointCollection != null) {
+        posadd.pointCollection.removeEventListener('click', pointCollectionListener);
         posadd.pointCollection.hide();
     }
 }
