@@ -195,7 +195,7 @@ function createContent(entity) {
         content += '<strong>动画</strong>： (信息量: ' + entity['infoAmount']['flashLength'] + ' 秒)<br/>';
         if(entity['flashes'].length == 1) {
             content += ('&nbsp;&nbsp;&nbsp;' + '<a href="#" id=' + entity['flashes'][0] + '' +
-            ' onclick="openWindowY(this, \'flash\', \'' + flash_path + '\')">查看动画</a>');
+            ' onclick="openWindowY(this, \'flash\', \'' + entity['flashes'][0] + '\')">查看动画</a>');
         } else {
             for (var j = 0; j < entity['flashes'].length; j++) {
                 var flash_path = entity['flashes'][j];
