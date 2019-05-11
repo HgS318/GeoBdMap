@@ -100,7 +100,7 @@ function showSnap() {
             var m_s = text_val.trim().split(':');
             var hou = parseInt(m_s[0]);
             var min = parseInt(m_s[1]);
-            var mins = hou * 60 + min;
+            var mins = hou * 60 + min * 2;
             time = mins;
         }
         removeMarkers();
