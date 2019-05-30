@@ -1177,3 +1177,61 @@ function createNewPolygon(data, data_type) {
     }
     return null;
 }
+
+function getZipCodeByName(province, city, district) {
+    var obj = getCityCodeByName(province, city, district);
+    if(obj != null) {
+        if(obj["ZipCode"] != undefined) {
+            return obj["ZipCode"];
+        }
+    }
+    return null;
+}
+
+function getCityCodeByName(province, city, district) {
+    var obj = getCityCodeByName(province, city, district);
+    if(obj != null) {
+        if(obj["CityCode"] != undefined) {
+            return obj["CityCode"];
+        }
+    }
+    return null;
+}
+
+
+function getCityCodeByName(province, city, district) {
+    if (province != ""){
+        province = province[0] + province[1];
+    }
+    var conts = [];
+    if(province != undefined && province != null && province != "") {
+        var pro = province.substring(0, 2);
+        conts.push(pro);
+    }
+    if(city != undefined && city != null && city != "") {
+        var ci = city.replace("自治州", "").replace("自治县", "");
+        conts.push(ci);
+    }
+    if(district != undefined && district != null && district != "") {
+        var dist = district.replace("自治州", "").replace("自治县", "");
+        conts.push(dist);
+    }
+    for (var key in china_dists) {
+        var obj = china_dists[key];
+        var merge_name = obj["MergerName"];
+        var flag = true;
+        for(var j = 0; i < conts.length; j++) {
+            var cont = conts[j];
+            if(merge_name.indexOf(cont) < 0) {
+                flag = false;
+                break;
+            }
+        }
+        if(flag) {
+            return obj;
+        }
+    }
+    return null;
+
+}
+
