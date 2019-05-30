@@ -111,6 +111,15 @@ public class JsonAction01 {
         return null;
     }
 
+    public String queryAPI() {
+        HttpServletRequest request = ServletActionContext.getRequest();
+        String url_origin = request.getParameter("url");
+        String url = decodeMyUrl(url_origin);
+        String result = queryUrl(url, null, null, null, 0, 0);
+        toBeJson(result);
+        return null;
+    }
+
     //  获取邮编的坐标
     public String getCoordsByPostcode() {
         HttpServletRequest request = ServletActionContext.getRequest();
@@ -674,6 +683,14 @@ public class JsonAction01 {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static String decodeMyUrl(String myUrl) {
+        return myUrl.replace("|", "&").replace("-", "?");
+    }
+
+    public static String encodeMyUrl(String myUrl) {
+        return myUrl.replace("&", "|").replace("?", "-");
     }
 
     private static String BD_AK = "SycUWXeBU9Z1tkvcNqmFxvo93cS4jbU7";

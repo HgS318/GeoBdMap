@@ -1,14 +1,22 @@
-<!DOCTYPE html>
-<!--<html xmlns:wb="http://open.weibo.com/wb">-->
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" id="html">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href='images/fav.ico' rel='icon' type='image/x-ico' />
+    <title>泛在位置信息叠加协议 共性技术验证系统</title>
 
-    <meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href='images/fav.ico ' rel='icon' type=‘image/x-ico’ />
-	<title>地名百科测试 - 勾画线条</title>
+	<link rel="stylesheet" type="text/css" href="download/jquery-easyui-1.7.0/themes/default/easyui.css">
+	<!--<link rel="stylesheet" type="text/css" href="download/jquery-easyui-1.7.0/themes/icon.css">-->
+	<link rel="stylesheet" type="text/css" href="download/jquery-easyui-1.7.0/demo/demo.css">
 
-	<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="OntoSys/js/easyui/themes/default/easyui.css" rel="stylesheet" type="text/css" />-->
+    <link href="OntoSys/js/easyui/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="OntoSys/js/galleryview/css/jquery.galleryview-3.0-dev.css" rel="stylesheet" type="text/css" />
+    <link href="OntoSys/js/main.css" rel="stylesheet" />
+    <link href="OntoSys/css/easy-responsive-tabs.css" rel="stylesheet" />
+
+    <!--<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">-->
 	<link href="font-awesome/css/font-awesome.css" rel="stylesheet">
 	<link href="css/plugins/social-buttons/social-buttons.css" rel="stylesheet">
 	<link href="css/jquery-ui.min.css" rel="stylesheet" />
@@ -22,1093 +30,561 @@
 	<link href="css/jquery.treeview.css" rel="stylesheet" />
 	<link href="css/screen.css" rel="stylesheet" />
 	<link href="css/pages/inline.style.sheet4.css" rel="stylesheet" />
+	<link href="css/pages/g1m-mainpage.css" rel="stylesheet" />
 
-	<script src="js/jquery.js" type="text/javascript"></script>
+	<link href="css/plugins/right-menu/context.standalone.css" rel="stylesheet" type="text/css" />
+
+	<link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
+	<!--<script type="text/javascript" src="download/jquery-easyui-1.7.0/jquery.min.js"></script>-->
+	<link rel="stylesheet" href="css/bmap-modify.css"/>
+	<!--<link href="js/bootstrap/bootstrap-3.3.4.css" rel="stylesheet" type="text/css" />-->
+
+	<!--<script src="OntoSys/js/easyui/jquery-1.44-min.js" type="text/javascript"></script>-->
+	<!--<script src="js/jquery.js" type="text/javascript"></script>-->
     <!--<script src="js/jquery-1.10.2.min.js"></script>-->
-	<script src="js/jquery-ui.min.js"></script>
-	<script src="js/jquery.cookie.js"></script>
-	<script src="js/jquery.treeview.js" type="text/javascript"></script>
+	<script src="js/jquery-1.10.2.js"></script>
+	<!--<script src="js/jquery-ui.min.js"></script>-->
+	<!--<script src="js/jquery.cookie.js"></script>-->
+	<!--<script src="js/jquery.treeview.js" type="text/javascript"></script>-->
 	<script src="js/jquery.autocomplete.js" type="text/javascript"></script>
-	<script src='data/localdata.js' type='text/javascript'></script>
-	<script src="data/testdata.js" type="text/javascript" charset=”utf-8″></script>
-	<script src="js/jquery.treeview.edit.js" type="text/javascript"></script>
-	<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
-	<script src="http://webapi.amap.com/maps?v=1.3&key=8325164e247e15eea68b59e89200988b&plugin=AMap.Transfer,AMap.Walking,AMap.Driving,AMap.PlaceSearch,AMap.ToolBar,AMap.Marker,AMap.MouseTool,AMap.PolyEditor"></script>
-	<script src="http://webapi.amap.com/js/marker.js"></script>
-	<script src="http://webapi.amap.com/demos/js/liteToolbar.js" type="text/javascript"></script>
+	<!--<script src='data/localdata.js' type='text/javascript'></script>-->
+	<!--<script src="data/testdata.js" type="text/javascript" charset=”utf-8″></script>-->
+	<!--<script src="js/jquery.treeview.edit.js" type="text/javascript"></script>-->
+	<!--<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>-->
 
 
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=SycUWXeBU9Z1tkvcNqmFxvo93cS4jbU7"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/GeoUtils/1.2/src/GeoUtils_min.js"></script>
+	<script type="text/javascript" src="download/mapv/build/mapv.js"></script>
+    <!--  <script src="OntoSys/js/easyui/jquery-1.44-min.js" type="text/javascript"></script> -->
+
+	<script type="text/javascript" src="download/jquery-easyui-1.7.0/jquery.easyui.min.js"></script>
+	<!--<script src="OntoSys/js/easyui/jquery.easyui.min.js" type="text/javascript"></script>-->
+	<script src="OntoSys/js/galleryview/jquery.timers-1.2.js" type="text/javascript"></script>
+	<script src="OntoSys/js/galleryview/jquery.easing.1.3.js" type="text/javascript"></script>
+	<script src="OntoSys/js/galleryview/jquery.galleryview-3.0-dev.js" type="text/javascript"></script>
+	<script src="OntoSys/js/easyResponsiveTabs.js" type="text/javascript"></script>
+	<!--<script src="OntoSys/js/easyui/jquery.iDialog.js"></script>-->
+	<script src="js/pages/bd-mainpage-layout.js"></script>
+	<script src="js/pages/bd-mainpage-map.js"></script>
+	<script src="js/pages/bd-mainpage-infowin.js"></script>
+	<script src="js/pages/relpos.js"></script>
+	<script src="js/pages/posadd.js"></script>
+	<script src="js/pages/baidu-search.js"></script>
+	<script src="js/pages/xiaoqi.js"></script>
+	<script src="fuse/js/fuse-seq.js"></script>
+	<!--<script src="OntoSys/js/my/instanceLoad.js" type="text/javascript" charset="utf-8"></script>-->
+
+	<script src="http://www.jq22.com/jquery/bootstrap-3.3.4.js"></script>
+	<!--<script src="../../../js/bootstrap/js/bootstrap.js" type="text/javascript"></script>-->
+	<script src="js/plugins/right-menu/demo3.js"></script>
+	<script src="js/plugins/right-menu/context.js"></script>
+	<!--<script type="text/javascript" src="data/geo/poi_json/ChinaPOI_mod600.js"></script>-->
+	<!--<script type="text/javascript" src="data/geo/poi_json/points-sample-data.js"></script>-->
+	<script type="text/javascript" src="data/geo/poi_json/WuhanPOI_2w.js"></script>
+    
 </head>
-
-<body>
-
-<!--<input type="text" id="suggest13" />-->
-    <div id="hm_header" class="hmbar-header hmbar-default">
-        <a class="navbar-brand" href="index.html">
-            <img src="images/logo.png" />
-        </a>
-
-        <div class="hm-searchpanel">
-            <div id='hm_searchinput' class="input-group custom-search-form">
-                <input id="autocomplete" title="提示: &quot;输入搜索关键字&quot;" placeholder="地名百科搜索..." class="form-control" />
-				<span class="input-group-btn">
-					<button id="search" class="btn btn-default" type="button" onclick="testauto();">
-						<i class="fa fa-search"></i>
-					</button>
-				</span>
-            </div>
-        </div>
-
+<body class="easyui-layout">
+    <div id="northDiv" data-options="region:'north',border:false">
+		<div id="logos" class="logos">
+			<span><img id="icon" src="OntoSys/img/knowledge.png" /></span>
+			<span>泛在位置信息叠加协议 共性技术验证系统</span>
+			<span id="staticsDiv" class="statics"></span>
+		</div>
     </div>
 
-	<div id="hm_sidebar" class="hmbar-side hmbar-default ">
-		<!-- 边栏表头 -->
-        <div id="infohead" class="hm-infohead">
-            <div id="hm_wikinav" class="headnav-default">
-                <p><i class="fa fa-lg fa-th fa-fw"></i> 行政区划</p>
-            </div>
-            <div id="hm_classnav" class="headnav-default">
-                <p><i class="fa fa-lg fa-th-large fa-fw"></i> 地名分类</p>
-            </div>
-            <div id="hm_favnav" class="headnav-default">
-                <p><i class="fa fa-lg fa-ticket fa-fw"></i> 路径规划</p>
-            </div>
-        </div>
+	<!--左边功能栏-->
+    <div id="westDiv" data-options="region:'west',split:true,collapsed:false,title:'功能目录'" style="width: 350px; padding: 2px;">
+        <div id="tabsDiv" class="easyui-tabs" data-options="fit:true" style="cursor:pointer">
 
-		<div id="hm_mapInfo" class="hm-mapinfo">
-
-			<!--  行政区划 -->
-            <div id="hm_wikiClass" class="hm-wikiClass">
-                <div class="hm-wikiAdv">
-					<table>
-						<tr>
-							<!--<td><wb:share-button appkey='2943998357' addition='simple' type='icon'></wb:share-button></td>-->
-							<td>
-								<div id="sidetreecontrol1">&nbsp; <a href="#">全部收起</a> | <a href="#">全部展开</a></div>
-							</td>
-						</tr>
-					</table>
-					<!--<div class="weiboicondiv">-->
-						<!--<wb:share-button appkey='2943998357' addition='simple' type='icon'></wb:share-button>-->
-					<!--</div>-->
-					<!--<div id="sidetreecontrol1" style="width:200px;height:20px;margin: 0 0 0 80px;">-->
-						<!--<a href="#">全部收起</a> | <a href="#">全部展开</a>-->
-					<!--</div>-->
-					<table>
-						<tr>
-							<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							<td>
-								<ul class="treeview" id="tree1">
-							<li class="expandable" id="folder1">
-								<div class="hitarea expandable-hitarea"></div>
-								<a href="#">湖北省</a>
-								<ul>
-									<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">武汉市</a>
-										<ul style="display: none;"><li class="last">
-												<a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul>
-									</li>
-									<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">黄石市</a>
-										<ul style="display: none;"><li class="last">
-											<a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
-									<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">十堰市</a>
-										<ul style="display: none;"><li class="last">
-											<a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
-									<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">宜昌市</a>
-										<ul style="display: none;"><li class="last">
-											<a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
-									<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">襄阳市</a>
-										<ul style="display: none;"><li class="last">
-											<a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
-									<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">鄂州市</a>
-										<ul style="display: none;"><li class="last">
-											<a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
-									<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">荆门市</a>
-										<ul style="display: none;"><li class="last">
-											<a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
-									<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">孝感市</a>
-										<ul style="display: none;"><li class="last">
-											<a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
-									<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">荆州市</a>
-										<ul style="display: none;"><li class="last">
-											<a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
-									<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">黄冈市</a>
-										<ul style="display: none;"><li class="last">
-											<a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
-									<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">咸宁市</a>
-										<ul style="display: none;"><li class="last">
-											<a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
-									<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">随州市</a>
-										<ul style="display: none;"><li class="last">
-											<a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
-									<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#">恩施土家族苗族自治州</a>
-										<ul style="display: none;"><li class="last">
-											<a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
-									<li class="last"><div class="hitarea expandable-hitarea"></div><a href="#">省直辖县级行政单位</a>
-										<ul style="display: none;"><li class="last">
-											<a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a></li></ul></li>
-								</ul>
-							</li>
-						</ul>
-							</td>
-						</tr>
-					</table>
+			<div title="位置感知" data-options="iconCls:'icon-search'">
+				<div id="simpleSearchDiv" class="datagrid-toolbar" style="margin-bottom: 10px; padding:8px 4px 4px 5px;">
+					<input id="posGeneral" class="easyui-searchbox" style="width: 100%; height: 30px; line-height: 30px"
+						   data-options="prompt:'接入位置信息',menu:'#simplesearchtabsdiv',searcher:autoAdd" />
+					<div id="simplesearchtabsdiv">
+						<div data-options="name:'allsimplesearch',iconCls:'icon-ok'">自动识别</div>
+						<!--<div data-options="name:'coordsearch'">坐标</div>-->
+						<!--<div data-options="name:'postcodesearch'">邮政编码</div>-->
+						<!--<div data-options="name:'phonesearch'">固定电话</div>-->
+						<!--<div data-options="name:'ipesearch'">固定IP</div>-->
+					</div>
 				</div>
-            </div>
-			<!-- 地名类型 -->
-			<div id="hm_infoClass" class="hm-infoclass">
-				<div class="hm-wikiAdv">
 
-					<table>
-						<tr>
-							<!--<td><wb:share-button appkey='2943998357' addition='simple' type='icon'></wb:share-button></td>-->
-							<td>
-								<div id="sidetreecontrol2"> &nbsp; <a href="#">全部收起</a> | <a href="#">全部展开</a> </div>
-							</td>
-						</tr>
-					</table>
-					<table>
-						<tr>
-							<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							<td>
-								<ul class="treeview" id="tree2">
-						<li class="expandable" id="folder2">
-							<div class="hitarea expandable-hitarea"></div><a href="#" onclick="gotoBigType('行政区域类')">行政区域类</a>
-							<ul style="display: none;">
-								<li class="last">
-									<a href="#" onclick="gotoSmallType('行政区域类', '行政区域')">行政区域</a>
-								</li>
-							</ul>
-						</li>
-						<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#" onclick="gotoBigType('非行政区域类')">非行政区域类</a></li>
-						<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#/index.cfm">群众自治组织类</a></li>
-						<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#/index.cfm">居民点类</a></li>
-						<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#/index.cfm">交通运输设施类</a></li>
-						<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#/index.cfm">水利电力设施类</a></li>
-						<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#/index.cfm">纪念地旅游景点类</a></li>
-						<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#/index.cfm">建筑物类</a></li>
-						<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#/index.cfm">单位类</a></li>
-						<li class="expandable"><div class="hitarea expandable-hitarea"></div><a href="#/index.cfm">陆地水系类</a></li>
-						<li class="last"><div class="hitarea expandable-hitarea"></div><a href="#/index.cfm">陆地地形类</a></li>
-					</ul>
-							</td>
-						</tr>
-					</table>
+				<div class="searchDiv">
+					<div id="ClassCheckbox2" class="ClassCheckbox">
+						<div id="highsearch2">
+							<h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位置信息感知与接入</h1>
+
+							<div id="addrDiv" class="nextTab" >
+								<h3>&nbsp;&nbsp;地名/地址</h3>
+								<textarea id="addrtext" rows="4" cols="32"></textarea>
+								<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="file" id="addrfile" name="uploadFile" accept="text/plain"
+										   onchange="openFile(event, 'addrtext')" />
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="接入地名/地址" class="srhbtn" onclick="extract_address()">
+									<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+									<!--<input type="button" value="清除" class="srhbtn" onclick="clear_address()">-->
+								</p>
+							</div>
+
+							<div id="coordDiv" class="nextTab" >
+								<h3>&nbsp;&nbsp;坐标</h3>
+								<form>
+									<p>输入坐标：<input id="coordtext" class="innerWord"/></p>
+									<p>坐标系：<select id="coordSys">
+										<option value ="wgs">WGS 84</option>
+										<option value ="gcj">火星坐标系</option>
+										<option value="bd">百度坐标系</option>
+									</select></p>
+									<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<input type="file" id="coordfile" name="uploadFile"
+											   onchange="openFileName(event, 'coordtext')" /></p>
+									<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<input type="button" value="接入坐标位置" class="srhbtn" onclick="extract_coords()">
+										<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+										<!--<input type="button" value="清除" class="srhbtn" onclick="clear_coords()">-->
+									</p>
+								</form>
+							</div>
+
+							<div id="postDiv" class="nextTab" >
+								<h3>&nbsp;&nbsp;邮政编码</h3>
+								<p>输入邮编：<input id="posttext" class="innerWord"/></p>
+								<p>相关信息：<input id="postAboutText" class="innerWord"/></p>
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="接入邮编位置" class="srhbtn" onclick="extract_postcode()">
+									<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+									<!--<input type="button" value="清除" class="srhbtn" onclick="clear_postcode()">-->
+								</p>
+							</div>
+
+							<div id="phoneDiv" class="nextTab" >
+								<h3>&nbsp;&nbsp;固定电话</h3>
+								<textarea id="phonetext" rows="3" cols="32"></textarea>
+								<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="file" id="phonefile" name="uploadFile" accept="text/plain"
+										   onchange="openFile(event, 'phonetext')" />
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="接入固话位置" class="srhbtn" onclick="extract_phone_number()">
+									<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+									<!--<input type="button" value="清除" class="srhbtn" onclick="clear_phone_number()">-->
+								</p>
+							</div>
+
+							<div id="ipDiv" class="nextTab" >
+								<h3>&nbsp;&nbsp;固定IP</h3>
+								<textarea id="iptext" rows="3" cols="32"></textarea>
+								<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="file" id="ipfile" name="uploadFile" accept="text/plain"
+										   onchange="openFile(event, 'iptext')" />
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="接入IP位置" class="srhbtn" onclick="extract_ip()">
+									<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+									<!--<input type="button" value="清除" class="srhbtn" onclick="clear_ip()">-->
+								</p>
+							</div>
+
+							<div id="textPosDiv" class="nextTab" >
+								<h3>&nbsp;&nbsp;文本信息的位置感知</h3>
+								<p></p>
+								<textarea id="extrapostext" rows="6" cols="32"></textarea><br/>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<input type="file" id="relposefile" name="uploadFile" accept="text/plain"
+									   onchange="openFile(event, 'extrapostext')" />
+								<p>设置城市：<input id="relposCity" class="innerWord" maxlength="19" value="不设置"/></p>
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="提取位置信息" class="srhbtn" onclick="extract_positions()">
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="清除" class="srhbtn" onclick="clear_posadds()"></p>
+								&nbsp;
+								<input type="checkbox" id="relative_checkbox" onclick="toShowRelatives(this)"/>显示相对位置
+								&nbsp;&nbsp;&nbsp;
+								<input type="checkbox" id="relative_more" onclick="relativeMore(this)"/>模糊查询
+							</div>
+
+							<div id="globalPosDiv" class="nextTab" >
+								<br/>
+								<h3>&nbsp;&nbsp;全球位置信息接入</h3>
+								<p>全球位置：<input id="glopostext" class="innerWord"/></p>
+								<p>城市范围：<input id="gloposCity" class="innerWord" maxlength="19" value="当前地图范围"/></p>
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="接入全球位置" class="srhbtn" onclick="extract_global_demo()">
+									<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+									<!--<input type="button" value="清除" class="srhbtn" onclick="clear_postcode()">-->
+								</p>
+							</div>
+
+						</div>
+						<br/>
+						<p style="font-size: 13px">&nbsp;&nbsp;&nbsp;“地名感知（北邮）”的功能&nbsp;请
+							<a href="html/location_test.html" target="_blank">点击</a></p>
+						<p style="font-size: 13px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;百度 mapv 的示例&nbsp;请
+							<a href="https://mapv.baidu.com/gallery.html" target="_blank">点击</a></p>
+					</div>
+
+				</div>
+
+			</div>
+
+			<div title="位置叠加" data-options="iconCls:'icon-category'">
+
+				<div class="searchDiv">
+
+					<h1>&nbsp;&nbsp;叠加协议案例演示</h1>
+					<div class="nextTab" >
+						<h3>&nbsp;&nbsp;&nbsp;位置叠加</h3>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<button class="srhbtn" onclick="gotoProtocolCases(0)">上确共位叠加</button>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<button class="srhbtn" onclick="gotoProtocolCases(2)">下确共位叠加</button>
+					</div>
+					<div class="nextTab" >
+						<h3>&nbsp;&nbsp;&nbsp;共形叠加</h3>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<button class="srhbtn" onclick="gotoProtocolCases(4)">结构共形叠加</button>
+					</div>
+					<div class="nextTab" >
+					<h3>&nbsp;&nbsp;&nbsp;时态叠加</h3>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<button class="srhbtn" onclick="gotoProtocolCases(5)">串联叠加</button>
+						&nbsp;&nbsp;&nbsp;
+						<button class="srhbtn" onclick="gotoProtocolCases(6)">并联叠加</button>
+						&nbsp;&nbsp;&nbsp;
+						<button class="srhbtn" onclick="gotoProtocolCases(8)">瞬间叠加</button>
+					</div>
+					<h1>&nbsp;&nbsp;信息叠加计算</h1>
+					<div id="chooseColoTab1" class="nextTab">
+						<h3><input type="checkbox" id="colocheckbox1" checked onclick="toChooseColo1(this)"/>&nbsp;共位叠加</h3>
+						<div id="chooseColo1" class="nextTab">
+							<p><label><input name="coloMethod1" type="radio" value="1" checked />上确共位叠加 </label>
+								<label><input name="coloMethod1" type="radio" value="2" />下确共位叠加 </label>
+						</div>
+					</div>
+
+					<div id="choosetensetab" class="nextTab">
+						<h3><input type="checkbox" id="timecheckbox1" onclick="toChooseTime1(this)"/>&nbsp;时态叠加</h3>
+						<div id="choosetense1" class="nextTab" style="display: none">
+							<p><label><input name="tenseMethod" type="radio" value="1" checked onclick="timeAddMehod(1, 1)" />串联叠加 </label>
+								<label><input name="tenseMethod" type="radio" value="2" onclick="timeAddMehod(2, 1)" />并联叠加 </label></p>
+							<p><label><input name="tenseMethod" type="radio" value="3" onclick="timeAddMehod(3, 1)" />瞬间叠加 </label>
+								<label><input name="tenseMethod" type="radio" value="4" onclick="timeAddMehod(4, 1)" />指定时间叠加 </label></p>
+							<p id="starttime1p" style="display: none"><font id="starttime1t">起始时间 </font>
+								<input id="starttime1" type="text" class="easyui-datebox" style="width: 170px"></p>
+							<p id="endtime1p" style="display: none"><font id="endtime1t">截止时间 </font>
+								<input id="endtime1" type="text" class="easyui-datebox" style="width: 170px"></p>
+						</div>
+					</div>
+
+					<div id="choosedists2" class="nextTab" >
+						<!--<h3><input type="checkbox" id="distscheckbox2" onclick="toChooseDist(this)"/>&nbsp;指定空间范围</h3>-->
+                        <h3><input type="checkbox" id="distscheckbox2" onclick="toChooseMapExtent(this)"/>&nbsp;指定空间范围</h3>
+						<div id="distscheckboxes2" class="nextTab"  style="display: block">
+							<!--<h3 style="color: black"><input type="checkbox" id="mapextentcheckbox" onclick="toChooseMapExtent(this)"/>&nbsp;选择地图范围</h3>-->
+							<div id="mapextentdone" class="nextTab" style="display: none">范围未选择</div>
+							<!--<p><input type="checkbox" id="acheckbox" onclick=""/>北京市 &nbsp;-->
+							<!--<input type="checkbox" id="bcheckbox" onclick=""/>上海市 &nbsp;</p>-->
+							<!--<p><input type="checkbox" id="ccheckbox" onclick=""/>武汉市 &nbsp;-->
+							<!--<input type="checkbox" id="dcheckbox" onclick=""/>其他 &nbsp;<p/>-->
+						</div>
+					</div>
+					<br/>
+
+					<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" value="开始叠加" class="srhbtn" onclick="addGo()">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" value="清空" class="srhbtn" onclick="clear_posadds()"></p>
 				</div>
 			</div>
 
-			<!-- 路径规划 -->
-			<div id="hm_favorites" class="hm-favorites">
-				<!--<td><wb:share-button appkey='2943998357' addition='simple' type='icon'></wb:share-button>-->
-				<div id="pathpoints" class="pathpoints"></div>
-				<div id="pathinfo1" class="pathinfo1"></div>
-				<div id="hiddendiv" class="hiddendiv"></div>
-			</div>
+			<!--<div title="地名消岐" id="listTab" data-options="iconCls:'icon-mini-edit'" style="display: none">-->
+                <!--<div class="datagrid-toolbar" style="margin-bottom: 10px; padding:8px 4px 4px 5px;">-->
+                    <!--<input id="xqinput" class="easyui-searchbox" style="width: 100%; height: 30px; line-height: 30px"-->
+                           <!--data-options="prompt:'输入消岐文本地址',searcher:initXiaoqi" />-->
+                <!--</div>-->
 
-			<!-- 左下列表 -->
-			<div id="searchresults" class="SearchResult">
-				<div id="resultitems"></div>
-				<div id="hm_Paginate"></div>
-			</div>
+                <!--<div class="searchDiv">-->
 
+                    <!--<div class="nextTab" >-->
+                        <!--<h3>&nbsp;&nbsp;游记正文</h3>-->
+                        <!--<textarea rows="10" cols="34" id="xiaoqiText"></textarea>-->
+                    <!--</div>-->
+
+                    <!--<div class="nextTab" >-->
+                        <!--<h3>&nbsp;&nbsp;文本中的时间</h3>-->
+                        <!--<textarea rows="3" cols="34" id="test1"></textarea>-->
+                    <!--</div>-->
+                    <!--<div class="nextTab" >-->
+                        <!--<h3>&nbsp;&nbsp;文本中的地名</h3>-->
+                        <!--<textarea rows="3" cols="34" id="test2"></textarea>-->
+                    <!--</div>-->
+                    <!--<div class="nextTab" >-->
+                        <!--<h3>&nbsp;&nbsp;结果：歧义地名</h3>-->
+                        <!--<textarea rows="3" cols="34" id="diMing_result"></textarea>-->
+                    <!--</div>-->
+                    <!--<div class="nextTab" >-->
+                        <!--<h3>&nbsp;&nbsp;结果：歧义经纬度</h3>-->
+                        <!--<textarea rows="3" cols="34" id="JingWei_result"></textarea>-->
+                    <!--</div>-->
+
+                    <!--<br/>-->
+                    <!--<div class="nextTab" >-->
+                        <!--&nbsp;&nbsp;&nbsp;<button class="srhbtn" onclick="jia_ellipse();inTuoYuan();">PPA判断</button>-->
+                        <!--&nbsp;&nbsp;&nbsp;<button class="srhbtn" onclick="rset();addke();inKeDaYu();">可达域判断</button>-->
+                        <!--&nbsp;&nbsp;&nbsp;<button class="srhbtn" onclick="rset();gailv();">概率判断</button>-->
+						<!--<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+						<!--&nbsp;&nbsp;&nbsp;<button class="srhbtn" onclick="hideXiaoqi()">清除消岐要素</button>-->
+                    <!--</div>-->
+                    <!--<p></p>-->
+                    <!--<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;“地名消岐”的完整功能&nbsp;请-->
+                        <!--<a href="http://106.12.93.49:8080/placedisambigution/final.jsp" target="_blank">点击</a></p>-->
+
+                <!--</div>-->
+
+                <!--&lt;!&ndash;<div class="panel ">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div class="panel-heading">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<h3 class="panel-title">游记正文</h3>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div class="panel-body"  id="test" >&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div class="col-md-6">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div class="panel panel-info">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="panel-heading">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<h5 class="panel-title">文本中的时间</h5>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="panel-body" id="test1" >&ndash;&gt;-->
+
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div class="col-md-6">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div class="panel panel-info">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="panel-heading">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<h5 class="panel-title">文本中的地名</h5>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="panel-body" id="test2"  >&ndash;&gt;-->
+
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div class="col-md-6">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div class="panel panel-info">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="panel-heading">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<h5 class="panel-title">结果：歧义地名</h5>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="panel-body" id="diMing_result"  >&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div class="col-md-6">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div class="panel panel-info">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="panel-heading">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<h5 class="panel-title">结果：歧义经纬度</h5>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="panel-body" id="JingWei_result"  >&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+            <!--</div>-->
 
 		</div>
 
 	</div>
-	<!--地图容器-->
-    <div id="hm_content" class="hmbar-content">
-		<!--<div id="wrap" class="my-map">-->
-			<div id="mapContainer">
+
+    <!--中间主地图-->
+	<div id="centerDiv" data-options="region:'center',title:'地图'" style="padding: 6px; overflow-y: scroll">
+		<div class="floatDiv" id="floatDiv">
+		</div>
+
+		<div id="mapContainer" style="width:100%; height: 100%"></div>
+		<div class='button-group' style="background-color: #0d9bf2;right: 20px">
+			<input type="checkbox" id="toolbarInfo" checked onclick="placesCheckBox(this)"/>位置信息
+			<input type="checkbox" id="toolbarPosadd" checked onclick="distsCheckBox(this)"/>接入信息
+			<input type="checkbox" id="toolbarEntities" onclick="entityCheckBox(this)"/>叠加要素
+			<input type="checkbox" id="toolbarMassp" onclick="boundsCheckBox(this)"/>海量点
+			<!--<input type="checkbox" id="toolbarBoundMarkers" checked onclick="boundMarksCheckBox(this)"/>事件-->
+			<!--<input type="checkbox" id="overview" disabled/>鹰眼-->
+			<!--<input type="checkbox" id="overviewOpen" disabled />展开鹰眼-->
+		</div>
+		<!--  <div id="divContainer">  -->
+		<!--<div id="divContainer1">-->
+		<!---->
+		<!--<ul id=tabs class="resp-tabs-list tabContainer tab1"></ul>-->
+		<!--<div id="AllContainer" class="resp-tabs-container tab1"></div>-->
+		<!--&lt;!&ndash; <div id="divContainer"></div> &ndash;&gt;   -->
+		<!--</div>-->
+
+	</div>
+
+	<!--右边结果栏-->
+	<div id="eastDiv" data-options="region:'east',split:true" title="位置信息" style="width: 350px; padding: 2px;overflow-x: hidden">
+		<div id="eastTabsDiv" class="easyui-tabs" data-options="fit:true" style="cursor:pointer;">
+
+			<div title="信息列表" data-options="iconCls:'icon-more'">
+
+				<div id="resultsdiv" class="easyui-accordion" style="width:100%;height:100%; float: right;">
+
+					<div id="searchstat" title="信息汇总" selected="true" style="overflow:auto;">
+						<h3 style="color:#0099FF; text-align: center">信息条目汇总</h3>
+						<!--<div id="distinfo" style="display: none">-->
+							<!--<p id="distname" style="text-align: center" onclick="toInfoRes()">行政区名称：</p>-->
+							<!--<p id="numval" style="text-align: center" onclick="toInfoRes()">乡村数：</p>-->
+							<!--<p id="numcomu" style="text-align: center" onclick="toInfoRes()">社区数：</p>-->
+							<!--<p id="subcom" style="text-align: center" onclick="toInfoRes()">下属村、居委会：</p>-->
+						<!--</div>-->
+						<div id="infoStats">
+							<p id="placeintotal" style="text-align: center" onclick="toInfoRes()">位置信息：0条记录</p>
+							<p id="distintotal" style="text-align: center" onclick="toPosaddRes()">感知接入信息：0条记录</p>
+							<p id="posaddtotal" style="text-align: center" onclick="toEntityRes()">叠加要素：0条记录</p>
+							<p id="boundintotal" style="text-align: center" onclick="toMassPointRes()">海量点：0条记录</p>
+						</div>
+                        <!--<p>&nbsp;&nbsp;<strong>叠加模式：</strong></p>-->
+                        <!--<p>&nbsp;&nbsp;&nbsp;&nbsp;上确共位叠加，串联时态叠加，自选范围</p><br/>-->
+                        <!--<p>&nbsp;&nbsp;<strong>处理的信息量：</strong></p>-->
+                        <!--<p>&nbsp;&nbsp;&nbsp;&nbsp;文字：16304字节，图形：33256字节，<br/>-->
+                            <!--&nbsp;&nbsp;&nbsp;&nbsp;图像：46926846字节，视频：2523秒，<br/>-->
+                            <!--&nbsp;&nbsp;&nbsp;&nbsp;音频：865秒，动画：75秒</p>-->
+                        <!--<p>&nbsp;&nbsp;&nbsp;&nbsp;处理了74条位置信息，<br/>-->
+                            <!--&nbsp;&nbsp;&nbsp;&nbsp;叠加产生了23个组合地理实体</p><br/>-->
+                        <!--<p>&nbsp;&nbsp;<strong>叠加产生要素的信息量：</strong></p>-->
+                        <!--<p>&nbsp;&nbsp;&nbsp;&nbsp;文字：9102字节，图形：13368字节，<br/>-->
+                            <!--&nbsp;&nbsp;&nbsp;&nbsp;图像：29105662字节，视频：1273秒，<br/>-->
+                            <!--&nbsp;&nbsp;&nbsp;&nbsp;音频：241秒，动画：31秒</p>-->
+
+						<!--<p id="bmintotal" style="text-align: center" onclick="toMassPointRes()">事件：0条记录</p>-->
+
+						<br/>
+						<p style="text-align: center">
+							<button id="outputbtn" class="srhbtn" onclick="openResultWindow()">
+								查询结果详情</button></p>
+					</div>
+
+					<div title="位置信息" id="placeresultsdiv" >
+						<div id="placeresults"></div>
+						<div id="hm_Paginate_places"></div>
+					</div>
+
+					<div title="感知接入信息" id="distresultsdiv">
+						<div id="distresults"></div>
+						<div id="hm_Paginate_dists"></div>
+					</div>
+
+					<div title="叠加要素" id="posaddResDiv">
+						<div id="posaddRes"></div>
+						<div id="hm_Paginate_posadd"></div>
+					</div>
+
+					<div title="海量点" id="boundresultsdiv">
+						<div id="boundresults" class="searchDiv">
+
+							<div class="nextTab" id="mapvLayerControl" style="display: none">
+								<h3><input type="checkbox" id="mapvpLayer" checked onclick="toShowMapv(this)"/>
+									&nbsp;beijing_mass_points</h3>
+								<div class="nextTab">
+									<p>类型： mapv图层</p>
+									<p>数据量： 370827 个点数据</p>
+								</div>
+							</div>
+
+							<div class="nextTab" id="pointCollControl" style="display: none">
+								<h3><input type="checkbox" id="pointCoolLayer" onclick="toShowPointCool(this)"
+										   checked/> &nbsp;WuhanPoints</h3>
+								<div class="nextTab">
+									<p>类型： BMap海量点集图层</p>
+									<p>数据量： 20236 个点数据</p>
+								</div>
+							</div>
+
+						</div>
+						<div id="hm_Paginate_bounds"></div>
+					</div>
+
+					<!--<div title="事件" id="bmresultsdiv">-->
+						<!--<div id="boundmarkrsresults"></div>-->
+						<!--<div id="hm_Paginate_boundmarkers"></div>-->
+					<!--</div>-->
+
+				</div>
+
+				<div id="hiddendiv" class="hiddendiv"></div>
+
 			</div>
-    </div>
 
-	<script src="js/echarts/echarts-all.js" type="text/javascript" ></script>
-	<script src="js/require.js" data-main="js/main" ></script>
-	<!-- 主地图操作 -->
-	<script type="text/javascript">
+			<!--<div title="全网搜索" id="manageTab" data-options="iconCls:'icon-man'" style="display: none">-->
+
+				<!--<div class="datagrid-toolbar" style="margin-bottom: 1px; padding:8px 4px 4px 5px;">-->
+					<!--<input id="baiduSearchInput" class="easyui-searchbox" value=""-->
+						   <!--style="width: 100%; height: 30px; line-height: 30px; margin-right: 8px; padding-right: 8px"-->
+						   <!--data-options="prompt:'百度搜索',searcher:baiduSearch"/>-->
+				<!--</div>-->
+
+				<!--<div style="width: 99%; margin-left: 2px">-->
+					<!--<div id="bdSearchResults"></div>-->
+				<!--</div>-->
+
+				<!--<div id="seachAddDiv" style="width: 99%; margin-left: 2px; display: none">-->
+
+					<!--<div id="chooseColoTab2" class="nextTab" style="display: block">-->
+						<!--<h3><input type="checkbox" id="colocheckbox2" checked onclick="toChooseColo2(this)"/>&nbsp;共位叠加</h3>-->
+						<!--<div id="chooseColo2" class="nextTab">-->
+							<!--<p><label><input name="coloMethod2" type="radio" value="1" checked />上确共位叠加(推荐) </label>-->
+								<!--<label><input name="coloMethod2" type="radio" value="2" onclick="lowerAddClick(this)" />下确共位叠加 </label>-->
+						<!--</div>-->
+					<!--</div>-->
+
+					<!--<div id="choosetensetab2" class="nextTab" style="display: block">-->
+						<!--<h3><input type="checkbox" id="timecheckbox2" onclick="toChooseTime2(this)"/>&nbsp;时态叠加</h3>-->
+						<!--<div id="choosetense2" class="nextTab" style="display: none">-->
+							<!--<p><label><input name="tenseMethod" type="radio" value="1" checked onclick="timeAddMehod(1, 2)" />串联叠加 </label>&nbsp;&nbsp;-->
+								<!--&nbsp;&nbsp;<label><input name="tenseMethod" type="radio" value="2" onclick="timeAddMehod(2, 2)" />并联叠加 </label></p>-->
+							<!--<p><label><input name="tenseMethod" type="radio" value="3" onclick="timeAddMehod(3, 2)" />瞬间叠加 </label>&nbsp;&nbsp;-->
+								<!--&nbsp;&nbsp;<label><input name="tenseMethod" type="radio" value="4" onclick="timeAddMehod(4, 2)" />指定时间叠加 </label></p>-->
+							<!--<p id="starttime2p" style="display: none"><font id="starttime2t">起始时间 </font>-->
+                                <!--<input id="starttime2" type="text" class="easyui-datebox" style="width: 170px"></p>-->
+							<!--<p id="endtime2p" style="display: none"><font id="endtime2t">截止时间 </font>-->
+                                <!--<input id="endtime2" type="text" class="easyui-datebox" style="width: 170px"></p>-->
+						<!--</div>-->
+					<!--</div>-->
+
+					<!--<br/>-->
+					<!--<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+						<!--<input type="button" value="叠加搜索结果" class="srhbtn" onclick="addSearchToMap()">-->
+						<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+						<!--<input type="button" value="清空搜索结果" class="srhbtn" onclick="clearBaiduSearch()"></p>-->
+
+				<!--</div>-->
+
+				<!--<div style="width: 99%; margin-left: 2px">-->
+					<!--<div id="trafficDiv" style="display: none">-->
+						<!--<div class="nextTab">-->
+							<!--<h3>&nbsp;&nbsp;选择路况时间</h3>-->
+							<!--<div id="trafficRadios" class="nextTab">-->
+								<!--<p><label><input name="trafficRadio" type="radio" value="-1" checked-->
+												 <!--onclick="gotoTrafficTime(this)" />关闭路况 </label></p>-->
+								<!--<p><label><input name="trafficRadio" type="radio" value="9" onclick="gotoTrafficTime(this)" />2月27日 9:00 - 9:59</label></p>-->
+								<!--<p><label><input name="trafficRadio" type="radio" value="10" onclick="gotoTrafficTime(this)" />2月27日 10:00 - 10:59</label></p>-->
+								<!--<p><label><input name="trafficRadio" type="radio" value="11" onclick="gotoTrafficTime(this)" />2月27日 11:00 - 11:59</label></p>-->
+								<!--<p><label><input name="trafficRadio" type="radio" value="12" onclick="gotoTrafficTime(this)" />2月27日 11:00 - 11:59</label></p>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+
+				<!--<div id="y" class="easyui-window" title="Basic Window" data-options="iconCls:'icon-save',closed:true"-->
+					 <!--style="width:500px;height:500px;padding: 3px 0px 0px 2px; overflow: hidden"></div>-->
+
+			<!--</div>-->
+
+		</div>
+	</div>
 
-		var infoWindow, map, level = 15;
-		var markers = [];	//	所有点标注
-		var showingPlaces;	//	所有当前显示的地名
-		var windata;		//	当前信息窗体中的地名数据
-		var orgdata, destdata;	//	信息窗体搜索框中起点，终点的地点数据
-		var navMethod = "trans";	//	信息窗体中上一次导航方式
-		var entered = false;	//	信息窗体搜索框是否键入过Enter
-		var infoWinDown;	//	信息窗体下部搜索框html
-
-		//	生成信息窗体的内容
-		function constructInfoWindow(title, content) {
-			var info = document.createElement("div");
-			info.className = "info";
-
-			//可以通过下面的方式修改自定义窗体的宽高
-			//info.style.width = "400px";
-			// 定义顶部标题
-			var top = document.createElement("div");
-			var titleD = document.createElement("div");
-			var closeX = document.createElement("img");
-			top.className = "info-top";
-			titleD.innerHTML = title;
-			closeX.src = "images/close2.gif";
-			closeX.onclick = closeInfoWindow;
-			top.appendChild(titleD);
-			top.appendChild(closeX);
-			info.appendChild(top);
-
-			// 定义中部内容
-			var middle = document.createElement("div");
-			middle.className = "info-middle";
-			middle.style.backgroundColor = 'white';
-			middle.innerHTML = content;
-			info.appendChild(middle);
-
-			//	添加下部内容（搜索框）
-			info.appendChild(infoWinDown);
-
-			// 定义底部内容
-			var bottom = document.createElement("div");
-			bottom.className = "info-bottom";
-			bottom.style.position = 'relative';
-			bottom.style.top = '0px';
-			bottom.style.margin = '0 auto';
-			var sharp = document.createElement("img");
-			sharp.src = "images/sharp.png";
-			bottom.appendChild(sharp);
-			info.appendChild(bottom);
-
-			return info;
-		}
-
-		//	生成信息创意下部（搜索框）的内容
-		function constructInfoDown() {
-			//	定义下部内容
-			var down = document.createElement("div");
-			down.className = "amap-info-combo status-origin";
-			down.setAttribute("id", "winbtm");
-//			down.setAttribute("style", "background-color: #FFFFFF");
-			var downstr = "" +
-//			"<div class=\"amap-info-combo status-origin\" id=\"winbtm\">" +
-				"<table><tbody>"+
-					"<tr class=\"amap-info-tabs\">" +
-						"<td class=\"tab\" id=\"findnear\" onclick=\"selectsrhmethod(this)\"><i class=\"tab-icon icon-around\"></i>在附近找</td>" +
-						"<td class=\"tab selected\" id=\"fromhere\" onclick=\"selectsrhmethod(this)\"><i class=\"tab-icon icon-start\"></i>这里出发</td>" +
-						"<td class=\"tab\" id=\"tothere\" onclick=\"selectsrhmethod(this)\"><i class=\"tab-icon icon-end\"></i>到这里去</td>" +
-					"</tr></tbody>" +
-				"</table>" +
-				"<table cellpadding=\"0\"><tbody>" +
-					"<tr>" +
-						"<td class=\"input-label\" id=\"startorend\">终点</td>" +
-						"<td>" +
-							"<div class=\"keyword-input\"><input class=\"keyword\" type=\"text\" id=\"winsrhword\" /></div>" +
-						"</td>" +
-						"<td>" +
-							"<div class=\"search-button hide\" id=\"poisrhbtn\" onclick=\"srhpoi();\">搜索</div>" +
-							"<div class=\"nav-button\" id=\"navsrhdiv\">" +
-								"<span class=\"nav-icon nav-drive\" id=\"drivesrhbtn\" onclick=\"srhdrive();\">驾车</span>" +
-								"<span class=\"nav-icon nav-bus\" id=\"bussrhbtn\" onclick=\"srhbus();\">公交</span>" +
-								"<span class=\"nav-icon nav-walk\" id=\"walksrhbtn\" onclick=\"srhwalk();\">步行</span>" +
-							"</div>" +
-						"</td>" +
-					"</tr></tbody>" +
-				"</table>"
-//			 + "</div>"
-					;
-			down.innerHTML = downstr;
-			return down;
-		}
-
-		//	打开信息窗体
-		function openInfoWindow(data) {
-			var extData = data;
-			var title = extData.name + '<span style="font-size:11px;color:#F00;">&nbsp;&nbsp;' + extData['小类'] + '</span>';
-			//var title = '华荣正街' + '<span style="font-size:11px;color:#F00;">&nbsp;&nbsp;' + '街道' + '</span>';
-			var content = [];
-			content.push("<img src='images/contentdemopic.jpg'>"
-					+ "<strong>地名含义：</strong>" + extData.desc);
-			content.push("<strong>行政区：</strong>" + extData['所在（跨）行政区']);
-			content.push("<a href='html/wikiContent_fitall.html?name=" + extData.nickname + "' target='_blank'>详细信息</a>");
-			closeInfoWindow();
-			infoWindow = new AMap.InfoWindow({
-				isCustom: true,  //使用自定义窗体
-				content: constructInfoWindow(title, content.join("<br>")),
-				offset: new AMap.Pixel(14, -47)	//-113, -140
-			});
-			infoWindow.on('open', function () {
-				windata = data;
-			});
-			infoWindow.on('close', function () {
-				hasAutoCom = false;
-//				var srhdiv = document.getElementById("winbtm");
-//				srhdiv.setAttribute("id", "oldwinbtm");
-//				srhdiv.innerHTML = " ";
-			});
-			infoWindow.on('change', function () {
-
-			});
-
-			infoWindow.open(map, data.position);
-
-
-		}
-
-		//	关闭地图中的信息窗体
-		function closeInfoWindow() {
-			if(infoWindow) {
-				infoWindow.close();
-				map.clearInfoWindow();
-				infoWindow = null;
-			}
-		}
-
-		//	附近搜索
-		function srhpoi() {
-			var item0 = consPlaceResult(windata, "中");
-
-			var inputele = document.getElementById("winsrhword");
-			var srhtxt = inputele.value;
-			var placeSearch = new AMap.PlaceSearch({ //构造地点查询类
-				pageSize: 5,
-				pageIndex: 1,
-				city: windata.citycode, //城市
-				map: map,
-				panel: "pathinfo1"
-			});
-			placeSearch.searchNearBy(srhtxt, windata.position, 500, function(status, result) {
-				var test = 0;
-			});
-			closeWindowBySearch();
-			clearNavPanel();
-			setResultsInDiv([item0], "pathpoints");
-		}
-
-		//	驾车搜索
-		function srhdrive() {
-			navMethod = "drive";
-			var transOptions = createTransOption();
-			var trans = new AMap.Driving(transOptions);
-			trans.search(orgdata.position, destdata.position, function(status, result) {
-				//TODO:开发者使用result自己创建交互面板和地图展示
-			});
-			closeWindowBySearch();
-		}
-
-		//	公交搜索
-		function srhbus() {
-			navMethod = "trans";
-			var transOptions = createTransOption();
-			var trans = new AMap.Transfer(transOptions);
-			trans.search(orgdata.position, destdata.position, function(status, result) {
-				//TODO:开发者使用result自己创建交互面板和地图展示
-			});
-			closeWindowBySearch();
-		}
-
-		//	步行搜索
-		function srhwalk() {
-			navMethod = "walk";
-			var transOptions = createTransOption();
-			var trans = new AMap.Walking(transOptions);
-			trans.search(orgdata.position, destdata.position, function(status, result) {
-				//TODO:开发者使用result自己创建交互面板和地图展示
-			});
-			closeWindowBySearch();
-		}
-
-		//	生成搜索Options的内容
-		function createTransOption() {
-			var inputele = document.getElementById("winsrhword");
-			var srhtxt = inputele.value;
-			var soe = document.getElementById("startorend");
-			var otherplace = findPlaceByAttr("name", srhtxt);
-			if(soe.innerHTML == "起点") {
-				orgdata = otherplace;
-				destdata = windata;
-			} else {
-				orgdata = windata;
-				destdata = otherplace;
-			}
-			var item1 = consPlaceResult(orgdata, "起");
-			var item2 = consPlaceResult(destdata, "终");
-			clearNavPanel();
-			setResultsInDiv([item1, item2], "pathpoints");
-
-			var transOptions = {
-				city: orgdata.citycode,
-				citid: destdata.citycode,
-//				policy: AMap.TransferPolicy.LEAST_TIME,
-				map: map,
-				panel: "pathinfo1"
-			};
-			return transOptions;
-		}
-
-		//	在所有地名中按属性查询
-		function findPlaceByAttr(attr, _name) {
-			var pla = null;
-			for(var i = 0; i < placedata.length; i++) {
-				var testplace = placedata[i];
-				if(testplace[attr] == _name) {
-					pla = testplace;
-					break;
-				}
-			}
-			return pla;
-		}
-
-		//	因为搜索而关闭信息窗体
-		function closeWindowBySearch() {
-			document.getElementById("winsrhword").value = "";
-			closeInfoWindow();
-			map.clearMap();
-			initmarkers();
-			toChangeHead("hm_favnav");
-		}
-
-		//	清空“路径规划”容器的内容
-		function clearNavPanel() {
-			var navPanel = document.getElementById("pathinfo1");
-			navPanel.innerHTML = "";
-		}
-
-		//	设置信息窗体搜索方式
-		function selectsrhmethod(e) {
-			var oid = e.id;
-			var posObj = document.getElementById("findnear");
-			var fhObj = document.getElementById("fromhere");
-			var thObj = document.getElementById("tothere");
-
-			switch(oid) {
-				case "findnear":{
-					posObj.className = "tab selected";
-					fhObj.className = "tab";
-					thObj.className = "tab";
-					$("#startorend")[0].innerHTML = "";
-					$("#poisrhbtn")[0].className = "search-button";
-					$("#navsrhdiv")[0].className = "nav-button hide";
-					break;
-				}
-				case "fromhere":{
-					posObj.className = "tab";
-					fhObj.className = "tab selected";
-					thObj.className = "tab";
-					$("#startorend")[0].innerHTML = "终点";
-					$("#poisrhbtn")[0].className = "search-button hide";
-					$("#navsrhdiv")[0].className = "nav-button";
-					break;
-				}
-				case "tothere":{
-					posObj.className = "tab";
-					fhObj.className = "tab";
-					thObj.className = "tab selected";
-					$("#startorend")[0].innerHTML = "起点";
-					$("#poisrhbtn")[0].className = "search-button hide";
-					$("#navsrhdiv")[0].className = "nav-button";
-					break;
-				}
-			}
-
-		}
-
-		//	切换左边栏的窗体
-		function toChangeHead(oid) {
-			var titles=["hm_wikinav", "hm_classnav", "hm_favnav"];
-			var infoClassObj = document.getElementById("hm_infoClass");
-			var favoritesObj = document.getElementById("hm_favorites");
-			var wikiClassObj = document.getElementById("hm_wikiClass");
-
-			for(var i = 0;i < titles.length; i++) {
-				var title = titles[i];
-				var preHeadObj = document.getElementById(title);
-				var reg = new RegExp('(\\s|^)' + "active" + '(\\s|$)');
-				preHeadObj.className = preHeadObj.className.replace(reg, ' ');
-			}
-			document.getElementById(oid).className += " active";
-			document.getElementById("hm_mapInfo").style.display="block";
-			document.getElementById("searchresults").style.display="none";
-			switch(oid) {
-				case "hm_classnav":{
-					infoClassObj.style.display="block";
-					favoritesObj.style.display="none";
-					document.getElementById("pathinfo1").style.display = "none";
-					wikiClassObj.style.display="none";
-					break;
-				}
-				case "hm_favnav":{
-					infoClassObj.style.display="none";
-					favoritesObj.style.display="block";
-					document.getElementById("pathinfo1").style.display = "block";
-					wikiClassObj.style.display="none";
-					break;
-				}
-				case "hm_wikinav":{
-					infoClassObj.style.display="none";
-					favoritesObj.style.display="none";
-					document.getElementById("pathinfo1").style.display = "none";
-					wikiClassObj.style.display="block";
-					break;
-				}
-			}
-		}
-
-		//	显示某大类的所有地名
-		function gotoBigType(bigtype) {
-			var tmpdata = [];
-			for (var i = 0; i < placedata.length; i++) {
-				var data = placedata[i];
-				if(data['大类'] == bigtype) {
-					tmpdata.push(data);
-				}
-			}
-			if(tmpdata.length > 0) {
-				showingPlaces = tmpdata;
-				setNewMarkers(tmpdata);
-				setResultItems(tmpdata, "searchresults");
-			} else {
-				alert("暂无 " + bigtype + " 相关数据...");
-			}
-		}
-
-		//	显示某小类的所有地名
-		function gotoSmallType(bigtype, smalltype) {
-			var tmpdata = [];
-			for (var i = 0; i < placedata.length; i++) {
-				var data = placedata[i];
-				var flag = false;
-				if(data['大类'] == bigtype && data['小类'] == smalltype) {
-					tmpdata.push(data);
-				}
-			}
-			if(tmpdata.length > 0) {
-				showingPlaces = tmpdata;
-				setNewMarkers(tmpdata);
-				setResultItems(tmpdata, "searchresults");
-			} else {
-				alert("暂无 " + bigtype +"-" + smalltype + " 相关数据...");
-			}
-		}
-
-		//	显示某地区的所有地名
-		function gotoDist(dictcode) {
-
-			var tmpdata = [];
-			for (var i = 0; i < placedata.length; i++) {
-				var data = placedata[i];
-				var thiscode = data['dist'];
-				if(distIn(thiscode, dictcode)) {
-					tmpdata.push(data);
-				}
-			}
-			if(tmpdata.length > 0) {
-				showingPlaces = tmpdata;
-				setNewMarkers(tmpdata);
-				setResultItems(tmpdata, "searchresults");
-			} else {
-				alert("暂无 " + dictcode + " 地区相关数据...");
-			}
-		}
-
-		//	地图前往某一坐标点
-		function gotoPlace(posStr, name) {
-			var pla;
-			if(name) {
-				pla = findPlaceByAttr("name", name);
-				closeInfoWindow();
-			}
-			var xystr = posStr.split(",");
-			var x = parseFloat(xystr[0]);
-			var y = parseFloat(xystr[1]);
-			var npos = [x, y];
-			var zom = map.getZoom();
-			if(zom < 16) {
-				map.setZoom(16);
-//				if(zom < 14) {
-//					map.setZoom(14);
-//				} else {
-//					map.setZoom(zom + 1);
-//				}
-			}
-			map.panTo(npos);
-			if(pla) {
-				openInfoWindow(pla);
-			}
-//			openInfoWindow(placedata);
-		}
-
-		//	地区代码是否位于某地区
-		function distIn(sub, par) {
-			var i = 0;
-			for(i = 0; i < sub.length; i++) {
-				var c1 = sub.charCodeAt(i), c2 = par.charCodeAt(i);
-				if(c1 != c2) {
-					break;
-				}
-			}
-			for( ;i < par.length; i++) {
-				var c = par.charCodeAt(i);
-				if(c != 48) {
-					return false;
-				}
-			}
-			return true;
-		}
-
-		//	新的点标注
-		function setNewMarkers(newdata) {
-			while (markers.length > 0) {
-				map.remove(markers);
-				markers.pop();
-			}
-			closeInfoWindow();
-			for(var i = 0; i < newdata.length; i++) {
-				var data = newdata[i];
-				var marker;
-				marker = new AMap.Marker({
-					map: map,
-					position: data.position,
-					zIndex: 3,
-					extData: data,
-					title: data.name,
-					label: data.name.substring(0, 1),
-				});
-				AMap.event.addListener(marker, "click", mapFeatureClick);
-				markers.push(marker);
-			}
-			map.setFitView();
-		}
-
-		//	在左边结果栏显示若干条结果，muldata为json
-		function setResultItems(muldata, divname) {
-
-			var parentdiv = document.getElementById(divname);
-			parentdiv.style.display="block";
-			var prestr = "<div class='list-group'>", endstr = "</div>", midstr = "";
-			for(var i = 0; i < muldata.length; i++) {
-				var data = muldata[i];
-				var str = consPlaceResult(data, i + 1);
-				midstr += str;
-			}
-			var totalstr = prestr + midstr + endstr;
-			parentdiv.innerHTML = totalstr;
-		}
-
-		//	在左边结果栏显示若干条结果，items为html
-		function setResultsInDiv(items, divname) {
-			var parentdiv = document.getElementById(divname);
-			parentdiv.style.display="block";
-			var prestr = "<div class='list-group'>", endstr = "</div>", midstr = "";
-			for(var i = 0; i < items.length; i++) {
-				midstr += items[i];
-			}
-			var totalstr = prestr + midstr + endstr;
-			parentdiv.innerHTML = totalstr;
-		}
-
-		//	产生左边结果栏的一条数据——名称，位置，起点/终点，最左序号，下方详情
-		function consResultItem(name, pos, type, order, content){
-			var posstr = pos[0] +"," + pos[1];
-			str = "<div class='list-group-item'" +"onclick=\"gotoPlace('"+ posstr + "', '" + name + "')\"" +
-					"><div class='SearchResult_item_left' " +
-					"><p><strong>" + order +
-					"</strong></p></div><div class='SearchResult_item_content'>" +
-					"<p><font color='#0B73EB'>" + name +
-					"</font><span class='wikiTag'>" + type +
-					"</span></p><p>" + content + "</p></div></div>";
-			return str;
-		}
-
-		//	产生左边结果栏的一条数据，place为地点的json数据
-		function consPlaceResult(place, order) {
-			return consResultItem(place.name, place.position, place['小类'], order, "地域代码：" + place.dist);
-		}
-
-		//	全部行政区域显示在左边栏相应位置
-		function setDists() {
-			var wholetree = document.getElementById("tree1");
-			var temp = document.getElementById("folder1");
-			var inner1 = "<li class='collapsable'>";
-			var inner2 = "</li>";
-			var branches = $(inner1 + "<div class='hitarea collapsable-hitarea'></div>" +
-					"<a href='#' onclick=\"gotoDist('420000000')\">湖北省</a><ul id='clist'></ul>" + inner2).appendTo("#folder1");
-			var branchdom =$('#clist')[0];
-
-			var subDistricts = distdata.subclasses;
-			for (var i = 0; i < subDistricts.length; i++) {	//	省内各城市
-				var city = subDistricts[i];
-				var cityname = city.name;
-				var citynode = document.createElement("li");
-				var $cn = $(citynode);
-				if(i == subDistricts.length - 1) {
-					citynode.setAttribute("class", "last");
-				} else {
-					citynode.setAttribute("class", "expandable");
-				}
-//				citynode.setAttribute("class", "expandable");
-				var citydiv = document.createElement("div");
-				citydiv.setAttribute("class", "hitarea expandable-hitarea");
-				var citya = document.createElement("a");
-				citya.setAttribute("href", "#");
-//				citya.setAttribute("class", "");
-				citya.setAttribute("onclick", "gotoDist('" + city.id + "')");
-				var citytext = document.createTextNode(cityname);
-				citya.appendChild(citytext);
-				citynode.appendChild(citydiv);
-				citynode.appendChild(citya);
-				if (!city.subclasses) {
-					branchdom.appendChild(citynode);
-					continue;
-				}
-				var countylist = document.createElement("ul");
-				countylist.setAttribute("style", "display: none;");
-				for (var j = 0; j < city.subclasses.length; j++) {//	城市内各区县
-					var county = city.subclasses[j];
-					var countyname = county.name;
-					var countynode = document.createElement("li");
-					var countya = document.createElement("a");
-					countya.setAttribute("href", "#");
-					countya.setAttribute("onclick", "gotoDist('" + county.id + "')");
-					var countytext = document.createTextNode(countyname);
-					countya.appendChild(countytext);
-
-					if (county.subclasses) {
-						if(j == city.subclasses.length - 1) {
-							countynode.setAttribute("class", "last");
-						} else {
-							countynode.setAttribute("class", "expandable");
-						}
-//						countynode.setAttribute("class", "expandable");
-						var countydiv = document.createElement("div");
-						countydiv.setAttribute("class", "hitarea expandable-hitarea");
-						countynode.appendChild(countydiv);
-						countynode.appendChild(countya);
-						var streetlist = document.createElement("ul");
-						streetlist.setAttribute("style", "display: none;");
-						for (var k = 0; k < county.subclasses.length; k++) {	//	区县内各街道
-							var street = county.subclasses[k];
-							var streetname = street.name;
-							var streetnode = document.createElement("li");
-							var streeta = document.createElement("a");
-							streeta.setAttribute("href", "#");
-							streeta.setAttribute("onclick", "gotoDist('" + street.id + "')");
-							var streettext = document.createTextNode(streetname);
-							streeta.appendChild(streettext);
-							streetnode.appendChild(streeta);
-							if(k == county.subclasses.length - 1) {
-								streetnode.className = "last";
-							}
-							streetlist.appendChild(streetnode);
-						}
-						countynode.appendChild(streetlist);
-					} else {
-						if(j == city.subclasses.length - 1) {
-							countynode.setAttribute("class", "last");
-						}
-						countynode.appendChild(countya);
-					}
-					countylist.appendChild(countynode);
-				}
-				citynode.appendChild(countylist);
-				branchdom.appendChild(citynode);
-			}
-			var htm = branches.html();
-			wholetree.innerHTML = inner1 + htm + inner2;
-
-			$("#tree1").treeview({
-//				add: branches,
-//				remove: branches,
-				collapsed: true,
-				animated: "fast",
-				control:"#sidetreecontrol1",
-				prerendered: true,
-//				persist: "location"
-			});
-		}
-
-		//	全部地名类型显示在左边栏相应位置
-		function setTypes() {
-			var wholetree = document.getElementById("tree2");
-			var temp = document.getElementById("folder2");
-			var inner1 = "<li class='collapsable'>";
-			var inner2 = "</li>";
-			var branches = $(inner1 + "<div class='hitarea collapsable-hitarea'></div>" +
-					"<a href='#'>所有分类</a><ul id='dlist'></ul>" + inner2).appendTo("#folder2");
-			var branchdom =$('#dlist')[0];
-			var subDistricts = typedata.subclasses;
-			for (var i = 0; i < subDistricts.length; i += 1) {	//	省内各城市
-				var city = subDistricts[i];
-				var cityname = city.name;
-				var citynode = document.createElement("li");
-				var $cn = $(citynode);
-//				if(i == subDistricts.length - 1) {
-//					citynode.setAttribute("class", "last");
-//				} else {
-//					citynode.setAttribute("class", "expandable");
-//				}
-				citynode.setAttribute("class", "expandable");
-				var citydiv = document.createElement("div");
-				citydiv.setAttribute("class", "hitarea expandable-hitarea");
-				var citya = document.createElement("a");
-				citya.setAttribute("href", "#");
-//				citya.setAttribute("class", "");
-				citya.setAttribute("onclick", "gotoBigType('" + cityname + "')");
-				var citytext = document.createTextNode(cityname);
-				citya.appendChild(citytext);
-				citynode.appendChild(citydiv);
-				citynode.appendChild(citya);
-				if (!city.subclasses) {
-					branchdom.appendChild(citynode);
-					continue;
-				}
-				var streetlist = document.createElement("ul");
-				streetlist.setAttribute("style", "display: none;");
-				for (var k = 0; k < city.subclasses.length; k++) {	//	区县内各街道
-					var street = city.subclasses[k];
-					var streetname = street.name;
-					var streetnode = document.createElement("li");
-					var streeta = document.createElement("a");
-					streeta.setAttribute("href", "#");
-					streeta.setAttribute("onclick", "gotoSmallType('"+cityname+"', '"+streetname+"')");
-					var streettext = document.createTextNode(streetname);
-					streeta.appendChild(streettext);
-					streetnode.appendChild(streeta);
-					if(k == city.subclasses.length - 1) {
-						streetnode.className = "last";
-					}
-					streetlist.appendChild(streetnode);
-				}
-				citynode.appendChild(streetlist);
-				branchdom.appendChild(citynode);
-			}
-			var htm = branches.html();
-			wholetree.innerHTML = inner1 + htm + inner2;
-
-			$("#tree2").treeview({
-//				add: branches,
-//				remove: branches,
-				collapsed: true,
-				animated: "fast",
-				control:"#sidetreecontrol2",
-				prerendered: true,
-//				persist: "location"
-			});
-		}
-
-		//	设置自动补全
-		function setAutoComplete() {
-			infoWinDown = constructInfoDown();
-			document.getElementById("hiddendiv").appendChild(infoWinDown);
-			$("#winsrhword").focus().autocomplete(placedata, {
-				minChars: 1,
-				width: 100,
-				matchCase: false,//不区分大小写
-//				matchContains: "word",
-//				autoFill: true,
-				formatItem: function(row, i, max) {
-					return row.name;
-				},
-				formatMatch: function(row, i, max) {
-					return row.ChnSpell + row.name;
-				},
-				formatResult: function(row) {
-					return row.name;
-				},
-				reasultSearch:function(row,v) {//本场数据自定义查询语法 注意这是我自己新加的事件
-					//自定义在code或spell中匹配
-					if(row.data.ChnSpell.indexOf(v) == 0 || row.data.name.indexOf(v) == 0) {
-						return row;
-					}
-					else {
-						return false;
-					}
-				}
-			});
-			$("#winsrhword").keydown(function(e) {
-				if(e.keyCode != 13){
-					return;
-				}
-				if(!entered) {
-					entered = true;
-					return;
-				}
-				var navTxt = $("#startorend")[0].innerText;
-				entered = false;
-				if(navTxt =="起点" || navTxt =="终点") {
-					if(navMethod == "trans") {
-						srhbus();
-					} else if(navMethod == "drive") {
-						srhdrive();
-					} else if(navMethod == "walk") {
-						srhwalk();
-					}
-				} else {
-					srhpoi();
-				}
-			});
-		}
-
-		//	初始化所有点标注
-		function initmarkers(pdata) {
-			for (var i = 0; i < placedata.length; i++) {
-				var data = placedata[i];
-				var marker = new AMap.Marker({
-					map: map,
-					position: data.position,
-					zIndex: 3,
-					extData: data,
-					title: data.name,
-
-				});
-				AMap.event.addListener(marker, "click", mapFeatureClick);
-				markers.push(marker);
-			}
-			if(pdata) {
-				showingPlaces = pdata;
-				showNarkers(pdata);
-			} else {
-				showingPlaces = placedata;
-			}
-		}
-
-		//	显示一定量的点标注
-		function showNarkers(pdata) {
-			for (var i = 0; i < pdata.length; i++) {
-				var data = pdata[i];
-				var marker = new AMap.Marker({
-					map: map,
-					position: data.position,
-					zIndex: 3,
-					extData: data,
-					title: data.name,
-					label: data.name.substring(0, 1),
-				});
-				AMap.event.addListener(marker, "click", mapFeatureClick);
-				markers.push(marker);
-			}
-		}
-
-		//	点击标注Marker时
-		function mapFeatureClick(e){
-			openInfoWindow(e.target.getExtData());
-		}
-
-		$(document).ready(function(){
-
-		});
-
-		$(function() {
-//			setDists();
-//			setTypes();
-			setAutoComplete();
-
-		});
-
-		map = new AMap.Map('mapContainer',{
-			resizeEnable: true,
-			center: [110.9713,30.8275],
-			zoom:level,
-			keyboardEnable :false,
-		});
-		map.on('complete', function(){
-			map.plugin(["AMap.ToolBar", "AMap.OverView", "AMap.Scale"], function(){
-				map.addControl(new AMap.ToolBar);
-				map.addControl(new AMap.OverView({isOpen: true}));
-				map.addControl(new AMap.Scale);
-			});
-		});
-
-		showingPlaces = placedata;
-//		initGeonames();
-//		showGeonames(showingPlaces);
-
-        var mouseTool = new AMap.MouseTool(map);
-        var drawPolyline = mouseTool.polyline(); //用鼠标工具画折线
-        AMap.event.addListener( mouseTool,'draw',function(e){ //添加事件
-			var path = e.obj.getPath();
-            var strBuffer = "";
-            strBuffer += "[ ";
-            for(var i = 0; i < path.length; i++) {
-                var pathPoint = path[i];
-                strBuffer += " [";
-                strBuffer += pathPoint.lng;
-                strBuffer += ", ";
-                strBuffer += pathPoint.lat;
-                strBuffer += "],";
-            }
-            strBuffer += " ]";
-            alert(strBuffer);//获取路径
-//            mouseTool.close(false);
-        });
-
-//        AMap.service('AMap.DistrictSearch',function(){//回调函数
-//            //实例化DistrictSearch
-//            var districtSearch = new AMap.DistrictSearch({
-////                level : 'city',
-//                level : 'county',
-////                level : 'district',
-//                subdistrict : 1,
-//                extensions : 'all'
-//            });
-//            //TODO: 使用districtSearch对象调用行政区查询的功能
-//			 var cities = [ "利川市", "建始县", "巴东县", "宣恩县", "咸丰县", "来凤县", "鹤峰县" ];
-//			for(var ci = 0; ci < cities.length; ci++) {
-//				var cit = cities[ci];
-//				//            districtSearch.search('恩施土家族苗族自治州',function(status, result){
-//				districtSearch.search(cit,function(status, result){
-////            districtSearch.search('舞阳坝街道',function(status, result){
-//					//TODO : 按照自己需求处理查询结果
-//					var dist = result.districtList[0];
-//					var subDistricts = result.districtList[0].districtList;
-////                var bdata;
-//					var cname = dist.name;
-//					var cbs = dist.boundaries;
-//					var cdata = { name: "", boundary: []};
-//					cdata.name = cname;
-//					for(var j = 0; j < cbs.length; j++) {
-//						for(var k = 0; k < cbs[j].length; k++) {
-//							var po = cbs[j][k];
-//							var cood = [po.lng, po.lat];
-//							cdata.boundary.push(cood);
-//						}
-//					}
-////                alert(eval(cdata));
-////                for(var i = 0;i < subDistricts.length; i++){
-////                    var county = subDistricts[i];
-////
-////                    var streetList = county.districtList;
-////                    for(var j = 0; j < streetList.length; j++) {
-////                        var street = streetList[j];
-////                        var sname = street.name;
-////                        var sb = street.boundaries;
-////					}
-////                }
-//					var polygonArr = [
-//						[109.453796, 30.299918],
-//						[109.445556, 30.246251],
-//						[109.528983, 30.245064],
-//						[109.523833, 30.305846]
-//					];
-//					var polygon = new AMap.Polygon({
-//						path: cdata.boundary,//设置多边形边界路径
-//						strokeColor: "#FF33FF", //线颜色
-//						strokeOpacity: 0.2, //线透明度
-//						strokeWeight: 3,    //线宽
-//						fillColor: "#1791fc", //填充色
-//						fillOpacity: 0.35//填充透明度
-//					});
-//					polygon.setMap(map);
-//
-//				})
-//
-//
-//
-//			}
-//
-//
-//
-//        })
-
-
-		map.setFitView();
-
-	</script>
 
 </body>
 

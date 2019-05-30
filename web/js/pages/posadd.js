@@ -7,9 +7,10 @@ var posadd_init = {
     convertor: new BMap.Convertor(),
     addr_overlays :[],
     coord_overlays: [],
-    post_overlays:[],
-    phone_overlays:[],
-    ip_overlays:[],
+    post_overlays: [],
+    phone_overlays: [],
+    ip_overlays: [],
+    global_poses : [],
     city_polygons: {},
     tmp_addrs: [],
     pointCollection: null,
@@ -39,6 +40,7 @@ function getPosaddsNum() {
     count += posadd.post_overlays.length;
     count += posadd.phone_overlays.length;
     count += posadd.ip_overlays.length;
+    count += posadd.global_poses.length;
     count += posadd.road_conditions.length;
     count += relpos.positions.length;
     count += relpos.relPositions.length;
@@ -310,6 +312,75 @@ function extract_ip() {
             // }
         }
     }
+}
+
+function extract_global_demo(text, region) {
+    if(text === undefined || text == null || "" == test) {
+        text = $("#glopostext")[0].value;
+    }
+    var current_view = false;
+    if(region === undefined || region == null || "" == region) {
+        region = $("#gloposCity")[0].value;
+    }
+    var service_url = "http://api.map.baidu.com/place_abroad/v1/search?scope=1&query=" + text +
+        "&page_size=5&page_num=0&output=json&ak=r5Cpb39ZYRGL2aaDqFyvdOAUzhTqOsfC&region=" + region;
+    if(region === undefined || region == null || "" == region || "当前地图范围" == region) {
+        var bound = map.getBounds();
+        var sw = bound.getSouthWest();
+        var ne = bound.getNorthEast();
+        var boundStr = sw.lat.toString() + ',' + sw.lng.toString() + ',' + ne.lat.toString() + ',' + ne.lng.toString();
+        service_url = "http://api.map.baidu.com/place_abroad/v1/search?scope=1&query=" + text +
+            "&page_size=5&page_num=0&output=json&ak=r5Cpb39ZYRGL2aaDqFyvdOAUzhTqOsfC&bounds=" + boundStr;
+        current_view = true;
+    }
+    var query_url = encodeMyUrl(service_url);
+    $.ajax({
+        url: "queryAPI.action?url=" + query_url,
+        type: 'get',
+        dataType: 'json',
+        success: function (_data) {
+            if(_data['status'] == 0 && _data['results'] != undefined) {
+                var len = _data['results'].length;
+                for(var i = 0; i < len; i++) {
+                    var poi = _data['results'][i];
+                    try {
+                        var x = poi['location']['lng'];
+                        var y = poi['location']['lat'];
+                        var bp = new BMap.Point(x, y);
+                        var info = [];
+                        if(poi['name'] != undefined && poi['name'] != null) {
+                            info.push(poi['name']);
+                        }
+                        if(poi['address'] != undefined && poi['address'] != null) {
+                            info.push("address: " + poi['address']);
+                        }
+                        if(poi['telephone'] != undefined && poi['telephone'] != null) {
+                            info.push("telephone: " + poi['telephone']);
+                        }
+                        var extData = {
+                            "name": "全球位置",
+                            "texts": info,
+                            "winwidth": 225,
+                            "id": generateUUID()
+                        };
+                        var marker = createNewMarker(bp);
+                        addOverlayAndInfowin(marker, extData, null, posadd.global_poses);
+                        if(i == 0 && current_view == false) {
+                            map.centerAndZoom(bp, 15);
+                        }
+                    } catch (e) {
+
+                    }
+                }
+                setResultItems(posadd.global_poses, "distresults", "global_poses", true);
+                updatePosaddNum();
+            }
+
+        }, error: function (err_data) {
+            console.log(err_data);
+        }
+    });
+    
 }
 
 function parsePostcode(postStr) {
@@ -823,6 +894,7 @@ function clear_posadds() {
     //     post_overlays:[],
     //     phone_overlays:[],
     //     ip_overlays:[],
+    //     global_poses : [],
     //     city_polygons: {},
     //     tmp_addrs: [],
     //     pointCollection: null,

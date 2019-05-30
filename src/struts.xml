@@ -9,7 +9,7 @@
     <package name="default" extends="struts-default">
         <action name="hello">
             <result>
-                /index.jsp
+                /right_menu.jsp
             </result>
         </action>
     </package>
@@ -24,6 +24,7 @@
         <action name="getAllGeoInfo" class="whu.eres.cartolab.controllers.JsonAction01" method="getAllGeoInfo" />
         <action name="getAllGeoEntities" class="whu.eres.cartolab.controllers.JsonAction01" method="getAllGeoEntities" />
         <action name="getAllSynData" class="whu.eres.cartolab.controllers.JsonAction01" method="getAllSynData" />
+        <action name="queryAPI" class="whu.eres.cartolab.controllers.JsonAction01" method="queryAPI" />
         <action name="getCoordsByPostcode" class="whu.eres.cartolab.controllers.JsonAction01" method="getCoordsByPostcode" />
         <action name="getDistrictsByPostcode" class="whu.eres.cartolab.controllers.JsonAction01" method="getDistrictsByPostcode" />
         <action name="getPolygonByPostcode" class="whu.eres.cartolab.controllers.JsonAction01" method="getPolygonByPostcode" />

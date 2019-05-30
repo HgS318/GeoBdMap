@@ -204,6 +204,18 @@
 								<input type="checkbox" id="relative_more" onclick="relativeMore(this)"/>模糊查询
 							</div>
 
+							<div id="globalPosDiv" class="nextTab" >
+								<br/>
+								<h3>&nbsp;&nbsp;全球位置信息接入</h3>
+								<p>全球位置：<input id="glopostext" class="innerWord"/></p>
+								<p>城市范围：<input id="gloposCity" class="innerWord" maxlength="19" value="当前地图范围"/></p>
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="接入全球位置" class="srhbtn" onclick="extract_global_demo()">
+									<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+									<!--<input type="button" value="清除" class="srhbtn" onclick="clear_postcode()">-->
+								</p>
+							</div>
+
 						</div>
 						<br/>
 						<p style="font-size: 13px">&nbsp;&nbsp;&nbsp;“地名感知（北邮）”的功能&nbsp;请

@@ -3,6 +3,11 @@ var k = true, R = false;
 var O = '93%', j = '500px', L = '5px';
 var G = '93%', J = '500px', K = '5px';
 
+String.prototype.myReplace=function(f, e) {//吧f替换成e
+	var reg=new RegExp(f, "g"); //创建正则RegExp对象
+	return this.replace(reg, e);
+};
+
 //	获取url参数
 function getQueryString(name) {
     var result = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
@@ -10,6 +15,14 @@ function getQueryString(name) {
         return "";
     }
     return result[1];
+}
+
+function decodeMyUrl(myUrl) {
+	return myUrl.myReplace("|", "\&").myReplace("-", "\?");
+}
+
+function encodeMyUrl(myUrl) {
+	return myUrl.myReplace("\&", "|");
 }
 
 function initElements() {

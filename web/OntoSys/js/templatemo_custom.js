@@ -46,7 +46,7 @@ jQuery(document).ready(function($){
 	$(".main_menu a.templatemo_hometestimonial").click(function(){
 		$('#menu-container .testimonial').fadeOut(500, function(){
         	//$('#menu-container .homepage').fadeIn(1000);
-			window.location.href="index.jsp";
+			window.location.href="../../right_menu.jsp";
 			$('#menu-container .testimonial').fadeIn(1000);
 	    });
 		return false;
@@ -75,7 +75,7 @@ jQuery(document).ready(function($){
 	
 	$(".main_menu a.templatemo_homecontact").click(function(){
 		$('#menu-container .contact').fadeOut(500, function(){
-			window.location.href="index.jsp";
+			window.location.href="../../right_menu.jsp";
 			$('#menu-container .homepage').fadeIn(1000);
 	    });
 		return false;
