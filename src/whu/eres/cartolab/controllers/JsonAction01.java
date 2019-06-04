@@ -290,7 +290,7 @@ public class JsonAction01 {
     public String getDistrictsByPostcode() {
         HttpServletRequest request = ServletActionContext.getRequest();
         try {
-            // http://v.juhe.cn/postcode/query?postcode=430079&key=9ab4f8036190fc2d63661391b5e7528e
+            // http://api.k780.com/?app=life.areacode&areacode=0760&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json
             String codeStr = request.getParameter("postcode");
             int code = Integer.parseInt(codeStr);
             int codeThousand = code / 1000;
