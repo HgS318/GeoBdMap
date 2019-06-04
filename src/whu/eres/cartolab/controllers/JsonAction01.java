@@ -278,6 +278,7 @@ public class JsonAction01 {
 //            reJson.put("points", "");
             reJson.put("points", coordArray);
             reJson.put("polygon", buf.toString());
+            reJson.put("data", pageResult);
             JsonAction00.toBeJson(reJson.toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -558,7 +559,12 @@ public class JsonAction01 {
                 }
                 paramSb.substring(0, paramSb.length() - 1);
             }
-            url = new URL(sendUrl + "?" + paramSb.toString());
+            String paramsStr = paramSb.toString();
+            if(paramsStr == "" || paramsStr.length() < 1) {
+                url = new URL(sendUrl);
+            } else {
+                url = new URL(sendUrl + "?" + paramsStr);
+            }
             httpurlconnection = (HttpURLConnection) url.openConnection();
             httpurlconnection.setRequestMethod("GET");
             httpurlconnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");

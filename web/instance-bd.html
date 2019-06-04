@@ -71,6 +71,7 @@
 	<script src="js/pages/bd-mainpage-infowin.js"></script>
 	<script src="js/pages/relpos.js"></script>
 	<script src="js/pages/posadd.js"></script>
+	<script src="js/pages/postrans.js"></script>
 	<script src="js/pages/baidu-search.js"></script>
 	<script src="js/pages/xiaoqi.js"></script>
 	<script src="fuse/js/fuse-seq.js"></script>
@@ -115,7 +116,7 @@
 				<div class="searchDiv">
 					<div id="ClassCheckbox2" class="ClassCheckbox">
 						<div id="highsearch2">
-							<h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位置信息感知与接入</h1>
+							<h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位置信息接入与转换</h1>
 
 							<div id="addrDiv" class="nextTab" >
 								<h3>&nbsp;&nbsp;地名/地址</h3>
@@ -123,8 +124,8 @@
 								<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="file" id="addrfile" name="uploadFile" accept="text/plain"
 										   onchange="openFile(event, 'addrtext')" />
-								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="button" value="接入地名/地址" class="srhbtn" onclick="extract_address()">
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="接入、转换 地名/地址" class="srhbtn" onclick="extract_address()">
 									<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
 									<!--<input type="button" value="清除" class="srhbtn" onclick="clear_address()">-->
 								</p>
@@ -142,8 +143,8 @@
 									<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										<input type="file" id="coordfile" name="uploadFile"
 											   onchange="openFileName(event, 'coordtext')" /></p>
-									<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-										<input type="button" value="接入坐标位置" class="srhbtn" onclick="extract_coords()">
+									<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<input type="button" value="接入、转换 坐标位置" class="srhbtn" onclick="extract_coords()">
 										<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
 										<!--<input type="button" value="清除" class="srhbtn" onclick="clear_coords()">-->
 									</p>
@@ -154,8 +155,8 @@
 								<h3>&nbsp;&nbsp;邮政编码</h3>
 								<p>输入邮编：<input id="posttext" class="innerWord"/></p>
 								<p>相关信息：<input id="postAboutText" class="innerWord"/></p>
-								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="button" value="接入邮编位置" class="srhbtn" onclick="extract_postcode()">
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="接入、转换 邮编位置" class="srhbtn" onclick="extract_postcode()">
 									<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
 									<!--<input type="button" value="清除" class="srhbtn" onclick="clear_postcode()">-->
 								</p>
@@ -167,8 +168,8 @@
 								<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="file" id="phonefile" name="uploadFile" accept="text/plain"
 										   onchange="openFile(event, 'phonetext')" />
-								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="button" value="接入固话位置" class="srhbtn" onclick="extract_phone_number()">
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="接入、转换 固话位置" class="srhbtn" onclick="extract_phone_number()">
 									<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
 									<!--<input type="button" value="清除" class="srhbtn" onclick="clear_phone_number()">-->
 								</p>
@@ -180,8 +181,8 @@
 								<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="file" id="ipfile" name="uploadFile" accept="text/plain"
 										   onchange="openFile(event, 'iptext')" />
-								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="button" value="接入IP位置" class="srhbtn" onclick="extract_ip()">
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" value="接入、转换 IP位置" class="srhbtn" onclick="extract_ip()">
 									<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
 									<!--<input type="button" value="清除" class="srhbtn" onclick="clear_ip()">-->
 								</p>

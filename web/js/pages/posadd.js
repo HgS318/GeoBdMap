@@ -221,13 +221,19 @@ function geocoderSearch(index){
             // var bp = new BMap.Point(point.lng, point.lat);
             // var marker = new BMap.Marker(bp);
             // marker.spaType = 1;
+            var x = point.lng;
+            var y = point.lat;
+            var posStr = (Math.round(x * 10000) / 10000).toString() + ", " + (Math.round(y * 10000) / 10000).toString();
             var marker = createNewMarker(point);
-            addOverlayAndInfowin(marker, {
+            var extData = {
                 "name": "地名/地址",
-                "text": addr,
+                "texts": [addr, "位置估计：" + posStr],
                 "winwidth": 200,
+                "maxTexts": 1000,
                 "id": generateUUID()
-            }, null, posadd.addr_overlays);
+            };
+            transXY(x, y, extData, {"addr": 0, "post": 1, "phone": 1});
+            addOverlayAndInfowin(marker, extData, null, posadd.addr_overlays);
             map.centerAndZoom(point, 13);
             setResultItems([posadd.addr_overlays[posadd.addr_overlays.length - 1]], "distresults", "addr_overlays", true);
         }
@@ -531,6 +537,7 @@ function showXY(x, y) {
             "name": "坐标",
             "texts": [x.toString() + ", " + y.toString(), "坐标系统: " + text],
             "winwidth": 150,
+            "maxTexts": 1000,
             "id": generateUUID()
         };
         var obPoint = new BMap.Point(x, y);
@@ -554,6 +561,7 @@ function showXY(x, y) {
                     marker = createNewMarker(bp);
                     shown = true;
                 }
+                transXY(x, y, extData, {"addr": 1, "post": 1, "phone": 1});
                 addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
                 map.centerAndZoom(bp, 15);
                 setResultItems([posadd.coord_overlays[posadd.coord_overlays.length - 1]], "distresults", "coord_overlays", true);
@@ -563,6 +571,7 @@ function showXY(x, y) {
             // var marker = new BMap.Marker(bp);
             // marker.spaType = 1;
             var marker = createNewMarker(bp);
+            transXY(x, y, extData, {"addr": 1, "post": 1, "phone": 1});
             addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
             map.centerAndZoom(bp, 15);
             setResultItems([posadd.coord_overlays[posadd.coord_overlays.length - 1]], "distresults", "coord_overlays", true);
@@ -652,16 +661,46 @@ function showPostcode(postcode) {
                 var polygon = createNewPolygon(polyArr, "bp_array");
                 polygon.spaType = 5;
                 var texts = ["邮编：" + postcode];
-                var postInfo = $("#postAboutText")[0].value;
-                if(postInfo != null && postInfo != '') {
-                    texts.push(postInfo);
+                try {
+                    var postInfo = $("#postAboutText")[0].value;
+                    if(postInfo != null && postInfo != '') {
+                        texts.push(postInfo);
+                    }
+                    var dataList = data['data']['list'];
+                    var firstObj = dataList[0];
+                    var province = firstObj['Province'];
+                    var city = firstObj['City'];
+                    var district = firstObj['District'];
+                    var Address = firstObj['Address'];
+                    var addr = province + city + district + Address;
+                    var areacode = getCityCodeByName(province, city, district);
+                    if (dataList.length > 1) {
+                        try {
+                            addr = addr + "，" + dataList[1]['Province'] + dataList[1]['City'] + dataList[1]['District']
+                                + dataList[1]['Address'] + " 等";
+                        } catch (secondExp) {
+                            addr = addr + " 等";
+                        }
+                    }
+                    texts.push("地址：" + addr);
+                    var x = polygon_data[0][0];
+                    var y = polygon_data[0][1];
+                    var posStr = (Math.round(x * 1000) / 1000).toString() + ", " + (Math.round(y * 1000) / 1000).toString();
+                    texts.push("位置估计：" + posStr);
+                    if (areacode != null) {
+                        texts.push("电话区号：" + areacode);
+                    }
+                } catch (dataExp){
+
                 }
-                addOverlayAndInfowin(polygon, {
+                var extData = {
                     "winwidth": 150,
                     "texts": texts,
                     "name": "邮编",
+                    "maxTexts": 1000,
                     "id": generateUUID()
-                }, null, posadd.post_overlays);
+                };
+                addOverlayAndInfowin(polygon, extData, null, posadd.post_overlays);
                 setResultItems([posadd.post_overlays[posadd.post_overlays.length - 1]], "distresults", "post_overlays", true);
             }
         }, error: function (err_data) {
@@ -673,40 +712,142 @@ function showPostcode(postcode) {
 }
 
 function showPostcodeDistrict(postcode) {
-    try {
-        var postNum = parseInt(postcode);
-        var postCityNum = postNum / 1000;
-        var cityPostCode = postCityNum * 1000;
-        var vagePostCode = cityPostCode.toString();
-    } catch (e) {
-        console.log(e);
-        alert("邮编输入有误！");
+    var distObj = getDistObjByPostCode(postcode);
+    if(distObj == null) {
         return;
     }
+    var texts = ["邮编：" + postcode];
+    var postInfo = $("#postAboutText")[0].value;
+    if(postInfo != null && postInfo != '') {
+        texts.push(postInfo);
+    }
+    var MergerName = null;
+    try {
+        MergerName = distObj['MergerName'];
+        texts.push("地址/地区：" + MergerName);
+        var x = distObj['lng'];
+        var y = distObj['lat'];
+        var posStr = (Math.round(x * 100) / 100).toString() + ", " + (Math.round(y * 100) / 100).toString();
+        texts.push("位置估计：" + posStr);
+    } catch (posExp) {}
+    try {
+        var areacode = distObj['CityCode'];
+        texts.push("电话区号：" + areacode);
+    } catch (phoneExp) {}
+    if(MergerName != undefined && MergerName != null) {
+        var eles = MergerName.split(',');
+        if(eles.length > 1) {
+            var province = "", city = "", district = "";
+            province = eles[1];
+            if(eles.length > 2) {
+                city =eles[2];
+            }
+            if(eles.length > 3) {
+                district =eles[3];
+            }
+            createDistMapElement(province, city, district, "邮政编码", texts);
+        }
+    }
+    // try {
+    //     var postNum = parseInt(postcode);
+    //     var postCityNum = postNum / 1000;
+    //     var cityPostCode = postCityNum * 1000;
+    //     var vagePostCode = cityPostCode.toString();
+    // } catch (e) {
+    //     console.log(e);
+    //     alert("邮编输入有误！");
+    //     return;
+    // }
+    // $.ajax({
+    //     url: 'getDistrictsByPostcode.action?postcode=' + postcode,
+    //     type: 'get',
+    //     dataType: 'json',
+    //     success: function (dists) {
+    //         var len = dists.length;
+    //         for (var i = 0; i < len; i++) {
+    //             var dist = dists[i];
+    //             var simcall = dist['simcall'];
+    //             var elements = simcall.split(',');
+    //             var ele_len = elements.length;
+    //             var province = elements[ele_len - 2];
+    //             var city = elements[ele_len - 1];
+    //             var district = "";
+    //             var addValue = postcode;
+    //             var postInfo = $("#postAboutText")[0].value;
+    //             if(postInfo != null && postInfo != '') {
+    //                 addValue += ("  (" + postInfo + ")");
+    //             }
+    //             getShape(province, city, district, "postcode", addValue);
+    //         }
+    //     }, error: function (err_data) {
+    //         console.log(err_data);
+    //         alert("邮编输入有误！");
+    //     }
+    // });
+}
+
+function createDistMapElement_local(province, city, district, type, texts) {
     $.ajax({
-        url: 'getDistrictsByPostcode.action?postcode=' + postcode,
+        url: 'getShape.action?province=' + province + '&city=' + city + '&district=' + district,
         type: 'get',
         dataType: 'json',
-        success: function (dists) {
-            var len = dists.length;
-            for (var i = 0; i < len; i++) {
-                var dist = dists[i];
-                var simcall = dist['simcall'];
-                var elements = simcall.split(',');
-                var ele_len = elements.length;
-                var province = elements[ele_len - 2];
-                var city = elements[ele_len - 1];
-                var district = "";
-                var addValue = postcode;
-                var postInfo = $("#postAboutText")[0].value;
-                if(postInfo != null && postInfo != '') {
-                    addValue += ("  (" + postInfo + ")");
-                }
-                getShape(province, city, district, "postcode", addValue);
-            }
-        }, error: function (err_data) {
-            console.log(err_data);
-            alert("邮编输入有误！");
+        success: function (shp_data) {
+            var shape = shp_data['shape'];
+            var polygon = createNewPolygon(shape, "string");
+            var type_map = {
+                "邮政编码": "post_overlays",
+                "固定电话": "phone_overlays",
+                "固定IP": "ip_overlays"
+            };
+            var overlay_type = type_map[type];
+            var list = posadd[overlay_type];
+            var extData = {
+                "name": type,
+                "winwidth": 200,
+                "texts": texts,
+                "maxTexts": 1000,
+                "id": generateUUID()
+            };
+            // posadd.city_polygons[city] = polygon;
+            addOverlayAndInfowin(polygon, extData, null, list);
+            gotoPolyOverlay(polygon, 8);
+            // setResultItems([polygon], "distresults", "city_polygons", true);
+            setResultItems([polygon], "distresults", overlay_type, true);
+        }, error: function (err) {
+            console.log(err);
+        }
+    });
+}
+
+function createDistMapElement(province, city, district, type, texts) {
+
+    var bdary = new BMap.Boundary();
+    bdary.get(city, function (rs) {       //获取行政区域
+        var count = rs.boundaries.length; //行政区域的点有多少个
+        if (count == 1) {
+            var polygon = new BMap.Polygon(rs.boundaries[0], overlay_styles.newPolygonStyle);
+            polygon = createNewPolygon(polygon, "polygon");
+            var type_map = {
+                "邮政编码": "post_overlays",
+                "固定电话": "phone_overlays",
+                "固定IP": "ip_overlays"
+            };
+            var overlay_type = type_map[type];
+            var list = posadd[overlay_type];
+            var extData = {
+                "name": type,
+                "winwidth": 200,
+                "texts": texts,
+                "maxTexts": 1000,
+                "id": generateUUID()
+            };
+            // posadd.city_polygons[city] = polygon;
+            addOverlayAndInfowin(polygon, extData, null, list);
+            gotoPolyOverlay(polygon, 8);
+            // setResultItems([polygon], "distresults", "city_polygons", true);
+            setResultItems([polygon], "distresults", overlay_type, true);
+        } else if(count > 1) {
+            createDistMapElement_local(province, city, district, type, texts);
         }
     });
 }
@@ -768,6 +909,7 @@ function getShape_local(province, city, district, key, addValue) {
                 "name": city,
                 "winwidth": 200,
                 "texts": texts,
+                "maxTexts": 1000,
                 "id": generateUUID()
             };
             polygon.name = city;
@@ -829,6 +971,7 @@ function getShape(province, city, district, key, addValue) {
                 "name": city,
                 "winwidth": 200,
                 "texts": texts,
+                "maxTexts": 1000,
                 "id": city
             };
             posadd.city_polygons[city] = polygon;

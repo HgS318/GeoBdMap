@@ -305,7 +305,11 @@ function createSimpleContent(entity) {
             }
             linkShown = true;
         } else {
-            var showTextNum = textsLen > 4 ? 4 : textsLen;
+            var maxTexts = 4;
+            if(entity.maxTexts != undefined && entity.maxTexts != null) {
+                maxTexts = entity.maxTexts;
+            }
+            var showTextNum = textsLen > maxTexts ? maxTexts : textsLen;
             for(var j = 0; j < showTextNum; j++) {
                 var text = entity['texts'][j];
                 if(text.length > simpleTextLen) {
