@@ -81,9 +81,10 @@ function initComponents() {
 
     map = new BMap.Map("mapContainer");
     // map.centerAndZoom(new BMap.Point(110.79581, 30.88069), 11);
-    // var _point = new BMap.Point(120.76387299284131, 31.92252143886308);
-    var _point = new BMap.Point(114.371347,30.541142);
-    map.centerAndZoom(_point, 12);
+    // var _point = new BMap.Point(114.371347,30.541142);
+    var _point = new BMap.Point(121.480812,31.233094);
+    // var _point = new BMap.Point(114.371347,30.541142);
+    map.centerAndZoom(_point, 11);
     var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
     var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
     var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT}); //右上角，仅包含平移和缩放按钮

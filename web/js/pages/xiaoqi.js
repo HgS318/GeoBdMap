@@ -74,6 +74,8 @@ function initXiaoqiText() {
 function initXiaoqiComponents() {
     document.getElementById("test1").value = "  早上, 九点, 春分, 中午十二点, 两个小时, 两点";
     document.getElementById("test2").value = "  武汉大学, 樱花大道, 万林艺术博物馆, 海底捞, 黄鹤楼";
+    var _point = new BMap.Point(114.371347,30.541142);
+    map.centerAndZoom(_point, 12);
 }
 
 function showXiaoqi() {
