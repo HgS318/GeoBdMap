@@ -504,8 +504,35 @@ function getAreaNumFromPhnoeNum(phoneNum) {
     return areaCode;
 }
 
+//  左边搜索按钮的测试程序
+function search_test_left() {
+    var point = new BMap.Point(13.7875871, 52.837132999999994);
+    var marker = new BMap.Marker(point);  // 创建标注
+    map.addOverlay(marker);              // 将标注添加到地图中
+    map.centerAndZoom(point, 15);
+    var opts = {
+        width : 210,     // 信息窗口宽度
+        height: 120,     // 信息窗口高度
+        title : "McDonald's Restaurant" , // 信息窗口标题
+        enableMessage:true,//设置允许信息窗发送短息
+        message:"亲耐滴，晚上一起吃个饭吧？戳下面的链接看下地址喔~"
+    }
+    var infoWindow = new BMap.InfoWindow("&nbsp;&nbsp;&nbsp;Classic, long-running fast-food chain known for its burgers, fries & shakes." +
+        "<br/>&nbsp;&nbsp;&nbsp;Cash only·Good for kids<br/>&nbsp;&nbsp;&nbsp;167, 16244 Schorfheide, Germany<br/>" +
+        "&nbsp;&nbsp;&nbsp;+49 3335 3747", opts);  // 创建信息窗口对象
+    marker.addEventListener("click", function(){
+        map.openInfoWindow(infoWindow, point); //开启信息窗口
+    });
+    var marker2 = new BMap.Marker(new BMap.Point(13.820236935702765,52.8351017192936));
+    map.addOverlay(marker2);              // 将标注添加到地图中
+}
+
 //  自动识别类型并接入
 function autoAdd() {
+    if(admin == true) {
+        search_test_left();
+        return;
+    }
     var text = $("#posGeneral")[0].value;
     var coords = parseCoordStr(text);
     if(coords != null) {

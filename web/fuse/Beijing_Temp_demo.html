@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+    </style>
+<script type="text/javascript" src="http://api.map.baidu.com/getscript?v=1.4"></script>
+    <title>北京气温示例</title>
+</head>
+<body>
+    <div id="allmap"></div>
+</body>
+</html>
+<script type="text/javascript">
+    // 百度地图API功能
+    var map = new BMap.Map("allmap");
+    map.centerAndZoom(new BMap.Point(116.388225, 40.01554), 9);
+    
+    map.enableScrollWheelZoom();
+    madeBoundary();
+    
+
+//区域图
+    function madeBoundary() {
+//		var datas = new Array("北京市东城区-#665599",
+//			"北京市西城区-#559955",
+//			"北京市朝阳区-#666ddd",
+//			"北京市丰台区-#1199cc",
+//			"北京市石景山区-#665599",
+//			"北京市海淀区-#559955",
+//			"北京市顺义区-#666ddd",
+//			"北京市通州区-#1199cc",
+//			"北京市大兴区-#665599",
+//			"北京市房山区-#559955",
+//			"北京市门头沟区-#666ddd",
+//			"北京市昌平区-#1199cc",
+//			"北京市平谷区-#559955",
+//			"北京市密云区-#666ddd",
+//			"北京市怀柔区-#1199cc",
+//			"北京市延庆区-#665599"
+//		);
+
+		var datas = ["北京市东城区-#1199cc",
+			"北京市西城区-#1199cc",
+			"北京市朝阳区-#ff0000",
+			"北京市丰台区-#1199cc",
+			"北京市石景山区-#1199cc",
+			"北京市海淀区-#1199cc",
+			"北京市顺义区-#1199cc",
+			"北京市通州区-#1199cc",
+			"北京市大兴区-#1199cc",
+			"北京市房山区-#1199cc",
+			"北京市门头沟区-#1199cc",
+			"北京市昌平区-#1199cc",
+			"北京市平谷区-#1199cc",
+			"北京市密云区-#1199cc",
+			"北京市怀柔区-#1199cc",
+			"北京市延庆区-#1199cc"
+		];
+        var bdary = new BMap.Boundary();
+        for(var i=0;i<datas.length;i++){
+			getBoundary(datas[i],bdary);
+        } 
+        
+    } 
+//设置区域图
+
+    function getBoundary(data,bdary){    
+		data = data.split("-");
+        bdary.get(data[0], function(rs){       //获取行政区域
+            var count = rs.boundaries.length; //行政区域的点有多少个
+            var pointArray = [];
+            for (var i = 0; i < 1; i++) {
+                var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 2, strokeColor: "#ff0000",fillOpacity:0.5,fillColor:data[1]}); //建立多边形覆盖物
+                var opts = {
+                    width : 200,     // 信息窗口宽度
+                    height: 300,     // 信息窗口高度
+                    title : "朝阳区气温" , // 信息窗口标题
+                    enableMessage:true,//设置允许信息窗发送短息
+                    message:""
+                };
+//                var infoStr = "&nbsp;&nbsp;11月7日：<br/>" +
+//                        "&nbsp;&nbsp;&nbsp;&nbsp;0时:7℃<br/>" +
+//                        "&nbsp;&nbsp;&nbsp;&nbsp;3时:5℃<br/>" +
+//                        "&nbsp;&nbsp;&nbsp;&nbsp;6时:7℃<br/>" +
+//                        "&nbsp;&nbsp;&nbsp;&nbsp;9时:8℃<br/>" +
+//                        "&nbsp;&nbsp;&nbsp;12时:11℃<br/>" +
+//                        "&nbsp;&nbsp;&nbsp;15时:13℃<br/>" +
+//                        "&nbsp;&nbsp;&nbsp;18时:10℃<br/>" +
+//                        "&nbsp;&nbsp;&nbsp;21时:9℃<br/>" +
+//                        "11月8日：<br/>"+
+//                        "&nbsp;&nbsp;&nbsp;&nbsp;0时:3℃<br/>" +
+//                        "&nbsp;&nbsp;&nbsp;&nbsp;3时:2℃<br/>" +
+//                        "&nbsp;&nbsp;&nbsp;&nbsp;6时:2℃";
+//                var infoWindow = new BMap.InfoWindow(infoStr, opts);  // 创建信息窗口对象
+                ply.addEventListener("click", function(){
+//                    map.openInfoWindow(infoWindow, new BMap.Point(116.388225, 40.01554)); //开启信息窗口
+                    var infoStr = "朝阳区气温\n" +
+                            " 11月7日：\n" +
+                            "     0时:7℃\n" +
+                            "     3时:5℃\n" +
+                            "     6时:7℃\n" +
+                            "     9时:8℃\n" +
+                            "     12时:11℃\n" +
+                            "     15时:13℃\n" +
+                            "     18时:10℃\n" +
+                            "     21时:9℃\n" +
+                            " 11月8日：\n"+
+                            "     0时:3℃\n" +
+                            "     3时:2℃\n" +
+                            "     6时:2℃";
+                    alert(infoStr);
+                });
+                map.addOverlay(ply);  //添加覆盖物
+            }        
+        }); 
+    }
+
+
+</script>

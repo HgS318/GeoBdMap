@@ -159,6 +159,11 @@ function createContent(entity) {
         return createSimpleContent(entity);
     }
     var content = "";
+    if(admin == true) {
+        content += ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '<a href="#" onclick=' +
+            '"openContentWindow(\'download/jquery-easyui-1.7.0/demo/datagrid/add_table0.html\',\'查看叠加信息\',450, 430, 30, 30)"' +
+            '>已叠加信息</a><br/><br/>');
+    }
     if(entity['infoIds'] != null && entity['infoIds'] != undefined) {
         content += '<strong>原信息编号</strong>： ' + entity['infoIds'] + '<br/>';
     }
@@ -277,6 +282,12 @@ function createContent(entity) {
 
 function createSimpleContent(entity) {
     var content = "";
+    if(admin == true) {
+        // content += ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '<a href="#" onclick="#">已叠加信息</a><br/><br/>');
+        content += ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '<a href="#" onclick=' +
+            '"openContentWindow(\'download/jquery-easyui-1.7.0/demo/datagrid/add_table0.html\',\'查看叠加信息\',650, 520, 30, 30)"' +
+            '>已叠加信息</a><br/><br/>');
+    }
     if(entity.address != null && entity.address != undefined) {
         content += '&nbsp;&nbsp;地址：' + entity.address + '<br/><br/>';
     }
