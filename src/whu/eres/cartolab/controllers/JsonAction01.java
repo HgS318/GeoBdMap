@@ -7,12 +7,28 @@ import java.net.*;
 import org.apache.struts2.*;
 import net.sf.json.*;
 
+import whu.eres.cartolab.db.csv.*;
 import whu.eres.cartolab.db.esri.*;
 import whu.eres.cartolab.geo.*;
 import whu.eres.cartolab.db.mysql.queries.*;
 
 public class JsonAction01 {
 
+    //  获取实时的空气质量数据（暂以2018年代替）
+    public String getRealtimeAir0() {
+        HttpServletRequest request = ServletActionContext.getRequest();
+        try {
+            String citeId = request.getParameter("citeId");
+            String str = AirCsvUtil.getRealtimeAir0(citeId);
+            toBeJson(str);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ex.getMessage();
+        }
+        return null;
+    }
+
+    //  位置叠加
     public String posadd() {
         HttpServletRequest request = ServletActionContext.getRequest();
         try {
@@ -30,6 +46,7 @@ public class JsonAction01 {
         return null;
     }
 
+    //  获取所有的简单地点信息
     public String getAllGeoInfo() {
         try {
             String str = GeoInfoQuery.getAllGeoInfo();
@@ -41,6 +58,7 @@ public class JsonAction01 {
         return null;
     }
 
+    //  获取所有的简单地点实体（合并的简单地点信息）
     public String getAllGeoEntities() {
         try {
             String str = GeoInfoQuery.getAllGeoEntities();

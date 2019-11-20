@@ -34,6 +34,7 @@ var posadd_init = {
         "合水口第二工业区16栋": [113.884064,22.791882, "公司企业", "广东省深圳市光明区公明松白路合水口泥围新村小区附近"],
     },
     realTimeDataInit: false,
+    airCites: null,
 };
 
 // var posadd = cloneObject(posadd_init);
@@ -145,7 +146,7 @@ var pointCollectionListener = function (e) {
     var content = "类型：" + extData.type2 + "<br/>" +"地址：" + extData.addr + "<br/>" +
         "经度：" + extData['wgsx'] + "<br/>" + "纬度：" + extData['wgxy'];
     openInfoWin({'x':extData['wgsx'], 'y': extData['wgxy'], 'target': {'spaType': -1}}, content, title, width);
-}
+};
 
 function showMapvpLayer(load) {
 
@@ -523,7 +524,7 @@ function search_test_left() {
         height: 120,     // 信息窗口高度
         title : "McDonald's Restaurant" , // 信息窗口标题
         enableMessage:true,//设置允许信息窗发送短息
-        message:"亲耐滴，晚上一起吃个饭吧？戳下面的链接看下地址喔~"
+        message:"..."
     }
     var infoWindow = new BMap.InfoWindow("&nbsp;&nbsp;&nbsp;Classic, long-running fast-food chain known for its burgers, fries & shakes." +
         "<br/>&nbsp;&nbsp;&nbsp;Cash only·Good for kids<br/>&nbsp;&nbsp;&nbsp;167, 16244 Schorfheide, Germany<br/>" +
@@ -535,6 +536,14 @@ function search_test_left() {
     map.addOverlay(marker2);              // 将标注添加到地图中
 }
 
+//  保留小数点后若干位
+function round(v, e){
+    var t = 1;
+    for(;e>0;t*=10,e--);
+    for(;e<0;t/=10,e++);
+    return Math.round(v*t)/t;
+}
+
 // 直接接入示例地点的具体操作
 function demoPlaceSearchShow(word) {
     var text = $("#posGeneral")[0].value;
@@ -544,7 +553,8 @@ function demoPlaceSearchShow(word) {
         var marker = createNewMarker(bp);
         var extData = {
             "name": word,
-            "texts": [posadd.demo_words[word][2], posadd.demo_words[word][3]],
+            "texts": [posadd.demo_words[word][2], posadd.demo_words[word][3], "位置估计：[" +
+                round(posadd.demo_words[word][0], 4).toString() + "," + round(posadd.demo_words[word][1].toString(), 4) + "]"],
             "winwidth": 200,
             "maxTexts": 1000,
             "id": generateUUID()
@@ -572,6 +582,7 @@ function autoSearchPlace() {
     }
     //  非示例地点：混合搜索
     var service_url = "http://localhost:5050/" + "mixed_place_search_1";
+    // var url = service_url + "?google=1&word=" + word;
     var url = service_url + "?word=" + word;
     $.ajax({
         url: url,
@@ -581,6 +592,7 @@ function autoSearchPlace() {
         success: function (srh_data) {
             var pois = srh_data["results"];
             for(var i = 0; i < pois.length; i++) {
+                // if(i > 0) break;
                 var poi = pois[i];
                 if("bdx" in poi && "bdy" in poi) {
                     var extData = {

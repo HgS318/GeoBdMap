@@ -74,12 +74,20 @@ function initGeoInfos() {
 }
 
 function initGeoEntities(entities) {
+    var entity_cites = {
+        "奥体中心": "1011A"
+    };
     if(entities != undefined && entities != null && entities.length > 0) {
         geoEntities = [];
         for (var i = 0; i < entities.length; i++) {
             var entity = entities[i];
             var uuid = generateUUID();
             entity['id'] = uuid;
+            if(posadd.realTimeDataInit == true && entity['name'] in entity_cites) {
+                var citeId = entity_cites[entity['name']];
+                var _extData = posadd.airCites[citeId];
+                entity['extData'] = _extData;
+            }
             var content = createContent(entity);
             createFigure(entity, content, geoEntities);
         }
@@ -164,6 +172,14 @@ function createContent(entity) {
             '"openContentWindow(\'download/jquery-easyui-1.7.0/demo/datagrid/add_table0.html\',\'查看叠加信息\',450, 430, 30, 30)"' +
             '>已叠加信息</a><br/><br/>');
     }
+    if(entity['extData'] != null && entity['extData'] != undefined) {
+        var _id = entity['extData']['id'];
+        var _name = entity['extData']['name'];
+        content += ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '<a href="#" onclick=' +
+            '"openContentWindow(\'download/jquery-easyui-1.7.0/demo/datagrid/air_table_page0.html?id=' +
+            _id + '&name=' + _name + '\',\'查看叠加信息\',500, 430, 30, 30)"' + '>已叠加信息</a><br/><br/>');
+    }
+
     if(entity['infoIds'] != null && entity['infoIds'] != undefined) {
         content += '<strong>原信息编号</strong>： ' + entity['infoIds'] + '<br/>';
     }
