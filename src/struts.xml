@@ -87,6 +87,8 @@
 
         <action name="tempHighSearch" class="whu.eres.cartolab.controllers.JsonAction00" method="tempHighSearch" />
 
+        <action name="searchGoogleMapQuery" class="whu.eres.cartolab.controllers.JsonAction01" method="searchGoogleMapQuery" />
+
 
     </package>
 

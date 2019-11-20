@@ -450,6 +450,25 @@ public class JsonAction01 {
         }
     }
 
+    public String searchGoogleMapQuery() {
+        HttpServletRequest request = ServletActionContext.getRequest();
+        // https://api.map.baidu.com/location/ip?ak=SycUWXeBU9Z1tkvcNqmFxvo93cS4jbU7&coor=bd09ll&ip=117.154.10.99
+        try{
+            String word = new String(request.getParameter("word").getBytes("iso-8859-1"));
+            String srhApi = "https://www.google.com/search?tbm=map&authuser=0&hl=en&gl=kh&pb=!4m12!1m3!1d171703.1889068656!2d114.13498723504287!3d30.441862537500636!2m3!1f0!2f0!3f0!3m2!1i1366!2i599!4f13.1!7i20!10b1!12m6!2m3!5m1!6e2!20e3!10b1!16b1!19m4!2m3!1i360!2i120!4i8!20m57!2m2!1i203!2i100!3m2!2i4!5b1!6m6!1m2!1i86!2i86!1m2!1i408!2i240!7m42!1m3!1e1!2b0!3e3!1m3!1e2!2b1!3e2!1m3!1e2!2b0!3e3!1m3!1e3!2b0!3e3!1m3!1e8!2b0!3e3!1m3!1e3!2b1!3e2!1m3!1e9!2b1!3e2!1m3!1e10!2b0!3e3!1m3!1e10!2b1!3e2!1m3!1e10!2b0!3e4!2b1!4b1!9b0!22m6!1seuHEXcS5DdD7wAOEv4fQBA%3A1!2zMWk6Mix0OjExODg3LGU6MSxwOmV1SEVYY1M1RGREN3dBT0V2NGZRQkE6MQ!7e81!12e3!17seuHEXcS5DdD7wAOEv4fQBA%3A685!18e15!24m40!1m12!13m6!2b1!3b1!4b1!6i1!8b1!9b1!18m4!3b1!4b1!5b1!6b1!2b1!5m5!2b1!3b1!5b1!6b1!7b1!10m1!8e3!14m1!3b1!17b1!20m2!1e3!1e6!24b1!25b1!26b1!30m1!2b1!36b1!43b1!52b1!55b1!56m2!1b1!3b1!26m4!2m3!1i80!2i92!4i8!30m28!1m6!1m2!1i0!2i0!2m2!1i458!2i599!1m6!1m2!1i1316!2i0!2m2!1i1366!2i599!1m6!1m2!1i0!2i0!2m2!1i1366!2i20!1m6!1m2!1i0!2i579!2m2!1i1366!2i599!34m8!3b1!4b1!6b1!8m1!1b1!9b1!12b1!14b1!37m1!1e81!42b1!47m0!49m1!3b1!50m3!2e2!3m1!1b1&oq=eberswalde%20schule&gs_l=maps.12..38i39i129k1l2j38l3.378367.378367.4.383556.3.2.0.1.0.0.117.228.0j2.2.0....0...1ac.1.64.maps..0.1.111....0.&tch=1&ech=21&psi=euHEXcS5DdD7wAOEv4fQBA.1573183871126.1&q="
+                    + word;
+            //key-value
+            Map<String, String> ipParams = new HashMap<>();
+            String ipReturnStr = queryAPI(srhApi, ipParams, "GET");
+//            JSONObject ipReturn = JSONObject.fromString(ipReturnStr);
+            JsonAction00.toBeText(ipReturnStr);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
     public double[] lonlat2metrics(double[] lonlats) {
         return lonlatWithMetrics(lonlats, 1, 6);
     }

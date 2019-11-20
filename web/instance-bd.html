@@ -71,6 +71,7 @@
 	<script src="js/pages/bd-mainpage-infowin.js"></script>
 	<script src="js/pages/relpos.js"></script>
 	<script src="js/pages/posadd.js"></script>
+	<script src="js/pages/posadd_dynamic.js"></script>
 	<script src="js/pages/postrans.js"></script>
 	<script src="js/pages/baidu-search.js"></script>
 	<script src="js/pages/xiaoqi.js"></script>
@@ -105,7 +106,8 @@
 					<input id="posGeneral" class="easyui-searchbox" style="width: 100%; height: 30px; line-height: 30px"
 						   data-options="prompt:'接入位置信息',menu:'#simplesearchtabsdiv',searcher:autoAdd" />
 					<div id="simplesearchtabsdiv">
-						<div data-options="name:'allsimplesearch',iconCls:'icon-ok'">自动识别</div>
+						<!--<div data-options="name:'allsimplesearch',iconCls:'icon-ok'">自动识别</div>-->
+						<div data-options="name:'allsimplesearch',iconCls:'icon-ok'">搜索</div>
 						<!--<div data-options="name:'coordsearch'">坐标</div>-->
 						<!--<div data-options="name:'postcodesearch'">邮政编码</div>-->
 						<!--<div data-options="name:'phonesearch'">固定电话</div>-->
@@ -292,6 +294,10 @@
 							<!--<p><input type="checkbox" id="ccheckbox" onclick=""/>武汉市 &nbsp;-->
 							<!--<input type="checkbox" id="dcheckbox" onclick=""/>其他 &nbsp;<p/>-->
 						</div>
+					</div>
+
+					<div id="chooseRealtime" class="nextTab" >
+						<h3><input type="checkbox" id="realtimecheckbox2" onclick="toShowRealtimeData(this)"/>&nbsp;叠加动态实时数据</h3>
 					</div>
 					<br/>
 

@@ -25,7 +25,15 @@ var posadd_init = {
     baiduSeachWord: "武汉 火灾 2月27日",
     baiduSearch: {},
     baiduSearchUrls: [],
-
+    demo_words: {
+        "武汉大学信息学部8栋": [114.365385,30.532532, "住宅区", "湖北省武汉市洪山区珞喻路"],
+        "武汉大学信息学部8幢": [114.365385,30.532532, "住宅区", "湖北省武汉市洪山区珞喻路"],
+        "武汉大学信息学部8舍": [114.365385,30.532532, "住宅区", "湖北省武汉市洪山区珞喻路"],
+        "宝安区公明街道合水口第二工业区16栋": [113.884064,22.791882, "公司企业", "广东省深圳市光明区公明松白路合水口泥围新村小区附近"],
+        "公明街道合水口第二工业区16栋": [113.884064,22.791882, "公司企业", "广东省深圳市光明区公明松白路合水口泥围新村小区附近"],
+        "合水口第二工业区16栋": [113.884064,22.791882, "公司企业", "广东省深圳市光明区公明松白路合水口泥围新村小区附近"],
+    },
+    realTimeDataInit: false,
 };
 
 // var posadd = cloneObject(posadd_init);
@@ -527,34 +535,107 @@ function search_test_left() {
     map.addOverlay(marker2);              // 将标注添加到地图中
 }
 
+// 直接接入示例地点的具体操作
+function demoPlaceSearchShow(word) {
+    var text = $("#posGeneral")[0].value;
+    var word = text.trim();
+    if(word in posadd.demo_words) {
+        var bp = new BMap.Point(posadd.demo_words[word][0], posadd.demo_words[word][1]);
+        var marker = createNewMarker(bp);
+        var extData = {
+            "name": word,
+            "texts": [posadd.demo_words[word][2], posadd.demo_words[word][3]],
+            "winwidth": 200,
+            "maxTexts": 1000,
+            "id": generateUUID()
+        };
+        addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
+        map.centerAndZoom(bp, 16);
+        setResultItems([posadd.coord_overlays[posadd.coord_overlays.length - 1]], "distresults", "coord_overlays", true);
+    }
+}
+
+//  （混合）地点搜索
+function autoSearchPlace() {
+    var text = $("#posGeneral")[0].value;
+    var word = text.trim();
+    //  清楚原先要素
+    clear_coords();
+    posadd.coord_overlays = [];
+    setResultItems(posadd.coord_overlays, "distresults", "coord_overlays", false);
+    $("#eastTabsDiv").tabs("select", "信息列表");
+    $("#resultsdiv").accordion("select", 2);
+    //  示例地点：直接接入
+    if(word in posadd.demo_words) {
+        setTimeout("demoPlaceSearchShow()", 8000);
+        return;
+    }
+    //  非示例地点：混合搜索
+    var service_url = "http://localhost:5050/" + "mixed_place_search_1";
+    var url = service_url + "?word=" + word;
+    $.ajax({
+        url: url,
+        type: 'get',
+        dataType: 'json',
+        timeout: 120000,
+        success: function (srh_data) {
+            var pois = srh_data["results"];
+            for(var i = 0; i < pois.length; i++) {
+                var poi = pois[i];
+                if("bdx" in poi && "bdy" in poi) {
+                    var extData = {
+                        "name": poi["name"],
+                        "texts": poi["texts"],
+                        "winwidth": 200,
+                        "maxTexts": 1000,
+                        "id": generateUUID()
+                    };
+                    var bp = new BMap.Point(poi["bdx"], poi["bdy"]);
+                    var marker = createNewMarker(bp);
+                    addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
+                    setResultItems([posadd.coord_overlays[posadd.coord_overlays.length - 1]], "distresults", "coord_overlays", true);
+                    if(i == 0) {
+                        map.centerAndZoom(bp, 12);
+                    }
+                }
+            }
+        }, error: function (err_data) {
+            alert("服务繁忙，请稍后再试。")
+            console.log(err_data);
+        }
+    });
+
+}
+
 //  自动识别类型并接入
 function autoAdd() {
-    if(admin == true) {
-        search_test_left();
-        return;
-    }
-    var text = $("#posGeneral")[0].value;
-    var coords = parseCoordStr(text);
-    if(coords != null) {
-        showXY(coords[0], coords[1]);
-        return;
-    }
-    var post = parsePostcode(text);
-    if(post != null) {
-        showPostcode(post);
-        return;
-    }
-    var ip = parseIP(text);
-    if(ip != null) {
-        showIpArea(ip);
-        return;
-    }
-    var areaCode = parsePhoneAreaCode(text);
-    if(areaCode != null) {
-        showAreacode(areaCode, text);
-        return;
-    }
-    extract_positions(text);
+    autoSearchPlace();
+    // if(admin == true) {
+    //     search_test_left();
+    //     return;
+    // }
+    // var text = $("#posGeneral")[0].value;
+    // var coords = parseCoordStr(text);
+    // if(coords != null) {
+    //     showXY(coords[0], coords[1]);
+    //     return;
+    // }
+    // var post = parsePostcode(text);
+    // if(post != null) {
+    //     showPostcode(post);
+    //     return;
+    // }
+    // var ip = parseIP(text);
+    // if(ip != null) {
+    //     showIpArea(ip);
+    //     return;
+    // }
+    // var areaCode = parsePhoneAreaCode(text);
+    // if(areaCode != null) {
+    //     showAreacode(areaCode, text);
+    //     return;
+    // }
+    // extract_positions(text);
 }
 
 function getShape_local(province, city, district, key, addValue) {
