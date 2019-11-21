@@ -130,6 +130,9 @@ function geocodeSearchAddr(addr){
     if(xiaoqi.index < xiaoqi.adds.length){
         setTimeout(window.bdGEO, 100);
     }
+    if(addr == "海底捞") {
+        return;
+    }
     xiaoqi.myGeo.getPoint(addr, function(point){
         if (point) {
             //document.getElementById("addr_result").innerHTML +=  index + "、" + addr + ":" + point.lng + "," + point.lat + "</br>";

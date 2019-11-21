@@ -1,5 +1,5 @@
 // var python_service = "http://localhost:5050/";
-var python_service = "http://106.12.93.49:5050/";
+var python_service = "http://106.12.56.213:5050/";
 
 var posadd_init = {
 
@@ -581,7 +581,7 @@ function autoSearchPlace() {
         return;
     }
     //  非示例地点：混合搜索
-    var service_url = "http://localhost:5050/" + "mixed_place_search_1";
+    var service_url = python_service + "mixed_place_search_1";
     // var url = service_url + "?google=1&word=" + word;
     var url = service_url + "?word=" + word;
     $.ajax({
@@ -591,26 +591,70 @@ function autoSearchPlace() {
         timeout: 120000,
         success: function (srh_data) {
             var pois = srh_data["results"];
-            for(var i = 0; i < pois.length; i++) {
-                // if(i > 0) break;
-                var poi = pois[i];
-                if("bdx" in poi && "bdy" in poi) {
-                    var extData = {
-                        "name": poi["name"],
-                        "texts": poi["texts"],
-                        "winwidth": 200,
-                        "maxTexts": 1000,
-                        "id": generateUUID()
-                    };
-                    var bp = new BMap.Point(poi["bdx"], poi["bdy"]);
-                    var marker = createNewMarker(bp);
-                    addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
-                    setResultItems([posadd.coord_overlays[posadd.coord_overlays.length - 1]], "distresults", "coord_overlays", true);
-                    if(i == 0) {
-                        map.centerAndZoom(bp, 12);
+            if(pois.length < 1) {
+                alert("暂时没有找到该位置。");
+            } else if(pois.length < 3) {
+                for(var i = 0; i < pois.length; i++) {
+                    var poi = pois[i];
+                    if("bdx" in poi && "bdy" in poi) {
+                        var extData = {
+                            "name": poi["name"],
+                            "texts": poi["texts"],
+                            "winwidth": 200,
+                            "maxTexts": 1000,
+                            "id": generateUUID()
+                        };
+                        var bp = new BMap.Point(poi["bdx"], poi["bdy"]);
+                        var marker = createNewMarker(bp);
+                        addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
+                        setResultItems([posadd.coord_overlays[posadd.coord_overlays.length - 1]], "distresults", "coord_overlays", true);
+                        if(i == 0) {
+                            map.centerAndZoom(bp, 12);
+                        }
                     }
                 }
+            } else {
+                var texts = ["&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可能包含的地点："];
+                var sx = 0.0, sy = 0.0, fx = 0.0, fy = 0.0;
+                var num = 5;
+                if(pois.length < num) {
+                    num = pois.length;
+                }
+                for(var i = 0; i < num; i++) {
+                    var poi = pois[i];
+                    if("bdx" in poi && "bdy" in poi) {
+                        sx += poi["bdx"];
+                        sy += poi["bdy"];
+                        if(i == 0) {
+                            fx = poi["bdx"];
+                            fy = poi["bdy"];
+                        }
+                        if(pois.length > num && i == num - 1) {
+                            texts.push("<strong>" + poi["name"] + "</strong> ...");
+                        } else {
+                            texts.push("<strong>" + poi["name"] + "</strong>");
+                        }
+                    }
+                }
+                var avgx = sx / num;
+                var avgy = sy / num;
+                // var bp = new BMap.Point(avgx, avgy);
+                // texts = ["&nbsp;&nbsp;[" + round(avgx, 3).toString() + "," + round(avgy, 3).toString() + "]&nbsp;（估计位置）"].concat(texts)
+                var bp = new BMap.Point(fx, fy);
+                texts = ["&nbsp;&nbsp;[" + round(fx, 3).toString() + "," + round(fy, 3).toString() + "]&nbsp;（估计位置）"].concat(texts)
+                var extData = {
+                    "name": word,
+                    "texts": texts,
+                    "winwidth": 200,
+                    "maxTexts": 1000,
+                    "id": generateUUID()
+                };
+                var marker = createNewMarker(bp);
+                addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
+                setResultItems([posadd.coord_overlays[posadd.coord_overlays.length - 1]], "distresults", "coord_overlays", true);
+                map.centerAndZoom(bp, 15);
             }
+
         }, error: function (err_data) {
             alert("服务繁忙，请稍后再试。")
             console.log(err_data);

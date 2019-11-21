@@ -61,9 +61,10 @@ public class AirCsvUtil {
         Date date = new Date();
         int month = date.getMonth() + 1;
         int day = date.getDate();
+        int thisHour = date.getHours();
         String strDateFormat = "MMdd";
         SimpleDateFormat sdf1 = new SimpleDateFormat("MMdd");
-        SimpleDateFormat sdf2 = new SimpleDateFormat("MM月dd日HH时");
+//        SimpleDateFormat sdf2 = new SimpleDateFormat("MM月dd日HH时");
         String formatedDate = sdf1.format(date);
 //        String fileName = "china_sites_2018" + Integer.toString(month) + Integer.toString(day) + ".csv";
         String fileName = "china_sites_2018" + formatedDate + ".csv";
@@ -94,6 +95,14 @@ public class AirCsvUtil {
                 if(isTargetLine(type)) {
 //                    String dateStr = getValue(csvReader, "date", 0);
                     String hourStr = getValue(csvReader, "hour", 1);
+                    try {
+                        int dataHour = Integer.parseInt(hourStr);
+                        if(dataHour >= thisHour) {
+                            continue;
+                        }
+                    } catch (Exception hourExp) {
+                        continue;
+                    }
                     if(hourStr.length() < 2) {
                         hourStr = "0" + hourStr;
                     }
