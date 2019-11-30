@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+    <script src="assets/js/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+
+        function getQueryString(name) {
+            var result = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
+            if (result == null || result.length < 1) {
+                return "";
+            }
+            return result[1];
+        }
+        var text = getQueryString("text");
+        if(text == "") {
+            text = "爱华路8号锦绣新居3栋";
+        }
+
+        //        var url = "http://106.12.56.213/addrPredict/Service1.asmx/addrPredict?text=" + text;
+        var url = "http://localhost/addrPredict/Service1.asmx/addrPredict?text=" + text;
+        $.ajax({
+            url: url,
+            type: 'get',
+            dataType: 'json',
+            success: function (_data) {
+
+                document.write(_data["x"]);
+                document.write("  ");
+                document.write(_data["y"]);
+            },
+            error: function (data) {
+            }
+        });
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

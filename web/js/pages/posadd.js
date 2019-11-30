@@ -32,6 +32,8 @@ var posadd_init = {
         "宝安区公明街道合水口第二工业区16栋": [113.884064,22.791882, "公司企业", "广东省深圳市光明区公明松白路合水口泥围新村小区附近"],
         "公明街道合水口第二工业区16栋": [113.884064,22.791882, "公司企业", "广东省深圳市光明区公明松白路合水口泥围新村小区附近"],
         "合水口第二工业区16栋": [113.884064,22.791882, "公司企业", "广东省深圳市光明区公明松白路合水口泥围新村小区附近"],
+        "eberswalde McDonald":[13.696661599999999, 52.841828199999995, "$$ · 快餐 · Schorfheide", "167, 16244 Schorfheide, 德国"],
+        "Eberswalde McDonald":[13.696661599999999, 52.841828199999995, "$$ · 快餐 · Schorfheide", "167, 16244 Schorfheide, 德国"]
     },
     realTimeDataInit: false,
     airCites: null,
@@ -395,7 +397,7 @@ function extract_global_demo(text, region) {
             console.log(err_data);
         }
     });
-    
+
 }
 
 function parsePostcode(postStr) {
@@ -455,7 +457,7 @@ function parseIP(ipStr) {
     } catch (e) {
         return null;
     }
-    
+
 }
 
 function parsePhoneAreaCode(phoneNumberStr) {
@@ -554,7 +556,7 @@ function demoPlaceSearchShow(word) {
         var extData = {
             "name": word,
             "texts": [posadd.demo_words[word][2], posadd.demo_words[word][3], "位置估计：[" +
-                round(posadd.demo_words[word][0], 4).toString() + "," + round(posadd.demo_words[word][1].toString(), 4) + "]"],
+            round(posadd.demo_words[word][0], 4).toString() + "," + round(posadd.demo_words[word][1].toString(), 4) + "]"],
             "winwidth": 200,
             "maxTexts": 1000,
             "id": generateUUID()
@@ -563,6 +565,19 @@ function demoPlaceSearchShow(word) {
         map.centerAndZoom(bp, 16);
         setResultItems([posadd.coord_overlays[posadd.coord_overlays.length - 1]], "distresults", "coord_overlays", true);
     }
+}
+
+//  是否为位置推理的示例查询
+function isPredictDemo(text) {
+    var pre_words = ["爱华路", "安托山九路", "八卦岭工业区", "八卦二路", "紫竹七道", "中铁公司地铁11号线",
+        "中康路", "振华路", "园岭新村", "龙溪花园", "贝底田坊", "岗厦村东二坊"];
+    for(var i = 0; i < pre_words.length; i++) {
+        var pre_word = pre_words[i];
+        if(text.indexOf(pre_word) > -1) {
+            return true;
+        }
+    }
+    return false;
 }
 
 //  （混合）地点搜索
@@ -577,8 +592,49 @@ function autoSearchPlace() {
     $("#resultsdiv").accordion("select", 2);
     //  示例地点：直接接入
     if(word in posadd.demo_words) {
-        setTimeout("demoPlaceSearchShow()", 8000);
+        setTimeout("demoPlaceSearchShow()", 4000);
         return;
+    }
+    if(isPredictDemo(word)) {   //  位置推理的结果（ASP.NET服务返回的结果）
+        var asp_url = "http://localhost/addrPredict/Service1.asmx/addrPredict?text=" + word;
+        // var asp_url = "http://106.12.56.213/addrPredict/Service1.asmx/addrPredict?text=" + word;
+        $.ajax({
+            url: asp_url,
+            type: 'get',
+            dataType: 'json',
+            success: function (_data) {
+                if(1 == _data["status"]) {
+                    var x = _data["x"];
+                    var y = _data["y"];
+                    var extData = {
+                        "name": word,
+                        "texts": _data["texts"],
+                        "winwidth": 200,
+                        "maxTexts": 1000,
+                        "id": generateUUID()
+                    };
+                    if(y > 90) {
+                        posadd.convertor.translate([obPoint], 6, 5, function (data, status, message) {
+                            if (status) {
+                                alert("坐标转换出现错误：x = " + x.toString() + ", y = " + y.toString());
+                            } else {
+                                var bp = data.points[0];
+                                var marker = createNewMarker(bp);
+                                addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
+                                setResultItems([posadd.coord_overlays[posadd.coord_overlays.length - 1]], "distresults", "coord_overlays", true);
+                            }
+                        });
+                    } else {
+                        var bp = new BMap.Point(x, y);
+                        var marker = createNewMarker(bp);
+                        addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
+                        setResultItems([posadd.coord_overlays[posadd.coord_overlays.length - 1]], "distresults", "coord_overlays", true);
+                    }
+                }
+            },
+            error: function (data) {
+            }
+        });
     }
     //  非示例地点：混合搜索
     var service_url = python_service + "mixed_place_search_1";
