@@ -21,8 +21,9 @@
             text = "爱华路8号锦绣新居3栋";
         }
 
-        //        var url = "http://106.12.56.213/addrPredict/Service1.asmx/addrPredict?text=" + text;
-        var url = "http://localhost/addrPredict/Service1.asmx/addrPredict?text=" + text;
+        // var url = "http://106.12.56.213/addrPredict/Service1.asmx/addrPredict?text=" + text;
+        // var url = "http://localhost/addrPredict/Service1.asmx/addrPredict?text=" + text;
+        var url = "http://localhost:55490/Service1.asmx/addrPredict?text=" + text;
         $.ajax({
             url: url,
             type: 'get',

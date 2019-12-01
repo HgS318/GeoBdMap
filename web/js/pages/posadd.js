@@ -569,74 +569,21 @@ function demoPlaceSearchShow(word) {
 
 //  是否为位置推理的示例查询
 function isPredictDemo(text) {
-    var pre_words = ["爱华路", "安托山九路", "八卦岭工业区", "八卦二路", "紫竹七道", "中铁公司地铁11号线",
-        "中康路", "振华路", "园岭新村", "龙溪花园", "贝底田坊", "岗厦村东二坊"];
-    for(var i = 0; i < pre_words.length; i++) {
-        var pre_word = pre_words[i];
-        if(text.indexOf(pre_word) > -1) {
-            return true;
-        }
-    }
+    // // var pre_words = ["爱华路", "安托山九路", "八卦岭工业区", "八卦二路", "紫竹七道", "中铁公司地铁11号线",
+    // //     "中康路", "振华路", "园岭新村", "龙溪花园", "贝底田坊", "岗厦村东二坊"];
+    // var pre_words = ["锦绣新居", "八卦岭工业区", "八卦二路", "金地网球花园", "紫竹七道", "石厦西村"];
+    // for(var i = 0; i < pre_words.length; i++) {
+    //     var pre_word = pre_words[i];
+    //     if(text.indexOf(pre_word) > -1) {
+    //         return true;
+    //     }
+    // }
     return false;
+    // return true;
 }
 
-//  （混合）地点搜索
-function autoSearchPlace() {
-    var text = $("#posGeneral")[0].value;
-    var word = text.trim();
-    //  清楚原先要素
-    clear_coords();
-    posadd.coord_overlays = [];
-    setResultItems(posadd.coord_overlays, "distresults", "coord_overlays", false);
-    $("#eastTabsDiv").tabs("select", "信息列表");
-    $("#resultsdiv").accordion("select", 2);
-    //  示例地点：直接接入
-    if(word in posadd.demo_words) {
-        setTimeout("demoPlaceSearchShow()", 4000);
-        return;
-    }
-    if(isPredictDemo(word)) {   //  位置推理的结果（ASP.NET服务返回的结果）
-        var asp_url = "http://localhost/addrPredict/Service1.asmx/addrPredict?text=" + word;
-        // var asp_url = "http://106.12.56.213/addrPredict/Service1.asmx/addrPredict?text=" + word;
-        $.ajax({
-            url: asp_url,
-            type: 'get',
-            dataType: 'json',
-            success: function (_data) {
-                if(1 == _data["status"]) {
-                    var x = _data["x"];
-                    var y = _data["y"];
-                    var extData = {
-                        "name": word,
-                        "texts": _data["texts"],
-                        "winwidth": 200,
-                        "maxTexts": 1000,
-                        "id": generateUUID()
-                    };
-                    if(y > 90) {
-                        posadd.convertor.translate([obPoint], 6, 5, function (data, status, message) {
-                            if (status) {
-                                alert("坐标转换出现错误：x = " + x.toString() + ", y = " + y.toString());
-                            } else {
-                                var bp = data.points[0];
-                                var marker = createNewMarker(bp);
-                                addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
-                                setResultItems([posadd.coord_overlays[posadd.coord_overlays.length - 1]], "distresults", "coord_overlays", true);
-                            }
-                        });
-                    } else {
-                        var bp = new BMap.Point(x, y);
-                        var marker = createNewMarker(bp);
-                        addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
-                        setResultItems([posadd.coord_overlays[posadd.coord_overlays.length - 1]], "distresults", "coord_overlays", true);
-                    }
-                }
-            },
-            error: function (data) {
-            }
-        });
-    }
-    //  非示例地点：混合搜索
+//  混合地点搜索
+function mixedSearchPlace(word) {   //  非示例地点：混合搜索
     var service_url = python_service + "mixed_place_search_1";
     // var url = service_url + "?google=1&word=" + word;
     var url = service_url + "?word=" + word;
@@ -716,7 +663,101 @@ function autoSearchPlace() {
             console.log(err_data);
         }
     });
+}
 
+//  地址推理搜索（是否在出差情况下准备混合搜索）
+function predictSearch(word, prepareMixed) {
+    // var asp_url = "http://localhost:55490/Service1.asmx/addrPredict?text=" + word;
+    var asp_url = "http://localhost/addrPredict/Service1.asmx/addrPredict?text=" + word;
+    // var asp_url = "http://106.12.56.213/addrPredict/Service1.asmx/addrPredict?text=" + word;
+    $.ajax({
+        url: asp_url,
+        type: 'get',
+        dataType: 'json',
+        success: function (_data) {
+            if(1 == _data["status"]) {
+                var x = _data["x"];
+                var y = _data["y"];
+                var extData = {
+                    "name": word,
+                    "texts": _data["texts"],
+                    "winwidth": 200,
+                    "maxTexts": 1000,
+                    "id": generateUUID()
+                };
+                var obPoint = new BMap.Point(x, y);
+                if(y > 90) {
+                    posadd.convertor.translate([obPoint], 6, 5, function (data, status, message) {
+                        if (status) {
+                            alert("坐标转换出现错误：x = " + x.toString() + ", y = " + y.toString());
+                        } else {
+                            var bp = data.points[0];
+                            var marker = createNewMarker(bp);
+                            extData["texts"] = ["位置估计：[" + round(data.points[0].lng, 3).toString() + ", " +
+                            round(data.points[0].lat, 3).toString() + "]"];
+                            addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
+                            setResultItems([posadd.coord_overlays[posadd.coord_overlays.length - 1]], "distresults", "coord_overlays", true);
+                            map.centerAndZoom(bp, 19);
+                        }
+                    });
+                } else {
+                    var bp = obPoint;
+                    var marker = createNewMarker(bp);
+                    addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
+                    setResultItems([posadd.coord_overlays[posadd.coord_overlays.length - 1]], "distresults", "coord_overlays", true);
+                    map.centerAndZoom(bp, 19);
+                }
+            } else {
+                if(prepareMixed == true) {
+                    mixedSearchPlace(word);
+                } else {
+                    alert("推理错误！");
+                }
+            }
+        },
+        error: function (err_data) {
+            if(prepareMixed == true) {
+                mixedSearchPlace(word);
+            } else {
+                alert("推理错误！");
+            }
+        }
+    });
+}
+
+//  地址推理按钮点击后
+function autoPredict() {
+    var text = $("#posPredict")[0].value;
+    var word = text.trim();
+    //  清楚原先要素
+    clear_coords();
+    posadd.coord_overlays = [];
+    setResultItems(posadd.coord_overlays, "distresults", "coord_overlays", false);
+    $("#eastTabsDiv").tabs("select", "信息列表");
+    $("#resultsdiv").accordion("select", 2);
+    predictSearch(word, false);
+}
+
+//  地点综合搜索（静态示例->地址推理示例->混合搜索）
+function autoSearchPlace() {
+    var text = $("#posGeneral")[0].value;
+    var word = text.trim();
+    //  清楚原先要素
+    clear_coords();
+    posadd.coord_overlays = [];
+    setResultItems(posadd.coord_overlays, "distresults", "coord_overlays", false);
+    $("#eastTabsDiv").tabs("select", "信息列表");
+    $("#resultsdiv").accordion("select", 2);
+    //  示例地点：直接接入
+    if(word in posadd.demo_words) {
+        setTimeout("demoPlaceSearchShow()", 4000);
+        return;
+    }
+    if(isPredictDemo(word)) {   //  位置推理的结果（ASP.NET服务返回的结果）
+        predictSearch(word, true);
+    } else {
+        mixedSearchPlace(word);
+    }
 }
 
 //  自动识别类型并接入
