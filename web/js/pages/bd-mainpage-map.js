@@ -81,9 +81,10 @@ function initComponents() {
 
     map = new BMap.Map("mapContainer");
     // map.centerAndZoom(new BMap.Point(110.79581, 30.88069), 11);
-    // var _point = new BMap.Point(114.371347,30.541142);
-    var _point = new BMap.Point(121.480812,31.233094);
-    // var _point = new BMap.Point(114.371347,30.541142);
+    // var _point = new BMap.Point(114.371347, 30.541142);
+    // var _point = new BMap.Point(114.371347, 30.541142);
+    // var _point = new BMap.Point(121.480812,31.233094);
+    var _point = new BMap.Point(113.576964, 22.286715);
     map.centerAndZoom(_point, 11);
     var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
     var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
@@ -984,13 +985,13 @@ function initMouseTool() {
 
 function spaTypeName(spaType) {
     if(spaType === undefined || spaType == null || spaType == 0) {
-        return "未知";
+        return "";
     }
     switch(spaType) {
         case 1: return "点";
         case 3: return "线";
         case 5: return "多边形";
-        default: return "未知";
+        default: return "";
     }
 }
 

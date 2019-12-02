@@ -89,6 +89,8 @@
 
         <action name="searchGoogleMapQuery" class="whu.eres.cartolab.controllers.JsonAction01" method="searchGoogleMapQuery" />
         <action name="getRealtimeAir0" class="whu.eres.cartolab.controllers.JsonAction01" method="getRealtimeAir0" />
+        <action name="getRealtimeAir1" class="whu.eres.cartolab.controllers.JsonAction01" method="getRealtimeAir1" />
+        <action name="getRealtimeTempByCityCode" class="whu.eres.cartolab.controllers.JsonAction01" method="getRealtimeTempByCityCode" />
 
 
     </package>

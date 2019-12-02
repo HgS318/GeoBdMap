@@ -37,6 +37,8 @@ var posadd_init = {
     },
     realTimeDataInit: false,
     airCites: null,
+    publicBikes: {},
+    publicBikesCollection: null,
 };
 
 // var posadd = cloneObject(posadd_init);

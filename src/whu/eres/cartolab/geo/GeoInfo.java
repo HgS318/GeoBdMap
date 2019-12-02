@@ -20,6 +20,7 @@ public class GeoInfo {
     public int lowerid;
     public int common = 0;
     public String name;
+    public String city;
     public String address;
     public double x;
     public double y;
@@ -59,6 +60,7 @@ public class GeoInfo {
             common = rs.getInt("common");
             name = rs.getString("name");
             address = rs.getString("address");
+            city = rs.getString("city");
             x = rs.getDouble("X");
             y = rs.getDouble("Y");
             position = rs.getString("position");
@@ -143,6 +145,7 @@ public class GeoInfo {
         obj.put("infoId", infoId);
         obj.put("geid", geid);
         obj.put("name", name);
+        obj.put("city", city);
         obj.put("address", address);
         obj.put("x", x);
         obj.put("y", y);
@@ -177,6 +180,7 @@ public class GeoInfo {
         obj.put("infoId", infoId);
         obj.put("geid", geid);
         obj.put("name", name);
+        obj.put("city", city);
         obj.put("address", address);
         obj.put("x", x);
         obj.put("y", y);

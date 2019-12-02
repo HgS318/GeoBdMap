@@ -4,15 +4,51 @@ import java.io.*;
 import java.util.*;
 import javax.servlet.http.*;
 import java.net.*;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.struts2.*;
 import net.sf.json.*;
 
+import org.json.simple.*;
 import whu.eres.cartolab.db.csv.*;
 import whu.eres.cartolab.db.esri.*;
 import whu.eres.cartolab.geo.*;
 import whu.eres.cartolab.db.mysql.queries.*;
 
 public class JsonAction01 {
+
+    public String getRealtimeTempByCityCode() {
+        HttpServletRequest request = ServletActionContext.getRequest();
+        String cityCode = request.getParameter("city");
+        Date date = new Date();
+        int thisHour = date.getHours();
+        int month = date.getMonth() + 1;
+        int day = date.getDate();
+        String[] temps = getTodayTemperature(cityCode, thisHour);
+        if(temps == null || temps.length < 1) {
+            toBeJson("get temperature error...");
+            return null;
+        }
+        JSONArray ja = new JSONArray();
+        for(int i = 0; i < thisHour; i++) {
+            String temp = temps[i];
+            String _time = month + "月" + day + "日" + i + "时";
+            JSONObject tempObj = new JSONObject();
+            tempObj.put("time", _time);
+            if(temp != null && !"".equals(temp) && !"null".equals(temp)) {
+                String _temp = temp + "℃";
+                tempObj.put("temp", _temp);
+                ja.put(i, tempObj);
+            } else {
+                tempObj.put("temp", "");
+                ja.put(i, tempObj);
+            }
+        }
+        String reStr = ja.toString();
+        toBeJson(reStr);
+        return null;
+    }
 
     //  获取实时的空气质量数据（暂以2018年代替）
     public String getRealtimeAir0() {
@@ -21,6 +57,34 @@ public class JsonAction01 {
             String citeId = request.getParameter("citeId");
             String str = AirCsvUtil.getRealtimeAir0(citeId);
             toBeJson(str);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ex.getMessage();
+        }
+        return null;
+    }
+
+    //  获取实时的空气质量数据（暂以2018年代替）以及气温
+    public String getRealtimeAir1() {
+        HttpServletRequest request = ServletActionContext.getRequest();
+        try {
+            String citeId = request.getParameter("citeId");
+            String cityCode = request.getParameter("city");
+            Date date = new Date();
+            int thisHour = date.getHours();
+            JSONArray ja = AirCsvUtil.getRealTimeAirQuality(citeId);
+            String[] temps = getTodayTemperature(cityCode, thisHour);
+            for(int i = 0; i < ja.length(); i++) {
+                if(i < temps.length) {
+                    String temp = temps[i];
+                    if(temp != null && !"".equals(temp) && !"null".equals(temp)) {
+                        String _temp = temp + "℃";
+                        ja.getJSONObject(i).put("temp", _temp);
+                    }
+                }
+            }
+            String reStr = ja.toString();
+            toBeJson(reStr);
         } catch (Exception ex) {
             ex.printStackTrace();
             return ex.getMessage();
@@ -528,12 +592,74 @@ public class JsonAction01 {
         return null;
     }
 
+    public String[] getTodayTemperature(String cityCode, int thisHour) {
+        try {
+            String site_url = "http://www.weather.com.cn/weather1d/" + cityCode + ".shtml";
+            String siteContent = queryAPI(site_url, null, "GET");
+            String flag = "observe24h_data";
+            int dataIndex = siteContent.indexOf(flag);
+            if(dataIndex > -1) {
+                int endId = siteContent.indexOf("</script>", dataIndex);
+                if(endId > dataIndex) {
+                    String contentCut = siteContent.substring(dataIndex, endId - 1);
+                    String dataStr = contentCut.replace(flag, "").replace("=", "").replace(";", "").trim();
+                    JSONObject jo = JSONObject.fromString(dataStr);
+                    JSONObject od = (JSONObject)jo.get("od");
+                    JSONArray od2 = (JSONArray)od.get("od2");
+                    String[] temps = new String[thisHour + 1];
+                    for(int i = 0; i < od2.length(); i++) {
+                        JSONObject obj = (JSONObject)od2.get(i);
+                        String hourStr = obj.get("od21").toString();
+                        int hour = Integer.parseInt(hourStr);
+                        if(hour > thisHour) {
+                            break;
+                        }
+                        String temp = obj.get("od22").toString();
+                        temps[hour] = temp;
+                    }
+                    return temps;
+
+                } else {
+                    throw new Exception();
+                }
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception ex1) {
+            try {
+                String nowapi_url = "http://api.k780.com/?app=weather.today&appkey=40713&sign=b3afd3d892135334df45dd0db8655e3a&format=json&weaid=" + cityCode;
+                String resStr = queryAPI(nowapi_url, null, "GET");
+                JSONObject jo = JSONObject.fromString(resStr);
+                JSONObject dataObj = (JSONObject)jo.get("result");
+                String temperature_curr = dataObj.getString("temperature_curr");
+                String temp_cur_str = temperature_curr.replace("℃", "").trim();
+                String temp_high = dataObj.getString("temp_high");
+                String temp_low = dataObj.getString("temp_low");
+                int temp_cur = Integer.parseInt(temp_cur_str);
+                int max_temp = Integer.parseInt(temp_high);
+                int min_temp = Integer.parseInt(temp_low);
+                int[] tempArr = AirCsvUtil.createDayTempArray(temp_cur, thisHour, max_temp, min_temp);
+                String[] temps = new String[thisHour + 1];
+                for(int i = 0; i < thisHour + 1; i++) {
+                    temps[i] = String.valueOf(tempArr[i]);
+                }
+                return temps;
+            } catch (Exception ex2) {
+                ex2.printStackTrace();
+                return null;
+            }
+        }
+    }
+
     public static String queryAPI(String requestUrl, Map params, String reqMethod) {
         //buffer用于接受返回的字符
         StringBuffer buffer = new StringBuffer();
         try {
             //建立URL，把请求地址给补全，其中urlencode（）方法用于把params里的参数给取出来
-            URL url = new URL(requestUrl + "?" + urlencode(params));
+            URL url = new URL(requestUrl);
+            if(params != null) {
+                url = new URL(requestUrl + "?" + urlencode(params));
+            }
             //打开http连接
             HttpURLConnection httpUrlConn = (HttpURLConnection) url.openConnection();
             httpUrlConn.setDoInput(true);
@@ -597,7 +723,7 @@ public class JsonAction01 {
                 paramSb.substring(0, paramSb.length() - 1);
             }
             String paramsStr = paramSb.toString();
-            if(paramsStr == "" || paramsStr.length() < 1) {
+            if("".equals(paramsStr) || paramsStr.length() < 1) {
                 url = new URL(sendUrl);
             } else {
                 url = new URL(sendUrl + "?" + paramsStr);

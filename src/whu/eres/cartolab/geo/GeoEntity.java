@@ -11,6 +11,7 @@ public class GeoEntity {
     public int geid;
     public  String name;
     public String address;
+    public String city;
     public double x;
     public double y;
     public String position;
@@ -43,6 +44,9 @@ public class GeoEntity {
             }
             if(address == null || "".equals(address)) {
                 address = info.address;
+            }
+            if(city == null || "".equals(city)) {
+                city = info.city;
             }
             if(x == 0.0) {
                 x = info.x;
@@ -105,6 +109,7 @@ public class GeoEntity {
         obj.put("geid", geid);
         obj.put("name", name);
         obj.put("address", address);
+        obj.put("city", city);
         obj.put("x", x);
         obj.put("y", y);
         obj.put("position", position);

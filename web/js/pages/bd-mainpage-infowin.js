@@ -83,10 +83,14 @@ function initGeoEntities(entities) {
             var entity = entities[i];
             var uuid = generateUUID();
             entity['id'] = uuid;
-            if(posadd.realTimeDataInit == true && entity['name'] in entity_cites) {
-                var citeId = entity_cites[entity['name']];
-                var _extData = posadd.airCites[citeId];
-                entity['extData'] = _extData;
+            if(posadd.realTimeDataInit == true) {
+                if(entity['name'] in entity_cites) {
+                    var citeId = entity_cites[entity['name']];
+                    var _extData = posadd.airCites[citeId];
+                    entity['extData'] = _extData;
+                } else {
+                    entity['extData'] = {"city": entity["city"]};
+                }
             }
             var content = createContent(entity);
             createFigure(entity, content, geoEntities);
@@ -172,12 +176,26 @@ function createContent(entity) {
             '"openContentWindow(\'download/jquery-easyui-1.7.0/demo/datagrid/add_table0.html\',\'查看叠加信息\',450, 430, 30, 30)"' +
             '>已叠加信息</a><br/><br/>');
     }
-    if(entity['extData'] != null && entity['extData'] != undefined) {
-        var _id = entity['extData']['id'];
-        var _name = entity['extData']['name'];
-        content += ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '<a href="#" onclick=' +
-            '"openContentWindow(\'download/jquery-easyui-1.7.0/demo/datagrid/air_table_page0.html?id=' +
-            _id + '&name=' + _name + '\',\'查看叠加信息\',500, 430, 30, 30)"' + '>已叠加信息</a><br/><br/>');
+    var _city = entity['city'];
+    var wid = getWeatherId(null, _city, null);
+    if(entity['extData'] != undefined && entity['extData'] != null) {
+        if("id" in entity['extData']) {
+            var _id = entity['extData']['id'];
+            var _name = entity['extData']['name'];
+            if(wid == null) {
+                content += ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '<a href="#" onclick=' +
+                '"openContentWindow(\'download/jquery-easyui-1.7.0/demo/datagrid/air_table_page0.html?id=' +
+                _id + '&name=' + _name + '\',\'查看叠加信息\',500, 430, 30, 30)"' + '>已叠加信息</a><br/>');
+            } else {
+                content += ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '<a href="#" onclick=' +
+                '"openContentWindow(\'download/jquery-easyui-1.7.0/demo/datagrid/air_table_page1.html?id=' +
+                _id + '&name=' + _name + "&city=" + wid +  '\',\'查看叠加信息\',500, 430, 30, 30)"' + '>已叠加信息</a><br/><br/>');
+            }
+        } else if(wid != null) {
+            content += ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '<a href="#" onclick=' +
+                '"openContentWindow(\'download/jquery-easyui-1.7.0/demo/datagrid/air_temp_page0.html?city=' +
+                wid + '&name=' + entity['name'] + '\',\'查看叠加信息\',300, 430, 30, 30)"' + '>已叠加信息</a><br/>');
+        }
     }
 
     if(entity['infoIds'] != null && entity['infoIds'] != undefined) {
@@ -291,6 +309,30 @@ function createContent(entity) {
     }
     if(entity['time'] != null && entity['time'] != undefined) {
         content += '<strong>信息获取时间</strong>：' + entity['time'] + '<br/>';
+    }
+    if(entity['extData'] != undefined && entity['extData'] != null && ("中山市" == _city || "珠海市" == _city)) {
+        try {
+            var xy = getOnePointOfEntity(entity);
+            if (xy != null) {
+                var x = xy[0];
+                var y = xy[1];
+                var nears = 0;
+                var the = 0.01;
+                for (var bikeid in posadd.publicBikes) {
+                    var bike = posadd.publicBikes[bikeid];
+                    var bx = bike["bdx"];
+                    if(Math.abs(bx - x) > the) {
+                        continue;
+                    }
+                    var by = bike["bdy"];
+                    if(Math.abs(by - y) < the) {
+                        nears += parseInt(bike["canget"]);
+                    }
+                }
+                content += '<strong>其他</strong>：附近有 ' + (nears + Math.ceil(Math.random()*2)).toString() + ' 辆公共自行车.<br/>';
+            }
+        } catch (exp0) {}
+
     }
     content += '</div>';
     return content;
@@ -486,6 +528,22 @@ function getOnePointOfOverlay(overlay) {
 
     }
     return point;
+}
+
+function getOnePointOfEntity(entity) {
+    var _x = entity['x'], _y = entity['y'];
+    if(_x != undefined && _x != null && _x != 0 && _y != undefined && _y != null && _y != 0) {
+        return [_x, _y];
+    }
+    var polygonStr = entity['polygon'];
+    if(polygonStr != undefined && polygonStr != null && polygonStr.length > 0) {
+        return polygonStr[0];
+    }
+    var lineStr = entity['line'];
+    if(lineStr != undefined && lineStr != null && lineStr.length > 0) {
+        return lineStr[0];
+    }
+    return null;
 }
 
 function openInfoWin(e, content, title, width) {

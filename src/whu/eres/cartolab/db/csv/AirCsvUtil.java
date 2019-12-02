@@ -56,7 +56,8 @@ public class AirCsvUtil {
         }
     }
 
-    public static String getRealtimeAir0(String citeId) {
+    public static JSONArray getRealTimeAirQuality(String citeId) {
+
         MysqlLocalConnection.getInstance();
         Date date = new Date();
         int month = date.getMonth() + 1;
@@ -137,8 +138,66 @@ public class AirCsvUtil {
                 ja.put(i, jo);
                 i++;
             }
-            return ja.toString();
+            return ja;
         }
+    }
+
+    public static String getRealtimeAir0(String citeId) {
+        JSONArray ja = getRealTimeAirQuality(citeId);
+        return ja.toString();
+    }
+
+    public static int[] createDayTempArray(int temp, int this_hour, int this_max, int this_min) {
+        int[] ref_arr = new int[]{-3,-3,-4,-5,-5,-5,-6,-5,-3,-1,-2,0,1,2,3,4,4,3,2,1,0,0,-1,-2};
+        double ref_max = 4.0, ref_min = -6.0;
+        double max = this_max + 0.1, min = this_min - 0.1;
+        if(temp > this_max) {
+            if(this_hour != 15 && this_hour != 16) {
+                max = this_max + 2.0;
+            }
+        }
+        if(temp < this_min) {
+            if(this_hour != 6) {
+                min = this_min - 2.0;
+            }
+        }
+        int ref_this = ref_arr[this_hour];
+        double ref_this_max = ref_max - ref_this, ref_this_min = ref_this - ref_min;
+        double[] ref_to_max = new double[24];
+        double[] ref_to_min = new double[24];
+        double[] ref_to_this = new double[24];
+        for(int i = 0; i < 24; i++) {
+            ref_to_max[i] = (ref_max - ref_arr[i]);
+            ref_to_min[i] = (ref_arr[i] - ref_min);
+            ref_to_this[i] = (ref_arr[i] - ref_this);
+        }
+        double[] ref_pros = new double[24];
+        for(int i = 0; i < 24; i++) {
+            double ref_diff = ref_to_this[i];
+            if(Math.abs(ref_diff) < 0.0001) {
+                ref_pros[i] = 0.0;
+            } else if (ref_diff > 0){
+                ref_pros[i] = ref_to_max[i] / ref_this_max;
+            } else if(ref_diff < 0) {
+                ref_pros[i] = ref_to_min[i] / ref_this_min;
+            }
+        }
+        double to_max = max - temp, to_min = temp - min;
+        double[] farr = new double[24];
+        int[] iarr = new int[24];
+        for(int i = 0; i < 24; i++) {
+            double simu_temp = 0.0, ref_pro = ref_pros[i];
+            if(Math.abs(ref_pro) < 0.0001) {
+                simu_temp = temp;
+            } else if (ref_pro > 0){
+                simu_temp = temp + to_max * ref_pro;
+            } else if(ref_pro < 0) {
+                simu_temp = temp + to_min * ref_pro;
+            }
+            farr[i] = simu_temp;
+            iarr[i] = (int)simu_temp;
+        }
+        return iarr;
     }
 
 
