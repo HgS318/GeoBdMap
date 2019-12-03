@@ -564,7 +564,7 @@ function demoPlaceSearchShow(word) {
             "id": generateUUID()
         };
         addOverlayAndInfowin(marker, extData, null, posadd.coord_overlays);
-        map.centerAndZoom(bp, 16);
+        map.centerAndZoom(bp, 18);
         setResultItems([posadd.coord_overlays[posadd.coord_overlays.length - 1]], "distresults", "coord_overlays", true);
     }
 }

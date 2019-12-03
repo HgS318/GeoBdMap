@@ -177,9 +177,9 @@ public class AirCsvUtil {
             if(Math.abs(ref_diff) < 0.0001) {
                 ref_pros[i] = 0.0;
             } else if (ref_diff > 0){
-                ref_pros[i] = ref_to_max[i] / ref_this_max;
+                ref_pros[i] = 1.0 - ref_to_max[i] / ref_this_max;
             } else if(ref_diff < 0) {
-                ref_pros[i] = ref_to_min[i] / ref_this_min;
+                ref_pros[i] = ref_to_min[i] / ref_this_min - 1.0;
             }
         }
         double to_max = max - temp, to_min = temp - min;
