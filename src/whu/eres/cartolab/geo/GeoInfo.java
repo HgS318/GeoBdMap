@@ -64,7 +64,7 @@ public class GeoInfo {
             x = rs.getDouble("X");
             y = rs.getDouble("Y");
             position = rs.getString("position");
-            if("".equals(position)) {
+            if(position != null && ("".equals(position) || position.length() < 3)) {
                 position = null;
             }
             if(x == 0.0 & y == 0.0 && position != null && position.length() > 2) {
@@ -83,7 +83,13 @@ public class GeoInfo {
                 spaType = 1;
             }
             line = rs.getString("line");
+            if(line != null && ("".equals(line) || line.length() < 7)) {
+                line = null;
+            }
             polygon = rs.getString("polygon");
+            if(polygon != null && ("".equals(polygon) || polygon.length() < 7)) {
+                polygon = null;
+            }
             shp = rs.getString("shp");
             fid = rs.getInt("fid");
             text = rs.getString("text");

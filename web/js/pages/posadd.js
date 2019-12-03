@@ -670,8 +670,8 @@ function mixedSearchPlace(word) {   //  非示例地点：混合搜索
 //  地址推理搜索（是否在出差情况下准备混合搜索）
 function predictSearch(word, prepareMixed) {
     // var asp_url = "http://localhost:55490/Service1.asmx/addrPredict?text=" + word;
-    var asp_url = "http://localhost/addrPredict/Service1.asmx/addrPredict?text=" + word;
-    // var asp_url = "http://106.12.56.213/addrPredict/Service1.asmx/addrPredict?text=" + word;
+    // var asp_url = "http://localhost/addrPredict/Service1.asmx/addrPredict?text=" + word;
+    var asp_url = "http://106.12.56.213/addrPredict/Service1.asmx/addrPredict?text=" + word;
     $.ajax({
         url: asp_url,
         type: 'get',

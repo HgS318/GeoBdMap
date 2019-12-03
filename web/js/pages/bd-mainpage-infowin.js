@@ -183,16 +183,16 @@ function createContent(entity) {
             var _id = entity['extData']['id'];
             var _name = entity['extData']['name'];
             if(wid == null) {
-                content += ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '<a href="#" onclick=' +
+                content += ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '<a href="#" onclick=' +
                 '"openContentWindow(\'download/jquery-easyui-1.7.0/demo/datagrid/air_table_page0.html?id=' +
                 _id + '&name=' + _name + '\',\'查看叠加信息\',500, 430, 30, 30)"' + '>已叠加信息</a><br/>');
             } else {
-                content += ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '<a href="#" onclick=' +
+                content += ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '<a href="#" onclick=' +
                 '"openContentWindow(\'download/jquery-easyui-1.7.0/demo/datagrid/air_table_page1.html?id=' +
-                _id + '&name=' + _name + "&city=" + wid +  '\',\'查看叠加信息\',500, 430, 30, 30)"' + '>已叠加信息</a><br/><br/>');
+                _id + '&name=' + _name + "&city=" + wid +  '\',\'查看叠加信息\',500, 430, 30, 30)"' + '>已叠加信息</a><br/>');
             }
         } else if(wid != null) {
-            content += ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '<a href="#" onclick=' +
+            content += ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '<a href="#" onclick=' +
                 '"openContentWindow(\'download/jquery-easyui-1.7.0/demo/datagrid/air_temp_page0.html?city=' +
                 wid + '&name=' + entity['name'] + '\',\'查看叠加信息\',300, 430, 30, 30)"' + '>已叠加信息</a><br/>');
         }
