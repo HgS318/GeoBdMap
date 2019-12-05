@@ -197,7 +197,7 @@ public class JsonAction01 {
         HttpServletRequest request = ServletActionContext.getRequest();
         String url_origin = request.getParameter("url");
         String url = decodeMyUrl(url_origin);
-        String result = queryUrl(url, null, null, null, 0, 0);
+        String result = queryAPI(url, null, "GET");
         toBeJson(result);
         return null;
     }
@@ -705,62 +705,6 @@ public class JsonAction01 {
         return sb.toString();
     }
 
-    //  放弃使用该方法
-    public static String queryUrl(String sendUrl, Map<String, String> params,
-                                  String sendType, String charset, int repeat_request_count, int repeat_request_max_count) {
-        URL url = null;
-        HttpURLConnection httpurlconnection = null;
-        try {
-            StringBuilder paramSb = new StringBuilder();
-            if (params != null) {
-                for (Map.Entry<String, String> e : params.entrySet()) {
-                    paramSb.append(e.getKey());
-                    paramSb.append("=");
-                    paramSb.append(URLEncoder.encode(e.getValue(), "UTF-8"));
-                    paramSb.append("&");
-                }
-                paramSb.substring(0, paramSb.length() - 1);
-            }
-            String paramsStr = paramSb.toString();
-            if("".equals(paramsStr) || paramsStr.length() < 1) {
-                url = new URL(sendUrl);
-            } else {
-                url = new URL(sendUrl + "?" + paramsStr);
-            }
-            httpurlconnection = (HttpURLConnection) url.openConnection();
-            httpurlconnection.setRequestMethod("GET");
-            httpurlconnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            httpurlconnection.setDoInput(true);
-            httpurlconnection.setDoOutput(true);
-
-            httpurlconnection.setConnectTimeout(30000);
-            httpurlconnection.setReadTimeout(30000);
-            httpurlconnection.setUseCaches(true);
-
-            int code = httpurlconnection.getResponseCode();
-            if (code == 200) {
-                DataInputStream in = new DataInputStream(httpurlconnection.getInputStream());
-                int len = in.available();
-//                int len = 5000;
-                byte[] by = new byte[len];
-                in.readFully(by);
-                String rev = new String(by, "UTF-8");
-                in.close();
-                return rev;
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (httpurlconnection != null) {
-                httpurlconnection.disconnect();
-            }
-        }
-        return null;
-
-    }
-
     /**
      * 将srcJObjStr和addJObjStr合并，如果有重复字段，以addJObjStr为准
      * @param srcJObjStr 原jsonObject字符串
@@ -824,33 +768,12 @@ public class JsonAction01 {
         return null;
     }
 
-    public static void toBeJson(String jsonStr){
-        HttpServletResponse response = ServletActionContext.getResponse();
-        response.addHeader("Access-Control-Allow-Origin", "*");
-        response.setContentType("text/javascript");
-        response.setCharacterEncoding("utf-8");
-        try {
-            PrintWriter out=response.getWriter();
-            out.write(jsonStr);
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void toBeJson(String jsonStr) {
+        JsonAction00.response(jsonStr, "text/javascript", "utf-8");
     }
 
-    public static void toBeText(String str){
-        HttpServletResponse response = ServletActionContext.getResponse();
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("utf-8");
-        try {
-            PrintWriter out=response.getWriter();
-            out.write(str);
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void toBeText(String str) {
+        JsonAction00.response(str, "text/plain", "utf-8");
     }
 
     public static String decodeMyUrl(String myUrl) {

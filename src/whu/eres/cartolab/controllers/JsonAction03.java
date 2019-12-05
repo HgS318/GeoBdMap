@@ -452,33 +452,12 @@ public class JsonAction03 {
         return null;
     }
 
-    public static void toBeJson(String jsonStr){
-        HttpServletResponse response = ServletActionContext.getResponse();
-        response.addHeader("Access-Control-Allow-Origin", "*");
-        response.setContentType("text/javascript");
-        response.setCharacterEncoding("utf-8");
-        try {
-            PrintWriter out=response.getWriter();
-            out.write(jsonStr);
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void toBeJson(String jsonStr) {
+        JsonAction00.response(jsonStr, "text/javascript", "utf-8");
     }
 
-    public static void toBeText(String str){
-        HttpServletResponse response = ServletActionContext.getResponse();
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("utf-8");
-        try {
-            PrintWriter out=response.getWriter();
-            out.write(str);
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void toBeText(String str) {
+        JsonAction00.response(str, "text/plain", "utf-8");
     }
 
 

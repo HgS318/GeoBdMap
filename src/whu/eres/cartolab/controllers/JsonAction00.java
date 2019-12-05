@@ -420,24 +420,31 @@ public class JsonAction00 {
 
 
     public static void toBeJson(String jsonStr){
-        HttpServletResponse response = ServletActionContext.getResponse();
-        response.addHeader("Access-Control-Allow-Origin", "*");
-        response.setContentType("text/javascript");
-        response.setCharacterEncoding("utf-8");
-        try {
-            PrintWriter out=response.getWriter();
-            out.write(jsonStr);
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        response(jsonStr, "text/javascript", "utf-8");
     }
 
     public static void toBeText(String str){
+        response(str, "text/plain", "utf-8");
+    }
+
+    public static void toBeJson(List list, int total) throws Exception{
+        JSONObject jobj = new JSONObject();
+        jobj.accumulate("total",total );
+        jobj.accumulate("rows", list);
+        response(jobj.toString(), "text/javascript", "utf-8");
+    }
+
+    public static void response(String str, String type, String charset) {
         HttpServletResponse response = ServletActionContext.getResponse();
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("utf-8");
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        if(type == null || "".equals(type)) {
+            type = "text/javascript";
+        }
+        if(charset == null || "".equals(charset)) {
+            charset = "utf-8";
+        }
+        response.setContentType(type);
+        response.setCharacterEncoding(charset);
         try {
             PrintWriter out=response.getWriter();
             out.write(str);
@@ -446,15 +453,6 @@ public class JsonAction00 {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static void toBeJson(List list, int total) throws Exception{
-        HttpServletResponse response = ServletActionContext.getResponse();
-        JSONObject jobj = new JSONObject();
-        jobj.accumulate("total",total );
-        jobj.accumulate("rows", list);
-        response.setCharacterEncoding("utf-8");
-        response.getWriter().write(jobj.toString());
     }
 
     public static String subJson(String org, int startpage, int pagerows) {
