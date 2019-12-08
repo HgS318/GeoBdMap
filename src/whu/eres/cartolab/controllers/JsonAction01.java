@@ -727,7 +727,6 @@ public class JsonAction01 {
         return srcJObj.toString();
     }
 
-    @SuppressWarnings("unchecked")
     public static JSONObject combineJson(JSONObject srcObj, JSONObject addObj) throws JSONException {
         Iterator<String> itKeys1 = addObj.keys();
         String key, value;
