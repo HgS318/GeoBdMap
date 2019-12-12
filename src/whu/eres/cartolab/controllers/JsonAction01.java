@@ -5,12 +5,9 @@ import java.util.*;
 import javax.servlet.http.*;
 import java.net.*;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import org.apache.struts2.*;
 import net.sf.json.*;
+import org.apache.struts2.*;
 
-import org.json.simple.*;
 import whu.eres.cartolab.db.csv.*;
 import whu.eres.cartolab.db.esri.*;
 import whu.eres.cartolab.geo.*;
