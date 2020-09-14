@@ -1,5 +1,24 @@
-// var python_service = "http://localhost:5050/";
-var python_service = "http://106.12.56.213:5050/";
+    // python服务 （relpos、百度搜索等服务器地址）
+// var python_service = "http://localhost:5050/";   //  本地
+// var python_service = "http://106.12.56.213:5050/";  //  百度云服务器
+// var python_service = "http://hgsflask.free.idcfengye.com/";  //  ngrok-Sunny
+var python_service = "http://cartolab.iicp.net/";  //  花生壳
+// var python_service = "http://47.94.211.184:7550/";  //  frps y7000p
+// var python_service = "http://47.94.211.184:7250/";  //  frps Desk 20
+// var python_service = "http://47.94.211.184:7450/";  //  frps b75
+
+
+    //  asp服务（地址推理等服务器地址）
+// var asp_service = "http://localhost:55490/";    //  本地调试
+// var asp_service = "http://localhost/";   // 本地
+// var asp_service = "http://localhost:8088/";    //  本地修改端口号
+// var asp_service = "http://106.12.56.213/";    //  百度云服务器
+// var asp_service = "http://hgsgeospan.ngrok2.xiaomiqiu.cn/";    //  ngrok-小米球
+var asp_service = "http://47.94.211.184:8088/";    //  阿里云服务器
+// var asp_service = "http://47.94.211.184:7588/";    //  frps y7000p
+// var asp_service = "http://47.94.211.184:7288/";    //  frps Desk 20
+// var asp_service = "http://47.94.211.184:7488/";    //  frps B75
+
 
 var posadd_init = {
 
@@ -588,12 +607,13 @@ function isPredictDemo(text) {
 function mixedSearchPlace(word) {   //  非示例地点：混合搜索
     var service_url = python_service + "mixed_place_search_1";
     // var url = service_url + "?google=1&word=" + word;
-    var url = service_url + "?word=" + word;
+    // var url = service_url + "?word=" + word;
+    var url = service_url + "?method=2&word=" + word;
     $.ajax({
         url: url,
         type: 'get',
         dataType: 'json',
-        timeout: 120000,
+        timeout: 220000,
         success: function (srh_data) {
             var pois = srh_data["results"];
             if(pois.length < 1) {
@@ -669,10 +689,7 @@ function mixedSearchPlace(word) {   //  非示例地点：混合搜索
 
 //  地址推理搜索（是否在出差情况下准备混合搜索）
 function predictSearch(word, prepareMixed) {
-    // var asp_url = "http://localhost:55490/Service1.asmx/addrPredict?text=" + word;
-    // var asp_url = "http://localhost/addrPredict/Service1.asmx/addrPredict?text=" + word;
-    // var asp_url = "http://localhost:8088/Service1.asmx/addrPredict?text=" + word;
-    var asp_url = "http://106.12.56.213/addrPredict/Service1.asmx/addrPredict?text=" + word;
+    var asp_url = asp_service + "Service1.asmx/addrPredict?text=" + word;
     $.ajax({
         url: asp_url,
         type: 'get',

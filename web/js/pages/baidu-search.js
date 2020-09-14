@@ -67,11 +67,12 @@ function setBaiduResultItems(searchData, divname) {
                 showUrl = showUrl.substring(0, 28) + '...';
             }
             var itemStr = "<div class='list-group-item'" + "onclick=\"gotoOverlay('baiduSearch', '" + oUrl + "')\"" +
-                "><div class='SearchResult_item_left' " +
-                "><p><strong>" + (i + 1) +
-                "</strong></p></div><div class='SearchResult_item_content'>" +
-                "<p><font color='#0B73EB'>" + name +
-                "</font></p><p>" + showUrl + "</p></div></div>";
+                    "ondblclick=\"window.open('" + oUrl + "', '_blank')\"" +
+                    "><div class='SearchResult_item_left' " +
+                    "><p><strong>" + (i + 1) +
+                    "</strong></p></div><div class='SearchResult_item_content'>" +
+                    "<p><font color='#0B73EB'>" + name +
+                    "</font></p><p>" + showUrl + "</p></div></div>";
             // var itemStr = consResultItem("baiduSearch", name, oUrl, '搜索结果', i + 1, url);
             midstr += itemStr;
             i++;

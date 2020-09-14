@@ -448,7 +448,7 @@ public class JsonAction01 {
         return null;
     }
 
-    //  获取IP的坐标
+    //  获取IP的坐标`
     public String getCoordsByIP() {
         HttpServletRequest request = ServletActionContext.getRequest();
         // https://api.map.baidu.com/location/ip?ak=SycUWXeBU9Z1tkvcNqmFxvo93cS4jbU7&coor=bd09ll&ip=117.154.10.99
@@ -457,7 +457,7 @@ public class JsonAction01 {
             String ipApi = "https://api.map.baidu.com/location/ip";
             //key-value
             Map<String, String> ipParams = new HashMap<>();
-            ipParams.put("ak", BD_AK);
+            ipParams.put("ak", "r5Cpb39ZYRGL2aaDqFyvdOAUzhTqOsfC");
             ipParams.put("ip", ip);
             ipParams.put("coor", "bd09ll");
             String ipReturnStr = queryAPI(ipApi, ipParams, "GET");
